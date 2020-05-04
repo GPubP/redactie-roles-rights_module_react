@@ -58,7 +58,7 @@ module.exports = env => {
 			'@acpaas-ui/react-editorial-components': '@acpaas-ui/react-editorial-components',
 		},
 		output: {
-			filename: 'redactie-content-module.umd.js',
+			filename: 'redactie-roles-rights-module.umd.js',
 			path: path.resolve(__dirname, 'dist'),
 			libraryTarget: 'umd',
 		},

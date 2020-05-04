@@ -1,6 +1,6 @@
 {
   "name": "@redactie/roles-rights-module",
-  "version": "0.6.0-0",
+  "version": "0.0.0-1",
   "description": "redactie roles-rights module",
   "main": "dist/redactie-roles-rights-module.umd.js",
   "module": "dist/redactie-roles-rights-module.umd.js",
@@ -100,6 +100,6 @@
     "query-string": "^6.12.1",
     "yup": "^0.28.3"
   },
-  "author": "Glenn Verschooren",
+  "author": "Maxim De Geyter",
   "license": "ISC"
 }
