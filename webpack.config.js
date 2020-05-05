@@ -51,6 +51,9 @@ module.exports = env => {
 		],
 		externals: {
 			react: 'react',
+			ky: 'ky',
+			formik: 'formik',
+			yup: 'yup',
 			'react-dom': 'react-dom',
 			'react-router-dom': 'react-router-dom',
 			'@redactie/redactie-core': '@redactie/redactie-core',
