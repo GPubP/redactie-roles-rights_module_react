@@ -3,13 +3,14 @@ export const BREADCRUMB_OPTIONS = {
 		'/',
 		'/:tenantId',
 		'/:tenantId/sites',
-		'/:tenantId/sites/:siteId/roles',
-		'/:tenantId/sites/:siteId/users',
-		'/:tenantId/sites/:siteId/users/:userId',
+		'/:tenantId/sites/:siteId/gebruikers',
+		'/:tenantId/sites/:siteId/gebruikers/users',
+		'/:tenantId/sites/:siteId/gebruikers/users/:userId',
+		'/:tenantId/sites/:siteId/gebruikers/roles',
 	],
 };
 
-const root = '/:siteId';
+const root = '/:siteId/gebruikers';
 
 const rolesRoot = `${root}/roles`;
 const usersRoot = `${root}/users`;

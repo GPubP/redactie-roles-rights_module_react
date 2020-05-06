@@ -8,10 +8,12 @@ import {
 } from '@acpaas-ui/react-editorial-components';
 import React, { FC, ReactElement, useEffect, useState } from 'react';
 
-import { DataLoader } from '../../components';
+import { DataLoader, FilterForm } from '../../components';
 import { useNavigate, useRoutesBreadcrumbs, useUsers } from '../../hooks';
 import { MODULE_PATHS } from '../../roles.const';
-import { LoadingState, RolesRouteProps } from '../../roles.types';
+import { generateFilterFormState } from '../../roles.helpers';
+import { FilterFormState, LoadingState, RolesRouteProps } from '../../roles.types';
+import { FilterItemSchema } from '../../services/filterItems';
 import { DEFAULT_USERS_SEARCH_PARAMS } from '../../services/users/users.service.const';
 
 import { USERS_OVERVIEW_COLUMNS } from './UsersOverview.const';
@@ -22,6 +24,7 @@ const UsersOverview: FC<RolesRouteProps<{ siteId: string }>> = ({ match }) => {
 	/**
 	 * Hooks
 	 */
+	const [filterItems, setFilterItems] = useState<FilterItemSchema[]>([]);
 	const { navigate } = useNavigate();
 	const breadcrumbs = useRoutesBreadcrumbs();
 	const [usersSearchParams, setUsersSearchParams] = useState(DEFAULT_USERS_SEARCH_PARAMS);
@@ -37,6 +40,35 @@ const UsersOverview: FC<RolesRouteProps<{ siteId: string }>> = ({ match }) => {
 	/**
 	 * Methods
 	 */
+
+	const onSubmit = ({ name }: FilterFormState): void => {
+		//add item to filterItems for Taglist
+		const request = { label: name, value: name };
+		setFilterItems([request]);
+		//add value to searchParams
+		setUsersSearchParams({
+			...usersSearchParams,
+			search: name,
+			skip: 0,
+		});
+	};
+
+	const deleteAllFilters = (): void => {
+		//set empty array as Taglist
+		const emptyFilter: [] = [];
+		setFilterItems(emptyFilter);
+		//delete search param from api call
+		setUsersSearchParams(DEFAULT_USERS_SEARCH_PARAMS);
+	};
+
+	const deleteFilter = (item: any): void => {
+		//delete item from filterItems
+		const setFilter = filterItems?.filter(el => el.value !== item.value);
+		setFilterItems(setFilter);
+		//set empty searchParams
+		setUsersSearchParams(DEFAULT_USERS_SEARCH_PARAMS);
+	};
+
 	const handlePageChange = (page: number): void => {
 		setUsersSearchParams({
 			...usersSearchParams,
@@ -72,7 +104,15 @@ const UsersOverview: FC<RolesRouteProps<{ siteId: string }>> = ({ match }) => {
 
 		return (
 			<div className="u-container u-wrapper">
-				<div className="u-margin-top"></div>
+				<div className="u-margin-top">
+					<FilterForm
+						initialState={generateFilterFormState()}
+						onCancel={deleteAllFilters}
+						onSubmit={onSubmit}
+						deleteActiveFilter={deleteFilter}
+						activeFilters={filterItems}
+					/>
+				</div>
 				<PaginatedTable
 					className="u-margin-top"
 					columns={USERS_OVERVIEW_COLUMNS}
