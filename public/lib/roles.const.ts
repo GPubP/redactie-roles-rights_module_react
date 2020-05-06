@@ -3,10 +3,9 @@ export const BREADCRUMB_OPTIONS = {
 		'/',
 		'/:tenantId',
 		'/:tenantId/sites',
-		'/:tenantId/sites/:siteId/content',
-		'/:tenantId/sites/:siteId/content/content-type',
-		'/:tenantId/sites/:siteId/content/content-type/:contentTypeId',
-		'/:tenantId/sites/:siteId/content/:contentId',
+		'/:tenantId/sites/:siteId/roles',
+		'/:tenantId/sites/:siteId/users',
+		'/:tenantId/sites/:siteId/users/:userId',
 	],
 };
 
