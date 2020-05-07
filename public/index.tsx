@@ -10,8 +10,12 @@ import { UsersOverview } from './lib/views';
 
 const RolesComponent: FC<RolesModuleProps> = ({ route, location, match, tenantId }) => {
 	// if path is /users, redirect to /users/overzicht
-	if (/\/users$/.test(location.pathname)) {
-		return <Redirect to={`/${tenantId}/users/overzicht`} />;
+	if (
+		/\/\b[0-9a-f]{8}\b-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-\b[0-9a-f]{12}\b\/users$/.test(
+			location.pathname
+		)
+	) {
+		return <Redirect to={`${location.pathname}/overzicht`} />;
 	}
 
 	return (
@@ -25,19 +29,22 @@ const RolesComponent: FC<RolesModuleProps> = ({ route, location, match, tenantId
 	);
 };
 
-Core.routes.register({
-	path: '/users',
+registerRoutes({
+	path: MODULE_PATHS.root,
 	component: RolesComponent,
 	navigation: {
+		renderContext: 'site',
+		context: 'site',
 		label: 'Gebruikers',
 	},
 	routes: [
 		{
-			path: '/users/overzicht',
+			path: MODULE_PATHS.users.root,
 			component: UsersOverview,
 			navigation: {
+				context: 'site',
 				label: 'Gebruikers',
-				parentPath: '/users',
+				parentPath: MODULE_PATHS.root,
 			},
 		},
 	],

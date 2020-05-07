@@ -6,10 +6,16 @@ export interface RolesModuleProps extends RouteConfigComponentProps {
 	tenantId: string;
 }
 
-export interface RolesRouteProps<Params = {}> extends RouteConfigComponentProps<Params> {
+export interface RolesRouteProps<
+	Params extends {
+		[K in keyof Params]?: string;
+	} = {}
+> extends RouteConfigComponentProps<Params> {
 	basePath: string;
 	routes: ModuleRouteConfig[];
+	tenantId: string;
 }
+
 
 export enum LoadingState {
 	Loading = 'loading',
