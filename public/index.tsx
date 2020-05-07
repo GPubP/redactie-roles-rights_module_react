@@ -6,7 +6,7 @@ import { registerRoutes } from './lib/connectors/sites';
 import { TenantContext } from './lib/context';
 import { MODULE_PATHS } from './lib/roles.const';
 import { RolesRouteProps } from './lib/roles.types';
-import { RolesOverview, UsersOverview } from './lib/views';
+import { RolesOverview, UsersOverview, UserUpdate } from './lib/views';
 
 const RolesComponent: FC<RolesRouteProps> = ({ route, location, match, tenantId }) => {
 	// if path is /rights, redirect to /rights/overzicht
@@ -17,12 +17,21 @@ const RolesComponent: FC<RolesRouteProps> = ({ route, location, match, tenantId 
 	) {
 		return <Redirect to={`${location.pathname}/overzicht`} />;
 	}
-	// if path is /users, redirect to /users/overzicht
-	if (
-		/\/\b[0-9a-f]{8}\b-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-\b[0-9a-f]{12}\b\/users$/.test(
-			location.pathname
-		)
-	) {
+
+	return (
+		<TenantContext.Provider value={{ tenantId }}>
+			{Core.routes.render(route.routes as ModuleRouteConfig[], {
+				basePath: match.url,
+				routes: route.routes,
+				tenantId,
+			})}
+		</TenantContext.Provider>
+	);
+};
+
+const usersComponent: FC<RolesRouteProps> = ({ route, location, match, tenantId }) => {
+	// if path is /gebruikers/users, redirect to /gebruikers/users/overzicht
+	if (/\/gebruikers\/users$/.test(location.pathname)) {
 		return <Redirect to={`${location.pathname}/overzicht`} />;
 	}
 
@@ -65,7 +74,7 @@ registerRoutes({
 		},
 		{
 			path: MODULE_PATHS.users.root,
-			component: UsersOverview,
+			component: usersComponent,
 			navigation: {
 				renderContext: 'site',
 				context: 'site',
@@ -76,6 +85,10 @@ registerRoutes({
 				{
 					path: MODULE_PATHS.users.overview,
 					component: UsersOverview,
+				},
+				{
+					path: MODULE_PATHS.users.detail,
+					component: UserUpdate,
 				},
 			],
 		},

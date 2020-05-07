@@ -18,11 +18,14 @@ const usersRoot = `${root}/users`;
 const rolesOverview = `${rolesRoot}/overzicht`;
 const usersOverview = `${usersRoot}/overzicht`;
 
+const userDetail = `${usersRoot}/:userUuid`;
+
 export const MODULE_PATHS = {
 	root,
 	users: {
 		root: usersRoot,
 		overview: usersOverview,
+		detail: userDetail,
 	},
 	roles: {
 		root: rolesRoot,
