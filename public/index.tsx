@@ -4,7 +4,7 @@ import { Redirect } from 'react-router-dom';
 
 import { registerRoutes } from './lib/connectors/sites';
 import { TenantContext } from './lib/context';
-import { MODULE_PATHS } from './lib/roles.const';
+import { MODULE_PATHS, MODULE_PATHS_SITE } from './lib/roles.const';
 import { RolesRouteProps } from './lib/roles.types';
 import { RolesOverview, UserDetailGeneral, UsersOverview, UserUpdate } from './lib/views';
 
@@ -15,6 +15,11 @@ const RolesComponent: FC<RolesRouteProps> = ({ route, location, match, tenantId 
 			location.pathname
 		)
 	) {
+		return <Redirect to={`${location.pathname}/overzicht`} />;
+	}
+
+	// if path is /gebruikers, redirect to /gebruikers/overzicht
+	if (/\/gebruikers$/.test(location.pathname)) {
 		return <Redirect to={`${location.pathname}/overzicht`} />;
 	}
 
@@ -46,41 +51,17 @@ const usersComponent: FC<RolesRouteProps> = ({ route, location, match, tenantId 
 	);
 };
 
-registerRoutes({
+Core.routes.register({
 	path: MODULE_PATHS.root,
 	component: RolesComponent,
 	navigation: {
-		renderContext: 'site',
-		context: 'site',
 		label: 'Gebruikers',
 	},
 	exact: true,
 	routes: [
 		{
-			path: MODULE_PATHS.roles.root,
-			component: RolesOverview,
-			navigation: {
-				renderContext: 'site',
-				context: 'site',
-				label: 'Rollen en rechten',
-				parentPath: MODULE_PATHS.root,
-			},
-			routes: [
-				{
-					path: MODULE_PATHS.roles.overview,
-					component: RolesOverview,
-				},
-			],
-		},
-		{
 			path: MODULE_PATHS.users.root,
 			component: usersComponent,
-			navigation: {
-				renderContext: 'site',
-				context: 'site',
-				label: 'Gebruikers',
-				parentPath: MODULE_PATHS.root,
-			},
 			routes: [
 				{
 					path: MODULE_PATHS.users.overview,
@@ -95,6 +76,51 @@ registerRoutes({
 							component: UserDetailGeneral,
 						},
 					],
+				},
+			],
+		},
+	],
+});
+
+registerRoutes({
+	path: MODULE_PATHS_SITE.root,
+	component: RolesComponent,
+	navigation: {
+		renderContext: 'site',
+		context: 'site',
+		label: 'Gebruikers',
+	},
+	exact: true,
+	routes: [
+		{
+			path: MODULE_PATHS_SITE.roles.root,
+			component: RolesOverview,
+			navigation: {
+				renderContext: 'site',
+				context: 'site',
+				label: 'Rollen en rechten',
+				parentPath: MODULE_PATHS_SITE.root,
+			},
+			routes: [
+				{
+					path: MODULE_PATHS_SITE.roles.overview,
+					component: RolesOverview,
+				},
+			],
+		},
+		{
+			path: MODULE_PATHS_SITE.users.root,
+			component: UsersOverview,
+			navigation: {
+				renderContext: 'site',
+				context: 'site',
+				label: 'Gebruikers',
+				parentPath: MODULE_PATHS_SITE.root,
+			},
+			routes: [
+				{
+					path: MODULE_PATHS_SITE.users.overview,
+					component: UsersOverview,
 				},
 			],
 		},

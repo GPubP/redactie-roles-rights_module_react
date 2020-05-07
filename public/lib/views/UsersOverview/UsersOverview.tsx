@@ -36,7 +36,7 @@ const UsersOverview: FC<RolesRouteProps<{ siteId: string }>> = ({ match }) => {
 		if (loadingState === LoadingState.Loaded || loadingState === LoadingState.Error) {
 			setInitialLoading(LoadingState.Loaded);
 		}
-	}, [loadingState]);
+	}, [loadingState, siteId]);
 	/**
 	 * Methods
 	 */
@@ -99,7 +99,7 @@ const UsersOverview: FC<RolesRouteProps<{ siteId: string }>> = ({ match }) => {
 			type: user.type,
 			added: user.added,
 			status: user.status || 'N/A',
-			navigate: userUuid => navigate(MODULE_PATHS.users.overview, { userUuid }),
+			navigate: userUuid => navigate(MODULE_PATHS.users.detail, { userUuid }),
 		}));
 
 		return (
