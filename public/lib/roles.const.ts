@@ -19,6 +19,7 @@ const rolesOverview = `${rolesRoot}/overzicht`;
 const usersOverview = `${usersRoot}/overzicht`;
 
 const userDetail = `${usersRoot}/:userUuid`;
+const userDetailGeneral = `${userDetail}/algemeen`;
 
 export const MODULE_PATHS = {
 	root,
@@ -26,6 +27,7 @@ export const MODULE_PATHS = {
 		root: usersRoot,
 		overview: usersOverview,
 		detail: userDetail,
+		detailGeneral: userDetailGeneral,
 	},
 	roles: {
 		root: rolesRoot,

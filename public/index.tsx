@@ -6,7 +6,7 @@ import { registerRoutes } from './lib/connectors/sites';
 import { TenantContext } from './lib/context';
 import { MODULE_PATHS } from './lib/roles.const';
 import { RolesRouteProps } from './lib/roles.types';
-import { RolesOverview, UsersOverview, UserUpdate } from './lib/views';
+import { RolesOverview, UserDetailGeneral, UsersOverview, UserUpdate } from './lib/views';
 
 const RolesComponent: FC<RolesRouteProps> = ({ route, location, match, tenantId }) => {
 	// if path is /rights, redirect to /rights/overzicht
@@ -89,6 +89,12 @@ registerRoutes({
 				{
 					path: MODULE_PATHS.users.detail,
 					component: UserUpdate,
+					routes: [
+						{
+							path: MODULE_PATHS.users.detailGeneral,
+							component: UserDetailGeneral,
+						},
+					],
 				},
 			],
 		},
