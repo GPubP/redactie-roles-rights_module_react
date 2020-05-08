@@ -28,7 +28,7 @@ const UsersOverview: FC<RolesRouteProps<{ siteId: string }>> = ({ match }) => {
 	const { navigate } = useNavigate();
 	const breadcrumbs = useRoutesBreadcrumbs();
 	const [usersSearchParams, setUsersSearchParams] = useState(DEFAULT_USERS_SEARCH_PARAMS);
-	const [loadingState, users] = useUsers(usersSearchParams);
+	const [loadingState, users] = useUsers(usersSearchParams, siteId);
 	const [initialLoading, setInitialLoading] = useState(LoadingState.Loading);
 	const [activeSorting, setActiveSorting] = useState<OrderBy>();
 
@@ -89,16 +89,16 @@ const UsersOverview: FC<RolesRouteProps<{ siteId: string }>> = ({ match }) => {
 	 * Render
 	 */
 	const renderOverview = (): ReactElement | null => {
-		if (!users?.data) {
+		if (!users?._embedded) {
 			return null;
 		}
 
-		const usersRows: UsersOverviewTableRow[] = users.data.map(user => ({
-			uuid: user.uuid as string,
-			name: user.name,
+		const usersRows: UsersOverviewTableRow[] = users._embedded.map(user => ({
+			uuid: user.id as string,
+			name: user.firstname + user.lastname,
 			type: user.type,
-			added: user.added,
-			status: user.status || 'N/A',
+			added: user.username,
+			status: user.username || 'N/A',
 			navigate: userUuid => navigate(MODULE_PATHS.users.overview, { userUuid }),
 		}));
 
@@ -118,13 +118,13 @@ const UsersOverview: FC<RolesRouteProps<{ siteId: string }>> = ({ match }) => {
 					columns={USERS_OVERVIEW_COLUMNS}
 					rows={usersRows}
 					currentPage={
-						Math.ceil(users.paging.skip / DEFAULT_USERS_SEARCH_PARAMS.limit) + 1
+						Math.ceil(users._page.number / DEFAULT_USERS_SEARCH_PARAMS.limit) + 1
 					}
 					itemsPerPage={DEFAULT_USERS_SEARCH_PARAMS.limit}
 					onPageChange={handlePageChange}
 					orderBy={handleOrderBy}
 					activeSorting={activeSorting}
-					totalValues={users?.paging?.total || 0}
+					totalValues={users?._page.totalElements || 0}
 					loading={loadingState === LoadingState.Loading}
 				></PaginatedTable>
 			</div>

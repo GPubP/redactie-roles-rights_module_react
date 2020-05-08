@@ -1,20 +1,25 @@
 export interface PagingSchema {
-	total: number;
-	moreResults: boolean;
-	limit: number;
-	skip: number;
+	totalElements: number;
+	totalPages: boolean;
+	size: number;
+	number: number;
 }
 
 export interface UserSchema {
-	_id: string;
-	uuid?: string;
-	name: string;
-	status: string;
+	address: string;
+	domain: string;
+	email: string;
+	externalMutableReference: string;
+	firstname: string;
+	id: string;
+	lastname: string;
+	nickname: string;
+	owner: boolean;
 	type: string;
-	added: string;
+	username: string;
 }
 
 export interface UsersSchema {
-	data: UserSchema[];
-	paging: PagingSchema;
+	_embedded: UserSchema[];
+	_page: PagingSchema;
 }
