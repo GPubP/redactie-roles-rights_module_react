@@ -2,6 +2,7 @@ import Core, { ModuleRouteConfig } from '@redactie/redactie-core';
 import React, { FC } from 'react';
 import { Redirect } from 'react-router-dom';
 
+import { registerRolesAPI } from './lib/api';
 import { TenantContext } from './lib/context';
 import { MODULE_PATHS } from './lib/roles.const';
 import { RolesModuleProps } from './lib/roles.types';
@@ -39,3 +40,9 @@ Core.routes.register({
 		},
 	],
 });
+
+// API export
+
+registerRolesAPI();
+
+export * from './lib/api/api.types';
