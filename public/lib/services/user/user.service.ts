@@ -18,7 +18,14 @@ export const getUser = async (uuid: string): Promise<UserRolesSchema | null> => 
 				type: 'mprofiel',
 				username: 'ex04103',
 			},
-			roles: [], // to be decided
+			roles: [
+				{
+					name: 'Tenantbeheerder',
+				},
+				{
+					name: 'Contentbeheerder',
+				},
+			],
 		};
 		return response;
 	} catch (err) {

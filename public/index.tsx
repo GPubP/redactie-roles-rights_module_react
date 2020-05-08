@@ -5,7 +5,7 @@ import { Redirect } from 'react-router-dom';
 import { TenantContext } from './lib/context';
 import { MODULE_PATHS } from './lib/roles.const';
 import { RolesModuleProps } from './lib/roles.types';
-import { UserDetailGeneral, UsersOverview, UserUpdate } from './lib/views';
+import { UserDetailGeneral, UserDetailRoles, UsersOverview, UserUpdate } from './lib/views';
 
 const RolesComponent: FC<RolesModuleProps> = ({ route, location, match, tenantId }) => {
 	// if path is /users, redirect to /users/overzicht
@@ -43,6 +43,10 @@ Core.routes.register({
 				{
 					path: MODULE_PATHS.users.detailGeneral,
 					component: UserDetailGeneral,
+				},
+				{
+					path: MODULE_PATHS.users.detailRoles,
+					component: UserDetailRoles,
 				},
 			],
 		},
