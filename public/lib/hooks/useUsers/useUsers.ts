@@ -12,7 +12,6 @@ const useUsers = (searchParams: SearchParams): [LoadingState, UsersSchema | null
 		getUsers(searchParams)
 			.then(result => {
 				if (result) {
-					console.log(result);
 					setUsers(result);
 				}
 				setLoadingState(LoadingState.Loaded);
