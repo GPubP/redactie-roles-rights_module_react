@@ -1,5 +1,5 @@
-import { Card } from '@acpaas-ui/react-components';
-import { Table } from '@acpaas-ui/react-editorial-components';
+import { Button, Card } from '@acpaas-ui/react-components';
+import { ActionBar, ActionBarContentSection, Table } from '@acpaas-ui/react-editorial-components';
 import { Field, Formik } from 'formik';
 import React, { FC, ReactElement } from 'react';
 
@@ -46,6 +46,22 @@ const UserDetailRoles: FC<UserDetailRolesProps> = ({ user }) => {
 			<div className="u-margin">
 				<h5>Rollen</h5>
 				{renderTableForm()}
+				<ActionBar className="o-action-bar--fixed" isOpen>
+					<ActionBarContentSection>
+						<div className="u-wrapper">
+							<Button
+								className="u-margin-right-xs"
+								onClick={() => console.log('save')}
+								type="success"
+							>
+								Bewaar
+							</Button>
+							<Button onClick={() => console.log('cancel')} outline>
+								Annuleer
+							</Button>
+						</div>
+					</ActionBarContentSection>
+				</ActionBar>
 			</div>
 		</Card>
 	);
