@@ -1,7 +1,7 @@
 import { RouteConfigComponentProps } from '@redactie/redactie-core';
 
-import { UserSchema } from '../../services/users';
+import { UserRolesSchema } from '../../services/user';
 
 export interface UserDetailGeneralProps extends RouteConfigComponentProps {
-	user: UserSchema;
+	user: UserRolesSchema;
 }
