@@ -2,23 +2,16 @@ export const BREADCRUMB_OPTIONS = {
 	excludePaths: [
 		'/',
 		'/:tenantId',
-		'/:tenantId/gebruikers',
-		'/:tenantId/gebruikers/overzicht',
-		'/:tenantId/gebruikers/:userId',
-		'/:tenantId/sites',
-		'/:tenantId/sites/:siteId/gebruikers',
-		'/:tenantId/sites/:siteId/gebruikers/users',
-		'/:tenantId/sites/:siteId/gebruikers/users/:userId',
-		'/:tenantId/sites/:siteId/gebruikers/roles',
+		'/:tenantId/users',
+		'/:tenantId/users/overzicht',
+		'/:tenantId/users/:userId',
 	],
 };
 
-const root = '/gebruikers';
+const root = '/users';
 
-const rolesRoot = `${root}/roles`;
 const usersRoot = `${root}`;
 
-const rolesOverview = `${rolesRoot}/overzicht`;
 const usersOverview = `${usersRoot}/overzicht`;
 
 const userDetail = `${usersRoot}/:userUuid`;
@@ -31,19 +24,5 @@ export const MODULE_PATHS = {
 		overview: usersOverview,
 		detail: userDetail,
 		detailGeneral: userDetailGeneral,
-	},
-};
-
-export const MODULE_PATHS_SITE = {
-	root: `/:siteId${root}`,
-	users: {
-		root: `/:siteId${usersRoot}`,
-		overview: `/:siteId${usersOverview}`,
-		detail: `/:siteId${userDetail}`,
-		detailGeneral: `/:siteId${userDetailGeneral}`,
-	},
-	roles: {
-		root: `/:siteId${rolesRoot}`,
-		overview: `/:siteId${rolesOverview}`,
 	},
 };

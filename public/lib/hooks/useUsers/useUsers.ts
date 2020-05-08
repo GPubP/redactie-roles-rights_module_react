@@ -4,15 +4,15 @@ import { LoadingState } from '../../roles.types';
 import { SearchParams } from '../../services/api';
 import { getUsers, UsersSchema } from '../../services/users';
 
-const useContentTypes = (searchParams: SearchParams): [LoadingState, UsersSchema | null] => {
+const useUsers = (searchParams: SearchParams): [LoadingState, UsersSchema | null] => {
 	const [loadingState, setLoadingState] = useState<LoadingState>(LoadingState.Loading);
-	const [contentTypes, setContentTypes] = useState<UsersSchema | null>(null);
+	const [users, setUsers] = useState<UsersSchema | null>(null);
 
 	useEffect(() => {
 		getUsers(searchParams)
 			.then(result => {
 				if (result) {
-					setContentTypes(result);
+					setUsers(result);
 				}
 				setLoadingState(LoadingState.Loaded);
 			})
@@ -21,7 +21,7 @@ const useContentTypes = (searchParams: SearchParams): [LoadingState, UsersSchema
 			});
 	}, [searchParams]);
 
-	return [loadingState, contentTypes];
+	return [loadingState, users];
 };
 
-export default useContentTypes;
+export default useUsers;

@@ -28,8 +28,8 @@ const UserUpdate: FC<RolesRouteProps<{ userUuid?: string }>> = ({ route, match }
 		const uuidRegex =
 			'\\b[0-9a-f]{8}\\b-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-\\b[0-9a-f]{12}\\b';
 
-		// Redirect /gebruikers/:userUuid to /gebruikers/:userUuid/algemeen
-		if (new RegExp(`/gebruikers/${uuidRegex}$`).test(location.pathname)) {
+		// Redirect /users/:userUuid to /users/:userUuid/algemeen
+		if (new RegExp(`/users/${uuidRegex}$`).test(location.pathname)) {
 			return <Redirect to={`${match.url}/algemeen`} />;
 		}
 

@@ -19,8 +19,7 @@ import { DEFAULT_USERS_SEARCH_PARAMS } from '../../services/users/users.service.
 import { USERS_OVERVIEW_COLUMNS } from './UsersOverview.const';
 import { OrderBy, UsersOverviewTableRow } from './UsersOverview.types';
 
-const UsersOverview: FC<RolesRouteProps<{ siteId: string }>> = ({ match }) => {
-	const { siteId } = match.params;
+const UsersOverview: FC<RolesRouteProps> = () => {
 	/**
 	 * Hooks
 	 */
@@ -36,7 +35,7 @@ const UsersOverview: FC<RolesRouteProps<{ siteId: string }>> = ({ match }) => {
 		if (loadingState === LoadingState.Loaded || loadingState === LoadingState.Error) {
 			setInitialLoading(LoadingState.Loaded);
 		}
-	}, [loadingState, siteId]);
+	}, [loadingState]);
 	/**
 	 * Methods
 	 */
@@ -89,17 +88,17 @@ const UsersOverview: FC<RolesRouteProps<{ siteId: string }>> = ({ match }) => {
 	 * Render
 	 */
 	const renderOverview = (): ReactElement | null => {
-		if (!users?.data) {
+		if (!users?._embedded) {
 			return null;
 		}
 
-		const usersRows: UsersOverviewTableRow[] = users.data.map(user => ({
-			uuid: user.uuid as string,
-			name: user.name,
+		const usersRows: UsersOverviewTableRow[] = users._embedded.map(user => ({
+			uuid: user.id,
+			name: user.firstname + user.lastname,
 			type: user.type,
-			added: user.added,
-			status: user.status || 'N/A',
-			navigate: userUuid => navigate(MODULE_PATHS.users.detail, { userUuid }),
+			added: user.email,
+			status: user.username || 'N/A',
+			navigate: (userUuid: string) => navigate(MODULE_PATHS.users.detail, { userUuid }),
 		}));
 
 		return (
@@ -118,13 +117,13 @@ const UsersOverview: FC<RolesRouteProps<{ siteId: string }>> = ({ match }) => {
 					columns={USERS_OVERVIEW_COLUMNS}
 					rows={usersRows}
 					currentPage={
-						Math.ceil(users.paging.skip / DEFAULT_USERS_SEARCH_PARAMS.limit) + 1
+						Math.ceil(users._page.totalPages / DEFAULT_USERS_SEARCH_PARAMS.limit) + 1
 					}
 					itemsPerPage={DEFAULT_USERS_SEARCH_PARAMS.limit}
 					onPageChange={handlePageChange}
 					orderBy={handleOrderBy}
 					activeSorting={activeSorting}
-					totalValues={users?.paging?.total || 0}
+					totalValues={users?._page?.totalElements || 0}
 					loading={loadingState === LoadingState.Loading}
 				></PaginatedTable>
 			</div>
@@ -136,10 +135,7 @@ const UsersOverview: FC<RolesRouteProps<{ siteId: string }>> = ({ match }) => {
 			<ContextHeader title="Gebruikers">
 				<ContextHeaderTopSection>{breadcrumbs}</ContextHeaderTopSection>
 				<ContextHeaderActionsSection>
-					<Button
-						onClick={() => navigate(MODULE_PATHS.users.overview, { siteId })}
-						iconLeft="plus"
-					>
+					<Button onClick={() => navigate(MODULE_PATHS.users.overview)} iconLeft="plus">
 						Nieuwe maken
 					</Button>
 				</ContextHeaderActionsSection>

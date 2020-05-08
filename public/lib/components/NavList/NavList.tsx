@@ -1,7 +1,7 @@
 import React, { FC } from 'react';
 import { NavLink } from 'react-router-dom';
 
-import { NavListProps } from './Navlist.types';
+import { NavListProps } from './NavList.types';
 
 const NavList: FC<NavListProps> = ({ items }) => {
 	return (

@@ -9,11 +9,11 @@ export const getUsers = async (
 ): Promise<UsersSchema | null> => {
 	try {
 		const response: UsersSchema = await api
-			.get(`content/content-types?${parseSearchParams(searchParams)}`)
+			.get(`users?${parseSearchParams(searchParams)}`)
 			.json();
 
 		if (!response) {
-			throw new Error('Failed to get content-types');
+			throw new Error('Failed to get users');
 		}
 
 		return response;
