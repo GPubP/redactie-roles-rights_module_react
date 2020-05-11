@@ -1,8 +1,6 @@
 import {
-	CreateUserPayload,
 	GetUserPayload,
 	GetUsersPayload,
-	UpdateUserPayload,
 	usersApiService,
 	UsersApiService,
 } from '../../services/users';
