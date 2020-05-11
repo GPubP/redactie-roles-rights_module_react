@@ -12,6 +12,7 @@ import { DataLoader, NavList } from '../../components';
 import { useRoutesBreadcrumbs } from '../../hooks';
 import useUser from '../../hooks/useUser/useUser';
 import { LoadingState, RolesRouteProps } from '../../roles.types';
+import { rolesService } from '../../store/roles';
 import { usersService } from '../../store/users';
 
 import { USER_UPDATE_NAV_LIST_ITEMS } from './UserUpdate.const';
@@ -28,6 +29,8 @@ const UserUpdate: FC<RolesRouteProps<{ userUuid?: string }>> = ({ route, match }
 	useEffect(() => {
 		if (userUuid) {
 			usersService.getUser({ id: userUuid });
+			usersService.getUserRoles({ id: userUuid });
+			rolesService.getRoles();
 			return;
 		}
 	}, [userUuid]);

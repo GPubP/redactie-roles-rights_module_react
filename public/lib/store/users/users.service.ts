@@ -44,6 +44,22 @@ export class UsersService {
 			})
 			.finally(() => this.store.setIsFetching(false));
 	}
+
+	public getUserRoles(payload: GetUserPayload): void {
+		this.store.setIsFetching(true);
+		this.usersService
+			.getUserRoles(payload)
+			.then(response => {
+				console.log(response);
+				/* 	this.store.update({
+					user: response,
+				}); */
+			})
+			.catch(err => {
+				this.store.setError(err);
+			})
+			.finally(() => this.store.setIsFetching(false));
+	}
 }
 
 export const usersService = new UsersService(usersStore, usersApiService);

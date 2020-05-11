@@ -1,3 +1,4 @@
+import { RolesModel } from '../../store/roles';
 import api, { parseSearchParams } from '../api/api.service';
 
 import { DEFAULT_USERS_SEARCH_PARAMS } from './users.service.const';
@@ -21,6 +22,10 @@ export class UsersApiService {
 
 	public async getUser({ id }: GetUserPayload): Promise<UserResponse> {
 		return await api.get(`users/${id}`).json<UserResponse>();
+	}
+
+	public async getUserRoles({ id }: GetUserPayload): Promise<RolesModel> {
+		return await api.get(`users/${id}/roles`).json<RolesModel>();
 	}
 }
 
