@@ -2,46 +2,47 @@ import Core, { ModuleRouteConfig } from '@redactie/redactie-core';
 import React, { FC } from 'react';
 import { Redirect } from 'react-router-dom';
 
-import { registerRoutes } from './lib/connectors/sites';
+import { registerRolesAPI } from './lib/api';
 import { TenantContext } from './lib/context';
 import { MODULE_PATHS } from './lib/roles.const';
-import { RolesRouteProps } from './lib/roles.types';
-import { RolesOverview } from './lib/views';
+import { RolesModuleProps } from './lib/roles.types';
+import { UsersOverview } from './lib/views';
 
-const RolesComponent: FC<RolesRouteProps> = ({ route, location, match, tenantId }) => {
-	// if path is /roles, redirect to /roles/overzicht
-	if (
-		/\/\b[0-9a-f]{8}\b-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-\b[0-9a-f]{12}\b\/roles$/.test(
-			location.pathname
-		)
-	) {
-		return <Redirect to={`${location.pathname}/overzicht`} />;
+const RolesComponent: FC<RolesModuleProps> = ({ route, location, tenantId }) => {
+	// if path is /users, redirect to /users/overzicht
+	if (/\/users$/.test(location.pathname)) {
+		return <Redirect to={`/${tenantId}/users/overzicht`} />;
 	}
 
 	return (
 		<TenantContext.Provider value={{ tenantId }}>
 			{Core.routes.render(route.routes as ModuleRouteConfig[], {
-				basePath: match.url,
 				routes: route.routes,
-				tenantId,
 			})}
 		</TenantContext.Provider>
 	);
 };
 
-registerRoutes({
-	path: MODULE_PATHS.roles.root,
+Core.routes.register({
+	path: MODULE_PATHS.tenantRoot,
 	component: RolesComponent,
-	exact: true,
 	navigation: {
-		renderContext: 'site',
-		context: 'site',
-		label: 'Rollen en rechten',
+		label: 'Gebruikers',
 	},
 	routes: [
 		{
-			path: MODULE_PATHS.roles.overview,
-			component: RolesOverview,
+			path: MODULE_PATHS.tenantUsersOverview,
+			component: UsersOverview,
+			navigation: {
+				label: 'Gebruikers',
+				parentPath: MODULE_PATHS.tenantRoot,
+			},
 		},
 	],
 });
+
+// API export
+
+registerRolesAPI();
+
+export * from './lib/api/api.types';
