@@ -12,7 +12,7 @@ import { DataLoader, NavList } from '../../components';
 import { useRoutesBreadcrumbs } from '../../hooks';
 import useUser from '../../hooks/useUser/useUser';
 import { LoadingState, RolesRouteProps } from '../../roles.types';
-import { internalService, useUserFacade } from '../../store/internal';
+import { userService, useUserFacade } from '../../store/user';
 
 import { USER_UPDATE_NAV_LIST_ITEMS } from './UserUpdate.const';
 
@@ -36,7 +36,7 @@ const UserUpdate: FC<RolesRouteProps<{ userUuid?: string }>> = ({ route, match }
 
 	useEffect(() => {
 		if (userLoadingState !== LoadingState.Loading && user) {
-			internalService.updateUser(user);
+			userService.updateUser(user);
 		}
 	}, [user, userLoadingState]);
 

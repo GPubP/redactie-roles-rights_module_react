@@ -4,7 +4,7 @@ import { takeUntil } from 'rxjs/operators';
 
 import { UserRolesSchema } from '../../services/user';
 
-import { internalQuery } from './internal.query';
+import { userQuery } from './user.query';
 
 export const useUserFacade = (): UserRolesSchema | null => {
 	const [user, setUser] = useState<UserRolesSchema | null>(null);
@@ -12,7 +12,7 @@ export const useUserFacade = (): UserRolesSchema | null => {
 	useEffect(() => {
 		const destroyed$: Subject<boolean> = new Subject<boolean>();
 
-		internalQuery.user$.pipe(takeUntil(destroyed$)).subscribe((user: any) => {
+		userQuery.user$.pipe(takeUntil(destroyed$)).subscribe((user: any) => {
 			if (user) {
 				return setUser(user);
 			}
