@@ -22,6 +22,17 @@ export const DUMMY_SITES = [
 	},
 ];
 
+export const DUMMY_ROLES = [
+	{
+		name: 'Tenantbeheerder',
+		checked: true,
+	},
+	{
+		name: 'Contentbeheerder',
+		checked: true,
+	},
+];
+
 export const SITE_COLUMNS = (): any[] => [
 	{
 		label: 'Naam',

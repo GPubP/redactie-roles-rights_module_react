@@ -1,9 +1,14 @@
-import { Button, Card } from '@acpaas-ui/react-components';
+import { Button, Card, Checkbox } from '@acpaas-ui/react-components';
 import { ActionBar, ActionBarContentSection, Table } from '@acpaas-ui/react-editorial-components';
 import { Field, Formik } from 'formik';
 import React, { FC, ReactElement } from 'react';
 
-import { DUMMY_SITES, SITE_COLUMNS, SITE_VALIDATION_SCHEMA } from './UserDetailRoles.const';
+import {
+	DUMMY_ROLES,
+	DUMMY_SITES,
+	SITE_COLUMNS,
+	SITE_VALIDATION_SCHEMA,
+} from './UserDetailRoles.const';
 import { UserDetailRolesProps } from './UserDetailRoles.types';
 
 const UserDetailRoles: FC<UserDetailRolesProps> = ({ user }) => {
@@ -33,7 +38,7 @@ const UserDetailRoles: FC<UserDetailRolesProps> = ({ user }) => {
 		return (
 			<Formik
 				initialValues={{ fields: DUMMY_SITES }}
-				onSubmit={() => console.log('submit form')}
+				onSubmit={() => console.log('submit table form')}
 				validationSchema={SITE_VALIDATION_SCHEMA}
 			>
 				{() => <Field name="fields" placeholder="No fields" as={renderTableField} />}
@@ -41,10 +46,30 @@ const UserDetailRoles: FC<UserDetailRolesProps> = ({ user }) => {
 		);
 	};
 
+	const renderRolesForm = (): ReactElement => {
+		return (
+			<Formik initialValues={DUMMY_ROLES} onSubmit={() => console.log('submit roles form')}>
+				{({ values }) =>
+					values.map((role, index) => (
+						<Field
+							key={index}
+							as={Checkbox}
+							checked={role.checked}
+							id={role.name}
+							name={role.name}
+							label={role.name}
+						/>
+					))
+				}
+			</Formik>
+		);
+	};
+
 	return (
 		<Card>
 			<div className="u-margin">
-				<h5>Rollen</h5>
+				<h5 className="u-margin-bottom">Rollen</h5>
+				{renderRolesForm()}
 				{renderTableForm()}
 				<ActionBar className="o-action-bar--fixed" isOpen>
 					<ActionBarContentSection>
