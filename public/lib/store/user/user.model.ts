@@ -1,5 +1,5 @@
 import { UserRolesSchema } from '../../services/user';
 
-export interface InternalState {
+export interface UserState {
 	readonly user: UserRolesSchema | null;
 }

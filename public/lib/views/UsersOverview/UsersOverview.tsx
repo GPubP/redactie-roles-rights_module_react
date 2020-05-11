@@ -11,23 +11,25 @@ import React, { FC, ReactElement, useEffect, useState } from 'react';
 import { DataLoader, FilterForm } from '../../components';
 import { useNavigate, useRoutesBreadcrumbs, useUsers } from '../../hooks';
 import { MODULE_PATHS } from '../../roles.const';
-import { generateFilterFormState } from '../../roles.helpers';
 import { FilterFormState, LoadingState, RolesRouteProps } from '../../roles.types';
-import { FilterItemSchema } from '../../services/filterItems';
 import { DEFAULT_USERS_SEARCH_PARAMS } from '../../services/users/users.service.const';
 
-import { USERS_OVERVIEW_COLUMNS } from './UsersOverview.const';
-import { OrderBy, UsersOverviewTableRow } from './UsersOverview.types';
+import { CONTENT_INITIAL_FILTER_STATE, USERS_OVERVIEW_COLUMNS } from './UsersOverview.const';
+import { FilterItemSchema, OrderBy, UsersOverviewTableRow } from './UsersOverview.types';
 
 const UsersOverview: FC<RolesRouteProps> = () => {
 	/**
 	 * Hooks
 	 */
+	const [currentPage, setCurrentPage] = useState(DEFAULT_USERS_SEARCH_PARAMS.skip);
 	const [filterItems, setFilterItems] = useState<FilterItemSchema[]>([]);
+	const [filterFormState, setFilterFormState] = useState<FilterFormState>(
+		CONTENT_INITIAL_FILTER_STATE
+	);
 	const { navigate } = useNavigate();
 	const breadcrumbs = useRoutesBreadcrumbs();
 	const [usersSearchParams, setUsersSearchParams] = useState(DEFAULT_USERS_SEARCH_PARAMS);
-	const [loadingState, users] = useUsers(usersSearchParams);
+	const [loadingState, users, usersMeta] = useUsers();
 	const [initialLoading, setInitialLoading] = useState(LoadingState.Loading);
 	const [activeSorting, setActiveSorting] = useState<OrderBy>();
 
@@ -40,14 +42,33 @@ const UsersOverview: FC<RolesRouteProps> = () => {
 	 * Methods
 	 */
 
-	const onSubmit = ({ name }: FilterFormState): void => {
+	const createFilterItems = ({
+		name,
+	}: FilterFormState): {
+		filters: FilterItemSchema[];
+	} => {
+		const filters = [
+			{
+				filterKey: 'search',
+				valuePrefix: 'Zoekterm',
+				value: name,
+			},
+		];
+
+		return {
+			filters: [...filters].filter(item => !!item.value),
+		};
+	};
+
+	const onSubmit = (filterFormState: FilterFormState): void => {
 		//add item to filterItems for Taglist
-		const request = { label: name, value: name };
-		setFilterItems([request]);
+		setFilterFormState(filterFormState);
+		const filterItems = createFilterItems(filterFormState);
+		setFilterItems(filterItems.filters);
 		//add value to searchParams
 		setUsersSearchParams({
 			...usersSearchParams,
-			search: name,
+			search: filterFormState.name,
 			skip: 0,
 		});
 	};
@@ -58,6 +79,7 @@ const UsersOverview: FC<RolesRouteProps> = () => {
 		setFilterItems(emptyFilter);
 		//delete search param from api call
 		setUsersSearchParams(DEFAULT_USERS_SEARCH_PARAMS);
+		setFilterFormState(CONTENT_INITIAL_FILTER_STATE);
 	};
 
 	const deleteFilter = (item: any): void => {
@@ -66,12 +88,18 @@ const UsersOverview: FC<RolesRouteProps> = () => {
 		setFilterItems(setFilter);
 		//set empty searchParams
 		setUsersSearchParams(DEFAULT_USERS_SEARCH_PARAMS);
+		setFilterFormState({
+			...filterFormState,
+			[item.filterKey]: '',
+		});
 	};
 
-	const handlePageChange = (page: number): void => {
+	const handlePageChange = (pageNumber: number): void => {
+		setCurrentPage(pageNumber);
+
 		setUsersSearchParams({
 			...usersSearchParams,
-			skip: (page - 1) * DEFAULT_USERS_SEARCH_PARAMS.limit,
+			skip: pageNumber,
 		});
 	};
 
@@ -88,24 +116,24 @@ const UsersOverview: FC<RolesRouteProps> = () => {
 	 * Render
 	 */
 	const renderOverview = (): ReactElement | null => {
-		if (!users?._embedded) {
+		if (!users) {
 			return null;
 		}
 
-		const usersRows: UsersOverviewTableRow[] = users._embedded.map(user => ({
+		const usersRows: UsersOverviewTableRow[] = users.map(user => ({
 			uuid: user.id,
 			name: user.firstname + user.lastname,
 			type: user.type,
 			added: user.email,
 			status: user.username || 'N/A',
-			navigate: (userUuid: string) => navigate(MODULE_PATHS.users.detail, { userUuid }),
+			navigate: (userUuid: string) => navigate(MODULE_PATHS.tenantUserDetail, { userUuid }),
 		}));
 
 		return (
 			<div className="u-container u-wrapper">
 				<div className="u-margin-top">
 					<FilterForm
-						initialState={generateFilterFormState()}
+						initialState={filterFormState}
 						onCancel={deleteAllFilters}
 						onSubmit={onSubmit}
 						deleteActiveFilter={deleteFilter}
@@ -116,14 +144,12 @@ const UsersOverview: FC<RolesRouteProps> = () => {
 					className="u-margin-top"
 					columns={USERS_OVERVIEW_COLUMNS}
 					rows={usersRows}
-					currentPage={
-						Math.ceil(users._page.totalPages / DEFAULT_USERS_SEARCH_PARAMS.limit) + 1
-					}
+					currentPage={currentPage}
 					itemsPerPage={DEFAULT_USERS_SEARCH_PARAMS.limit}
 					onPageChange={handlePageChange}
 					orderBy={handleOrderBy}
 					activeSorting={activeSorting}
-					totalValues={users?._page?.totalElements || 0}
+					totalValues={usersMeta?.totalElements}
 					loading={loadingState === LoadingState.Loading}
 				></PaginatedTable>
 			</div>
@@ -135,7 +161,10 @@ const UsersOverview: FC<RolesRouteProps> = () => {
 			<ContextHeader title="Gebruikers">
 				<ContextHeaderTopSection>{breadcrumbs}</ContextHeaderTopSection>
 				<ContextHeaderActionsSection>
-					<Button onClick={() => navigate(MODULE_PATHS.users.overview)} iconLeft="plus">
+					<Button
+						onClick={() => navigate(MODULE_PATHS.tenantUsersOverview)}
+						iconLeft="plus"
+					>
 						Nieuwe maken
 					</Button>
 				</ContextHeaderActionsSection>

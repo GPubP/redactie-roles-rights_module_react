@@ -8,23 +8,16 @@ export const BREADCRUMB_OPTIONS = {
 	],
 };
 
-const root = '/users';
-
-const usersRoot = `${root}`;
-
-const usersOverview = `${usersRoot}/overzicht`;
-
-const userDetail = `${usersRoot}/:userUuid`;
-const userDetailGeneral = `${userDetail}/algemeen`;
-const userDetailRoles = `${userDetail}/rollen`;
+const tenantRoot = '/users';
+const tenantUsersOverview = `${tenantRoot}/overzicht`;
+const tenantUserDetail = `${tenantRoot}/:userUuid`;
+const tenantUserDetailGeneral = `${tenantUserDetail}/algemeen`;
+const tenantUserDetailRoles = `${tenantUserDetail}/rollen`;
 
 export const MODULE_PATHS = {
-	root,
-	users: {
-		root: usersRoot,
-		overview: usersOverview,
-		detail: userDetail,
-		detailGeneral: userDetailGeneral,
-		detailRoles: userDetailRoles,
-	},
+	tenantRoot,
+	tenantUsersOverview,
+	tenantUserDetail,
+	tenantUserDetailGeneral,
+	tenantUserDetailRoles,
 };

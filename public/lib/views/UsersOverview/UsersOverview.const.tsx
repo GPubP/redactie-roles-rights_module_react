@@ -4,6 +4,10 @@ import React from 'react';
 
 import { UsersOverviewTableRow } from './UsersOverview.types';
 
+export const CONTENT_INITIAL_FILTER_STATE = {
+	name: '',
+};
+
 export const USERS_OVERVIEW_COLUMNS = [
 	{
 		label: 'Naam',

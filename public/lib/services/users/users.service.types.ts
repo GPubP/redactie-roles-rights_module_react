@@ -1,11 +1,17 @@
-export interface PagingSchema {
+import { SearchParams } from '../api';
+
+export interface UsersResponse {
+	_embedded: UserResponse[];
+	_page: UserMetaResponse;
+}
+export interface UserMetaResponse {
 	size: number;
 	totalElements: boolean;
 	totalPages: number;
 	number: number;
 }
 
-export interface UserSchema {
+export interface UserResponse {
 	address: string;
 	domain: string;
 	email: string;
@@ -19,7 +25,17 @@ export interface UserSchema {
 	username: string;
 }
 
-export interface UsersSchema {
-	_embedded: UserSchema[];
-	_page: PagingSchema;
+export interface GetUserPayload {
+	id: string;
 }
+export interface CreateUserPayload {
+	firstname: string;
+	lastname: string;
+}
+
+export interface UpdateUserPayload {
+	id: string;
+	body: CreateUserPayload;
+}
+
+export type GetUsersPayload = SearchParams;
