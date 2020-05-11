@@ -15,6 +15,7 @@ import { generateFilterFormState } from '../../roles.helpers';
 import { FilterFormState, LoadingState, RolesRouteProps } from '../../roles.types';
 import { FilterItemSchema } from '../../services/filterItems';
 import { DEFAULT_USERS_SEARCH_PARAMS } from '../../services/users/users.service.const';
+import { usersService } from '../../store/users';
 
 import { USERS_OVERVIEW_COLUMNS } from './UsersOverview.const';
 import { OrderBy, UsersOverviewTableRow } from './UsersOverview.types';
@@ -24,13 +25,18 @@ const UsersOverview: FC<RolesRouteProps<{ siteId: string }>> = ({ match }) => {
 	/**
 	 * Hooks
 	 */
+	const [currentPage, setCurrentPage] = useState(DEFAULT_USERS_SEARCH_PARAMS.skip);
 	const [filterItems, setFilterItems] = useState<FilterItemSchema[]>([]);
 	const { navigate } = useNavigate();
 	const breadcrumbs = useRoutesBreadcrumbs();
 	const [usersSearchParams, setUsersSearchParams] = useState(DEFAULT_USERS_SEARCH_PARAMS);
-	const [loadingState, users] = useUsers(usersSearchParams, siteId);
+	const [loadingState, users, usersMeta] = useUsers();
 	const [initialLoading, setInitialLoading] = useState(LoadingState.Loading);
 	const [activeSorting, setActiveSorting] = useState<OrderBy>();
+
+	useEffect(() => {
+		usersService.getUsersBySite(usersSearchParams, siteId);
+	}, [siteId, usersSearchParams]);
 
 	useEffect(() => {
 		if (loadingState === LoadingState.Loaded || loadingState === LoadingState.Error) {
@@ -69,10 +75,12 @@ const UsersOverview: FC<RolesRouteProps<{ siteId: string }>> = ({ match }) => {
 		setUsersSearchParams(DEFAULT_USERS_SEARCH_PARAMS);
 	};
 
-	const handlePageChange = (page: number): void => {
+	const handlePageChange = (pageNumber: number): void => {
+		setCurrentPage(pageNumber);
+
 		setUsersSearchParams({
 			...usersSearchParams,
-			skip: (page - 1) * DEFAULT_USERS_SEARCH_PARAMS.limit,
+			skip: pageNumber,
 		});
 	};
 
@@ -89,11 +97,11 @@ const UsersOverview: FC<RolesRouteProps<{ siteId: string }>> = ({ match }) => {
 	 * Render
 	 */
 	const renderOverview = (): ReactElement | null => {
-		if (!users?._embedded) {
+		if (!users) {
 			return null;
 		}
 
-		const usersRows: UsersOverviewTableRow[] = users._embedded.map(user => ({
+		const usersRows: UsersOverviewTableRow[] = users.map(user => ({
 			uuid: user.id as string,
 			name: user.firstname + user.lastname,
 			type: user.type,
@@ -117,14 +125,12 @@ const UsersOverview: FC<RolesRouteProps<{ siteId: string }>> = ({ match }) => {
 					className="u-margin-top"
 					columns={USERS_OVERVIEW_COLUMNS}
 					rows={usersRows}
-					currentPage={
-						Math.ceil(users._page.number / DEFAULT_USERS_SEARCH_PARAMS.limit) + 1
-					}
+					currentPage={currentPage}
 					itemsPerPage={DEFAULT_USERS_SEARCH_PARAMS.limit}
 					onPageChange={handlePageChange}
 					orderBy={handleOrderBy}
 					activeSorting={activeSorting}
-					totalValues={users?._page.totalElements || 0}
+					totalValues={usersMeta?.totalElements}
 					loading={loadingState === LoadingState.Loading}
 				></PaginatedTable>
 			</div>
