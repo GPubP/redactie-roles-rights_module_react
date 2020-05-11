@@ -12,7 +12,6 @@ import { DataLoader, NavList } from '../../components';
 import { useRoutesBreadcrumbs } from '../../hooks';
 import useUser from '../../hooks/useUser/useUser';
 import { LoadingState, RolesRouteProps } from '../../roles.types';
-import { userService, useUserFacade } from '../../store/user';
 
 import { USER_UPDATE_NAV_LIST_ITEMS } from './UserUpdate.const';
 
@@ -24,7 +23,6 @@ const UserUpdate: FC<RolesRouteProps<{ userUuid?: string }>> = ({ route, match }
 	const breadcrumbs = useRoutesBreadcrumbs();
 	const { siteId, userUuid } = useParams();
 	const [userLoadingState, user] = useUser(userUuid);
-	const internalUser = useUserFacade();
 
 	useEffect(() => {
 		if (userLoadingState !== LoadingState.Loading) {
@@ -34,17 +32,17 @@ const UserUpdate: FC<RolesRouteProps<{ userUuid?: string }>> = ({ route, match }
 		setInitialLoading(LoadingState.Loading);
 	}, [userLoadingState]);
 
-	useEffect(() => {
+	/* useEffect(() => {
 		if (userLoadingState !== LoadingState.Loading && user) {
 			userService.updateUser(user);
 		}
-	}, [user, userLoadingState]);
+	}, [user, userLoadingState]); */
 
 	/**
 	 * Render
 	 */
 	const renderChildRoutes = (): ReactElement | null => {
-		if (!internalUser) {
+		if (!user) {
 			return null;
 		}
 

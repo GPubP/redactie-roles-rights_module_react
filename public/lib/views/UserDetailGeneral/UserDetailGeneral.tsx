@@ -15,9 +15,7 @@ const UserDetailGeneral: FC<UserDetailGeneralProps> = ({ user }) => {
 					<div className="col-xs-12 ">
 						<span>Naam</span>
 						<p className="u-margin-top-xs">
-							<span className="u-text-light u-margin-right-xs">
-								{user.user.lastname}
-							</span>
+							<span className="u-text-light u-margin-right-xs">{user.lastname}</span>
 						</p>
 					</div>
 				</div>
@@ -25,9 +23,7 @@ const UserDetailGeneral: FC<UserDetailGeneralProps> = ({ user }) => {
 					<div className="col-xs-12 ">
 						<span>Voornaam</span>
 						<p className="u-margin-top-xs">
-							<span className="u-text-light u-margin-right-xs">
-								{user.user.firstname}
-							</span>
+							<span className="u-text-light u-margin-right-xs">{user.firstname}</span>
 						</p>
 					</div>
 				</div>
