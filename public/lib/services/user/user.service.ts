@@ -4,6 +4,8 @@ import { UserRolesSchema } from './user.service.types';
 
 export const getUser = async (uuid: string): Promise<UserRolesSchema | null> => {
 	try {
+		//TODO: fetch user from api when it's available
+
 		//const response: UserRolesSchema = await api.get(`users/${uuid}`).json();
 		const response: UserRolesSchema = {
 			user: {
