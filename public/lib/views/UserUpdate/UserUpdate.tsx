@@ -12,6 +12,7 @@ import { DataLoader, NavList } from '../../components';
 import { useRoutesBreadcrumbs } from '../../hooks';
 import useUser from '../../hooks/useUser/useUser';
 import { LoadingState, RolesRouteProps } from '../../roles.types';
+import { useUserFacade } from '../../store/users';
 
 import { USER_UPDATE_NAV_LIST_ITEMS } from './UserUpdate.const';
 
@@ -24,6 +25,8 @@ const UserUpdate: FC<RolesRouteProps<{ userUuid?: string }>> = ({ route, match }
 	const { siteId, userUuid } = useParams();
 	const [userLoadingState, user] = useUser(userUuid);
 
+	const internalUser = useUserFacade();
+
 	useEffect(() => {
 		if (userLoadingState !== LoadingState.Loading) {
 			return setInitialLoading(LoadingState.Loaded);
@@ -32,17 +35,21 @@ const UserUpdate: FC<RolesRouteProps<{ userUuid?: string }>> = ({ route, match }
 		setInitialLoading(LoadingState.Loading);
 	}, [userLoadingState]);
 
-	/* useEffect(() => {
+	useEffect(() => {
 		if (userLoadingState !== LoadingState.Loading && user) {
-			userService.updateUser(user);
+			console.log(user);
+			//userService.updateUser(user);
 		}
-	}, [user, userLoadingState]); */
+	}, [user, userLoadingState]);
 
 	/**
 	 * Render
 	 */
 	const renderChildRoutes = (): ReactElement | null => {
-		if (!user) {
+		console.log(internalUser);
+		console.log(user);
+
+		if (!internalUser) {
 			return null;
 		}
 
