@@ -12,7 +12,7 @@ import { DataLoader, NavList } from '../../components';
 import { useRoutesBreadcrumbs } from '../../hooks';
 import useUser from '../../hooks/useUser/useUser';
 import { LoadingState, RolesRouteProps } from '../../roles.types';
-import { userService, useUserFacade } from '../../store/user';
+import { usersService } from '../../store/users';
 
 import { USER_UPDATE_NAV_LIST_ITEMS } from './UserUpdate.const';
 
@@ -22,9 +22,15 @@ const UserUpdate: FC<RolesRouteProps<{ userUuid?: string }>> = ({ route, match }
 	 */
 	const [initialLoading, setInitialLoading] = useState(LoadingState.Loading);
 	const breadcrumbs = useRoutesBreadcrumbs();
-	const { siteId, userUuid } = useParams();
+	const { userUuid } = useParams();
 	const [userLoadingState, user] = useUser(userUuid);
-	const internalUser = useUserFacade();
+
+	useEffect(() => {
+		if (userUuid) {
+			usersService.getUser({ id: userUuid });
+			return;
+		}
+	}, [userUuid]);
 
 	useEffect(() => {
 		if (userLoadingState !== LoadingState.Loading) {
@@ -34,17 +40,11 @@ const UserUpdate: FC<RolesRouteProps<{ userUuid?: string }>> = ({ route, match }
 		setInitialLoading(LoadingState.Loading);
 	}, [userLoadingState]);
 
-	useEffect(() => {
-		if (userLoadingState !== LoadingState.Loading && user) {
-			userService.updateUser(user);
-		}
-	}, [user, userLoadingState]);
-
 	/**
 	 * Render
 	 */
 	const renderChildRoutes = (): ReactElement | null => {
-		if (!internalUser) {
+		if (!user) {
 			return null;
 		}
 
@@ -75,7 +75,6 @@ const UserUpdate: FC<RolesRouteProps<{ userUuid?: string }>> = ({ route, match }
 								items={USER_UPDATE_NAV_LIST_ITEMS.map(listItem => ({
 									...listItem,
 									to: generatePath(`${route.path}/${listItem.to}`, {
-										siteId,
 										userUuid,
 									}),
 								}))}
@@ -83,7 +82,7 @@ const UserUpdate: FC<RolesRouteProps<{ userUuid?: string }>> = ({ route, match }
 						</Card>
 					</div>
 					<div className="col-xs-9">
-						<DataLoader loadingState={LoadingState.Loaded} render={renderChildRoutes} />
+						<DataLoader loadingState={initialLoading} render={renderChildRoutes} />
 					</div>
 				</div>
 			</Container>

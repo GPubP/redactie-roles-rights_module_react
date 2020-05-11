@@ -14,10 +14,13 @@ const tenantUserDetail = `${tenantRoot}/:userUuid`;
 const tenantUserDetailGeneral = `${tenantUserDetail}/algemeen`;
 const tenantUserDetailRoles = `${tenantUserDetail}/rollen`;
 
+const tenantRolesRoot = `${tenantRoot}/roles`;
+
 export const MODULE_PATHS = {
 	tenantRoot,
 	tenantUsersOverview,
 	tenantUserDetail,
 	tenantUserDetailGeneral,
 	tenantUserDetailRoles,
+	tenantRolesRoot,
 };

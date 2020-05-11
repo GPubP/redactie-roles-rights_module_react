@@ -28,14 +28,5 @@ export interface UserResponse {
 export interface GetUserPayload {
 	id: string;
 }
-export interface CreateUserPayload {
-	firstname: string;
-	lastname: string;
-}
-
-export interface UpdateUserPayload {
-	id: string;
-	body: CreateUserPayload;
-}
 
 export type GetUsersPayload = SearchParams;
