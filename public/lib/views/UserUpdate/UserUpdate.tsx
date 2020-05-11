@@ -12,7 +12,7 @@ import { DataLoader, NavList } from '../../components';
 import { useRoutesBreadcrumbs } from '../../hooks';
 import useUser from '../../hooks/useUser/useUser';
 import { LoadingState, RolesRouteProps } from '../../roles.types';
-import { usersService, useUserFacade } from '../../store/users';
+import { usersService } from '../../store/users';
 
 import { USER_UPDATE_NAV_LIST_ITEMS } from './UserUpdate.const';
 
@@ -24,8 +24,6 @@ const UserUpdate: FC<RolesRouteProps<{ userUuid?: string }>> = ({ route, match }
 	const breadcrumbs = useRoutesBreadcrumbs();
 	const { userUuid } = useParams();
 	const [userLoadingState, user] = useUser(userUuid);
-
-	const internalUser = useUserFacade();
 
 	useEffect(() => {
 		if (userUuid) {
@@ -46,7 +44,7 @@ const UserUpdate: FC<RolesRouteProps<{ userUuid?: string }>> = ({ route, match }
 	 * Render
 	 */
 	const renderChildRoutes = (): ReactElement | null => {
-		if (!internalUser) {
+		if (!user) {
 			return null;
 		}
 
