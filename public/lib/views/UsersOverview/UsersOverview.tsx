@@ -13,10 +13,10 @@ import { useNavigate, useRoutesBreadcrumbs, useUsers } from '../../hooks';
 import { MODULE_PATHS } from '../../roles.const';
 import { FilterFormState, LoadingState, RolesRouteProps } from '../../roles.types';
 import { DEFAULT_USERS_SEARCH_PARAMS } from '../../services/users/users.service.const';
+import { usersService } from '../../store/users';
 
 import { CONTENT_INITIAL_FILTER_STATE, USERS_OVERVIEW_COLUMNS } from './UsersOverview.const';
 import { FilterItemSchema, OrderBy, UsersOverviewTableRow } from './UsersOverview.types';
-import { usersService } from '../../store/users';
 
 const UsersOverview: FC<RolesRouteProps> = () => {
 	/**
