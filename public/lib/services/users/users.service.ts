@@ -43,14 +43,6 @@ export class UsersApiService {
 
 		return response;
 	}
-
-	public async createUser(payload: CreateUserPayload): Promise<UserResponse> {
-		return await api.post('users', { json: payload }).json();
-	}
-
-	public async updateUser({ body, id }: UpdateUserPayload): Promise<UserResponse> {
-		return await api.put(`users/${id}`, { json: body }).json();
-	}
 }
 
 export const usersApiService = new UsersApiService();

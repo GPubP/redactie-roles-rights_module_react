@@ -11,9 +11,6 @@ export class UsersQuery extends QueryEntity<UsersState> {
 	public meta$ = this.select(state => state.meta);
 	public user$ = this.select(state => state.user);
 	public isFetching$ = this.select(state => state.isFetching);
-	public isCreating$ = this.select(state => state.isCreating);
-	public isUpdating$ = this.select(state => state.isUpdating);
-	public isActivating$ = this.select(state => state.isActivating);
 }
 
 export const usersQuery = new UsersQuery(usersStore);
