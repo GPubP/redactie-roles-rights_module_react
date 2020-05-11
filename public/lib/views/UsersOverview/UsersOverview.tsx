@@ -16,6 +16,7 @@ import { DEFAULT_USERS_SEARCH_PARAMS } from '../../services/users/users.service.
 
 import { CONTENT_INITIAL_FILTER_STATE, USERS_OVERVIEW_COLUMNS } from './UsersOverview.const';
 import { FilterItemSchema, OrderBy, UsersOverviewTableRow } from './UsersOverview.types';
+import { usersService } from '../../store/users';
 
 const UsersOverview: FC<RolesRouteProps<{ siteId: string }>> = ({ match }) => {
 	const { siteId } = match.params;
@@ -33,6 +34,10 @@ const UsersOverview: FC<RolesRouteProps<{ siteId: string }>> = ({ match }) => {
 	const [loadingState, users, usersMeta] = useUsers();
 	const [initialLoading, setInitialLoading] = useState(LoadingState.Loading);
 	const [activeSorting, setActiveSorting] = useState<OrderBy>();
+
+	useEffect(() => {
+		usersService.getUsers(usersSearchParams);
+	}, [usersSearchParams]);
 
 	useEffect(() => {
 		if (loadingState === LoadingState.Loaded || loadingState === LoadingState.Error) {
