@@ -10,7 +10,7 @@ export const getUsersBySite = async (
 ): Promise<UsersSchema | null> => {
 	try {
 		const response: UsersSchema = await api
-			.get(`user-roles/v1/sites/${siteId}/users?${parseSearchParams(searchParams)}`)
+			.get(`users-roles/v1/sites/${siteId}/users?${parseSearchParams(searchParams)}`)
 			.json();
 
 		if (!response) {
