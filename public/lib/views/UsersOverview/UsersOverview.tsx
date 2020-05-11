@@ -11,14 +11,12 @@ import React, { FC, ReactElement, useEffect, useState } from 'react';
 import { DataLoader, FilterForm } from '../../components';
 import { useNavigate, useRoutesBreadcrumbs, useUsers } from '../../hooks';
 import { MODULE_PATHS } from '../../roles.const';
-import { generateFilterFormState } from '../../roles.helpers';
 import { FilterFormState, LoadingState, RolesRouteProps } from '../../roles.types';
-import { FilterItemSchema } from '../../services/filterItems';
 import { DEFAULT_USERS_SEARCH_PARAMS } from '../../services/users/users.service.const';
 import { usersService } from '../../store/users';
 
-import { USERS_OVERVIEW_COLUMNS } from './UsersOverview.const';
-import { OrderBy, UsersOverviewTableRow } from './UsersOverview.types';
+import { CONTENT_INITIAL_FILTER_STATE, USERS_OVERVIEW_COLUMNS } from './UsersOverview.const';
+import { FilterItemSchema, OrderBy, UsersOverviewTableRow } from './UsersOverview.types';
 
 const UsersOverview: FC<RolesRouteProps<{ siteId: string }>> = ({ match }) => {
 	const { siteId } = match.params;
@@ -27,6 +25,9 @@ const UsersOverview: FC<RolesRouteProps<{ siteId: string }>> = ({ match }) => {
 	 */
 	const [currentPage, setCurrentPage] = useState(DEFAULT_USERS_SEARCH_PARAMS.skip);
 	const [filterItems, setFilterItems] = useState<FilterItemSchema[]>([]);
+	const [filterFormState, setFilterFormState] = useState<FilterFormState>(
+		CONTENT_INITIAL_FILTER_STATE
+	);
 	const { navigate } = useNavigate();
 	const breadcrumbs = useRoutesBreadcrumbs();
 	const [usersSearchParams, setUsersSearchParams] = useState(DEFAULT_USERS_SEARCH_PARAMS);
@@ -47,14 +48,33 @@ const UsersOverview: FC<RolesRouteProps<{ siteId: string }>> = ({ match }) => {
 	 * Methods
 	 */
 
-	const onSubmit = ({ name }: FilterFormState): void => {
+	const createFilterItems = ({
+		name,
+	}: FilterFormState): {
+		filters: FilterItemSchema[];
+	} => {
+		const filters = [
+			{
+				filterKey: 'search',
+				valuePrefix: 'Zoekterm',
+				value: name,
+			},
+		];
+
+		return {
+			filters: [...filters].filter(item => !!item.value),
+		};
+	};
+
+	const onSubmit = (filterFormState: FilterFormState): void => {
 		//add item to filterItems for Taglist
-		const request = { label: name, value: name };
-		setFilterItems([request]);
+		setFilterFormState(filterFormState);
+		const filterItems = createFilterItems(filterFormState);
+		setFilterItems(filterItems.filters);
 		//add value to searchParams
 		setUsersSearchParams({
 			...usersSearchParams,
-			search: name,
+			search: filterFormState.name,
 			skip: 0,
 		});
 	};
@@ -65,6 +85,7 @@ const UsersOverview: FC<RolesRouteProps<{ siteId: string }>> = ({ match }) => {
 		setFilterItems(emptyFilter);
 		//delete search param from api call
 		setUsersSearchParams(DEFAULT_USERS_SEARCH_PARAMS);
+		setFilterFormState(CONTENT_INITIAL_FILTER_STATE);
 	};
 
 	const deleteFilter = (item: any): void => {
@@ -73,6 +94,10 @@ const UsersOverview: FC<RolesRouteProps<{ siteId: string }>> = ({ match }) => {
 		setFilterItems(setFilter);
 		//set empty searchParams
 		setUsersSearchParams(DEFAULT_USERS_SEARCH_PARAMS);
+		setFilterFormState({
+			...filterFormState,
+			[item.filterKey]: '',
+		});
 	};
 
 	const handlePageChange = (pageNumber: number): void => {
@@ -114,7 +139,7 @@ const UsersOverview: FC<RolesRouteProps<{ siteId: string }>> = ({ match }) => {
 			<div className="u-container u-wrapper">
 				<div className="u-margin-top">
 					<FilterForm
-						initialState={generateFilterFormState()}
+						initialState={filterFormState}
 						onCancel={deleteAllFilters}
 						onSubmit={onSubmit}
 						deleteActiveFilter={deleteFilter}

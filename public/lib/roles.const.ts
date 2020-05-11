@@ -10,22 +10,22 @@ export const BREADCRUMB_OPTIONS = {
 	],
 };
 
-const root = '/:siteId/gebruikers';
+const siteRoot = '/:siteId/gebruikers';
 
-const rolesRoot = `${root}/roles`;
-const usersRoot = `${root}/users`;
+const siteRolesRoot = `${siteRoot}/roles`;
+const siteUsersRoot = `${siteRoot}/users`;
 
-const rolesOverview = `${rolesRoot}/overzicht`;
-const usersOverview = `${usersRoot}/overzicht`;
+const siteRolesOverview = `${siteRolesRoot}/overzicht`;
+const siteUsersOverview = `${siteUsersRoot}/overzicht`;
 
 export const MODULE_PATHS = {
-	root,
+	siteRoot,
 	users: {
-		root: usersRoot,
-		overview: usersOverview,
+		root: siteUsersRoot,
+		overview: siteUsersOverview,
 	},
 	roles: {
-		root: rolesRoot,
-		overview: rolesOverview,
+		root: siteRolesRoot,
+		overview: siteRolesOverview,
 	},
 };

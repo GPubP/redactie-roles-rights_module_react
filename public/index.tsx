@@ -31,7 +31,7 @@ const RolesComponent: FC<RolesModuleProps> = ({ route, location, match, tenantId
 };
 
 registerRoutes({
-	path: MODULE_PATHS.root,
+	path: MODULE_PATHS.siteRoot,
 	component: RolesComponent,
 	navigation: {
 		renderContext: 'site',
@@ -45,7 +45,7 @@ registerRoutes({
 			navigation: {
 				context: 'site',
 				label: 'Gebruikers',
-				parentPath: MODULE_PATHS.root,
+				parentPath: MODULE_PATHS.siteRoot,
 			},
 		},
 	],
