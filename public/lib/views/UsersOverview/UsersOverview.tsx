@@ -126,7 +126,7 @@ const UsersOverview: FC<RolesRouteProps> = () => {
 			type: user.type,
 			added: user.email,
 			status: user.username || 'N/A',
-			navigate: (userUuid: string) => navigate(MODULE_PATHS.users.detail, { userUuid }),
+			navigate: (userUuid: string) => navigate(MODULE_PATHS.tenantUserDetail, { userUuid }),
 		}));
 
 		return (
@@ -161,7 +161,10 @@ const UsersOverview: FC<RolesRouteProps> = () => {
 			<ContextHeader title="Gebruikers">
 				<ContextHeaderTopSection>{breadcrumbs}</ContextHeaderTopSection>
 				<ContextHeaderActionsSection>
-					<Button onClick={() => navigate(MODULE_PATHS.users.overview)} iconLeft="plus">
+					<Button
+						onClick={() => navigate(MODULE_PATHS.tenantUsersOverview)}
+						iconLeft="plus"
+					>
 						Nieuwe maken
 					</Button>
 				</ContextHeaderActionsSection>
