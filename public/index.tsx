@@ -34,6 +34,10 @@ Core.routes.register({
 		{
 			path: MODULE_PATHS.tenantUsersOverview,
 			component: UsersOverview,
+			navigation: {
+				label: 'Gebruikers',
+				parentPath: MODULE_PATHS.tenantRoot,
+			},
 		},
 		{
 			path: MODULE_PATHS.tenantUserDetail,
