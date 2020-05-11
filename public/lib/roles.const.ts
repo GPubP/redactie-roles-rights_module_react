@@ -13,6 +13,7 @@ const rolesOverview = `${rolesRoot}/overzicht`;
 const usersOverview = `${usersRoot}/overzicht`;
 
 export const MODULE_PATHS = {
+	dashboard: '/dashboard',
 	tenantRoot,
 	tenantUsersOverview,
 	root,
