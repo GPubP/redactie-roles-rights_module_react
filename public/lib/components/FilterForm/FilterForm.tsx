@@ -23,6 +23,7 @@ const FilterForm: FC<FilterFormProps> = ({
 	return (
 		<>
 			<Formik
+				enableReinitialize={true}
 				initialValues={initialState}
 				onSubmit={onSubmit}
 				validationSchema={FILTER_FORM_VALIDATION_SCHEMA}
