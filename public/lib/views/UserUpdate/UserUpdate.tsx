@@ -64,7 +64,7 @@ const UserUpdate: FC<RolesRouteProps<{ userUuid?: string }>> = ({ route, match }
 
 	return (
 		<>
-			<ContextHeader title="Voornaam Achternaam">
+			<ContextHeader title={user && `${user?.firstname} ${user?.lastname}`}>
 				<ContextHeaderTopSection>{breadcrumbs}</ContextHeaderTopSection>
 			</ContextHeader>
 			<Container>
