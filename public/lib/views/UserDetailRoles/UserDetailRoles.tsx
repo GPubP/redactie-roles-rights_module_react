@@ -3,6 +3,8 @@ import { ActionBar, ActionBarContentSection, Table } from '@acpaas-ui/react-edit
 import { Field, Formik } from 'formik';
 import React, { FC, ReactElement } from 'react';
 
+import { useCoreTranslation } from '../../connectors/translations';
+
 import {
 	DUMMY_ROLES,
 	DUMMY_SITES,
@@ -12,6 +14,7 @@ import {
 import { UserDetailRolesProps } from './UserDetailRoles.types';
 
 const UserDetailRoles: FC<UserDetailRolesProps> = ({ user }) => {
+	const [t] = useCoreTranslation();
 	/**
 	 * Render
 	 */
@@ -79,10 +82,10 @@ const UserDetailRoles: FC<UserDetailRolesProps> = ({ user }) => {
 								onClick={() => console.log('save')}
 								type="success"
 							>
-								Bewaar
+								{t('BUTTON_SAVE')}
 							</Button>
 							<Button onClick={() => console.log('cancel')} outline>
-								Annuleer
+								{t('BUTTON_CANCEL')}
 							</Button>
 						</div>
 					</ActionBarContentSection>
