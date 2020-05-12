@@ -1,7 +1,8 @@
 import { EntityState } from '@datorama/akita';
 
-import { RolesResponse } from '../../services/roles';
+import { RoleResponse, RolesResponse } from '../../services/roles';
 
+export type RoleModel = RoleResponse;
 export type RolesModel = RolesResponse;
 
 export interface RolesState extends EntityState<RolesModel, string> {

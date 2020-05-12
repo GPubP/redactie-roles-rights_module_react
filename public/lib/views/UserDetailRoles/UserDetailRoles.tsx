@@ -3,6 +3,8 @@ import { ActionBar, ActionBarContentSection, Table } from '@acpaas-ui/react-edit
 import { Field, Formik } from 'formik';
 import React, { FC, ReactElement } from 'react';
 
+import { FormViewUserRoles } from '../../components';
+
 import {
 	DUMMY_ROLES,
 	DUMMY_SITES,
@@ -11,7 +13,18 @@ import {
 } from './UserDetailRoles.const';
 import { UserDetailRolesProps } from './UserDetailRoles.types';
 
-const UserDetailRoles: FC<UserDetailRolesProps> = ({ user }) => {
+const UserDetailRoles: FC<UserDetailRolesProps> = ({ user, roles, onCancel, onSubmit }) => {
+	/**
+	 * Functions
+	 */
+	const onConfigSave = (): void => {
+		onSubmit(user, roles);
+	};
+
+	const onConfigChange = (updatedObject: any): void => {
+		console.log('change', updatedObject);
+	};
+
 	/**
 	 * Render
 	 */
@@ -38,29 +51,10 @@ const UserDetailRoles: FC<UserDetailRolesProps> = ({ user }) => {
 		return (
 			<Formik
 				initialValues={{ fields: DUMMY_SITES }}
-				onSubmit={() => console.log('submit table form')}
+				onSubmit={onConfigChange}
 				validationSchema={SITE_VALIDATION_SCHEMA}
 			>
 				{() => <Field name="fields" placeholder="No fields" as={renderTableField} />}
-			</Formik>
-		);
-	};
-
-	const renderRolesForm = (): ReactElement => {
-		return (
-			<Formik initialValues={DUMMY_ROLES} onSubmit={() => console.log('submit roles form')}>
-				{({ values }) =>
-					values.map((role, index) => (
-						<Field
-							key={index}
-							as={Checkbox}
-							checked={role.checked}
-							id={role.name}
-							name={role.name}
-							label={role.name}
-						/>
-					))
-				}
 			</Formik>
 		);
 	};
@@ -69,19 +63,19 @@ const UserDetailRoles: FC<UserDetailRolesProps> = ({ user }) => {
 		<Card>
 			<div className="u-margin">
 				<h5 className="u-margin-bottom">Rollen</h5>
-				{renderRolesForm()}
+				<FormViewUserRoles formState={DUMMY_ROLES} onSubmit={onConfigChange} />
 				{renderTableForm()}
 				<ActionBar className="o-action-bar--fixed" isOpen>
 					<ActionBarContentSection>
 						<div className="u-wrapper">
 							<Button
 								className="u-margin-right-xs"
-								onClick={() => console.log('save')}
+								onClick={onConfigSave}
 								type="success"
 							>
 								Bewaar
 							</Button>
-							<Button onClick={() => console.log('cancel')} outline>
+							<Button onClick={onCancel} outline>
 								Annuleer
 							</Button>
 						</div>

@@ -62,6 +62,8 @@ const UserUpdate: FC<RolesRouteProps<{ userUuid?: string }>> = ({ route, match }
 		return Core.routes.render(route.routes as ModuleRouteConfig[], {
 			routes: route.routes,
 			user,
+			onCancel: () => console.log('cancel'),
+			onSubmit: () => console.log('submit'),
 		});
 	};
 
