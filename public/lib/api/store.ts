@@ -1,3 +1,4 @@
+import { rolesQuery, rolesService } from '../store/roles';
 import { usersQuery, usersService } from '../store/users';
 
 export const store = {
@@ -6,5 +7,11 @@ export const store = {
 			getUsers: usersService.getUsersBySite,
 		},
 		query: usersQuery,
+	},
+	roles: {
+		service: {
+			getRoles: rolesService.getRolesBySite,
+		},
+		query: rolesQuery,
 	},
 };
