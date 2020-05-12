@@ -1,4 +1,4 @@
-import { Button, Card, Checkbox } from '@acpaas-ui/react-components';
+import { Button, Card } from '@acpaas-ui/react-components';
 import { ActionBar, ActionBarContentSection, Table } from '@acpaas-ui/react-editorial-components';
 import { Field, Formik } from 'formik';
 import React, { FC, ReactElement } from 'react';
