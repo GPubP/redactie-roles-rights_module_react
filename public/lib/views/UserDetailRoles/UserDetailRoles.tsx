@@ -4,6 +4,7 @@ import { Field, Formik } from 'formik';
 import React, { FC, ReactElement } from 'react';
 
 import { FormViewUserRoles } from '../../components';
+import { useCoreTranslation } from '../../connectors/translations';
 
 import {
 	DUMMY_ROLES,
@@ -14,6 +15,7 @@ import {
 import { UserDetailRolesProps } from './UserDetailRoles.types';
 
 const UserDetailRoles: FC<UserDetailRolesProps> = ({ user, roles, onCancel, onSubmit }) => {
+	const [t] = useCoreTranslation();
 	/**
 	 * Functions
 	 */
@@ -24,7 +26,6 @@ const UserDetailRoles: FC<UserDetailRolesProps> = ({ user, roles, onCancel, onSu
 	const onConfigChange = (updatedObject: any): void => {
 		console.log('change', updatedObject);
 	};
-
 	/**
 	 * Render
 	 */
@@ -73,10 +74,10 @@ const UserDetailRoles: FC<UserDetailRolesProps> = ({ user, roles, onCancel, onSu
 								onClick={onConfigSave}
 								type="success"
 							>
-								Bewaar
+								{t('BUTTON_SAVE')}
 							</Button>
 							<Button onClick={onCancel} outline>
-								Annuleer
+								{t('BUTTON_CANCEL')}
 							</Button>
 						</div>
 					</ActionBarContentSection>
