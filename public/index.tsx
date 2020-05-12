@@ -7,7 +7,7 @@ import { registerRoutes } from './lib/connectors/sites';
 import { TenantContext } from './lib/context';
 import { MODULE_PATHS } from './lib/roles.const';
 import { RolesModuleProps } from './lib/roles.types';
-import { UsersOverview } from './lib/views';
+import { RolesOverview, UsersOverview } from './lib/views';
 
 const RolesComponent: FC<RolesModuleProps> = ({ route, location, match, tenantId }) => {
 	// if path is /users, redirect to /users/overzicht
@@ -45,6 +45,15 @@ registerRoutes({
 			navigation: {
 				context: 'site',
 				label: 'Gebruikers',
+				parentPath: MODULE_PATHS.siteRoot,
+			},
+		},
+		{
+			path: MODULE_PATHS.roles.root,
+			component: RolesOverview,
+			navigation: {
+				context: 'site',
+				label: 'Rollen en rechten',
 				parentPath: MODULE_PATHS.siteRoot,
 			},
 		},
