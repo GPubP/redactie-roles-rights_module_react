@@ -13,7 +13,7 @@ const tenantUsersOverview = `${tenantRoot}/overzicht`;
 const tenantUserDetail = `${tenantRoot}/:userUuid`;
 const tenantUserDetailGeneral = `${tenantUserDetail}/algemeen`;
 const tenantUserDetailRoles = `${tenantUserDetail}/rollen`;
-const tenantUserDetailRolesUpdate = `${tenantUserDetail}/rollen/:siteUuid/bewerken`;
+const tenantUserDetailRolesUpdate = `${tenantUserDetail}/sites/:siteUuid/rollen`;
 
 const tenantRolesRoot = `${tenantRoot}/roles`;
 

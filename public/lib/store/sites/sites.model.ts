@@ -1,13 +1,13 @@
 import { EntityState } from '@datorama/akita';
 
-import { SiteResponse, SitesMetaResponse } from '../../services/sites';
+import { SitesMetaResponse } from '../../services/sites';
 
-export type SiteModel = SiteResponse;
+export type SiteModel = any;
 export type SitesMetaModel = SitesMetaResponse;
 
 export interface SitesState extends EntityState<SiteModel, string> {
 	meta?: SitesMetaModel;
-	site?: SiteModel;
+	sites?: SiteModel[];
 	isFetching: boolean;
 }
 

@@ -9,7 +9,7 @@ import { useCoreTranslation } from '../../connectors/translations';
 import { mapUserRoles } from '../../helpers';
 import { ContentType } from '../../roles.types';
 
-import { DUMMY_SITES, SITE_COLUMNS, SITE_VALIDATION_SCHEMA } from './UserDetailRoles.const';
+import { SITE_COLUMNS, SITE_VALIDATION_SCHEMA } from './UserDetailRoles.const';
 import { UserDetailRolesProps } from './UserDetailRoles.types';
 
 const UserDetailRoles: FC<UserDetailRolesProps> = ({
@@ -42,9 +42,11 @@ const UserDetailRoles: FC<UserDetailRolesProps> = ({
 		const siteRows: any[] = (fields || []).map(site => ({
 			name: site.name,
 			roles: site.roles,
+			siteUuid: site.uuid,
 			path: '#',
 			setActiveField: () => console.log(site),
-			editAccess: () => console.log(site),
+			editAccess: () => console.log('edit acccess', site),
+			giveAccess: () => console.log('give acccess', site),
 		}));
 
 		return (
@@ -61,7 +63,7 @@ const UserDetailRoles: FC<UserDetailRolesProps> = ({
 		const sitesRows = sites.map(site => ({
 			id: site.uuid,
 			name: site.data.name,
-			roles: [],
+			roles: site.roles,
 		}));
 
 		return (

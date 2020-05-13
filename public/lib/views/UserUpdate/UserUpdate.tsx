@@ -34,7 +34,7 @@ const UserUpdate: FC<RolesRouteProps<{ userUuid?: string }>> = ({ route, match }
 			usersService.getUser({ id: userUuid });
 			usersService.getUserRoles({ id: userUuid });
 			rolesService.getRoles();
-			sitesService.getSites();
+			sitesService.getSites({ id: userUuid });
 			return;
 		}
 	}, [userUuid]);

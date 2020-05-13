@@ -66,6 +66,7 @@ export class UsersService {
 		this.usersService
 			.updateUserRoles(payload)
 			.then(response => {
+				//ISSUE: response does not return the updated roles
 				console.log(response);
 				/* 				this.store.update({
 					userRoles: response._embedded,

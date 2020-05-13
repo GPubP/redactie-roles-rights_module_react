@@ -46,6 +46,10 @@ Core.routes.register({
 			},
 		},
 		{
+			path: MODULE_PATHS.tenantUserDetailRolesUpdate,
+			component: UserDetailRolesUpdate,
+		},
+		{
 			path: MODULE_PATHS.tenantUserDetail,
 			component: UserUpdate,
 			routes: [
@@ -58,10 +62,6 @@ Core.routes.register({
 					component: UserDetailRoles,
 				},
 			],
-		},
-		{
-			path: MODULE_PATHS.tenantUserDetailRolesUpdate,
-			component: UserDetailRolesUpdate,
 		},
 	],
 });

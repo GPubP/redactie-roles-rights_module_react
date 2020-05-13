@@ -3,6 +3,8 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { array, object, string } from 'yup';
 
+import { RoleModel } from '../../store/roles';
+
 export const DUMMY_SITES = [
 	{
 		name: 'Antwerpen.be',
@@ -45,14 +47,18 @@ export const SITE_COLUMNS = (): any[] => [
 			if (rowData.roles.length === 0) {
 				return <span className="u-text-light">Geen toegang</span>;
 			}
-			return <span>{rowData.roles.join(',')}</span>;
+			return (
+				<span>
+					{rowData.roles.map((role: RoleModel) => role.attributes.displayName).join(',')}
+				</span>
+			);
 		},
 	},
 	{
 		label: '',
 		disableSorting: true,
 		component(value: string, rowData: any) {
-			const { editAccess } = rowData;
+			const { editAccess, giveAccess } = rowData;
 			const hasAccess = rowData.roles.length > 0 ? true : false;
 
 			if (hasAccess) {
@@ -68,7 +74,7 @@ export const SITE_COLUMNS = (): any[] => [
 			}
 
 			return (
-				<Button onClick={() => editAccess()} type="primary" outline>
+				<Button onClick={() => giveAccess()} type="primary" outline>
 					Toegang geven
 				</Button>
 			);

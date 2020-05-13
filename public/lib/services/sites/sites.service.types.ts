@@ -1,3 +1,5 @@
+import { RoleModel } from '../../store/roles';
+
 export interface SitesResponse {
 	_embedded: SiteResponse[];
 	_page: SitesMetaResponse;
@@ -16,6 +18,7 @@ export interface SiteResponse {
 		updatedAt: string;
 		active: boolean;
 	};
+	roles: RoleModel[];
 }
 
 export interface SitesMetaResponse {
@@ -23,4 +26,13 @@ export interface SitesMetaResponse {
 	totalElements: number;
 	totalPages: number;
 	number: string;
+}
+
+export interface GetSitesPayload {
+	id: string;
+}
+
+export interface GetUserRolesForSitePayload {
+	id: string;
+	siteUuid: string;
 }
