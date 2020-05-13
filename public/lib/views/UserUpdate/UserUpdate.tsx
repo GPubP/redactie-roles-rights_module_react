@@ -9,8 +9,7 @@ import React, { FC, ReactElement, useEffect, useState } from 'react';
 import { generatePath, Redirect, useParams } from 'react-router-dom';
 
 import { DataLoader, NavList } from '../../components';
-import { useRoutesBreadcrumbs } from '../../hooks';
-import useUser from '../../hooks/useUser/useUser';
+import { useRoles, useRoutesBreadcrumbs, useUser, useUserRoles } from '../../hooks';
 import { LoadingState, RolesRouteProps } from '../../roles.types';
 import { rolesService } from '../../store/roles';
 import { usersService } from '../../store/users';
@@ -25,6 +24,8 @@ const UserUpdate: FC<RolesRouteProps<{ userUuid?: string }>> = ({ route, match }
 	const breadcrumbs = useRoutesBreadcrumbs();
 	const { userUuid } = useParams();
 	const [userLoadingState, user] = useUser(userUuid);
+	const [userRolesLoadingState, userRoles] = useUserRoles(userUuid);
+	const [rolesLoadingState, roles] = useRoles();
 
 	useEffect(() => {
 		if (userUuid) {
@@ -36,12 +37,16 @@ const UserUpdate: FC<RolesRouteProps<{ userUuid?: string }>> = ({ route, match }
 	}, [userUuid]);
 
 	useEffect(() => {
-		if (userLoadingState !== LoadingState.Loading) {
+		if (
+			userLoadingState !== LoadingState.Loading &&
+			userRolesLoadingState !== LoadingState.Loading &&
+			rolesLoadingState !== LoadingState.Loading
+		) {
 			return setInitialLoading(LoadingState.Loaded);
 		}
 
 		setInitialLoading(LoadingState.Loading);
-	}, [userLoadingState]);
+	}, [rolesLoadingState, userLoadingState, userRolesLoadingState]);
 
 	/**
 	 * Render
@@ -62,6 +67,8 @@ const UserUpdate: FC<RolesRouteProps<{ userUuid?: string }>> = ({ route, match }
 		return Core.routes.render(route.routes as ModuleRouteConfig[], {
 			routes: route.routes,
 			user,
+			userRoles,
+			roles,
 			onCancel: () => console.log('cancel'),
 			onSubmit: () => console.log('submit'),
 		});

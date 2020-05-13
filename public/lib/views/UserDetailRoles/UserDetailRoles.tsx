@@ -6,21 +6,32 @@ import React, { FC, ReactElement } from 'react';
 
 import { FormViewUserRoles } from '../../components';
 import { useCoreTranslation } from '../../connectors/translations';
+import { RoleModel } from '../../store/roles';
 
 import {
 	ACTIVE_ROLES,
-	AVAILABLE_ROLES,
 	DUMMY_SITES,
 	SITE_COLUMNS,
 	SITE_VALIDATION_SCHEMA,
 } from './UserDetailRoles.const';
 import { UserDetailRolesProps } from './UserDetailRoles.types';
 
-const UserDetailRoles: FC<UserDetailRolesProps> = ({ user, roles, onCancel, onSubmit }) => {
+const UserDetailRoles: FC<UserDetailRolesProps> = ({
+	user,
+	userRoles,
+	roles,
+	onCancel,
+	onSubmit,
+}) => {
 	const [t] = useCoreTranslation();
+
 	/**
 	 * Functions
 	 */
+	const mapUserRoles = (userRoles: RoleModel[]): Array<string> => {
+		const rolesArray = userRoles && userRoles.map((role: RoleModel) => role.id);
+		return rolesArray;
+	};
 	const onConfigSave = (): void => {
 		onSubmit(user, roles);
 	};
@@ -67,8 +78,8 @@ const UserDetailRoles: FC<UserDetailRolesProps> = ({ user, roles, onCancel, onSu
 			<div className="u-margin">
 				<h5 className="u-margin-bottom">Rollen</h5>
 				<FormViewUserRoles
-					formState={ACTIVE_ROLES}
-					availableRoles={AVAILABLE_ROLES}
+					formState={mapUserRoles(userRoles)}
+					availableRoles={roles}
 					onSubmit={onConfigChange}
 				/>
 				{renderTableForm()}

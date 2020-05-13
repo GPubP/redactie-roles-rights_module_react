@@ -1,12 +1,9 @@
+import { RoleModel } from '../../../store/roles';
+
 export interface FormViewUserRolesProps {
 	formState: Array<string>;
-	availableRoles: Role[];
+	availableRoles: RoleModel[];
 	onSubmit: (formValues: RoleIds) => void;
-}
-
-export interface Role {
-	id: string;
-	name: string;
 }
 
 export interface RoleIds {

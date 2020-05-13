@@ -9,8 +9,8 @@ export class RolesQuery extends QueryEntity<RolesState> {
 	}
 
 	public meta$ = this.select(state => state.meta);
-	public user$ = this.select(state => state.user);
+	public roles$ = this.select(state => state.roles);
 	public isFetching$ = this.select(state => state.isFetching);
 }
 
-export const usersQuery = new RolesQuery(rolesStore);
+export const rolesQuery = new RolesQuery(rolesStore);

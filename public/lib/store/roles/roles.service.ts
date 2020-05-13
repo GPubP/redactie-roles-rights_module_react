@@ -10,10 +10,9 @@ export class RolesService {
 		this.rolesService
 			.getRoles()
 			.then(response => {
-				console.log(response);
-				/* 	this.store.update({
-					roles: response,
-				}); */
+				this.store.update({
+					roles: response._embedded,
+				});
 			})
 			.catch(err => {
 				this.store.setError(err);

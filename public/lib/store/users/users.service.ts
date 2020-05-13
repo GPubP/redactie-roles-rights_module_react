@@ -50,10 +50,9 @@ export class UsersService {
 		this.usersService
 			.getUserRoles(payload)
 			.then(response => {
-				console.log(response);
-				/* 	this.store.update({
-					user: response,
-				}); */
+				this.store.update({
+					userRoles: response._embedded,
+				});
 			})
 			.catch(err => {
 				this.store.setError(err);

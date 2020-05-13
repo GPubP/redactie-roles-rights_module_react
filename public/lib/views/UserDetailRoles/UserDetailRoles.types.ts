@@ -1,11 +1,12 @@
 import { RouteConfigComponentProps } from '@redactie/redactie-core';
 
-import { RolesModel } from '../../store/roles';
+import { RoleModel } from '../../store/roles';
 import { UserModel } from '../../store/users';
 
 export interface UserDetailRolesProps extends RouteConfigComponentProps {
 	user: UserModel;
-	roles: RolesModel;
+	userRoles: RoleModel[];
+	roles: RoleModel[];
 	onCancel: () => void;
-	onSubmit: (user: UserModel, roles: RolesModel) => void;
+	onSubmit: (user: UserModel, roles: RoleModel[] | null) => void;
 }
