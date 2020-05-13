@@ -13,6 +13,7 @@ const tenantUsersOverview = `${tenantRoot}/overzicht`;
 const tenantUserDetail = `${tenantRoot}/:userUuid`;
 const tenantUserDetailGeneral = `${tenantUserDetail}/algemeen`;
 const tenantUserDetailRoles = `${tenantUserDetail}/rollen`;
+const tenantUserDetailRolesUpdate = `${tenantUserDetail}/rollen/:siteUuid/bewerken`;
 
 const tenantRolesRoot = `${tenantRoot}/roles`;
 
@@ -22,5 +23,6 @@ export const MODULE_PATHS = {
 	tenantUserDetail,
 	tenantUserDetailGeneral,
 	tenantUserDetailRoles,
+	tenantUserDetailRolesUpdate,
 	tenantRolesRoot,
 };
