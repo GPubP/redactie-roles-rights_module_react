@@ -1,0 +1,17 @@
+@import '~@a-ui/core/dist/assets/styles/_quarks';
+
+.m-table-header {
+	width: 100%;
+	height: 10rem;
+	margin: $spacer 0;
+	background-color: #f3f3f3;
+
+	td {
+		// height: 3rem;
+		width: 10rem;
+		transform: rotate(-90deg);
+		padding: $spacer-sm;
+		border-bottom: 1px solid #c0c0c0;
+		border-top: 1px solid #c0c0c0;
+	}
+}

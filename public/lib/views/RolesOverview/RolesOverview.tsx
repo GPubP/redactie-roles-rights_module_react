@@ -1,6 +1,11 @@
-import { ContextHeader, ContextHeaderTopSection } from '@acpaas-ui/react-editorial-components';
+import {
+	Container,
+	ContextHeader,
+	ContextHeaderTopSection,
+} from '@acpaas-ui/react-editorial-components';
 import React, { FC } from 'react';
 
+import { ModulesList, RolesPermissionsList } from '../../components';
 import { RolesRouteProps } from '../../roles.types';
 
 const RolesOverview: FC<RolesRouteProps> = () => {
@@ -20,7 +25,12 @@ const RolesOverview: FC<RolesRouteProps> = () => {
 			<ContextHeader title="Rollen en rechten">
 				<ContextHeaderTopSection>breadcrumbs</ContextHeaderTopSection>
 			</ContextHeader>
-			<p>Hello World</p>
+			<Container>
+				<div className="row">
+					<ModulesList />
+					<RolesPermissionsList />
+				</div>
+			</Container>
 		</>
 	);
 };
