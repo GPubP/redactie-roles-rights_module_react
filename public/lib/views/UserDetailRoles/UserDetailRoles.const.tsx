@@ -22,19 +22,6 @@ export const DUMMY_SITES = [
 	},
 ];
 
-export const AVAILABLE_ROLES = [
-	{
-		id: 'Tenantbeheerder',
-		name: 'Tenantbeheerder',
-	},
-	{
-		id: 'Contentbeheerder',
-		name: 'Contentbeheerder',
-	},
-];
-
-export const ACTIVE_ROLES = ['Tenantbeheerder'];
-
 export const SITE_COLUMNS = (): any[] => [
 	{
 		label: 'Naam',

@@ -1,8 +1,9 @@
 import {
 	GetUserPayload,
 	GetUsersPayload,
-	usersApiService,
+	UpdateUserRolesPayload,
 	UsersApiService,
+	usersApiService,
 } from '../../services/users';
 
 import { UsersStore, usersStore } from './users.store';
@@ -53,6 +54,22 @@ export class UsersService {
 				this.store.update({
 					userRoles: response._embedded,
 				});
+			})
+			.catch(err => {
+				this.store.setError(err);
+			})
+			.finally(() => this.store.setIsFetching(false));
+	}
+
+	public updateUserRoles(payload: UpdateUserRolesPayload): void {
+		this.store.setIsFetching(true);
+		this.usersService
+			.updateUserRoles(payload)
+			.then(response => {
+				console.log(response);
+				/* 				this.store.update({
+					userRoles: response._embedded,
+				}); */
 			})
 			.catch(err => {
 				this.store.setError(err);

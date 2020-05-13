@@ -2,18 +2,14 @@ import { Button, Card } from '@acpaas-ui/react-components';
 import { ActionBar, ActionBarContentSection, Table } from '@acpaas-ui/react-editorial-components';
 import { CORE_TRANSLATIONS } from '@redactie/translations-module/public/lib/i18next/translations.const';
 import { Field, Formik } from 'formik';
-import React, { FC, ReactElement } from 'react';
+import React, { FC, ReactElement, useState } from 'react';
 
 import { FormViewUserRoles } from '../../components';
 import { useCoreTranslation } from '../../connectors/translations';
-import { RoleModel } from '../../store/roles';
+import { mapUserRoles } from '../../helpers';
+import { ContentType } from '../../roles.types';
 
-import {
-	ACTIVE_ROLES,
-	DUMMY_SITES,
-	SITE_COLUMNS,
-	SITE_VALIDATION_SCHEMA,
-} from './UserDetailRoles.const';
+import { DUMMY_SITES, SITE_COLUMNS, SITE_VALIDATION_SCHEMA } from './UserDetailRoles.const';
 import { UserDetailRolesProps } from './UserDetailRoles.types';
 
 const UserDetailRoles: FC<UserDetailRolesProps> = ({
@@ -24,20 +20,19 @@ const UserDetailRoles: FC<UserDetailRolesProps> = ({
 	onSubmit,
 }) => {
 	const [t] = useCoreTranslation();
+	const [selectedRoles, updateSelectedRoles] = useState(mapUserRoles(userRoles));
 
 	/**
 	 * Functions
 	 */
-	const mapUserRoles = (userRoles: RoleModel[]): Array<string> => {
-		const rolesArray = userRoles && userRoles.map((role: RoleModel) => role.id);
-		return rolesArray;
-	};
 	const onConfigSave = (): void => {
-		onSubmit(user, roles);
+		if (mapUserRoles(userRoles) !== selectedRoles) {
+			onSubmit(user, selectedRoles, ContentType.UserRoles);
+		}
 	};
 
-	const onConfigChange = (updatedObject: any): void => {
-		console.log('change', updatedObject);
+	const onConfigChange = (updatedRoles: any): void => {
+		updateSelectedRoles(updatedRoles);
 	};
 	/**
 	 * Render
@@ -78,7 +73,7 @@ const UserDetailRoles: FC<UserDetailRolesProps> = ({
 			<div className="u-margin">
 				<h5 className="u-margin-bottom">Rollen</h5>
 				<FormViewUserRoles
-					formState={mapUserRoles(userRoles)}
+					formState={selectedRoles}
 					availableRoles={roles}
 					onSubmit={onConfigChange}
 				/>

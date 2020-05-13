@@ -10,9 +10,9 @@ import { generatePath, Redirect, useParams } from 'react-router-dom';
 
 import { DataLoader, NavList } from '../../components';
 import { useRoles, useRoutesBreadcrumbs, useUser, useUserRoles } from '../../hooks';
-import { LoadingState, RolesRouteProps } from '../../roles.types';
+import { ContentType, LoadingState, RolesRouteProps } from '../../roles.types';
 import { rolesService } from '../../store/roles';
-import { usersService } from '../../store/users';
+import { UserModel, usersService } from '../../store/users';
 
 import { USER_UPDATE_NAV_LIST_ITEMS } from './UserUpdate.const';
 
@@ -49,6 +49,19 @@ const UserUpdate: FC<RolesRouteProps<{ userUuid?: string }>> = ({ route, match }
 	}, [rolesLoadingState, userLoadingState, userRolesLoadingState]);
 
 	/**
+	 * Functions
+	 */
+	const handleSubmit = (user: UserModel, content: any, contentType: ContentType): void => {
+		switch (contentType) {
+			case ContentType.UserRoles:
+				usersService.updateUserRoles({ id: user.id, roles: content });
+				break;
+			default:
+				break;
+		}
+	};
+
+	/**
 	 * Render
 	 */
 	const renderChildRoutes = (): ReactElement | null => {
@@ -70,7 +83,7 @@ const UserUpdate: FC<RolesRouteProps<{ userUuid?: string }>> = ({ route, match }
 			userRoles,
 			roles,
 			onCancel: () => console.log('cancel'),
-			onSubmit: () => console.log('submit'),
+			onSubmit: handleSubmit,
 		});
 	};
 

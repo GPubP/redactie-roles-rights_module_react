@@ -4,20 +4,24 @@ import React, { ChangeEvent, FC } from 'react';
 
 import { RoleModel } from '../../../store/roles';
 
-import { FormViewUserRolesProps } from './FormViewUserRoles.types';
+import { FormViewUserRolesProps, RoleIds } from './FormViewUserRoles.types';
 
 const FormViewUserRoles: FC<FormViewUserRolesProps> = ({ formState, availableRoles, onSubmit }) => {
+	const handleFormSubmit = (object: RoleIds): void => {
+		onSubmit(object.roleIds);
+	};
 	return (
-		<Formik initialValues={{ roleIds: formState }} onSubmit={onSubmit}>
+		<Formik initialValues={{ roleIds: formState }} onSubmit={handleFormSubmit}>
 			{({ values, submitForm }) => (
 				<FieldArray
 					name="roleIds"
 					render={arrayHelpers =>
+						availableRoles &&
 						availableRoles.map((role: RoleModel) => (
 							<Field
 								key={role.id}
 								as={Checkbox}
-								checked={values.roleIds.includes(role.id)}
+								checked={values.roleIds && values.roleIds.includes(role.id)}
 								id={role.id}
 								name={role.name}
 								label={role.attributes.displayName}
