@@ -1,5 +1,6 @@
 import { Button, Card } from '@acpaas-ui/react-components';
 import { ActionBar, ActionBarContentSection, Table } from '@acpaas-ui/react-editorial-components';
+import { CORE_TRANSLATIONS } from '@redactie/translations-module/public/lib/i18next/translations.const';
 import { Field, Formik } from 'formik';
 import React, { FC, ReactElement } from 'react';
 
@@ -74,10 +75,10 @@ const UserDetailRoles: FC<UserDetailRolesProps> = ({ user, roles, onCancel, onSu
 								onClick={onConfigSave}
 								type="success"
 							>
-								{t('BUTTON_SAVE')}
+								{t(CORE_TRANSLATIONS.BUTTON_SAVE)}
 							</Button>
 							<Button onClick={onCancel} outline>
-								{t('BUTTON_CANCEL')}
+								{t(CORE_TRANSLATIONS.BUTTON_CANCEL)}
 							</Button>
 						</div>
 					</ActionBarContentSection>
