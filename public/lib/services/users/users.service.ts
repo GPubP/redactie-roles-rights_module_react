@@ -2,10 +2,8 @@ import api, { parseSearchParams } from '../api/api.service';
 
 import { DEFAULT_USERS_SEARCH_PARAMS } from './users.service.const';
 import {
-	CreateUserPayload,
 	GetUserPayload,
 	GetUsersPayload,
-	UpdateUserPayload,
 	UserResponse,
 	UsersResponse,
 } from './users.service.types';
