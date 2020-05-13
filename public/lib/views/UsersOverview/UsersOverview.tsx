@@ -6,9 +6,11 @@ import {
 	ContextHeaderTopSection,
 	PaginatedTable,
 } from '@acpaas-ui/react-editorial-components';
+import { CORE_TRANSLATIONS } from '@redactie/translations-module/public/lib/i18next/translations.const';
 import React, { FC, ReactElement, useEffect, useState } from 'react';
 
 import { DataLoader, FilterForm } from '../../components';
+import { useCoreTranslation } from '../../connectors/translations';
 import { useNavigate, useRoutesBreadcrumbs, useUsers } from '../../hooks';
 import { MODULE_PATHS } from '../../roles.const';
 import { FilterFormState, LoadingState, RolesRouteProps } from '../../roles.types';
@@ -34,6 +36,7 @@ const UsersOverview: FC<RolesRouteProps<{ siteId: string }>> = ({ match }) => {
 	const [loadingState, users, usersMeta] = useUsers();
 	const [initialLoading, setInitialLoading] = useState(LoadingState.Loading);
 	const [activeSorting, setActiveSorting] = useState<OrderBy>();
+	const [t] = useCoreTranslation();
 
 	useEffect(() => {
 		usersService.getUsersBySite(usersSearchParams, siteId);
@@ -148,7 +151,7 @@ const UsersOverview: FC<RolesRouteProps<{ siteId: string }>> = ({ match }) => {
 				</div>
 				<PaginatedTable
 					className="u-margin-top"
-					columns={USERS_OVERVIEW_COLUMNS}
+					columns={USERS_OVERVIEW_COLUMNS(t)}
 					rows={usersRows}
 					currentPage={currentPage}
 					itemsPerPage={DEFAULT_USERS_SEARCH_PARAMS.limit}
@@ -171,7 +174,7 @@ const UsersOverview: FC<RolesRouteProps<{ siteId: string }>> = ({ match }) => {
 						onClick={() => navigate(MODULE_PATHS.users.overview, { siteId })}
 						iconLeft="plus"
 					>
-						Nieuwe maken
+						{t(CORE_TRANSLATIONS['BUTTON_CREATE-NEW'])}
 					</Button>
 				</ContextHeaderActionsSection>
 			</ContextHeader>
