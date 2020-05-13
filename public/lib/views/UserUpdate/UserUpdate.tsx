@@ -9,9 +9,10 @@ import React, { FC, ReactElement, useEffect, useState } from 'react';
 import { generatePath, Redirect, useParams } from 'react-router-dom';
 
 import { DataLoader, NavList } from '../../components';
-import { useRoles, useRoutesBreadcrumbs, useUser, useUserRoles } from '../../hooks';
+import { useRoles, useRoutesBreadcrumbs, useSites, useUser, useUserRoles } from '../../hooks';
 import { ContentType, LoadingState, RolesRouteProps } from '../../roles.types';
 import { rolesService } from '../../store/roles';
+import { sitesService } from '../../store/sites';
 import { UserModel, usersService } from '../../store/users';
 
 import { USER_UPDATE_NAV_LIST_ITEMS } from './UserUpdate.const';
@@ -26,12 +27,14 @@ const UserUpdate: FC<RolesRouteProps<{ userUuid?: string }>> = ({ route, match }
 	const [userLoadingState, user] = useUser(userUuid);
 	const [userRolesLoadingState, userRoles] = useUserRoles(userUuid);
 	const [rolesLoadingState, roles] = useRoles();
+	const [sitesLoadingState, sites] = useSites();
 
 	useEffect(() => {
 		if (userUuid) {
 			usersService.getUser({ id: userUuid });
 			usersService.getUserRoles({ id: userUuid });
 			rolesService.getRoles();
+			sitesService.getSites();
 			return;
 		}
 	}, [userUuid]);
@@ -40,13 +43,14 @@ const UserUpdate: FC<RolesRouteProps<{ userUuid?: string }>> = ({ route, match }
 		if (
 			userLoadingState !== LoadingState.Loading &&
 			userRolesLoadingState !== LoadingState.Loading &&
-			rolesLoadingState !== LoadingState.Loading
+			rolesLoadingState !== LoadingState.Loading &&
+			sitesLoadingState !== LoadingState.Loading
 		) {
 			return setInitialLoading(LoadingState.Loaded);
 		}
 
 		setInitialLoading(LoadingState.Loading);
-	}, [rolesLoadingState, userLoadingState, userRolesLoadingState]);
+	}, [rolesLoadingState, sites, sitesLoadingState, userLoadingState, userRolesLoadingState]);
 
 	/**
 	 * Functions
@@ -82,6 +86,7 @@ const UserUpdate: FC<RolesRouteProps<{ userUuid?: string }>> = ({ route, match }
 			user,
 			userRoles,
 			roles,
+			sites,
 			onCancel: () => console.log('cancel'),
 			onSubmit: handleSubmit,
 		});

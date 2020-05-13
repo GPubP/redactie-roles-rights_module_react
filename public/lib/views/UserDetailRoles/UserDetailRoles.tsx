@@ -16,6 +16,7 @@ const UserDetailRoles: FC<UserDetailRolesProps> = ({
 	user,
 	userRoles,
 	roles,
+	sites,
 	onCancel,
 	onSubmit,
 }) => {
@@ -51,15 +52,21 @@ const UserDetailRoles: FC<UserDetailRolesProps> = ({
 				className="u-margin-top"
 				columns={SITE_COLUMNS()}
 				rows={siteRows}
-				totalValues={DUMMY_SITES.length}
+				totalValues={sites.length}
 			/>
 		);
 	};
 
 	const renderTableForm = (): ReactElement => {
+		const sitesRows = sites.map(site => ({
+			id: site.uuid,
+			name: site.data.name,
+			roles: [],
+		}));
+
 		return (
 			<Formik
-				initialValues={{ fields: DUMMY_SITES }}
+				initialValues={{ fields: sitesRows }}
 				onSubmit={onConfigChange}
 				validationSchema={SITE_VALIDATION_SCHEMA}
 			>

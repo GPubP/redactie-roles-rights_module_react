@@ -48,7 +48,6 @@ Core.routes.register({
 		{
 			path: MODULE_PATHS.tenantUserDetail,
 			component: UserUpdate,
-			exact: true,
 			routes: [
 				{
 					path: MODULE_PATHS.tenantUserDetailGeneral,
@@ -57,7 +56,6 @@ Core.routes.register({
 				{
 					path: MODULE_PATHS.tenantUserDetailRoles,
 					component: UserDetailRoles,
-					exact: true,
 				},
 			],
 		},
