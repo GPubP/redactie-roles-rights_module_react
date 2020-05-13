@@ -1,35 +1,36 @@
 import { Checkbox } from '@acpaas-ui/react-components';
-import { Field, Formik } from 'formik';
-import React, { FC } from 'react';
+import { Field, FieldArray, Formik } from 'formik';
+import React, { ChangeEvent, FC } from 'react';
 
 import { FormViewUserRolesProps, Role } from './FormViewUserRoles.types';
 
-const FormViewUserRoles: FC<FormViewUserRolesProps> = ({ formState, onSubmit }) => {
-	const handleChange = (e: any): void => {
-		const { name } = e.target;
-		const updatedFormState = formState;
-		const itemToUpdate = updatedFormState.findIndex((x: any) => x.name === name);
-
-		updatedFormState[itemToUpdate].checked = !updatedFormState[itemToUpdate].checked;
-
-		onSubmit(updatedFormState);
-	};
+const FormViewUserRoles: FC<FormViewUserRolesProps> = ({ formState, availableRoles, onSubmit }) => {
 	return (
-		<Formik initialValues={formState} onSubmit={onSubmit}>
+		<Formik initialValues={{ roleIds: formState }} onSubmit={onSubmit}>
 			{({ values, submitForm }) => (
-				<>
-					{values.map((role: Role) => (
-						<Field
-							key={role.name}
-							as={Checkbox}
-							checked={role.checked}
-							id={role.name}
-							name={role.name}
-							label={role.name}
-							onChange={handleChange}
-						/>
-					))}
-				</>
+				<FieldArray
+					name="roleIds"
+					render={arrayHelpers =>
+						availableRoles.map((role: Role) => (
+							<Field
+								key={role.id}
+								as={Checkbox}
+								checked={values.roleIds.includes(role.id)}
+								id={role.id}
+								name={role.id}
+								label={role.name}
+								onChange={(e: ChangeEvent<HTMLInputElement>) => {
+									if (e.target.checked) arrayHelpers.push(role.id);
+									else {
+										const idx = values.roleIds.indexOf(role.id);
+										arrayHelpers.remove(idx);
+									}
+									submitForm();
+								}}
+							/>
+						))
+					}
+				/>
 			)}
 		</Formik>
 	);

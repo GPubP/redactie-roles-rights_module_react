@@ -8,7 +8,8 @@ import { FormViewUserRoles } from '../../components';
 import { useCoreTranslation } from '../../connectors/translations';
 
 import {
-	DUMMY_ROLES,
+	ACTIVE_ROLES,
+	AVAILABLE_ROLES,
 	DUMMY_SITES,
 	SITE_COLUMNS,
 	SITE_VALIDATION_SCHEMA,
@@ -65,7 +66,11 @@ const UserDetailRoles: FC<UserDetailRolesProps> = ({ user, roles, onCancel, onSu
 		<Card>
 			<div className="u-margin">
 				<h5 className="u-margin-bottom">Rollen</h5>
-				<FormViewUserRoles formState={DUMMY_ROLES} onSubmit={onConfigChange} />
+				<FormViewUserRoles
+					formState={ACTIVE_ROLES}
+					availableRoles={AVAILABLE_ROLES}
+					onSubmit={onConfigChange}
+				/>
 				{renderTableForm()}
 				<ActionBar className="o-action-bar--fixed" isOpen>
 					<ActionBarContentSection>

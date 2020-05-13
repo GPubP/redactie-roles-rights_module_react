@@ -1,9 +1,14 @@
 export interface FormViewUserRolesProps {
-	formState: any;
-	onSubmit: (formValues: any) => void;
+	formState: Array<string>;
+	availableRoles: Role[];
+	onSubmit: (formValues: RoleIds) => void;
 }
 
 export interface Role {
+	id: string;
 	name: string;
-	checked: boolean;
+}
+
+export interface RoleIds {
+	roleIds: Array<string>;
 }
