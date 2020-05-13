@@ -2,16 +2,22 @@ import { Checkbox } from '@acpaas-ui/react-components';
 import { Field, Formik } from 'formik';
 import React, { FC } from 'react';
 
-import AutoSubmit from '../AutoSubmit/AutoSubmit';
-
 import { FormViewUserRolesProps, Role } from './FormViewUserRoles.types';
 
 const FormViewUserRoles: FC<FormViewUserRolesProps> = ({ formState, onSubmit }) => {
+	const handleChange = (e: any): void => {
+		const { name } = e.target;
+		const updatedFormState = formState;
+		const itemToUpdate = updatedFormState.findIndex((x: any) => x.name === name);
+
+		updatedFormState[itemToUpdate].checked = !updatedFormState[itemToUpdate].checked;
+
+		onSubmit(updatedFormState);
+	};
 	return (
 		<Formik initialValues={formState} onSubmit={onSubmit}>
 			{({ values, submitForm }) => (
 				<>
-					<AutoSubmit initialValues={formState} values={values} submitForm={submitForm} />
 					{values.map((role: Role) => (
 						<Field
 							key={role.name}
@@ -20,6 +26,7 @@ const FormViewUserRoles: FC<FormViewUserRolesProps> = ({ formState, onSubmit }) 
 							id={role.name}
 							name={role.name}
 							label={role.name}
+							onChange={handleChange}
 						/>
 					))}
 				</>
