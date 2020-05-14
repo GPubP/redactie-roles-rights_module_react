@@ -27,8 +27,22 @@ const RolesOverview: FC<RolesRouteProps> = () => {
 			</ContextHeader>
 			<Container>
 				<div className="row">
-					<ModulesList />
-					<RolesPermissionsList />
+					<ModulesList
+						modules={[
+							{ id: 1, name: 'module 1' },
+							{ id: 2, name: 'module 2' },
+						]}
+					/>
+					<RolesPermissionsList
+						roles={[
+							{ id: 1, name: 'rol 1' },
+							{ id: 2, name: 'rol 2' },
+						]}
+						permissions={[
+							{ id: 1, name: 'permissie 1' },
+							{ id: 2, name: 'permissie 2' },
+						]}
+					/>
 				</div>
 			</Container>
 		</>
