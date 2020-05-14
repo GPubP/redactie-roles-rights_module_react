@@ -31,7 +31,7 @@ const UserDetailRoles: FC<UserDetailRolesProps> = ({ user }) => {
 		return (
 			<Table
 				className="u-margin-top"
-				columns={SITE_COLUMNS()}
+				columns={SITE_COLUMNS(t)}
 				rows={siteRows}
 				totalValues={DUMMY_SITES.length}
 			/>

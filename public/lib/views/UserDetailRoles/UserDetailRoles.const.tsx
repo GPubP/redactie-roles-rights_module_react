@@ -1,4 +1,6 @@
 import { Button } from '@acpaas-ui/react-components';
+import { CORE_TRANSLATIONS } from '@redactie/translations-module/public/lib/i18next/translations.const';
+import { TranslateFunc } from '@redactie/translations-module/public/lib/i18next/useTranslation';
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { array, object, string } from 'yup';
@@ -33,9 +35,9 @@ export const DUMMY_ROLES = [
 	},
 ];
 
-export const SITE_COLUMNS = (): any[] => [
+export const SITE_COLUMNS = (t: TranslateFunc): any[] => [
 	{
-		label: 'Naam',
+		label: t(CORE_TRANSLATIONS.TABLE_NAME),
 		value: 'name',
 		component(value: string, rowData: any) {
 			const { path, setActiveField, editAccess } = rowData;
