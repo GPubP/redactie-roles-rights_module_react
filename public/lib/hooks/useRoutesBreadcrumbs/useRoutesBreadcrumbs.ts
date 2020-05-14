@@ -5,15 +5,11 @@ import { useNavigate } from '../../hooks';
 import { BREADCRUMB_OPTIONS, MODULE_PATHS } from '../../roles.const';
 import useRoutes from '../useRoutes/useRoutes';
 
-const useRoutesBreadcrumbs = (
-	extraBreadcrumbs: Breadcrumb[] = [],
-	extraProps?: Record<string, unknown>
-): ReactNode => {
+const useRoutesBreadcrumbs = (extraBreadcrumbs: Breadcrumb[] = []): ReactNode => {
 	const { generatePath } = useNavigate();
 	const routes = useRoutes();
 	const breadcrumbs = useBreadcrumbs(routes as ModuleRouteConfig[], {
 		...BREADCRUMB_OPTIONS,
-		extraProps,
 		extraBreadcrumbs: [
 			{
 				name: 'Home',
