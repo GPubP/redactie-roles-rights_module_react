@@ -52,7 +52,7 @@ const UserDetailRoles: FC<UserDetailRolesProps> = ({
 		return (
 			<Table
 				className="u-margin-top"
-				columns={SITE_COLUMNS()}
+				columns={SITE_COLUMNS(t)}
 				rows={siteRows}
 				totalValues={sites.length}
 			/>
