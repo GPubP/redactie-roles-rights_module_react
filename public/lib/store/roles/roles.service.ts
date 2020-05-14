@@ -11,12 +11,14 @@ export class RolesService {
 			.getRolesBySite(payload, siteId)
 			.then(response => {
 				this.store.setIsFetching(false);
-				const roles = response._embedded;
-				const meta = response._page;
+				const roles = response.roles;
+				const securityRights = response.securityRights;
+				const modules = response.modules;
 
 				this.store.set(roles);
 				this.store.update({
-					meta,
+					securityRights,
+					modules,
 				});
 			})
 			.catch(err => {

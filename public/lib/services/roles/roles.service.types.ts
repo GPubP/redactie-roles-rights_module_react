@@ -1,28 +1,54 @@
 import { SearchParams } from '../api';
 
 export interface RolesResponse {
-	_embedded: RoleResponse[];
-	_page: RoleMetaResponse;
+	modules: ModuleResponse[];
+	securityRights: SecurityRightResponse[];
+	roles: RoleResponse[];
 }
-export interface RoleMetaResponse {
-	size: number;
-	totalElements: boolean;
-	totalPages: number;
-	number: number;
+
+export interface SecurityRightAtrributes {
+	level: string;
+	module: string;
+	site: string;
+	tenant: string;
+	type: string;
+}
+export interface SecurityRightResponse {
+	applicationDisplayName: string;
+	applicationId: string;
+	applicationName: string;
+	attributes: SecurityRightAtrributes;
+	description: string;
+	environment: string;
+	id: string;
+	name: string;
+	neededTrustLevel: number;
+}
+
+export interface ModuleResponse {
+	id: string;
+	name: string;
+}
+
+export interface RoleAtrributes {
+	CRUD: string;
+	DOMEIN: string;
+	LOCATIE: string;
+	STADSBEDRIJF: string;
+}
+
+export interface Role {
+	attributes: RoleAtrributes;
+	description: string;
+	id: string;
+	name: string;
+	validFrom: string;
+	validTo: string;
 }
 
 export interface RoleResponse {
-	address: string;
-	domain: string;
-	email: string;
-	externalMutableReference: string;
-	firstname: string;
-	id: string;
-	lastname: string;
-	nickname: string;
-	owner: boolean;
-	type: string;
-	username: string;
+	role: Role;
+	securityRights: string[];
 }
 
 export interface GetRolePayload {

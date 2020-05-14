@@ -1,13 +1,15 @@
 import { EntityState } from '@datorama/akita';
 
-import { RoleMetaResponse, RoleResponse } from '../../services/roles';
+import { ModuleResponse, RoleResponse, SecurityRightResponse } from '../../services/roles';
 
 export type RoleModel = RoleResponse;
-export type RolesMetaModel = RoleMetaResponse;
+export type SecurityRightModel = SecurityRightResponse;
+export type ModuleModel = ModuleResponse;
 
 export interface RolesState extends EntityState<RoleModel, string> {
-	meta?: RolesMetaModel;
+	securityRight?: SecurityRightModel;
 	role?: RoleModel;
+	module?: ModuleModel;
 	isFetching: boolean;
 }
 

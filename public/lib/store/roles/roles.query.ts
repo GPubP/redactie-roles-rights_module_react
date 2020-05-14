@@ -8,8 +8,9 @@ export class RolesQuery extends QueryEntity<RolesState> {
 		super(store);
 	}
 
-	public meta$ = this.select(state => state.meta);
-	public site$ = this.select(state => state.site);
+	public securityRight$ = this.select(state => state.securityRight);
+	public role$ = this.select(state => state.role);
+	public module$ = this.select(state => state.module);
 	public isFetching$ = this.select(state => state.isFetching);
 }
 
