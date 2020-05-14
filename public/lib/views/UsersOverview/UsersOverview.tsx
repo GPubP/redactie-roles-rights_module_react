@@ -131,7 +131,7 @@ const UsersOverview: FC<RolesRouteProps<{ siteId: string }>> = ({ match }) => {
 
 		const usersRows: UsersOverviewTableRow[] = users.map(user => ({
 			uuid: user.id,
-			name: user.firstname + user.lastname,
+			name: `${user.firstname} ${user.lastname}`,
 			type: user.type,
 			added: user.email,
 			status: user.username || 'N/A',
