@@ -6,7 +6,13 @@ import { registerRolesAPI } from './lib/api';
 import { TenantContext } from './lib/context';
 import { MODULE_PATHS } from './lib/roles.const';
 import { RolesModuleProps } from './lib/roles.types';
-import { UserDetailGeneral, UserDetailRoles, UsersOverview, UserUpdate } from './lib/views';
+import {
+	UserDetailGeneral,
+	UserDetailRoles,
+	UserDetailRolesUpdate,
+	UsersOverview,
+	UserUpdate,
+} from './lib/views';
 
 const RolesComponent: FC<RolesModuleProps> = ({ route, location, tenantId }) => {
 	// if path is /users, redirect to /users/overzicht
@@ -38,6 +44,10 @@ Core.routes.register({
 				label: 'Gebruikers',
 				parentPath: MODULE_PATHS.tenantRoot,
 			},
+		},
+		{
+			path: MODULE_PATHS.tenantUserDetailRolesUpdate,
+			component: UserDetailRolesUpdate,
 		},
 		{
 			path: MODULE_PATHS.tenantUserDetail,

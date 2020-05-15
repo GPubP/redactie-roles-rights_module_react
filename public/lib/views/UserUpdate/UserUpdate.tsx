@@ -9,10 +9,11 @@ import React, { FC, ReactElement, useEffect, useState } from 'react';
 import { generatePath, Redirect, useParams } from 'react-router-dom';
 
 import { DataLoader, NavList } from '../../components';
-import { useRoutesBreadcrumbs } from '../../hooks';
-import useUser from '../../hooks/useUser/useUser';
-import { LoadingState, RolesRouteProps } from '../../roles.types';
-import { usersService } from '../../store/users';
+import { useRoles, useRoutesBreadcrumbs, useSites, useUser, useUserRoles } from '../../hooks';
+import { ContentType, LoadingState, RolesRouteProps } from '../../roles.types';
+import { rolesService } from '../../store/roles';
+import { sitesService } from '../../store/sites';
+import { UserModel, usersService } from '../../store/users';
 
 import { USER_UPDATE_NAV_LIST_ITEMS } from './UserUpdate.const';
 
@@ -24,21 +25,45 @@ const UserUpdate: FC<RolesRouteProps<{ userUuid?: string }>> = ({ route, match }
 	const breadcrumbs = useRoutesBreadcrumbs();
 	const { userUuid } = useParams();
 	const [userLoadingState, user] = useUser(userUuid);
+	const [userRolesLoadingState, userRoles] = useUserRoles(userUuid);
+	const [rolesLoadingState, roles] = useRoles();
+	const [sitesLoadingState, sites] = useSites();
 
 	useEffect(() => {
 		if (userUuid) {
 			usersService.getUser({ id: userUuid });
+			usersService.getUserRoles({ id: userUuid });
+			rolesService.getRoles();
+			sitesService.getSites({ id: userUuid });
 			return;
 		}
 	}, [userUuid]);
 
 	useEffect(() => {
-		if (userLoadingState !== LoadingState.Loading) {
+		if (
+			userLoadingState !== LoadingState.Loading &&
+			userRolesLoadingState !== LoadingState.Loading &&
+			rolesLoadingState !== LoadingState.Loading &&
+			sitesLoadingState !== LoadingState.Loading
+		) {
 			return setInitialLoading(LoadingState.Loaded);
 		}
 
 		setInitialLoading(LoadingState.Loading);
-	}, [userLoadingState]);
+	}, [rolesLoadingState, sites, sitesLoadingState, userLoadingState, userRolesLoadingState]);
+
+	/**
+	 * Functions
+	 */
+	const handleSubmit = (user: UserModel, content: any, contentType: ContentType): void => {
+		switch (contentType) {
+			case ContentType.UserRoles:
+				usersService.updateUserRoles({ id: user.id, roles: content });
+				break;
+			default:
+				break;
+		}
+	};
 
 	/**
 	 * Render
@@ -59,6 +84,11 @@ const UserUpdate: FC<RolesRouteProps<{ userUuid?: string }>> = ({ route, match }
 		return Core.routes.render(route.routes as ModuleRouteConfig[], {
 			routes: route.routes,
 			user,
+			userRoles,
+			roles,
+			sites,
+			onCancel: () => console.log('cancel'),
+			onSubmit: handleSubmit,
 		});
 	};
 

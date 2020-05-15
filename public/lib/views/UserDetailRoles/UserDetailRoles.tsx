@@ -1,21 +1,40 @@
-import { Button, Card, Checkbox } from '@acpaas-ui/react-components';
+import { Button, Card } from '@acpaas-ui/react-components';
 import { ActionBar, ActionBarContentSection, Table } from '@acpaas-ui/react-editorial-components';
 import { CORE_TRANSLATIONS } from '@redactie/translations-module/public/lib/i18next/translations.const';
 import { Field, Formik } from 'formik';
-import React, { FC, ReactElement } from 'react';
+import React, { FC, ReactElement, useState } from 'react';
 
+import { FormViewUserRoles } from '../../components';
 import { useCoreTranslation } from '../../connectors/translations';
+import { mapUserRoles } from '../../helpers';
+import { ContentType } from '../../roles.types';
 
-import {
-	DUMMY_ROLES,
-	DUMMY_SITES,
-	SITE_COLUMNS,
-	SITE_VALIDATION_SCHEMA,
-} from './UserDetailRoles.const';
+import { SITE_COLUMNS, SITE_VALIDATION_SCHEMA } from './UserDetailRoles.const';
 import { UserDetailRolesProps } from './UserDetailRoles.types';
 
-const UserDetailRoles: FC<UserDetailRolesProps> = ({ user }) => {
+const UserDetailRoles: FC<UserDetailRolesProps> = ({
+	user,
+	userRoles,
+	roles,
+	sites,
+	onCancel,
+	onSubmit,
+}) => {
 	const [t] = useCoreTranslation();
+	const [selectedRoles, updateSelectedRoles] = useState(mapUserRoles(userRoles));
+
+	/**
+	 * Functions
+	 */
+	const onConfigSave = (): void => {
+		if (mapUserRoles(userRoles) !== selectedRoles) {
+			onSubmit(user, selectedRoles, ContentType.UserRoles);
+		}
+	};
+
+	const onConfigChange = (updatedRoles: any): void => {
+		updateSelectedRoles(updatedRoles);
+	};
 	/**
 	 * Render
 	 */
@@ -23,9 +42,11 @@ const UserDetailRoles: FC<UserDetailRolesProps> = ({ user }) => {
 		const siteRows: any[] = (fields || []).map(site => ({
 			name: site.name,
 			roles: site.roles,
+			siteUuid: site.uuid,
 			path: '#',
 			setActiveField: () => console.log(site),
-			editAccess: () => console.log(site),
+			editAccess: () => console.log('edit acccess', site),
+			giveAccess: () => console.log('give acccess', site),
 		}));
 
 		return (
@@ -33,38 +54,25 @@ const UserDetailRoles: FC<UserDetailRolesProps> = ({ user }) => {
 				className="u-margin-top"
 				columns={SITE_COLUMNS(t)}
 				rows={siteRows}
-				totalValues={DUMMY_SITES.length}
+				totalValues={sites.length}
 			/>
 		);
 	};
 
 	const renderTableForm = (): ReactElement => {
+		const sitesRows = sites.map(site => ({
+			id: site.uuid,
+			name: site.data.name,
+			roles: site.roles,
+		}));
+
 		return (
 			<Formik
-				initialValues={{ fields: DUMMY_SITES }}
-				onSubmit={() => console.log('submit table form')}
+				initialValues={{ fields: sitesRows }}
+				onSubmit={onConfigChange}
 				validationSchema={SITE_VALIDATION_SCHEMA}
 			>
 				{() => <Field name="fields" placeholder="No fields" as={renderTableField} />}
-			</Formik>
-		);
-	};
-
-	const renderRolesForm = (): ReactElement => {
-		return (
-			<Formik initialValues={DUMMY_ROLES} onSubmit={() => console.log('submit roles form')}>
-				{({ values }) =>
-					values.map((role, index) => (
-						<Field
-							key={index}
-							as={Checkbox}
-							checked={role.checked}
-							id={role.name}
-							name={role.name}
-							label={role.name}
-						/>
-					))
-				}
 			</Formik>
 		);
 	};
@@ -73,19 +81,23 @@ const UserDetailRoles: FC<UserDetailRolesProps> = ({ user }) => {
 		<Card>
 			<div className="u-margin">
 				<h5 className="u-margin-bottom">Rollen</h5>
-				{renderRolesForm()}
+				<FormViewUserRoles
+					formState={selectedRoles}
+					availableRoles={roles}
+					onSubmit={onConfigChange}
+				/>
 				{renderTableForm()}
 				<ActionBar className="o-action-bar--fixed" isOpen>
 					<ActionBarContentSection>
 						<div className="u-wrapper">
 							<Button
 								className="u-margin-right-xs"
-								onClick={() => console.log('save')}
+								onClick={onConfigSave}
 								type="success"
 							>
 								{t(CORE_TRANSLATIONS.BUTTON_SAVE)}
 							</Button>
-							<Button onClick={() => console.log('cancel')} outline>
+							<Button onClick={onCancel} outline>
 								{t(CORE_TRANSLATIONS.BUTTON_CANCEL)}
 							</Button>
 						</div>

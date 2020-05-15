@@ -16,6 +16,12 @@ export enum LoadingState {
 	Loaded = 'loaded',
 	Error = 'error',
 }
+
+export enum ContentType {
+	UserRoles = 'UserRoles',
+	SiteRoles = 'SiteRoles',
+}
+
 export interface FilterFormState {
 	name: string;
 }

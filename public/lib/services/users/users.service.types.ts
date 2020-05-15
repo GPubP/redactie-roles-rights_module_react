@@ -29,4 +29,9 @@ export interface GetUserPayload {
 	id: string;
 }
 
+export interface UpdateUserRolesPayload {
+	id: string;
+	roles: Array<string>;
+}
+
 export type GetUsersPayload = SearchParams;
