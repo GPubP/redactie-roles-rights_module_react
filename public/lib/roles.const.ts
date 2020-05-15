@@ -1,5 +1,11 @@
 export const BREADCRUMB_OPTIONS = {
-	excludePaths: ['/', '/:tenantId'],
+	excludePaths: [
+		'/',
+		'/:tenantId',
+		'/:tenantId/users',
+		'/:tenantId/users/overzicht',
+		'/:tenantId/users/:userId',
+	],
 };
 
 const siteRoot = '/:siteId/gebruikers';
@@ -11,6 +17,12 @@ const siteUsersRoot = `${siteRoot}/users`;
 
 const siteRolesOverview = `${siteRolesRoot}/overzicht`;
 const siteUsersOverview = `${siteUsersRoot}/overzicht`;
+const tenantUserDetail = `${tenantRoot}/:userUuid`;
+const tenantUserDetailGeneral = `${tenantUserDetail}/algemeen`;
+const tenantUserDetailRoles = `${tenantUserDetail}/rollen`;
+const tenantUserDetailRolesUpdate = `${tenantUserDetail}/sites/:siteUuid/rollen`;
+
+const tenantRolesRoot = `${tenantRoot}/roles`;
 
 export const MODULE_PATHS = {
 	siteRoot,
@@ -25,4 +37,9 @@ export const MODULE_PATHS = {
 		root: siteRolesRoot,
 		overview: siteRolesOverview,
 	},
+	tenantUserDetail,
+	tenantUserDetailGeneral,
+	tenantUserDetailRoles,
+	tenantUserDetailRolesUpdate,
+	tenantRolesRoot,
 };

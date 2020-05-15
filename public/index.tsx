@@ -7,7 +7,14 @@ import { registerRoutes } from './lib/connectors/sites';
 import { TenantContext } from './lib/context';
 import { MODULE_PATHS } from './lib/roles.const';
 import { RolesModuleProps } from './lib/roles.types';
-import { SiteUsersOverview, UsersOverview } from './lib/views';
+import {
+	SiteUsersOverview,
+	UserDetailGeneral,
+	UserDetailRoles,
+	UserDetailRolesUpdate,
+	UsersOverview,
+	UserUpdate,
+} from './lib/views';
 
 const SiteRolesComponent: FC<RolesModuleProps> = ({ route, location, tenantId }) => {
 	// if path is /users, redirect to /users/overzicht
@@ -70,6 +77,7 @@ Core.routes.register({
 	navigation: {
 		label: 'Gebruikers',
 	},
+	exact: true,
 	routes: [
 		{
 			path: MODULE_PATHS.tenantUsersOverview,
@@ -78,6 +86,24 @@ Core.routes.register({
 				label: 'Gebruikers',
 				parentPath: MODULE_PATHS.tenantRoot,
 			},
+		},
+		{
+			path: MODULE_PATHS.tenantUserDetailRolesUpdate,
+			component: UserDetailRolesUpdate,
+		},
+		{
+			path: MODULE_PATHS.tenantUserDetail,
+			component: UserUpdate,
+			routes: [
+				{
+					path: MODULE_PATHS.tenantUserDetailGeneral,
+					component: UserDetailGeneral,
+				},
+				{
+					path: MODULE_PATHS.tenantUserDetailRoles,
+					component: UserDetailRoles,
+				},
+			],
 		},
 	],
 });
