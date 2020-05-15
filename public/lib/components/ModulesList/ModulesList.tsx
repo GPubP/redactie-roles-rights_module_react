@@ -7,6 +7,11 @@ import './ModulesList.scss';
 const ModulesList: React.FC<ModulesListProps> = ({ modules }) => {
 	return (
 		<ul className="col-xs-12 col-sm-2">
+			<li>
+				<Card>
+					<CardHeader title="Alle permissies" />
+				</Card>
+			</li>
 			{modules.map((module: Module) => (
 				<li key={module.id}>
 					<Card>

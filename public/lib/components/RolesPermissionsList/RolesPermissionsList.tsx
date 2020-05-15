@@ -23,8 +23,8 @@ const RolesPermissionsList: React.FC<RolesPermissionsProps> = ({ roles, permissi
 						<tr key={permission.id}>
 							<th className="a-table-header--side">{permission.name}</th>
 							{roles.map((role: RolePermission) => (
-								<td key={role.id}>
-									<p>Checkbox</p>
+								<td className="a-table-checkbox" key={role.id}>
+									<input type="checkbox" id="horns" name="horns" />
 								</td>
 							))}
 							<td></td>

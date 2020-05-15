@@ -12,27 +12,43 @@
 
 	.a-table-header {
 		&--top {
+			height: 180px;
+			width: 36px;
 			border-left: 1px solid #c0c0c0;
 			border-right: 1px solid #c0c0c0;
+			text-align: center;
+			transform-origin: 50% 50%;
+			transform: rotate(-90deg);
 		}
 
 		&--side {
 			border-bottom: 1px solid #c0c0c0;
 			border-top: 1px solid #c0c0c0;
+			width: 180px;
 		}
 	}
 
 	tr {
 		height: 36px;
 		text-align: left;
-		padding-left: $spacer;
 	}
 
 	tr:nth-child(even) {
 		background-color: #f3f3f3;
 	}
 
+	th,
 	td {
+		padding-left: $spacer;
+	}
+
+	td {
+		border-bottom: 1px solid #c0c0c0;
+		border-top: 1px solid #c0c0c0;
+	}
+
+	.a-table-checkbox {
+		width: 36px;
 		border: 1px solid #c0c0c0;
 	}
 }
