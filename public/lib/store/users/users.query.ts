@@ -9,7 +9,7 @@ export class UsersQuery extends QueryEntity<UsersState> {
 	}
 
 	public meta$ = this.select(state => state.meta);
-	public site$ = this.select(state => state.site);
+	public user$ = this.select(state => state.user);
 	public isFetching$ = this.select(state => state.isFetching);
 }
 

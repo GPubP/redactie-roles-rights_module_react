@@ -12,8 +12,10 @@ const useNavigate = (): { generatePath: GenerateFn; navigate: NavigateFn } => {
 	const { tenantId } = useContext(TenantContext);
 	const history = useHistory();
 
-	const generate = (path: string, params?: Params): string =>
-		generatePath(`/${tenantId}/${path}`, params);
+	const generate = (path: string, params?: Params): string => {
+		return generatePath(`/${tenantId}${path}`, params);
+	};
+
 	const navigate = (path: string, params?: Params, state?: H.LocationState): void =>
 		history.push(generate(path, params), state);
 
