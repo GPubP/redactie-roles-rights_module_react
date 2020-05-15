@@ -31,7 +31,7 @@ export class UsersApiService {
 
 	public async updateUserRoles({ id, roles }: UpdateUserRolesPayload): Promise<any> {
 		return await api
-			.put(`users/${id}/roles`, {
+			.post(`users/${id}/roles`, {
 				json: {
 					roles: roles,
 				},
