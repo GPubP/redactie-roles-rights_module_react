@@ -11,7 +11,7 @@ import React, { FC, ReactElement, useEffect, useState } from 'react';
 
 import { DataLoader, FilterForm } from '../../components';
 import { useCoreTranslation } from '../../connectors/translations';
-import { useNavigate, useRoutesBreadcrumbs, useUsers } from '../../hooks';
+import { useRoutesBreadcrumbs, useSiteNavigate, useUsers } from '../../hooks';
 import { MODULE_PATHS } from '../../roles.const';
 import { FilterFormState, LoadingState, RolesRouteProps } from '../../roles.types';
 import { DEFAULT_USERS_SEARCH_PARAMS } from '../../services/users/users.service.const';
@@ -30,7 +30,7 @@ const SiteUsersOverview: FC<RolesRouteProps<{ siteId: string }>> = ({ match }) =
 	const [filterFormState, setFilterFormState] = useState<FilterFormState>(
 		CONTENT_INITIAL_FILTER_STATE
 	);
-	const { navigate } = useNavigate();
+	const { navigate } = useSiteNavigate();
 	const breadcrumbs = useRoutesBreadcrumbs();
 	const [usersSearchParams, setUsersSearchParams] = useState(DEFAULT_USERS_SEARCH_PARAMS);
 	const [loadingState, users, usersMeta] = useUsers();

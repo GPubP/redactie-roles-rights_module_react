@@ -9,7 +9,7 @@ import { MODULE_PATHS } from './lib/roles.const';
 import { RolesModuleProps } from './lib/roles.types';
 import { SiteUsersOverview, UsersOverview } from './lib/views';
 
-const RolesComponent: FC<RolesModuleProps> = ({ route, location, tenantId }) => {
+const SiteRolesComponent: FC<RolesModuleProps> = ({ route, location, tenantId }) => {
 	// if path is /users, redirect to /users/overzicht
 	if (
 		/\/\b[0-9a-f]{8}\b-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-\b[0-9a-f]{12}\b\/users$/.test(
@@ -28,9 +28,24 @@ const RolesComponent: FC<RolesModuleProps> = ({ route, location, tenantId }) => 
 	);
 };
 
+const TenantRolesComponent: FC<RolesModuleProps> = ({ route, location, tenantId }) => {
+	// if path is /users, redirect to /users/overzicht
+	if (/\/users$/.test(location.pathname)) {
+		return <Redirect to={`/${tenantId}/users/overzicht`} />;
+	}
+
+	return (
+		<TenantContext.Provider value={{ tenantId }}>
+			{Core.routes.render(route.routes as ModuleRouteConfig[], {
+				routes: route.routes,
+			})}
+		</TenantContext.Provider>
+	);
+};
+
 registerRoutes({
 	path: MODULE_PATHS.siteRoot,
-	component: RolesComponent,
+	component: SiteRolesComponent,
 	navigation: {
 		renderContext: 'site',
 		context: 'site',
@@ -51,10 +66,8 @@ registerRoutes({
 
 Core.routes.register({
 	path: MODULE_PATHS.tenantRoot,
-	component: RolesComponent,
+	component: TenantRolesComponent,
 	navigation: {
-		renderContext: 'site',
-		context: 'site',
 		label: 'Gebruikers',
 	},
 	routes: [
@@ -62,7 +75,6 @@ Core.routes.register({
 			path: MODULE_PATHS.tenantUsersOverview,
 			component: UsersOverview,
 			navigation: {
-				context: 'site',
 				label: 'Gebruikers',
 				parentPath: MODULE_PATHS.tenantRoot,
 			},
