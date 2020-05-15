@@ -10,9 +10,9 @@ export const BREADCRUMB_OPTIONS = {
 
 const tenantRoot = '/users';
 const tenantUsersOverview = `${tenantRoot}/overzicht`;
-
 const tenantUserDetail = `${tenantRoot}/:userUuid`;
 const tenantUserDetailGeneral = `${tenantUserDetail}/algemeen`;
+const tenantUserDetailRoles = `${tenantUserDetail}/rollen`;
 
 const tenantRolesRoot = `${tenantRoot}/roles`;
 
@@ -22,5 +22,6 @@ export const MODULE_PATHS = {
 	tenantUsersOverview,
 	tenantUserDetail,
 	tenantUserDetailGeneral,
+	tenantUserDetailRoles,
 	tenantRolesRoot,
 };
