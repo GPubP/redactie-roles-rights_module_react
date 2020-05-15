@@ -12,6 +12,5 @@ export interface UsersState extends EntityState<UserModel, string> {
 }
 
 export const createInitialUsersState = (): UsersState => ({
-	loading: false,
 	isFetching: false,
 });

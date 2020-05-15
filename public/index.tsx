@@ -7,9 +7,9 @@ import { registerRoutes } from './lib/connectors/sites';
 import { TenantContext } from './lib/context';
 import { MODULE_PATHS } from './lib/roles.const';
 import { RolesModuleProps } from './lib/roles.types';
-import { UsersOverview } from './lib/views';
+import { SiteUsersOverview, UsersOverview } from './lib/views';
 
-const RolesComponent: FC<RolesModuleProps> = ({ route, location, match, tenantId }) => {
+const RolesComponent: FC<RolesModuleProps> = ({ route, location, tenantId }) => {
 	// if path is /users, redirect to /users/overzicht
 	if (
 		/\/\b[0-9a-f]{8}\b-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-\b[0-9a-f]{12}\b\/users$/.test(
@@ -22,9 +22,7 @@ const RolesComponent: FC<RolesModuleProps> = ({ route, location, match, tenantId
 	return (
 		<TenantContext.Provider value={{ tenantId }}>
 			{Core.routes.render(route.routes as ModuleRouteConfig[], {
-				basePath: match.url,
 				routes: route.routes,
-				tenantId,
 			})}
 		</TenantContext.Provider>
 	);
@@ -41,11 +39,32 @@ registerRoutes({
 	routes: [
 		{
 			path: MODULE_PATHS.users.root,
-			component: UsersOverview,
+			component: SiteUsersOverview,
 			navigation: {
 				context: 'site',
 				label: 'Gebruikers',
 				parentPath: MODULE_PATHS.siteRoot,
+			},
+		},
+	],
+});
+
+Core.routes.register({
+	path: MODULE_PATHS.tenantRoot,
+	component: RolesComponent,
+	navigation: {
+		renderContext: 'site',
+		context: 'site',
+		label: 'Gebruikers',
+	},
+	routes: [
+		{
+			path: MODULE_PATHS.tenantUsersOverview,
+			component: UsersOverview,
+			navigation: {
+				context: 'site',
+				label: 'Gebruikers',
+				parentPath: MODULE_PATHS.tenantRoot,
 			},
 		},
 	],

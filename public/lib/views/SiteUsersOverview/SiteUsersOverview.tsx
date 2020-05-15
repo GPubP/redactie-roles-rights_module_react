@@ -17,10 +17,10 @@ import { FilterFormState, LoadingState, RolesRouteProps } from '../../roles.type
 import { DEFAULT_USERS_SEARCH_PARAMS } from '../../services/users/users.service.const';
 import { usersService } from '../../store/users';
 
-import { CONTENT_INITIAL_FILTER_STATE, USERS_OVERVIEW_COLUMNS } from './UsersOverview.const';
-import { FilterItemSchema, OrderBy, UsersOverviewTableRow } from './UsersOverview.types';
+import { CONTENT_INITIAL_FILTER_STATE, USERS_OVERVIEW_COLUMNS } from './SiteUsersOverview.const';
+import { FilterItemSchema, OrderBy, UsersOverviewTableRow } from './SiteUsersOverview.types';
 
-const UsersOverview: FC<RolesRouteProps<{ siteId: string }>> = ({ match }) => {
+const SiteUsersOverview: FC<RolesRouteProps<{ siteId: string }>> = ({ match }) => {
 	const { siteId } = match.params;
 	/**
 	 * Hooks
@@ -39,8 +39,8 @@ const UsersOverview: FC<RolesRouteProps<{ siteId: string }>> = ({ match }) => {
 	const [t] = useCoreTranslation();
 
 	useEffect(() => {
-		usersService.getUsers(usersSearchParams);
-	}, [usersSearchParams]);
+		usersService.getUsersBySite(usersSearchParams, siteId);
+	}, [siteId, usersSearchParams]);
 
 	useEffect(() => {
 		if (loadingState === LoadingState.Loaded || loadingState === LoadingState.Error) {
@@ -185,4 +185,4 @@ const UsersOverview: FC<RolesRouteProps<{ siteId: string }>> = ({ match }) => {
 	);
 };
 
-export default UsersOverview;
+export default SiteUsersOverview;
