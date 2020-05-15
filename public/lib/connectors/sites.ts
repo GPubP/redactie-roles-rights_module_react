@@ -1,9 +1,10 @@
-import Core, { ModuleRouteConfig, Routes } from '@redactie/redactie-core';
+import Core, { ModuleRouteConfig } from '@redactie/redactie-core';
+import { Routes } from '@redactie/redactie-core/dist/routes';
 
 // TODO export sites api typings
-const sitesAPI: { routes: Routes } = Core.modules.getModuleAPI('sites-module') as {
+const RolesAPI: { routes: Routes } = Core.modules.getModuleAPI('roles-rights-module') as {
 	routes: Routes;
 };
 
 export const registerRoutes = (routes: ModuleRouteConfig): any | false =>
-	sitesAPI ? sitesAPI.routes.register(routes) : false;
+	RolesAPI ? RolesAPI.routes.register(routes) : false;
