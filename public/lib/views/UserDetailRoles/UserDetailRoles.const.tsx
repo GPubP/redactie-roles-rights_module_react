@@ -31,7 +31,7 @@ export const SITE_COLUMNS = (t: TranslateFunc): any[] => [
 		label: t(CORE_TRANSLATIONS.TABLE_NAME),
 		value: 'name',
 		component(value: string, rowData: any) {
-			const { path, setActiveField, editAccess } = rowData;
+			const { path, setActiveField } = rowData;
 			return (
 				<>
 					<Link to={path} onClick={() => setActiveField()}>
