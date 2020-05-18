@@ -7,9 +7,17 @@ import { registerRoutes } from './lib/connectors/sites';
 import { TenantContext } from './lib/context';
 import { MODULE_PATHS } from './lib/roles.const';
 import { RolesModuleProps } from './lib/roles.types';
-import { RolesOverview, UsersOverview } from './lib/views';
+import {
+	RolesOverview,
+	SiteUsersOverview,
+	UserDetailGeneral,
+	UserDetailRoles,
+	UserDetailRolesUpdate,
+	UsersOverview,
+	UserUpdate,
+} from './lib/views';
 
-const RolesComponent: FC<RolesModuleProps> = ({ route, location, match, tenantId }) => {
+const SiteRolesComponent: FC<RolesModuleProps> = ({ route, location, tenantId }) => {
 	// if path is /users, redirect to /users/overzicht
 	if (
 		/\/\b[0-9a-f]{8}\b-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-\b[0-9a-f]{12}\b\/users$/.test(
@@ -22,9 +30,22 @@ const RolesComponent: FC<RolesModuleProps> = ({ route, location, match, tenantId
 	return (
 		<TenantContext.Provider value={{ tenantId }}>
 			{Core.routes.render(route.routes as ModuleRouteConfig[], {
-				basePath: match.url,
 				routes: route.routes,
-				tenantId,
+			})}
+		</TenantContext.Provider>
+	);
+};
+
+const TenantRolesComponent: FC<RolesModuleProps> = ({ route, location, tenantId }) => {
+	// if path is /users, redirect to /users/overzicht
+	if (/\/users$/.test(location.pathname)) {
+		return <Redirect to={`/${tenantId}/users/overzicht`} />;
+	}
+
+	return (
+		<TenantContext.Provider value={{ tenantId }}>
+			{Core.routes.render(route.routes as ModuleRouteConfig[], {
+				routes: route.routes,
 			})}
 		</TenantContext.Provider>
 	);
@@ -32,7 +53,7 @@ const RolesComponent: FC<RolesModuleProps> = ({ route, location, match, tenantId
 
 registerRoutes({
 	path: MODULE_PATHS.siteRoot,
-	component: RolesComponent,
+	component: SiteRolesComponent,
 	navigation: {
 		renderContext: 'site',
 		context: 'site',
@@ -41,7 +62,7 @@ registerRoutes({
 	routes: [
 		{
 			path: MODULE_PATHS.users.root,
-			component: UsersOverview,
+			component: SiteUsersOverview,
 			navigation: {
 				context: 'site',
 				label: 'Gebruikers',
@@ -56,6 +77,43 @@ registerRoutes({
 				label: 'Rollen en rechten',
 				parentPath: MODULE_PATHS.siteRoot,
 			},
+		},
+	],
+});
+
+Core.routes.register({
+	path: MODULE_PATHS.tenantRoot,
+	component: TenantRolesComponent,
+	navigation: {
+		label: 'Gebruikers',
+	},
+	exact: true,
+	routes: [
+		{
+			path: MODULE_PATHS.tenantUsersOverview,
+			component: UsersOverview,
+			navigation: {
+				label: 'Gebruikers',
+				parentPath: MODULE_PATHS.tenantRoot,
+			},
+		},
+		{
+			path: MODULE_PATHS.tenantUserDetailRolesUpdate,
+			component: UserDetailRolesUpdate,
+		},
+		{
+			path: MODULE_PATHS.tenantUserDetail,
+			component: UserUpdate,
+			routes: [
+				{
+					path: MODULE_PATHS.tenantUserDetailGeneral,
+					component: UserDetailGeneral,
+				},
+				{
+					path: MODULE_PATHS.tenantUserDetailRoles,
+					component: UserDetailRoles,
+				},
+			],
 		},
 	],
 });

@@ -28,14 +28,10 @@ export interface UserResponse {
 export interface GetUserPayload {
 	id: string;
 }
-export interface CreateUserPayload {
-	firstname: string;
-	lastname: string;
-}
 
-export interface UpdateUserPayload {
+export interface UpdateUserRolesPayload {
 	id: string;
-	body: CreateUserPayload;
+	roles: Array<string>;
 }
 
 export type GetUsersPayload = SearchParams;

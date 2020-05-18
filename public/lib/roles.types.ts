@@ -1,6 +1,5 @@
 import { ModuleRouteConfig, RouteConfigComponentProps } from '@redactie/redactie-core';
 
-import { Routes } from './services/routes';
 import { UsersQuery, UsersService } from './store/users';
 
 export interface RolesModuleProps extends RouteConfigComponentProps {
@@ -22,12 +21,14 @@ export enum LoadingState {
 	Loaded = 'loaded',
 	Error = 'error',
 }
-export interface FilterFormState {
-	name: string;
+
+export enum ContentType {
+	UserRoles = 'UserRoles',
+	SiteRoles = 'SiteRoles',
 }
 
 export interface UsersModuleAPI {
-	routes: Routes;
+	routes: ModuleRouteConfig;
 	store: {
 		users: {
 			service: Partial<UsersService>;
