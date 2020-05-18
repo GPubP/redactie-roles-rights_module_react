@@ -12,10 +12,25 @@ export class SitesService {
 			.then(sitesResponse => {
 				const sites = sitesResponse._embedded;
 
-				const populatedSites = sites.map(site =>
-					this.sitesService
-						.getUserRolesForSite({ id: payload.id, siteUuid: site.uuid })
-						.then(rolesResponse => ({ ...site, roles: rolesResponse._embedded }))
+				const populatedSites = sites.map(
+					site =>
+						new Promise(resolve => {
+							this.sitesService
+								.getUserRolesForSite({ id: payload.id, siteUuid: site.uuid })
+								.then(rolesResponse => {
+									return resolve({
+										...site,
+										roles: rolesResponse._embedded,
+									});
+								})
+								.catch(() => {
+									// don't crash when the server response
+									return resolve({
+										...site,
+										roles: [],
+									});
+								});
+						})
 				);
 
 				Promise.all(populatedSites)
