@@ -1,10 +1,22 @@
+import { useObservable } from '@mindspace-io/react';
 import { isNil } from 'ramda';
 import { useEffect, useState } from 'react';
 import { Subject } from 'rxjs';
 import { distinctUntilChanged, filter, takeUntil } from 'rxjs/operators';
 
 import { LoadingState } from '../../roles.types';
-import { UserModel, UsersMetaModel, usersQuery } from '../../store/users';
+import { UserModel, usersFacade, UsersMetaModel, usersQuery } from '../../store/users';
+
+// const useUsersTwo = (): [LoadingState | null, UserModel[], UsersMetaModel | null | undefined] => {
+// 	const [loading] = useObservable(usersFacade.isFetching$, null);
+// 	const [users] = useObservable(usersFacade.users$, []);
+// 	const [meta] = useObservable(usersFacade.meta$, null);
+// 	const [error] = useObservable(usersFacade.error$, null);
+
+// 	const loadingState = error ? LoadingState.Error : loading;
+
+// 	return [loadingState, users, meta];
+// };
 
 const useUsers = (): [LoadingState, UserModel[], UsersMetaModel | null] => {
 	const [loadingState, setLoadingState] = useState<LoadingState>(LoadingState.Loading);
