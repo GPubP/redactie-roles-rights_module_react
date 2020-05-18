@@ -35,7 +35,6 @@ export class SitesService {
 
 				Promise.all(populatedSites)
 					.then(result => {
-						console.log('wtf is dit nu weer', result);
 						const meta = sitesResponse._page;
 
 						this.store.set(result);
