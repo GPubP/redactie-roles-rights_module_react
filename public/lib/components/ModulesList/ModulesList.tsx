@@ -1,31 +1,25 @@
-import { Card, CardHeader } from '@acpaas-ui/react-components';
 import React, { FC } from 'react';
+import { NavLink } from 'react-router-dom';
 
-import { Module, ModulesListProps } from './ModulesList.types';
-import './ModulesList.scss';
+import { ModulesListProps } from './ModulesList.types';
 
-const ModulesList: React.FC<ModulesListProps> = ({ modules }) => {
+const ModulesList: FC<ModulesListProps> = ({ modules }) => {
 	return (
-		<ul className="col-xs-12 col-sm-2">
+		<ul className="m-nav-list">
 			<li>
-				<Card>
-					<CardHeader title="Alle permissies" />
-				</Card>
+				<NavLink activeClassName="is-active" to="Alle permissies">
+					Alle permissies
+				</NavLink>
 			</li>
-			{modules.map((module: Module) => (
-				<li key={module.id}>
-					<Card>
-						<CardHeader title={`${module.name}`} />
-					</Card>
+			{modules.map(({ name }, index) => (
+				<li key={`nav-list-${index}`}>
+					<NavLink activeClassName="is-active" to={name}>
+						{name}
+					</NavLink>
 				</li>
 			))}
 		</ul>
 	);
-	// modules.map(module => (
-	// 	<Card className="col-xs-12 col-sm-2">
-	// 		<CardHeader title={module} />
-	// 	</Card>
-	// ))
 };
 
 export default ModulesList;
