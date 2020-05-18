@@ -1,4 +1,6 @@
-import { FilterFormState } from '../../roles.types';
+export interface FilterFormState {
+	name: string;
+}
 
 export interface FilterFormProps {
 	initialState: FilterFormState;

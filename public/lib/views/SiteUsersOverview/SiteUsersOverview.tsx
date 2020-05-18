@@ -9,11 +9,11 @@ import {
 import { CORE_TRANSLATIONS } from '@redactie/translations-module/public/lib/i18next/translations.const';
 import React, { FC, ReactElement, useEffect, useState } from 'react';
 
-import { DataLoader, FilterForm } from '../../components';
+import { DataLoader, FilterForm, FilterFormState } from '../../components';
 import { useCoreTranslation } from '../../connectors/translations';
 import { useRoutesBreadcrumbs, useSiteNavigate, useUsers } from '../../hooks';
 import { MODULE_PATHS } from '../../roles.const';
-import { FilterFormState, LoadingState, RolesRouteProps } from '../../roles.types';
+import { LoadingState, RolesRouteProps } from '../../roles.types';
 import { DEFAULT_USERS_SEARCH_PARAMS } from '../../services/users/users.service.const';
 import { usersService } from '../../store/users';
 

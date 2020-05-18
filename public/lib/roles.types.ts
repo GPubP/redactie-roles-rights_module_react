@@ -27,10 +27,6 @@ export enum ContentType {
 	SiteRoles = 'SiteRoles',
 }
 
-export interface FilterFormState {
-	name: string;
-}
-
 export interface UsersModuleAPI {
 	routes: ModuleRouteConfig;
 	store: {
