@@ -138,7 +138,7 @@ const UsersOverview: FC<RolesRouteProps> = () => {
 		}));
 
 		return (
-			<div className="u-container u-wrapper">
+			<>
 				<div className="u-margin-top">
 					<FilterForm
 						initialState={filterFormState}
@@ -160,7 +160,7 @@ const UsersOverview: FC<RolesRouteProps> = () => {
 					totalValues={usersMeta?.totalElements}
 					loading={loadingState === LoadingState.Loading}
 				></PaginatedTable>
-			</div>
+			</>
 		);
 	};
 

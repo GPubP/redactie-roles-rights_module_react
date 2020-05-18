@@ -139,7 +139,7 @@ const SiteUsersOverview: FC<RolesRouteProps<{ siteId: string }>> = ({ match }) =
 		}));
 
 		return (
-			<div className="u-container u-wrapper">
+			<>
 				<div className="u-margin-top">
 					<FilterForm
 						initialState={filterFormState}
@@ -161,7 +161,7 @@ const SiteUsersOverview: FC<RolesRouteProps<{ siteId: string }>> = ({ match }) =
 					totalValues={usersMeta?.totalElements}
 					loading={loadingState === LoadingState.Loading}
 				></PaginatedTable>
-			</div>
+			</>
 		);
 	};
 
