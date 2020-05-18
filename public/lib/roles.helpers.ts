@@ -1,4 +1,4 @@
-import { FilterFormState } from './roles.types';
+import { FilterFormState } from './components';
 
 export const generateFilterFormState = (): FilterFormState => ({
 	name: '',
