@@ -1,55 +1,16 @@
-import { isNil } from 'ramda';
-import { useEffect, useState } from 'react';
-import { Subject } from 'rxjs';
-import { distinctUntilChanged, filter, takeUntil } from 'rxjs/operators';
+import { useObservable } from '@mindspace-io/react';
 
 import { LoadingState } from '../../roles.types';
-import { SiteModel, sitesQuery } from '../../store/sites';
+import { SiteModel, sitesFacade } from '../../store/sites';
 
-const UseSites = (): [LoadingState, SiteModel[] | null] => {
-	const [loadingState, setLoadingState] = useState<LoadingState>(LoadingState.Loading);
-	const [sites, setSites] = useState<SiteModel[] | null>(null);
+const useSites = (): [LoadingState | null, SiteModel[] | null | undefined] => {
+	const [loading] = useObservable(sitesFacade.isFetching$, null);
+	const [sites] = useObservable(sitesFacade.sites$, null);
+	const [error] = useObservable(sitesFacade.error$, null);
 
-	useEffect(() => {
-		const destroyed$: Subject<boolean> = new Subject<boolean>();
-
-		sitesQuery
-			.selectAll()
-			.pipe(
-				takeUntil(destroyed$),
-				filter(sitesObject => !isNil(sitesObject)),
-				distinctUntilChanged()
-			)
-			.subscribe(sitesObject => {
-				if (sitesObject) {
-					setSites(sitesObject);
-				}
-			});
-
-		sitesQuery.isFetching$.pipe(takeUntil(destroyed$)).subscribe(loading => {
-			if (loading) {
-				return setLoadingState(LoadingState.Loading);
-			}
-
-			setLoadingState(LoadingState.Loaded);
-		});
-
-		sitesQuery
-			.selectError()
-			.pipe(
-				takeUntil(destroyed$),
-				filter(error => !isNil(error)),
-				distinctUntilChanged()
-			)
-			.subscribe(() => setLoadingState(LoadingState.Error));
-
-		return () => {
-			destroyed$.next(true);
-			destroyed$.complete();
-		};
-	}, []);
+	const loadingState = error ? LoadingState.Error : loading;
 
 	return [loadingState, sites];
 };
 
-export default UseSites;
+export default useSites;

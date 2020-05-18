@@ -12,7 +12,7 @@ import { DataLoader, NavList } from '../../components';
 import { useRoles, useRoutesBreadcrumbs, useSites, useUser, useUserRoles } from '../../hooks';
 import { ContentType, LoadingState, RolesRouteProps } from '../../roles.types';
 import { rolesService } from '../../store/roles';
-import { sitesService } from '../../store/sites';
+import { sitesFacade } from '../../store/sites';
 import { UserModel, usersFacade } from '../../store/users';
 
 import { USER_UPDATE_NAV_LIST_ITEMS } from './UserUpdate.const';
@@ -34,7 +34,7 @@ const UserUpdate: FC<RolesRouteProps<{ userUuid?: string }>> = ({ route, match }
 			usersFacade.getUser({ id: userUuid });
 			usersFacade.getUserRoles({ id: userUuid });
 			rolesService.getRoles();
-			sitesService.getSites({ id: userUuid });
+			sitesFacade.getSites({ id: userUuid });
 			return;
 		}
 	}, [userUuid]);

@@ -12,6 +12,5 @@ export interface SitesState extends EntityState<SiteModel, string> {
 }
 
 export const createInitialSitesState = (): SitesState => ({
-	loading: false,
 	isFetching: false,
 });

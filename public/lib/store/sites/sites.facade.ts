@@ -1,13 +1,22 @@
-import { GetSitesPayload, sitesApiService, SitesApiService } from '../../services/sites';
+import { GetSitesPayload, SitesApiService, sitesApiService } from '../../services/sites';
 
+import { SitesQuery, sitesQuery } from './sites.query';
 import { SitesStore, sitesStore } from './sites.store';
 
-export class SitesService {
-	constructor(private store: SitesStore, private sitesService: SitesApiService) {}
+export class SitesFacade {
+	constructor(
+		private store: SitesStore,
+		private service: SitesApiService,
+		private query: SitesQuery
+	) {}
+
+	public readonly sites$ = this.query.sites$;
+	public readonly error$ = this.query.error$;
+	public readonly isFetching$ = this.query.isFetching$;
 
 	public getSites(payload: GetSitesPayload): void {
 		this.store.setIsFetching(true);
-		this.sitesService
+		this.service
 			.getSites()
 			.then(sitesResponse => {
 				const sites = sitesResponse._embedded;
@@ -15,7 +24,7 @@ export class SitesService {
 				const populatedSites = sites.map(
 					site =>
 						new Promise(resolve => {
-							this.sitesService
+							this.service
 								.getUserRolesForSite({ id: payload.id, siteUuid: site.uuid })
 								.then(rolesResponse => {
 									return resolve({
@@ -57,4 +66,4 @@ export class SitesService {
 	}
 }
 
-export const sitesService = new SitesService(sitesStore, sitesApiService);
+export const sitesFacade = new SitesFacade(sitesStore, sitesApiService, sitesQuery);
