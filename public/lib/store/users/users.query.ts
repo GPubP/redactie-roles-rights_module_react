@@ -28,7 +28,9 @@ export class UsersQuery extends QueryEntity<UsersState> {
 	public user$ = this.select(state => state.user).pipe(
 		filter(user => !isNil(user), distinctUntilChanged())
 	);
-	public userRoles$ = this.select(state => state.userRoles);
+	public userRoles$ = this.select(state => state.userRoles).pipe(
+		filter(user => !isNil(user), distinctUntilChanged())
+	);
 
 	// State
 	public error$ = this.selectError().pipe(filter(error => !isNil(error), distinctUntilChanged()));

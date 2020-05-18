@@ -15,7 +15,7 @@ import { useRoutesBreadcrumbs, useSiteNavigate, useUsers } from '../../hooks';
 import { MODULE_PATHS } from '../../roles.const';
 import { LoadingState, RolesRouteProps } from '../../roles.types';
 import { DEFAULT_USERS_SEARCH_PARAMS } from '../../services/users/users.service.const';
-import { usersService } from '../../store/users';
+import { usersFacade } from '../../store/users';
 
 import { CONTENT_INITIAL_FILTER_STATE, USERS_OVERVIEW_COLUMNS } from './SiteUsersOverview.const';
 import { FilterItemSchema, OrderBy, UsersOverviewTableRow } from './SiteUsersOverview.types';
@@ -39,7 +39,7 @@ const SiteUsersOverview: FC<RolesRouteProps<{ siteId: string }>> = ({ match }) =
 	const [t] = useCoreTranslation();
 
 	useEffect(() => {
-		usersService.getUsersBySite(usersSearchParams, siteId);
+		usersFacade.getUsersBySite(usersSearchParams, siteId);
 	}, [siteId, usersSearchParams]);
 
 	useEffect(() => {

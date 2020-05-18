@@ -13,7 +13,7 @@ import { useRoles, useRoutesBreadcrumbs, useSites, useUser, useUserRoles } from 
 import { ContentType, LoadingState, RolesRouteProps } from '../../roles.types';
 import { rolesService } from '../../store/roles';
 import { sitesService } from '../../store/sites';
-import { UserModel, usersService } from '../../store/users';
+import { UserModel, usersFacade } from '../../store/users';
 
 import { USER_UPDATE_NAV_LIST_ITEMS } from './UserUpdate.const';
 
@@ -31,8 +31,8 @@ const UserUpdate: FC<RolesRouteProps<{ userUuid?: string }>> = ({ route, match }
 
 	useEffect(() => {
 		if (userUuid) {
-			usersService.getUser({ id: userUuid });
-			usersService.getUserRoles({ id: userUuid });
+			usersFacade.getUser({ id: userUuid });
+			usersFacade.getUserRoles({ id: userUuid });
 			rolesService.getRoles();
 			sitesService.getSites({ id: userUuid });
 			return;
@@ -58,7 +58,7 @@ const UserUpdate: FC<RolesRouteProps<{ userUuid?: string }>> = ({ route, match }
 	const handleSubmit = (user: UserModel, content: any, contentType: ContentType): void => {
 		switch (contentType) {
 			case ContentType.UserRoles:
-				usersService.updateUserRoles({ id: user.id, roles: content });
+				usersFacade.updateUserRoles({ id: user.id, roles: content });
 				break;
 			default:
 				break;

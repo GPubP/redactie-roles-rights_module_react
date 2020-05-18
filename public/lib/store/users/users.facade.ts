@@ -19,6 +19,7 @@ export class UsersFacade {
 	public readonly meta$ = this.query.meta$;
 	public readonly users$ = this.query.users$;
 	public readonly user$ = this.query.user$;
+	public readonly userRoles$ = this.query.userRoles$;
 	public readonly isFetching$ = this.query.isFetching$;
 	public readonly error$ = this.query.error$;
 
