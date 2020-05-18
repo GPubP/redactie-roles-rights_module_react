@@ -13,6 +13,5 @@ export interface RolesState extends EntityState<RolesModel, string> {
 }
 
 export const createInitialRolesState = (): RolesState => ({
-	loading: false,
 	isFetching: false,
 });

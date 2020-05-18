@@ -1,54 +1,16 @@
-import { isNil } from 'ramda';
-import { useEffect, useState } from 'react';
-import { Subject } from 'rxjs';
-import { distinctUntilChanged, filter, takeUntil } from 'rxjs/operators';
+import { useObservable } from '@mindspace-io/react';
 
 import { LoadingState } from '../../roles.types';
-import { RoleModel, rolesQuery } from '../../store/roles';
+import { RoleModel, rolesFacade } from '../../store/roles';
 
-const useRoles = (): [LoadingState, RoleModel[] | null] => {
-	const [loadingState, setLoadingState] = useState<LoadingState>(LoadingState.Loading);
-	const [roles, setRoles] = useState<RoleModel[] | null>(null);
+const useRolesTwo = (): [LoadingState | null, RoleModel[] | null | undefined] => {
+	const [loading] = useObservable(rolesFacade.isFetching$, null);
+	const [roles] = useObservable(rolesFacade.roles$, null);
+	const [error] = useObservable(rolesFacade.error$, null);
 
-	useEffect(() => {
-		const destroyed$: Subject<boolean> = new Subject<boolean>();
-
-		rolesQuery.roles$
-			.pipe(
-				takeUntil(destroyed$),
-				filter(rolesObject => !isNil(rolesObject)),
-				distinctUntilChanged()
-			)
-			.subscribe(rolesObject => {
-				if (rolesObject) {
-					setRoles(rolesObject);
-				}
-			});
-
-		rolesQuery.isFetching$.pipe(takeUntil(destroyed$)).subscribe(loading => {
-			if (loading) {
-				return setLoadingState(LoadingState.Loading);
-			}
-
-			setLoadingState(LoadingState.Loaded);
-		});
-
-		rolesQuery
-			.selectError()
-			.pipe(
-				takeUntil(destroyed$),
-				filter(error => !isNil(error)),
-				distinctUntilChanged()
-			)
-			.subscribe(() => setLoadingState(LoadingState.Error));
-
-		return () => {
-			destroyed$.next(true);
-			destroyed$.complete();
-		};
-	}, []);
+	const loadingState = error ? LoadingState.Error : loading;
 
 	return [loadingState, roles];
 };
 
-export default useRoles;
+export default useRolesTwo;
