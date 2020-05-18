@@ -89,16 +89,16 @@ const UserDetailRoles: FC<UserDetailRolesProps> = ({
 				{renderTableForm()}
 				<ActionBar className="o-action-bar--fixed" isOpen>
 					<ActionBarContentSection>
-						<div className="u-wrapper">
+						<div className="u-wrapper row end-xs">
+							<Button onClick={onCancel} negative>
+								{t(CORE_TRANSLATIONS.BUTTON_CANCEL)}
+							</Button>
 							<Button
-								className="u-margin-right-xs"
+								className="u-margin-left-xs"
 								onClick={onConfigSave}
 								type="success"
 							>
 								{t(CORE_TRANSLATIONS.BUTTON_SAVE)}
-							</Button>
-							<Button onClick={onCancel} outline>
-								{t(CORE_TRANSLATIONS.BUTTON_CANCEL)}
 							</Button>
 						</div>
 					</ActionBarContentSection>

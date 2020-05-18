@@ -11,16 +11,17 @@ import React, { FC, ReactElement, useEffect, useState } from 'react';
 
 import { DataLoader, FilterForm, FilterFormState } from '../../components';
 import { useCoreTranslation } from '../../connectors/translations';
-import { useNavigate, useRoutesBreadcrumbs, useUsers } from '../../hooks';
+import { useRoutesBreadcrumbs, useSiteNavigate, useUsers } from '../../hooks';
 import { MODULE_PATHS } from '../../roles.const';
 import { LoadingState, RolesRouteProps } from '../../roles.types';
 import { DEFAULT_USERS_SEARCH_PARAMS } from '../../services/users/users.service.const';
 import { usersService } from '../../store/users';
 
-import { CONTENT_INITIAL_FILTER_STATE, USERS_OVERVIEW_COLUMNS } from './UsersOverview.const';
-import { FilterItemSchema, OrderBy, UsersOverviewTableRow } from './UsersOverview.types';
+import { CONTENT_INITIAL_FILTER_STATE, USERS_OVERVIEW_COLUMNS } from './SiteUsersOverview.const';
+import { FilterItemSchema, OrderBy, UsersOverviewTableRow } from './SiteUsersOverview.types';
 
-const UsersOverview: FC<RolesRouteProps> = () => {
+const SiteUsersOverview: FC<RolesRouteProps<{ siteId: string }>> = ({ match }) => {
+	const { siteId } = match.params;
 	/**
 	 * Hooks
 	 */
@@ -29,7 +30,7 @@ const UsersOverview: FC<RolesRouteProps> = () => {
 	const [filterFormState, setFilterFormState] = useState<FilterFormState>(
 		CONTENT_INITIAL_FILTER_STATE
 	);
-	const { navigate } = useNavigate();
+	const { navigate } = useSiteNavigate();
 	const breadcrumbs = useRoutesBreadcrumbs();
 	const [usersSearchParams, setUsersSearchParams] = useState(DEFAULT_USERS_SEARCH_PARAMS);
 	const [loadingState, users, usersMeta] = useUsers();
@@ -38,8 +39,8 @@ const UsersOverview: FC<RolesRouteProps> = () => {
 	const [t] = useCoreTranslation();
 
 	useEffect(() => {
-		usersService.getUsers(usersSearchParams);
-	}, [usersSearchParams]);
+		usersService.getUsersBySite(usersSearchParams, siteId);
+	}, [siteId, usersSearchParams]);
 
 	useEffect(() => {
 		if (loadingState === LoadingState.Loaded || loadingState === LoadingState.Error) {
@@ -134,7 +135,7 @@ const UsersOverview: FC<RolesRouteProps> = () => {
 			type: user.type,
 			added: user.email,
 			status: user.username || 'N/A',
-			navigate: (userUuid: string) => navigate(MODULE_PATHS.tenantUserDetail, { userUuid }),
+			navigate: userUuid => navigate(MODULE_PATHS.users.overview, { userUuid }),
 		}));
 
 		return (
@@ -170,7 +171,7 @@ const UsersOverview: FC<RolesRouteProps> = () => {
 				<ContextHeaderTopSection>{breadcrumbs}</ContextHeaderTopSection>
 				<ContextHeaderActionsSection>
 					<Button
-						onClick={() => navigate(MODULE_PATHS.tenantUsersOverview)}
+						onClick={() => navigate(MODULE_PATHS.users.overview, { siteId })}
 						iconLeft="plus"
 					>
 						{t(CORE_TRANSLATIONS['BUTTON_CREATE-NEW'])}
@@ -184,4 +185,4 @@ const UsersOverview: FC<RolesRouteProps> = () => {
 	);
 };
 
-export default UsersOverview;
+export default SiteUsersOverview;

@@ -12,29 +12,43 @@ export class SitesService {
 			.then(sitesResponse => {
 				const sites = sitesResponse._embedded;
 
-				const populatedSites = sites.map(site => {
-					return this.sitesService
-						.getUserRolesForSite({ id: payload.id, siteUuid: site.uuid })
-						.then(rolesResponse => {
-							return { ...site, roles: rolesResponse._embedded };
+				const populatedSites = sites.map(
+					site =>
+						new Promise(resolve => {
+							this.sitesService
+								.getUserRolesForSite({ id: payload.id, siteUuid: site.uuid })
+								.then(rolesResponse => {
+									return resolve({
+										...site,
+										roles: rolesResponse._embedded,
+									});
+								})
+								.catch(() => {
+									// don't crash when the server response
+									return resolve({
+										...site,
+										roles: [],
+									});
+								});
 						})
-						.catch(err => {
-							this.store.setIsFetching(false);
-							this.store.setError(err);
+				);
+
+				Promise.all(populatedSites)
+					.then(result => {
+						const meta = sitesResponse._page;
+
+						this.store.set(result);
+
+						this.store.update({
+							meta,
 						});
-				});
 
-				Promise.all(populatedSites).then(result => {
-					const meta = sitesResponse._page;
-
-					this.store.set(result);
-
-					this.store.update({
-						meta,
+						this.store.setIsFetching(false);
+					})
+					.catch(err => {
+						this.store.setIsFetching(false);
+						this.store.setError(err);
 					});
-
-					this.store.setIsFetching(false);
-				});
 			})
 			.catch(err => {
 				this.store.setIsFetching(false);
