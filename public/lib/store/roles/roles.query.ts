@@ -22,7 +22,6 @@ export class RolesQuery extends QueryEntity<RolesState> {
 
 	// Data
 	public meta$ = this.select(state => state.meta).pipe(
-		// TODO: check if distinctUntilChanged is doing something
 		filter(meta => !isNil(meta), distinctUntilChanged())
 	);
 	public roles$ = this.select(state => state.roles);

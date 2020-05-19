@@ -21,7 +21,6 @@ export class UsersQuery extends QueryEntity<UsersState> {
 	}
 
 	public meta$ = this.select(state => state.meta).pipe(
-		// TODO: check if distinctUntilChanged is doing something
 		filter(meta => !isNil(meta), distinctUntilChanged())
 	);
 	public users$ = this.selectAll();
