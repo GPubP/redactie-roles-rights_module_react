@@ -31,8 +31,8 @@ export interface ModuleResponse {
 }
 
 export interface RoleAttributes {
-	displayName: string;
-	level: string;
+	displayName?: string;
+	level?: string;
 	[key: string]: any;
 	CRUD: string | null;
 	DOMEIN: string | null;

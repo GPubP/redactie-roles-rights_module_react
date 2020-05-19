@@ -17,7 +17,7 @@ export class RolesApiService {
 		siteId: string
 	): Promise<SecurityRightsResponse> {
 		return await api
-			.get(`users-roles/v1/sites/${siteId}/users`, {
+			.get(`sites/${siteId}/roles-security-rights-matrix`, {
 				searchParams: parseSearchParams(searchParams),
 			})
 			.json<SecurityRightsResponse>();

@@ -1,9 +1,6 @@
-export interface RolePermission {
-	id: number;
-	name: string;
-}
+import { Role, SecurityRightResponse } from '../../services/roles';
 
 export interface RolesPermissionsProps {
-	roles: RolePermission[];
-	permissions: RolePermission[];
+	roles: Role[];
+	permissions: SecurityRightResponse[];
 }

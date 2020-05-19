@@ -1,9 +1,10 @@
-ul {
-	list-style: none;
-}
+.m-nav-list {
+	li {
+		border-left: 1.3px solid #949494;
+		border-right: 1.3px solid #949494;
 
-ul,
-li { /* reset the margin and padding */
-	margin: 0;
-	padding: 0;
+		a {
+			text-align: left;
+		}
+	}
 }

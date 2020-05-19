@@ -1,30 +1,41 @@
-import { Card, CardBody, CardTitle } from '@acpaas-ui/react-components';
+import { Card, CardBody, CardTitle, Checkbox } from '@acpaas-ui/react-components';
+import { Field, Formik } from 'formik';
 import React, { FC } from 'react';
 
 import './RolesPermissionsList.scss';
-import { RolePermission, RolesPermissionsProps } from './RolesPermissionsList.types';
+import { Role, SecurityRightResponse } from '../../services/roles';
 
-const RolesPermissionsList: React.FC<RolesPermissionsProps> = ({ roles, permissions }) => {
+import { RolesPermissionsProps } from './RolesPermissionsList.types';
+
+const RolesPermissionsList: FC<RolesPermissionsProps> = ({ roles, permissions }) => {
+	let formState: Array<string>;
+
+	const handleFormSubmit = (): void => {
+		console.log('check');
+	};
+
 	return (
-		<Card className="col-xs-12 col-sm-8 u-margin-left">
+		<Card>
 			<CardBody>
 				<CardTitle>Module Titel</CardTitle>
 				<table className="m-table">
 					<tr className="m-table--header">
 						<th></th>
-						{roles.map((role: RolePermission) => (
-							<th key={role.id} className="a-table-header--top">
-								{role.name}
+						{roles.map((role: Role) => (
+							<th key={role.role.id} className="a-table-header--top">
+								{role.role.name}
 							</th>
 						))}
 						<th></th>
 					</tr>
-					{permissions.map((permission: RolePermission) => (
+					{permissions.map((permission: SecurityRightResponse) => (
 						<tr key={permission.id}>
 							<th className="a-table-header--side">{permission.name}</th>
-							{roles.map((role: RolePermission) => (
-								<td className="a-table-checkbox" key={role.id}>
-									<input type="checkbox" id="horns" name="horns" />
+							{roles.map((role: Role) => (
+								<td className="a-table-checkbox" key={role.role.id}>
+									<Formik initialValues={formState} onSubmit={handleFormSubmit}>
+										<Field as={Checkbox} />
+									</Formik>
 								</td>
 							))}
 							<td></td>
