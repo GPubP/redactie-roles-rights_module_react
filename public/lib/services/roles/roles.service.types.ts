@@ -30,24 +30,18 @@ export interface ModuleResponse {
 	name: string;
 }
 
-export interface RoleAtrributes {
-	CRUD: string;
-	DOMEIN: string;
-	LOCATIE: string;
-	STADSBEDRIJF: string;
+export interface RoleAttributes {
+	displayName: string;
+	level: string;
+	[key: string]: any;
+	CRUD: string | null;
+	DOMEIN: string | null;
+	LOCATIE: string | null;
+	STADSBEDRIJF: string | null;
 }
 
 export interface Role {
-	attributes: RoleAtrributes;
-	description: string;
-	id: string;
-	name: string;
-	validFrom: string;
-	validTo: string;
-}
-
-export interface RoleResponse {
-	role: Role;
+	role: RoleResponse;
 	securityRights: string[];
 }
 
@@ -56,3 +50,24 @@ export interface GetSecurityRightPayload {
 }
 
 export type GetSecurityRightsPayload = SearchParams;
+
+export interface RoleResponse {
+	attributes: RoleAttributes;
+	description: string;
+	id: string;
+	name: string;
+	validFrom: Date | null;
+	validTo: Date | null;
+}
+
+export interface RolesMetaResponse {
+	size: number;
+	totalElements: boolean;
+	totalPages: number;
+	number: number;
+}
+
+export interface RolesResponse {
+	_embedded: RoleResponse[];
+	_page: RolesMetaResponse;
+}
