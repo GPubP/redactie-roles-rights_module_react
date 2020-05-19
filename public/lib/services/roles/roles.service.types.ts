@@ -1,6 +1,6 @@
 import { SearchParams } from '../api';
 
-export interface RolesResponse {
+export interface SecurityRightsResponse {
 	modules: ModuleResponse[];
 	securityRights: SecurityRightResponse[];
 	roles: RoleResponse[];
@@ -51,8 +51,8 @@ export interface RoleResponse {
 	securityRights: string[];
 }
 
-export interface GetRolePayload {
+export interface GetSecurityRightPayload {
 	id: string;
 }
 
-export type GetRolesPayload = SearchParams;
+export type GetSecurityRightsPayload = SearchParams;

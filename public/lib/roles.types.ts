@@ -1,7 +1,7 @@
 import { ModuleRouteConfig, RouteConfigComponentProps } from '@redactie/redactie-core';
 
 import { Routes } from './services/routes';
-import { RolesQuery, RolesService } from './store/roles';
+import { RolesQuery, RolesService } from './store/securityRights';
 import { UsersQuery, UsersService } from './store/users';
 
 export interface RolesModuleProps extends RouteConfigComponentProps {

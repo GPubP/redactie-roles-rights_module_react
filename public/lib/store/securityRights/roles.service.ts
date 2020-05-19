@@ -1,11 +1,11 @@
-import { GetRolesPayload, rolesApiService, RolesApiService } from '../../services/roles';
+import { GetSecurityRightsPayload, rolesApiService, RolesApiService } from '../../services/roles';
 
 import { RolesStore, rolesStore } from './roles.store';
 
 export class RolesService {
 	constructor(private store: RolesStore, private rolesService: RolesApiService) {}
 
-	public getRolesBySite(payload: GetRolesPayload, siteId: string): void {
+	public getRolesBySite(payload: GetSecurityRightsPayload, siteId: string): void {
 		this.store.setIsFetching(true);
 		this.rolesService
 			.getRolesBySite(payload, siteId)

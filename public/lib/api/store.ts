@@ -1,4 +1,4 @@
-import { rolesQuery, rolesService } from '../store/roles';
+import { rolesQuery, rolesService } from '../store/securityRights';
 import { usersQuery, usersService } from '../store/users';
 
 export const store = {

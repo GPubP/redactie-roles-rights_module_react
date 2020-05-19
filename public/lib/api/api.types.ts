@@ -1,5 +1,5 @@
 import { UsersModuleAPI } from '../roles.types';
-import { ModuleModel, RoleModel, RolesState, SecurityRightModel } from '../store/roles';
+import { ModuleModel, RoleModel, RolesState, SecurityRightModel } from '../store/securityRights';
 import { UserModel, UsersMetaModel, UsersState } from '../store/users';
 
 export {
