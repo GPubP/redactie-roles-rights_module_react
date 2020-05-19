@@ -1,6 +1,6 @@
-import { Role, SecurityRightResponse } from '../../services/roles';
+import { RoleResponse, SecurityRightResponse } from '../../services/securityRights';
 
 export interface RolesPermissionsProps {
-	roles: Role[];
+	roles: RoleResponse[];
 	permissions: SecurityRightResponse[];
 }

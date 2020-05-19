@@ -1,5 +1,6 @@
 import { UsersModuleAPI } from '../roles.types';
-import { ModuleModel, RoleModel, RolesState, SecurityRightModel } from '../store/securityRights';
+import { RoleModel, RolesMetaModel, RolesState } from '../store/roles';
+import { SecurityRightModel, SecurityRightsState } from '../store/securityRights';
 import { UserModel, UsersMetaModel, UsersState } from '../store/users';
 
 export {
@@ -7,8 +8,9 @@ export {
 	UserModel,
 	UsersMetaModel,
 	UsersState,
-	ModuleModel,
 	RoleModel,
+	RolesMetaModel,
 	SecurityRightModel,
+	SecurityRightsState,
 	RolesState,
 };

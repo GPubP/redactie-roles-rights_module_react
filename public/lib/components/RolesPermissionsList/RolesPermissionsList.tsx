@@ -3,7 +3,7 @@ import { Field, Formik } from 'formik';
 import React, { FC } from 'react';
 
 import './RolesPermissionsList.scss';
-import { Role, SecurityRightResponse } from '../../services/roles';
+import { RoleResponse, SecurityRightResponse } from '../../services/securityRights';
 
 import { RolesPermissionsProps } from './RolesPermissionsList.types';
 
@@ -21,7 +21,7 @@ const RolesPermissionsList: FC<RolesPermissionsProps> = ({ roles, permissions })
 				<table className="m-table">
 					<tr className="m-table--header">
 						<th></th>
-						{roles.map((role: Role) => (
+						{roles.map((role: RoleResponse) => (
 							<th key={role.role.id} className="a-table-header--top">
 								{role.role.name}
 							</th>
@@ -31,7 +31,7 @@ const RolesPermissionsList: FC<RolesPermissionsProps> = ({ roles, permissions })
 					{permissions.map((permission: SecurityRightResponse) => (
 						<tr key={permission.id}>
 							<th className="a-table-header--side">{permission.name}</th>
-							{roles.map((role: Role) => (
+							{roles.map((role: RoleResponse) => (
 								<td className="a-table-checkbox" key={role.role.id}>
 									<Formik initialValues={formState} onSubmit={handleFormSubmit}>
 										<Field as={Checkbox} />

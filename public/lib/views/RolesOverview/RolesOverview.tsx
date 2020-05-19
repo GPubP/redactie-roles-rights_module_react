@@ -6,10 +6,10 @@ import {
 import React, { FC, ReactElement, useEffect, useState } from 'react';
 
 import { DataLoader, ModulesList, RolesPermissionsList } from '../../components';
-import { useRoles, useRoutesBreadcrumbs } from '../../hooks';
+import { useRoutesBreadcrumbs, useSecurityRights } from '../../hooks';
 import { LoadingState, RolesRouteProps } from '../../roles.types';
 import { DEFAULT_ROLES_SEARCH_PARAMS } from '../../services/roles/roles.service.const';
-import { rolesService } from '../../store/securityRights';
+import { securityRightsFacade } from '../../store/securityRights';
 
 import { fakeApi } from './RolesOverview.const';
 
@@ -20,11 +20,11 @@ const RolesOverview: FC<RolesRouteProps<{ siteId: string }>> = ({ match }) => {
 	 */
 	const breadcrumbs = useRoutesBreadcrumbs();
 	const [rolesSearchParams, setRolesSearchParams] = useState(DEFAULT_ROLES_SEARCH_PARAMS);
-	const [loadingState, roles] = useRoles();
+	const [loadingState, securityRights] = useSecurityRights();
 	const [initialLoading, setInitialLoading] = useState(LoadingState.Loading);
 
 	useEffect(() => {
-		rolesService.getRolesBySite(rolesSearchParams, siteId);
+		securityRightsFacade.getSecurityRightsBySite(rolesSearchParams, siteId);
 	}, [rolesSearchParams, siteId]);
 
 	useEffect(() => {
@@ -40,14 +40,14 @@ const RolesOverview: FC<RolesRouteProps<{ siteId: string }>> = ({ match }) => {
 	 * Render
 	 */
 	const renderOverview = (): ReactElement | null => {
-		if (!roles) {
+		if (!securityRights) {
 			return null;
 		}
 
-		console.log(roles);
+		console.log(securityRights);
 		const modules = fakeApi.modules;
-		const fakeRoles = fakeApi.roles;
-		const securityRights = fakeApi.securityRights;
+		const roles = fakeApi.roles;
+		const permissions = fakeApi.securityRights;
 
 		return (
 			<div className="row">
@@ -55,7 +55,7 @@ const RolesOverview: FC<RolesRouteProps<{ siteId: string }>> = ({ match }) => {
 					<ModulesList modules={modules} />
 				</div>
 				<div className="col-xs-8 u-margin-left">
-					<RolesPermissionsList roles={fakeRoles} permissions={securityRights} />
+					<RolesPermissionsList roles={roles} permissions={permissions} />
 				</div>
 			</div>
 		);
