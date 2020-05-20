@@ -7,9 +7,9 @@ import React, { FC, ReactElement, useState } from 'react';
 import { FormViewUserRoles } from '../../components';
 import { useCoreTranslation } from '../../connectors/translations';
 import { mapUserRoles } from '../../helpers';
-import { useNavigate } from '../../hooks';
+import { useNavigate, useUsersLoadingStates } from '../../hooks';
 import { MODULE_PATHS } from '../../roles.const';
-import { ContentType } from '../../roles.types';
+import { ContentType, LoadingState } from '../../roles.types';
 import { usersFacade } from '../../store/users';
 
 import { SITE_COLUMNS, SITE_VALIDATION_SCHEMA } from './UserDetailRoles.const';
@@ -25,6 +25,7 @@ const UserDetailRoles: FC<UserDetailRolesProps> = ({
 }) => {
 	const [t] = useCoreTranslation();
 	const [selectedRoles, updateSelectedRoles] = useState(mapUserRoles(userRoles));
+	const { isAddingUserToSite, isUpdating } = useUsersLoadingStates();
 	const { navigate } = useNavigate();
 
 	/**
@@ -71,7 +72,7 @@ const UserDetailRoles: FC<UserDetailRolesProps> = ({
 		return (
 			<Table
 				className="u-margin-top"
-				columns={SITE_COLUMNS(t)}
+				columns={SITE_COLUMNS(t, isAddingUserToSite)}
 				rows={siteRows}
 				totalValues={sites.length}
 			/>
@@ -114,6 +115,12 @@ const UserDetailRoles: FC<UserDetailRolesProps> = ({
 								{t(CORE_TRANSLATIONS.BUTTON_CANCEL)}
 							</Button>
 							<Button
+								iconLeft={
+									isUpdating === LoadingState.Loading
+										? 'circle-o-notch fa-spin'
+										: null
+								}
+								disabled={isUpdating === LoadingState.Loading}
 								className="u-margin-left-xs"
 								onClick={onConfigSave}
 								type="success"

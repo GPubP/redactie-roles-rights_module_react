@@ -7,7 +7,7 @@ import {
 	ContextHeaderTopSection,
 } from '@acpaas-ui/react-editorial-components';
 import { CORE_TRANSLATIONS } from '@redactie/translations-module/public/lib/i18next/translations.const';
-import React, { FC, ReactElement, useEffect, useState } from 'react';
+import React, { FC, ReactElement, useEffect, useMemo, useState } from 'react';
 import { useParams } from 'react-router-dom';
 
 import { DataLoader, FormViewUserRoles } from '../../components';
@@ -35,14 +35,30 @@ const UserDetailRolesUpdate: FC<RolesRouteProps<{ userUuid?: string; siteUuid?: 
 	const { userUuid, siteUuid } = useParams();
 	const [initialLoading, setInitialLoading] = useState(LoadingState.Loading);
 	const [t] = useCoreTranslation();
-	const breadcrumbs = useRoutesBreadcrumbs();
 	const [userLoadingState, user] = useUser(userUuid);
+	const { navigate, generatePath } = useNavigate();
+	const extraBreadcrumbs = useMemo(() => {
+		return [
+			{
+				name: user ? `${user.firstname} ${user.lastname}` : '...',
+				target: generatePath(MODULE_PATHS.tenantUserDetail, {
+					userUuid,
+				}),
+			},
+			// The last breadcrumb will be removed so we need to set a dummy
+			// breadcrumb to make sure that the user breadcrumb is visible
+			{
+				name: 'last',
+				target: '',
+			},
+		];
+	}, [user, generatePath, userUuid]);
+	const breadcrumbs = useRoutesBreadcrumbs(extraBreadcrumbs);
 	const { isUpdating } = useUsersLoadingStates();
 	const [rolesLoadingState, roles] = useSiteRoles();
 	const [siteLoadingState, site] = useSite();
 	const [userRolesLoadingState, userRoles] = useUserRolesForSite();
 	const [selectedRoles, updateSelectedRoles] = useState<string[]>([]);
-	const { navigate } = useNavigate();
 
 	useEffect(() => {
 		if (userUuid && siteUuid) {
@@ -103,6 +119,8 @@ const UserDetailRolesUpdate: FC<RolesRouteProps<{ userUuid?: string; siteUuid?: 
 			userUuid,
 		});
 	};
+
+	console.log(selectedRoles);
 
 	/**
 	 * Render

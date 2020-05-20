@@ -5,6 +5,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { array, object, string } from 'yup';
 
+import { LoadingState } from '../../roles.types';
 import { RoleModel } from '../../store/roles';
 
 export const DUMMY_SITES = [
@@ -26,7 +27,7 @@ export const DUMMY_SITES = [
 	},
 ];
 
-export const SITE_COLUMNS = (t: TranslateFunc): any[] => [
+export const SITE_COLUMNS = (t: TranslateFunc, isAddingUserToSite: LoadingState | null): any[] => [
 	{
 		label: t(CORE_TRANSLATIONS.TABLE_NAME),
 		value: 'name',
@@ -75,7 +76,17 @@ export const SITE_COLUMNS = (t: TranslateFunc): any[] => [
 			}
 
 			return (
-				<Button onClick={() => giveAccess()} type="primary" outline>
+				<Button
+					iconLeft={
+						isAddingUserToSite === LoadingState.Loading
+							? 'circle-o-notch fa-spin'
+							: null
+					}
+					disabled={isAddingUserToSite === LoadingState.Loading}
+					onClick={() => giveAccess()}
+					type="primary"
+					outline
+				>
 					Toegang geven
 				</Button>
 			);
