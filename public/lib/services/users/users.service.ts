@@ -1,8 +1,9 @@
-import { RolesModel } from '../../store/roles';
 import api, { parseSearchParams } from '../api/api.service';
+import { RolesResponse } from '../roles';
 
 import { DEFAULT_USERS_SEARCH_PARAMS } from './users.service.const';
 import {
+	AddUserToSitePayload,
 	GetUserPayload,
 	GetUsersPayload,
 	UpdateUserRolesPayload,
@@ -33,11 +34,11 @@ export class UsersApiService {
 	}
 
 	public async getUser({ id }: GetUserPayload): Promise<UserResponse> {
-		return await api.get(`users/${id}`).json<UserResponse>();
+		return await api.get(`users/${id}`).json();
 	}
 
-	public async getUserRoles({ id }: GetUserPayload): Promise<RolesModel> {
-		return await api.get(`users/${id}/roles`).json<RolesModel>();
+	public async getUserRoles({ id }: GetUserPayload): Promise<RolesResponse> {
+		return await api.get(`users/${id}/roles`).json();
 	}
 
 	public async updateUserRoles({ id, roles }: UpdateUserRolesPayload): Promise<any> {
@@ -47,7 +48,17 @@ export class UsersApiService {
 					roles: roles,
 				},
 			})
-			.json<any>();
+			.json();
+	}
+
+	public async addUserToSite({ siteId, userId }: AddUserToSitePayload): Promise<any> {
+		return await api
+			.post(`sites/${siteId}/users`, {
+				json: {
+					userId,
+				},
+			})
+			.json();
 	}
 }
 

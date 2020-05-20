@@ -1,5 +1,6 @@
 import { GetSitesPayload, SitesApiService, sitesApiService } from '../../services/sites';
 
+import { SiteModel } from './sites.model';
 import { SitesQuery, sitesQuery } from './sites.query';
 import { SitesStore, sitesStore } from './sites.store';
 
@@ -22,7 +23,7 @@ export class SitesFacade {
 				const sites = sitesResponse._embedded;
 
 				const populatedSites = sites.map(
-					site =>
+					(site): Promise<SiteModel> =>
 						new Promise(resolve => {
 							this.service
 								.getUserRolesForSite({ id: payload.id, siteUuid: site.uuid })
@@ -30,6 +31,7 @@ export class SitesFacade {
 									return resolve({
 										...site,
 										roles: rolesResponse._embedded,
+										hasAccess: true,
 									});
 								})
 								.catch(() => {
@@ -37,6 +39,7 @@ export class SitesFacade {
 									return resolve({
 										...site,
 										roles: [],
+										hasAccess: false,
 									});
 								});
 						})

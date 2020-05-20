@@ -13,3 +13,10 @@ export interface UserDetailRolesProps extends RouteConfigComponentProps {
 	onCancel: () => void;
 	onSubmit: (user: UserModel, roles: Array<string>, contentType: ContentType) => void;
 }
+
+export interface SiteRow {
+	id: string;
+	name: string;
+	roles: any[];
+	hasAccess: boolean;
+}

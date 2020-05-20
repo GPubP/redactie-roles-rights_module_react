@@ -7,10 +7,13 @@ import React, { FC, ReactElement, useState } from 'react';
 import { FormViewUserRoles } from '../../components';
 import { useCoreTranslation } from '../../connectors/translations';
 import { mapUserRoles } from '../../helpers';
+import { useNavigate } from '../../hooks';
+import { MODULE_PATHS } from '../../roles.const';
 import { ContentType } from '../../roles.types';
+import { usersFacade } from '../../store/users';
 
 import { SITE_COLUMNS, SITE_VALIDATION_SCHEMA } from './UserDetailRoles.const';
-import { UserDetailRolesProps } from './UserDetailRoles.types';
+import { SiteRow, UserDetailRolesProps } from './UserDetailRoles.types';
 
 const UserDetailRoles: FC<UserDetailRolesProps> = ({
 	user,
@@ -22,6 +25,7 @@ const UserDetailRoles: FC<UserDetailRolesProps> = ({
 }) => {
 	const [t] = useCoreTranslation();
 	const [selectedRoles, updateSelectedRoles] = useState(mapUserRoles(userRoles));
+	const { navigate } = useNavigate();
 
 	/**
 	 * Functions
@@ -35,18 +39,33 @@ const UserDetailRoles: FC<UserDetailRolesProps> = ({
 	const onConfigChange = (updatedRoles: any): void => {
 		updateSelectedRoles(updatedRoles);
 	};
+
+	const redirectToSitesRolesDetail = (userId: string, siteId: string): void => {
+		navigate(MODULE_PATHS.tenantUserDetailRolesUpdate, {
+			siteUuid: siteId,
+			userUuid: userId,
+		});
+	};
 	/**
 	 * Render
 	 */
-	const renderTableField = ({ value: fields }: { value: any[] }): ReactElement => {
+	const renderTableField = ({ value: fields }: { value: SiteRow[] }): ReactElement => {
 		const siteRows: any[] = (fields || []).map(site => ({
 			name: site.name,
 			roles: site.roles,
-			siteUuid: site.uuid,
+			siteUuid: site.id,
 			path: '#',
 			setActiveField: () => console.log(site),
-			editAccess: () => console.log('edit acccess', site),
-			giveAccess: () => console.log('give acccess', site),
+			editAccess: () => redirectToSitesRolesDetail(user.id, site.id),
+			giveAccess: () =>
+				usersFacade.addUserToSite(
+					{
+						siteId: site.id,
+						userId: user.id,
+					},
+					() => redirectToSitesRolesDetail(user.id, site.id)
+				),
+			hasAccess: site?.hasAccess,
 		}));
 
 		return (
@@ -60,10 +79,11 @@ const UserDetailRoles: FC<UserDetailRolesProps> = ({
 	};
 
 	const renderTableForm = (): ReactElement => {
-		const sitesRows = sites.map(site => ({
+		const sitesRows: SiteRow[] = sites.map(site => ({
 			id: site.uuid,
 			name: site.data.name,
 			roles: site.roles,
+			hasAccess: site.hasAccess,
 		}));
 
 		return (

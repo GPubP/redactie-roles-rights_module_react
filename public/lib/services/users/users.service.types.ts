@@ -34,4 +34,9 @@ export interface UpdateUserRolesPayload {
 	roles: Array<string>;
 }
 
+export interface AddUserToSitePayload {
+	userId: string;
+	siteId: string;
+}
+
 export type GetUsersPayload = SearchParams;

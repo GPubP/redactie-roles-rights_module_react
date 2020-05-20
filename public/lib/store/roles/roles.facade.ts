@@ -19,8 +19,11 @@ export class RolesFacade {
 		this.service
 			.getRoles()
 			.then(response => {
+				const roles = response._embedded;
+				const meta = response._page;
+				this.store.set(roles);
 				this.store.update({
-					roles: response._embedded,
+					meta,
 				});
 			})
 			.catch(err => {

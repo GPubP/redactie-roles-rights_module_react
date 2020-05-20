@@ -13,6 +13,12 @@ export class UsersStore extends EntityStore<UsersState, UserModel> {
 			isFetching,
 		});
 	}
+
+	public setIsAddingUserToSite(isAddingUserToSite = false): void {
+		this.update({
+			isAddingUserToSite,
+		});
+	}
 }
 
 export const usersStore = new UsersStore();

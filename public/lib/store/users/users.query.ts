@@ -36,6 +36,9 @@ export class UsersQuery extends QueryEntity<UsersState> {
 	public isFetching$ = this.select(state => state.isFetching).pipe(
 		map(this.convertBoolToLoadingState)
 	);
+	public isAddingUserToSite$ = this.select(state => state.isAddingUserToSite).pipe(
+		map(this.convertBoolToLoadingState)
+	);
 }
 
 export const usersQuery = new UsersQuery(usersStore);

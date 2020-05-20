@@ -11,7 +11,7 @@ import { generatePath, Redirect, useParams } from 'react-router-dom';
 import { DataLoader, NavList } from '../../components';
 import { useRoles, useRoutesBreadcrumbs, useSites, useUser, useUserRoles } from '../../hooks';
 import { ContentType, LoadingState, RolesRouteProps } from '../../roles.types';
-import { rolesService } from '../../store/roles';
+import { rolesFacade } from '../../store/roles';
 import { sitesFacade } from '../../store/sites';
 import { UserModel, usersFacade } from '../../store/users';
 
@@ -33,7 +33,7 @@ const UserUpdate: FC<RolesRouteProps<{ userUuid?: string }>> = ({ route, match }
 		if (userUuid) {
 			usersFacade.getUser({ id: userUuid });
 			usersFacade.getUserRoles({ id: userUuid });
-			rolesService.getRoles();
+			rolesFacade.getRoles();
 			sitesFacade.getSites({ id: userUuid });
 			return;
 		}
@@ -94,7 +94,7 @@ const UserUpdate: FC<RolesRouteProps<{ userUuid?: string }>> = ({ route, match }
 
 	return (
 		<>
-			<ContextHeader title={user && `${user?.firstname} ${user?.lastname}`}>
+			<ContextHeader title={user ? `${user?.firstname} ${user?.lastname}` : ''}>
 				<ContextHeaderTopSection>{breadcrumbs}</ContextHeaderTopSection>
 			</ContextHeader>
 			<Container>

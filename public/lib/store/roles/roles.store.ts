@@ -1,9 +1,9 @@
 import { EntityStore, StoreConfig } from '@datorama/akita';
 
-import { createInitialRolesState, RolesModel, RolesState } from './roles.model';
+import { createInitialRolesState, RoleModel, RolesState } from './roles.model';
 
-@StoreConfig({ name: 'roles', idKey: 'uuid' })
-export class RolesStore extends EntityStore<RolesState, RolesModel> {
+@StoreConfig({ name: 'roles', idKey: 'id' })
+export class RolesStore extends EntityStore<RolesState, RoleModel> {
 	constructor() {
 		super(createInitialRolesState());
 	}

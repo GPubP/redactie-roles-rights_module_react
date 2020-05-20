@@ -61,9 +61,8 @@ export const SITE_COLUMNS = (t: TranslateFunc): any[] => [
 		disableSorting: true,
 		component(value: string, rowData: any) {
 			const { editAccess, giveAccess } = rowData;
-			const hasAccess = rowData.roles.length > 0 ? true : false;
 
-			if (hasAccess) {
+			if (rowData.hasAccess) {
 				return (
 					<Button
 						ariaLabel="Edit"

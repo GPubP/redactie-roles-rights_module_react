@@ -1,9 +1,10 @@
 import {
+	AddUserToSitePayload,
 	GetUserPayload,
 	GetUsersPayload,
 	UpdateUserRolesPayload,
-	usersApiService,
 	UsersApiService,
+	usersApiService,
 } from '../../services/users';
 
 import { UsersQuery, usersQuery } from './users.query';
@@ -21,6 +22,7 @@ export class UsersFacade {
 	public readonly user$ = this.query.user$;
 	public readonly userRoles$ = this.query.userRoles$;
 	public readonly isFetching$ = this.query.isFetching$;
+	public readonly isAddingUserToSite$ = this.query.isAddingUserToSite$;
 	public readonly error$ = this.query.error$;
 
 	public getUsers(payload: GetUsersPayload): void {
@@ -108,6 +110,23 @@ export class UsersFacade {
 				this.store.setError(err);
 			})
 			.finally(() => this.store.setIsFetching(false));
+	}
+
+	public addUserToSite(payload: AddUserToSitePayload, fn: () => void): void {
+		this.store.setIsAddingUserToSite(true);
+
+		this.service
+			.addUserToSite(payload)
+			.then(() => {
+				console.log('partyyy: user is successfully linked');
+				fn();
+				// Redirect after success
+				// this.store.setIsAddingUserToSite(false);
+			})
+			.catch(err => {
+				this.store.setError(err);
+			})
+			.finally(() => this.store.setIsAddingUserToSite(false));
 	}
 }
 
