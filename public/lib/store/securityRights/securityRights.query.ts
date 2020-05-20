@@ -22,6 +22,8 @@ export class SecurityRightsQuery extends QueryEntity<SecurityRightsState> {
 
 	// Data
 	public securityRights$ = this.select(state => state.securityRights);
+	public modules$ = this.select(state => state.modules);
+	public roles$ = this.select(state => state.roles);
 
 	// State
 	public error$ = this.selectError().pipe(filter(error => !isNil(error), distinctUntilChanged()));

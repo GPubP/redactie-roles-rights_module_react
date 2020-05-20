@@ -1,8 +1,5 @@
-export interface Module {
-	id: string;
-	name: string;
-}
+import { ModuleResponse } from '../../services/securityRights';
 
 export interface ModulesListProps {
-	modules: Module[];
+	modules: ModuleResponse[] | null | undefined;
 }

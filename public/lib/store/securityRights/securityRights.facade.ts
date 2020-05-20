@@ -15,6 +15,8 @@ export class SecurityRightsFacade {
 	) {}
 
 	public readonly securityRights$ = this.query.securityRights$;
+	public readonly modules$ = this.query.modules$;
+	public readonly roles$ = this.query.roles$;
 	public readonly error$ = this.query.error$;
 	public readonly isFetching$ = this.query.isFetching$;
 
@@ -24,7 +26,9 @@ export class SecurityRightsFacade {
 			.getRolesBySite(payload, siteId)
 			.then(response => {
 				this.store.update({
-					securityRights: response,
+					securityRights: response.securityRights,
+					modules: response.modules,
+					roles: response.roles,
 				});
 			})
 			.catch(err => {

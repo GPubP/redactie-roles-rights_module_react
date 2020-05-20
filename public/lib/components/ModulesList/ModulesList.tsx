@@ -12,7 +12,7 @@ const ModulesList: FC<ModulesListProps> = ({ modules }) => {
 					Alle permissies
 				</NavLink>
 			</li>
-			{modules.map(({ name, id }, index) => (
+			{modules?.map(({ name, id }, index) => (
 				<li key={`nav-list-${index}`}>
 					<NavLink activeClassName="is-active" to={id}>
 						{name}

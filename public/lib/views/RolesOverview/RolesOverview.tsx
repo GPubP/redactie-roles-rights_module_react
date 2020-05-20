@@ -20,7 +20,7 @@ const RolesOverview: FC<RolesRouteProps<{ siteId: string }>> = ({ match }) => {
 	 */
 	const breadcrumbs = useRoutesBreadcrumbs();
 	const [rolesSearchParams, setRolesSearchParams] = useState(DEFAULT_ROLES_SEARCH_PARAMS);
-	const [loadingState, securityRights] = useSecurityRights();
+	const [loadingState, securityRights, roles, modules] = useSecurityRights();
 	const [initialLoading, setInitialLoading] = useState(LoadingState.Loading);
 
 	useEffect(() => {
@@ -44,18 +44,15 @@ const RolesOverview: FC<RolesRouteProps<{ siteId: string }>> = ({ match }) => {
 			return null;
 		}
 
-		console.log(securityRights);
-		const modules = fakeApi.modules;
-		const roles = fakeApi.roles;
-		const permissions = fakeApi.securityRights;
+		const fakeModules = fakeApi.modules;
 
 		return (
 			<div className="row">
 				<div className="col-xs-3">
-					<ModulesList modules={modules} />
+					<ModulesList modules={fakeModules} />
 				</div>
 				<div className="col-xs-8 u-margin-left">
-					<RolesPermissionsList roles={roles} permissions={permissions} />
+					<RolesPermissionsList roles={roles} permissions={securityRights} />
 				</div>
 			</div>
 		);
