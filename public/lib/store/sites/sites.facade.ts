@@ -1,4 +1,5 @@
 import { GetSitesPayload, SitesApiService, sitesApiService } from '../../services/sites';
+import { UsersApiService, usersApiService } from '../../services/users';
 
 import { SiteModel } from './sites.model';
 import { SitesQuery, sitesQuery } from './sites.query';
@@ -8,6 +9,7 @@ export class SitesFacade {
 	constructor(
 		private store: SitesStore,
 		private service: SitesApiService,
+		private userService: UsersApiService,
 		private query: SitesQuery
 	) {}
 
@@ -25,8 +27,7 @@ export class SitesFacade {
 				const populatedSites = sites.map(
 					(site): Promise<SiteModel> =>
 						new Promise(resolve => {
-							// TODO: call the user service for this
-							this.service
+							this.userService
 								.getUserRolesForSite({ id: payload.id, siteUuid: site.uuid })
 								.then(rolesResponse => {
 									return resolve({
@@ -70,4 +71,9 @@ export class SitesFacade {
 	}
 }
 
-export const sitesFacade = new SitesFacade(sitesStore, sitesApiService, sitesQuery);
+export const sitesFacade = new SitesFacade(
+	sitesStore,
+	sitesApiService,
+	usersApiService,
+	sitesQuery
+);

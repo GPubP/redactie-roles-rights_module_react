@@ -39,4 +39,9 @@ export interface AddUserToSitePayload {
 	siteId: string;
 }
 
+export interface GetUserRolesForSitePayload {
+	id: string;
+	siteUuid: string;
+}
+
 export type GetUsersPayload = SearchParams;

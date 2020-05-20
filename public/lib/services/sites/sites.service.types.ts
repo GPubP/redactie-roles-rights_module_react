@@ -31,8 +31,3 @@ export interface SitesMetaResponse {
 export interface GetSitesPayload {
 	id: string;
 }
-
-export interface GetUserRolesForSitePayload {
-	id: string;
-	siteUuid: string;
-}

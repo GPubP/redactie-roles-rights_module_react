@@ -5,6 +5,7 @@ import { DEFAULT_USERS_SEARCH_PARAMS } from './users.service.const';
 import {
 	AddUserToSitePayload,
 	GetUserPayload,
+	GetUserRolesForSitePayload,
 	GetUsersPayload,
 	UpdateUserRolesPayload,
 	UserResponse,
@@ -59,6 +60,13 @@ export class UsersApiService {
 				},
 			})
 			.json();
+	}
+
+	public async getUserRolesForSite({
+		id,
+		siteUuid,
+	}: GetUserRolesForSitePayload): Promise<RolesResponse> {
+		return await api.get(`sites/${siteUuid}/users/${id}/roles`).json();
 	}
 }
 
