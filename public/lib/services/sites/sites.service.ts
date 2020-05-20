@@ -9,6 +9,7 @@ export class SitesApiService {
 		return await sitesApi.get(`sites`).json();
 	}
 
+	// TODO: move this call to the user service => the user has roles!
 	public async getUserRolesForSite({
 		id,
 		siteUuid,

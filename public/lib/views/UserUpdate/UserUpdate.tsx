@@ -9,7 +9,7 @@ import React, { FC, ReactElement, useEffect, useState } from 'react';
 import { generatePath, Redirect, useParams } from 'react-router-dom';
 
 import { DataLoader, NavList } from '../../components';
-import { useRoles, useRoutesBreadcrumbs, useSites, useUser, useUserRoles } from '../../hooks';
+import { useRoutesBreadcrumbs, useSites, useTenantRoles, useUser, useUserRoles } from '../../hooks';
 import { ContentType, LoadingState, RolesRouteProps } from '../../roles.types';
 import { rolesFacade } from '../../store/roles';
 import { sitesFacade } from '../../store/sites';
@@ -26,14 +26,14 @@ const UserUpdate: FC<RolesRouteProps<{ userUuid?: string }>> = ({ route, match }
 	const { userUuid } = useParams();
 	const [userLoadingState, user] = useUser(userUuid);
 	const [userRolesLoadingState, userRoles] = useUserRoles(userUuid);
-	const [rolesLoadingState, roles] = useRoles();
+	const [rolesLoadingState, roles] = useTenantRoles();
 	const [sitesLoadingState, sites] = useSites();
 
 	useEffect(() => {
 		if (userUuid) {
 			usersFacade.getUser({ id: userUuid });
 			usersFacade.getUserRoles({ id: userUuid });
-			rolesFacade.getRoles();
+			rolesFacade.getTenantRoles();
 			sitesFacade.getSites({ id: userUuid });
 			return;
 		}

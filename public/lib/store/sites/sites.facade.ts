@@ -25,6 +25,7 @@ export class SitesFacade {
 				const populatedSites = sites.map(
 					(site): Promise<SiteModel> =>
 						new Promise(resolve => {
+							// TODO: call the user service for this
 							this.service
 								.getUserRolesForSite({ id: payload.id, siteUuid: site.uuid })
 								.then(rolesResponse => {

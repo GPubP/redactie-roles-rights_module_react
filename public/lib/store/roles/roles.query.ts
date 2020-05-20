@@ -1,13 +1,13 @@
-import { QueryEntity } from '@datorama/akita';
-import { isNil } from 'ramda';
-import { distinctUntilChanged, filter, map } from 'rxjs/operators';
+import { filterNil, Query } from '@datorama/akita';
+import { Observable } from 'rxjs';
+import { distinctUntilChanged, map } from 'rxjs/operators';
 
 import { LoadingState } from '../../roles.types';
 
-import { RolesState } from './roles.model';
+import { RoleEntityTypes, RoleModel, RolesMetaModel, RolesState } from './roles.model';
 import { rolesStore, RolesStore } from './roles.store';
 
-export class RolesQuery extends QueryEntity<RolesState> {
+export class RolesQuery extends Query<RolesState> {
 	constructor(protected store: RolesStore) {
 		super(store);
 	}
@@ -21,16 +21,22 @@ export class RolesQuery extends QueryEntity<RolesState> {
 	}
 
 	// Data
-	public meta$ = this.select(state => state.meta).pipe(
-		filter(meta => !isNil(meta), distinctUntilChanged())
-	);
-	public roles$ = this.selectAll();
+	public selectMeta(type: RoleEntityTypes): Observable<RolesMetaModel | undefined> {
+		return this.select(state => state[type].meta).pipe(filterNil, distinctUntilChanged());
+	}
+
+	public selectRoles(type: RoleEntityTypes): Observable<RoleModel[]> {
+		return this.select(state => state[type].roles).pipe(filterNil, distinctUntilChanged());
+	}
 
 	// State
-	public error$ = this.selectError().pipe(filter(error => !isNil(error), distinctUntilChanged()));
-	public isFetching$ = this.select(state => state.isFetching).pipe(
-		map(this.convertBoolToLoadingState)
-	);
+	public selectIsFetching(type: RoleEntityTypes): Observable<LoadingState> {
+		return this.select(state => state[type].isFetching).pipe(
+			map(this.convertBoolToLoadingState)
+		);
+	}
+
+	public error$ = this.selectError().pipe(filterNil, distinctUntilChanged());
 }
 
 export const rolesQuery = new RolesQuery(rolesStore);
