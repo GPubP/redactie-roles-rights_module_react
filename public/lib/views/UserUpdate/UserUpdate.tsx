@@ -9,7 +9,13 @@ import React, { FC, ReactElement, useEffect, useState } from 'react';
 import { generatePath, Redirect, useParams } from 'react-router-dom';
 
 import { DataLoader, NavList } from '../../components';
-import { useRoutesBreadcrumbs, useSites, useTenantRoles, useUser, useUserRoles } from '../../hooks';
+import {
+	useRoutesBreadcrumbs,
+	useSites,
+	useTenantRoles,
+	useUser,
+	useUserRolesForTenant,
+} from '../../hooks';
 import { ContentType, LoadingState, RolesRouteProps } from '../../roles.types';
 import { rolesFacade } from '../../store/roles';
 import { sitesFacade } from '../../store/sites';
@@ -25,14 +31,14 @@ const UserUpdate: FC<RolesRouteProps<{ userUuid?: string }>> = ({ route, match }
 	const breadcrumbs = useRoutesBreadcrumbs();
 	const { userUuid } = useParams();
 	const [userLoadingState, user] = useUser(userUuid);
-	const [userRolesLoadingState, userRoles] = useUserRoles(userUuid);
+	const [userRolesLoadingState, userRoles] = useUserRolesForTenant(userUuid);
 	const [rolesLoadingState, roles] = useTenantRoles();
 	const [sitesLoadingState, sites] = useSites();
 
 	useEffect(() => {
 		if (userUuid) {
 			usersFacade.getUser({ id: userUuid });
-			usersFacade.getUserRoles({ id: userUuid });
+			usersFacade.getUserRolesForTenant({ id: userUuid });
 			rolesFacade.getTenantRoles();
 			sitesFacade.getSites({ id: userUuid });
 			return;
@@ -58,7 +64,7 @@ const UserUpdate: FC<RolesRouteProps<{ userUuid?: string }>> = ({ route, match }
 	const handleSubmit = (user: UserModel, content: any, contentType: ContentType): void => {
 		switch (contentType) {
 			case ContentType.UserRoles:
-				usersFacade.updateUserRoles({ id: user.id, roles: content });
+				usersFacade.updateUserRolesForTenant({ id: user.id, roles: content });
 				break;
 			default:
 				break;

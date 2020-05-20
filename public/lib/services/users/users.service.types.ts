@@ -29,18 +29,28 @@ export interface GetUserPayload {
 	id: string;
 }
 
-export interface UpdateUserRolesPayload {
+export interface GetUserRolesForTenantPayload {
 	id: string;
+}
+
+export interface UpdateUserRolesForTenantPayload {
+	id: string;
+	roles: Array<string>;
+}
+
+export interface GetUserRolesForSitePayload {
+	id: string;
+	siteUuid: string;
+}
+
+export interface UpdateUserRolesForSitePayload {
+	userId: string;
+	siteUuid: string;
 	roles: Array<string>;
 }
 
 export interface AddUserToSitePayload {
 	userId: string;
-	siteId: string;
-}
-
-export interface GetUserRolesForSitePayload {
-	id: string;
 	siteUuid: string;
 }
 

@@ -1,4 +1,9 @@
-import { GetSitesPayload, SitesApiService, sitesApiService } from '../../services/sites';
+import {
+	GetSitePayload,
+	GetSitesPayload,
+	sitesApiService,
+	SitesApiService,
+} from '../../services/sites';
 import { UsersApiService, usersApiService } from '../../services/users';
 
 import { SiteModel } from './sites.model';
@@ -14,6 +19,7 @@ export class SitesFacade {
 	) {}
 
 	public readonly sites$ = this.query.sites$;
+	public readonly site$ = this.query.site$;
 	public readonly error$ = this.query.error$;
 	public readonly isFetching$ = this.query.isFetching$;
 
@@ -68,6 +74,21 @@ export class SitesFacade {
 				this.store.setIsFetching(false);
 				this.store.setError(err);
 			});
+	}
+
+	public getSite(payload: GetSitePayload): void {
+		this.store.setIsFetching(true);
+		this.service
+			.getSite(payload)
+			.then(response => {
+				this.store.update({
+					site: response,
+				});
+			})
+			.catch(err => {
+				this.store.setError(err);
+			})
+			.finally(() => this.store.setIsFetching(false));
 	}
 }
 

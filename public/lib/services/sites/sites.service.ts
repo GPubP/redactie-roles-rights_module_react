@@ -1,12 +1,14 @@
-import api from '../api/api.service';
-import { RolesResponse } from '../roles';
 import sitesApi from '../sitesApi/sitesApi.service';
 
-import { SitesResponse } from './sites.service.types';
+import { GetSitePayload, SiteResponse, SitesResponse } from './sites.service.types';
 
 export class SitesApiService {
 	public async getSites(): Promise<SitesResponse> {
 		return await sitesApi.get(`sites`).json();
+	}
+
+	public async getSite({ id }: GetSitePayload): Promise<SiteResponse> {
+		return await sitesApi.get(`sites/${id}`).json<SiteResponse>();
 	}
 }
 

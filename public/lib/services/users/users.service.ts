@@ -6,8 +6,10 @@ import {
 	AddUserToSitePayload,
 	GetUserPayload,
 	GetUserRolesForSitePayload,
+	GetUserRolesForTenantPayload,
 	GetUsersPayload,
-	UpdateUserRolesPayload,
+	UpdateUserRolesForSitePayload,
+	UpdateUserRolesForTenantPayload,
 	UserResponse,
 	UsersResponse,
 } from './users.service.types';
@@ -38,25 +40,20 @@ export class UsersApiService {
 		return await api.get(`users/${id}`).json();
 	}
 
-	public async getUserRoles({ id }: GetUserPayload): Promise<RolesResponse> {
+	public async getUserRolesForTenant({
+		id,
+	}: GetUserRolesForTenantPayload): Promise<RolesResponse> {
 		return await api.get(`users/${id}/roles`).json();
 	}
 
-	public async updateUserRoles({ id, roles }: UpdateUserRolesPayload): Promise<any> {
+	public async updateUserRolesForTenant({
+		id,
+		roles,
+	}: UpdateUserRolesForTenantPayload): Promise<any> {
 		return await api
-			.post(`users/${id}/roles`, {
+			.put(`users/${id}/roles`, {
 				json: {
 					roles: roles,
-				},
-			})
-			.json();
-	}
-
-	public async addUserToSite({ siteId, userId }: AddUserToSitePayload): Promise<any> {
-		return await api
-			.post(`sites/${siteId}/users`, {
-				json: {
-					userId,
 				},
 			})
 			.json();
@@ -67,6 +64,30 @@ export class UsersApiService {
 		siteUuid,
 	}: GetUserRolesForSitePayload): Promise<RolesResponse> {
 		return await api.get(`sites/${siteUuid}/users/${id}/roles`).json();
+	}
+
+	public async updateUserRolesForSite({
+		userId,
+		siteUuid,
+		roles,
+	}: UpdateUserRolesForSitePayload): Promise<RolesResponse> {
+		return await api
+			.put(`sites/${siteUuid}/users/${userId}/roles`, {
+				json: {
+					roles,
+				},
+			})
+			.json();
+	}
+
+	public async addUserToSite({ siteUuid, userId }: AddUserToSitePayload): Promise<any> {
+		return await api
+			.post(`sites/${siteUuid}/users`, {
+				json: {
+					userId,
+				},
+			})
+			.json();
 	}
 }
 

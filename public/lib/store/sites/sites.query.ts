@@ -1,6 +1,5 @@
-import { QueryEntity } from '@datorama/akita';
-import { isNil } from 'ramda';
-import { distinctUntilChanged, filter, map } from 'rxjs/operators';
+import { filterNil, QueryEntity } from '@datorama/akita';
+import { distinctUntilChanged, map } from 'rxjs/operators';
 
 import { LoadingState } from '../../roles.types';
 
@@ -22,9 +21,10 @@ export class SitesQuery extends QueryEntity<SitesState> {
 
 	// Data
 	public sites$ = this.selectAll();
+	public site$ = this.select(state => state.site).pipe(filterNil, distinctUntilChanged());
 
 	// State
-	public error$ = this.selectError().pipe(filter(error => !isNil(error), distinctUntilChanged()));
+	public error$ = this.selectError().pipe(filterNil, distinctUntilChanged());
 	public isFetching$ = this.select(state => state.isFetching).pipe(
 		map(this.convertBoolToLoadingState)
 	);

@@ -28,6 +28,10 @@ export interface SitesMetaResponse {
 	number: string;
 }
 
+export interface GetSitePayload {
+	id: string;
+}
+
 export interface GetSitesPayload {
 	id: string;
 }
