@@ -26,6 +26,7 @@ const UserDetailRoles: FC<UserDetailRolesProps> = ({
 	const [t] = useCoreTranslation();
 	const [selectedRoles, updateSelectedRoles] = useState(mapUserRoles(userRoles));
 	const { isAddingUserToSite, isUpdating } = useUsersLoadingStates();
+	const [giveAccesSiteId, setGiveAccessSiteId] = useState<string | null>(null);
 	const { navigate } = useNavigate();
 
 	/**
@@ -33,7 +34,7 @@ const UserDetailRoles: FC<UserDetailRolesProps> = ({
 	 */
 	const onConfigSave = (): void => {
 		if (mapUserRoles(userRoles) !== selectedRoles) {
-			onSubmit(user, selectedRoles, ContentType.UserRoles);
+			onSubmit(user, selectedRoles, userRoles, ContentType.UserRoles);
 		}
 	};
 
@@ -58,21 +59,23 @@ const UserDetailRoles: FC<UserDetailRolesProps> = ({
 			path: '#',
 			setActiveField: () => console.log(site),
 			editAccess: () => redirectToSitesRolesDetail(user.id, site.id),
-			giveAccess: () =>
+			giveAccess: () => {
+				setGiveAccessSiteId(site.id);
 				usersFacade.addUserToSite(
 					{
 						siteUuid: site.id,
 						userId: user.id,
 					},
 					() => redirectToSitesRolesDetail(user.id, site.id)
-				),
+				);
+			},
 			hasAccess: site?.hasAccess,
 		}));
 
 		return (
 			<Table
 				className="u-margin-top"
-				columns={SITE_COLUMNS(t, isAddingUserToSite)}
+				columns={SITE_COLUMNS(t, isAddingUserToSite, giveAccesSiteId)}
 				rows={siteRows}
 				totalValues={sites.length}
 			/>

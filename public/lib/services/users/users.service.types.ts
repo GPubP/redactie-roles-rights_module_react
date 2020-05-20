@@ -1,3 +1,4 @@
+import { RoleModel } from '../../store/roles';
 import { SearchParams } from '../api';
 
 export interface UsersResponse {
@@ -36,6 +37,7 @@ export interface GetUserRolesForTenantPayload {
 export interface UpdateUserRolesForTenantPayload {
 	id: string;
 	roles: Array<string>;
+	roleDetails?: RoleModel[];
 }
 
 export interface GetUserRolesForSitePayload {
@@ -47,6 +49,7 @@ export interface UpdateUserRolesForSitePayload {
 	userId: string;
 	siteUuid: string;
 	roles: Array<string>;
+	roleDetails?: RoleModel[];
 }
 
 export interface AddUserToSitePayload {

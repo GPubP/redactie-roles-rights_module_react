@@ -9,6 +9,7 @@ import {
 	usersApiService,
 	UsersApiService,
 } from '../../services/users';
+import { RoleModel } from '../roles';
 
 import { UsersQuery, usersQuery } from './users.query';
 import { UsersStore, usersStore } from './users.store';
@@ -104,9 +105,14 @@ export class UsersFacade {
 		this.store.setIsUpdating(true);
 		this.service
 			.updateUserRolesForTenant(payload)
-			.then(response => {
-				//ISSUE: response does not return the updated roles
-				console.log('update user tenant roles success', response);
+			.then(() => {
+				this.store.setUserDetail({
+					activeTenantRoles: payload.roles.map(roleId => {
+						return payload.roleDetails?.find(
+							roleDetail => roleDetail.id == roleId
+						) as RoleModel;
+					}),
+				});
 			})
 			.catch(err => {
 				this.store.setError(err);
@@ -131,8 +137,15 @@ export class UsersFacade {
 		this.store.setIsUpdating(true);
 		return this.service
 			.updateUserRolesForSite(payload)
-			.then(response => {
-				console.log('update user site roles success', response);
+			.then(() => {
+				this.store.setUserDetail({
+					activeSiteRoles: payload.roles.map(roleId => {
+						console.log(payload.roleDetails, 'roles details');
+						return payload.roleDetails?.find(
+							roleDetail => roleDetail.id == roleId
+						) as RoleModel;
+					}),
+				});
 			})
 			.catch(err => this.store.setError(err))
 			.finally(() => this.store.setIsUpdating(false));

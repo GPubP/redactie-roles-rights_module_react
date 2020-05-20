@@ -27,7 +27,11 @@ export const DUMMY_SITES = [
 	},
 ];
 
-export const SITE_COLUMNS = (t: TranslateFunc, isAddingUserToSite: LoadingState | null): any[] => [
+export const SITE_COLUMNS = (
+	t: TranslateFunc,
+	isAddingUserToSite: LoadingState | null,
+	giveAccessSiteId: string | null
+): any[] => [
 	{
 		label: t(CORE_TRANSLATIONS.TABLE_NAME),
 		value: 'name',
@@ -62,6 +66,9 @@ export const SITE_COLUMNS = (t: TranslateFunc, isAddingUserToSite: LoadingState 
 		disableSorting: true,
 		component(value: string, rowData: any) {
 			const { editAccess, giveAccess } = rowData;
+			const isGivingAccess =
+				giveAccessSiteId === rowData.siteUuid &&
+				isAddingUserToSite === LoadingState.Loading;
 
 			if (rowData.hasAccess) {
 				return (
@@ -77,12 +84,8 @@ export const SITE_COLUMNS = (t: TranslateFunc, isAddingUserToSite: LoadingState 
 
 			return (
 				<Button
-					iconLeft={
-						isAddingUserToSite === LoadingState.Loading
-							? 'circle-o-notch fa-spin'
-							: null
-					}
-					disabled={isAddingUserToSite === LoadingState.Loading}
+					iconLeft={isGivingAccess ? 'circle-o-notch fa-spin' : null}
+					disabled={isGivingAccess}
 					onClick={() => giveAccess()}
 					type="primary"
 					outline

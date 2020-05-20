@@ -17,7 +17,7 @@ import {
 	useUserRolesForTenant,
 } from '../../hooks';
 import { ContentType, LoadingState, RolesRouteProps } from '../../roles.types';
-import { rolesFacade } from '../../store/roles';
+import { rolesFacade, RoleModel } from '../../store/roles';
 import { sitesFacade } from '../../store/sites';
 import { UserModel, usersFacade } from '../../store/users';
 
@@ -61,10 +61,19 @@ const UserUpdate: FC<RolesRouteProps<{ userUuid?: string }>> = ({ route, match }
 	/**
 	 * Functions
 	 */
-	const handleSubmit = (user: UserModel, content: any, contentType: ContentType): void => {
+	const handleSubmit = (
+		user: UserModel,
+		content: any,
+		userRoles: RoleModel[],
+		contentType: ContentType
+	): void => {
 		switch (contentType) {
 			case ContentType.UserRoles:
-				usersFacade.updateUserRolesForTenant({ id: user.id, roles: content });
+				usersFacade.updateUserRolesForTenant({
+					id: user.id,
+					roles: content,
+					roleDetails: userRoles,
+				});
 				break;
 			default:
 				break;
