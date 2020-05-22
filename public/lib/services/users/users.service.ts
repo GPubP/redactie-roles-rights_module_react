@@ -30,7 +30,7 @@ export class UsersApiService {
 		siteId: string
 	): Promise<UsersResponse> {
 		return await api
-			.get(`users-roles/v1/sites/${siteId}/users`, {
+			.get(`sites/${siteId}/users`, {
 				searchParams: parseSearchParams(searchParams),
 			})
 			.json<UsersResponse>();
