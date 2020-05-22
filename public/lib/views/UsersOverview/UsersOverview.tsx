@@ -1,12 +1,9 @@
-import { Button } from '@acpaas-ui/react-components';
 import {
 	Container,
 	ContextHeader,
-	ContextHeaderActionsSection,
 	ContextHeaderTopSection,
 	PaginatedTable,
 } from '@acpaas-ui/react-editorial-components';
-import { CORE_TRANSLATIONS } from '@redactie/translations-module/public/lib/i18next/translations.const';
 import React, { FC, ReactElement, useEffect, useState } from 'react';
 
 import { DataLoader, FilterForm, FilterFormState } from '../../components';
@@ -132,8 +129,6 @@ const UsersOverview: FC<RolesRouteProps> = () => {
 			uuid: user.id,
 			name: `${user.firstname} ${user.lastname}`,
 			type: user.type,
-			added: user.email,
-			status: user.username || 'N/A',
 			navigate: (userUuid: string) => navigate(MODULE_PATHS.tenantUserDetail, { userUuid }),
 		}));
 
@@ -168,14 +163,6 @@ const UsersOverview: FC<RolesRouteProps> = () => {
 		<>
 			<ContextHeader title="Gebruikers">
 				<ContextHeaderTopSection>{breadcrumbs}</ContextHeaderTopSection>
-				<ContextHeaderActionsSection>
-					<Button
-						onClick={() => navigate(MODULE_PATHS.tenantUsersOverview)}
-						iconLeft="plus"
-					>
-						{t(CORE_TRANSLATIONS['BUTTON_CREATE-NEW'])}
-					</Button>
-				</ContextHeaderActionsSection>
 			</ContextHeader>
 			<Container>
 				<DataLoader loadingState={initialLoading} render={renderOverview} />
