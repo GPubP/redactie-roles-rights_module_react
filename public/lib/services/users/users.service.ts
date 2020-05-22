@@ -29,8 +29,9 @@ export class UsersApiService {
 		searchParams: GetUsersPayload = DEFAULT_USERS_SEARCH_PARAMS,
 		siteId: string
 	): Promise<UsersResponse> {
+		console.log('get users');
 		return await api
-			.get(`users-roles/v1/sites/${siteId}/users`, {
+			.get(`sites/${siteId}/users`, {
 				searchParams: parseSearchParams(searchParams),
 			})
 			.json<UsersResponse>();

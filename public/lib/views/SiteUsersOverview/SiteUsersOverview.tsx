@@ -135,7 +135,8 @@ const SiteUsersOverview: FC<RolesRouteProps<{ siteId: string }>> = ({ match }) =
 			type: user.type,
 			added: user.email,
 			status: user.username || 'N/A',
-			navigate: userUuid => navigate(MODULE_PATHS.users.overview, { userUuid }),
+			navigate: userUuid =>
+				navigate(MODULE_PATHS.siteUserDetailRolesUpdate, { userUuid, siteId }),
 		}));
 
 		return (

@@ -9,6 +9,7 @@ import { TenantContext } from './lib/context';
 import { MODULE_PATHS } from './lib/roles.const';
 import { RolesModuleProps } from './lib/roles.types';
 import {
+	SiteUserDetailRolesUpdate,
 	SiteUsersOverview,
 	UserDetailGeneral,
 	UserDetailRoles,
@@ -62,6 +63,10 @@ registerRoutes({
 		label: 'Gebruikers',
 	},
 	routes: [
+		{
+			path: MODULE_PATHS.siteUserDetailRolesUpdate,
+			component: SiteUserDetailRolesUpdate,
+		},
 		{
 			path: MODULE_PATHS.users.root,
 			component: SiteUsersOverview,
