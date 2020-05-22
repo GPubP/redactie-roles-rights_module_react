@@ -9,9 +9,17 @@ import React, { FC, ReactElement, useEffect, useState } from 'react';
 import { generatePath, Redirect, useParams } from 'react-router-dom';
 
 import { DataLoader, NavList } from '../../components';
-import { useRoles, useRoutesBreadcrumbs, useSites, useUser, useUserRoles } from '../../hooks';
+import {
+	useNavigate,
+	useRoutesBreadcrumbs,
+	useSites,
+	useTenantRoles,
+	useUser,
+	useUserRolesForTenant,
+} from '../../hooks';
+import { MODULE_PATHS } from '../../roles.const';
 import { ContentType, LoadingState, RolesRouteProps } from '../../roles.types';
-import { rolesService } from '../../store/roles';
+import { rolesFacade } from '../../store/roles';
 import { sitesFacade } from '../../store/sites';
 import { UserModel, usersFacade } from '../../store/users';
 
@@ -25,15 +33,16 @@ const UserUpdate: FC<RolesRouteProps<{ userUuid?: string }>> = ({ route, match }
 	const breadcrumbs = useRoutesBreadcrumbs();
 	const { userUuid } = useParams();
 	const [userLoadingState, user] = useUser(userUuid);
-	const [userRolesLoadingState, userRoles] = useUserRoles(userUuid);
-	const [rolesLoadingState, roles] = useRoles();
+	const [userRolesLoadingState, userRoles] = useUserRolesForTenant(userUuid);
+	const [rolesLoadingState, roles] = useTenantRoles();
 	const [sitesLoadingState, sites] = useSites();
+	const { navigate } = useNavigate();
 
 	useEffect(() => {
 		if (userUuid) {
 			usersFacade.getUser({ id: userUuid });
-			usersFacade.getUserRoles({ id: userUuid });
-			rolesService.getRoles();
+			usersFacade.getUserRolesForTenant({ id: userUuid });
+			rolesFacade.getTenantRoles();
 			sitesFacade.getSites({ id: userUuid });
 			return;
 		}
@@ -58,11 +67,18 @@ const UserUpdate: FC<RolesRouteProps<{ userUuid?: string }>> = ({ route, match }
 	const handleSubmit = (user: UserModel, content: any, contentType: ContentType): void => {
 		switch (contentType) {
 			case ContentType.UserRoles:
-				usersFacade.updateUserRoles({ id: user.id, roles: content });
+				usersFacade.updateUserRolesForTenant({
+					id: user.id,
+					roles: content,
+				});
 				break;
 			default:
 				break;
 		}
+	};
+
+	const handleCancel = (): void => {
+		navigate(MODULE_PATHS.tenantUsersOverview);
 	};
 
 	/**
@@ -87,14 +103,14 @@ const UserUpdate: FC<RolesRouteProps<{ userUuid?: string }>> = ({ route, match }
 			userRoles,
 			roles,
 			sites,
-			onCancel: () => console.log('cancel'),
+			onCancel: handleCancel,
 			onSubmit: handleSubmit,
 		});
 	};
 
 	return (
 		<>
-			<ContextHeader title={user && `${user?.firstname} ${user?.lastname}`}>
+			<ContextHeader title={user ? `${user?.firstname} ${user?.lastname}` : ''}>
 				<ContextHeaderTopSection>{breadcrumbs}</ContextHeaderTopSection>
 			</ContextHeader>
 			<Container>

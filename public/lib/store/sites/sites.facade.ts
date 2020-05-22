@@ -1,5 +1,12 @@
-import { GetSitesPayload, SitesApiService, sitesApiService } from '../../services/sites';
+import {
+	GetSitePayload,
+	GetSitesPayload,
+	sitesApiService,
+	SitesApiService,
+} from '../../services/sites';
+import { UsersApiService, usersApiService } from '../../services/users';
 
+import { SiteModel } from './sites.model';
 import { SitesQuery, sitesQuery } from './sites.query';
 import { SitesStore, sitesStore } from './sites.store';
 
@@ -7,10 +14,12 @@ export class SitesFacade {
 	constructor(
 		private store: SitesStore,
 		private service: SitesApiService,
+		private userService: UsersApiService,
 		private query: SitesQuery
 	) {}
 
 	public readonly sites$ = this.query.sites$;
+	public readonly site$ = this.query.site$;
 	public readonly error$ = this.query.error$;
 	public readonly isFetching$ = this.query.isFetching$;
 
@@ -22,14 +31,15 @@ export class SitesFacade {
 				const sites = sitesResponse._embedded;
 
 				const populatedSites = sites.map(
-					site =>
+					(site): Promise<SiteModel> =>
 						new Promise(resolve => {
-							this.service
+							this.userService
 								.getUserRolesForSite({ id: payload.id, siteUuid: site.uuid })
 								.then(rolesResponse => {
 									return resolve({
 										...site,
 										roles: rolesResponse._embedded,
+										hasAccess: true,
 									});
 								})
 								.catch(() => {
@@ -37,6 +47,7 @@ export class SitesFacade {
 									return resolve({
 										...site,
 										roles: [],
+										hasAccess: false,
 									});
 								});
 						})
@@ -64,6 +75,26 @@ export class SitesFacade {
 				this.store.setError(err);
 			});
 	}
+
+	public getSite(payload: GetSitePayload): void {
+		this.store.setIsFetching(true);
+		this.service
+			.getSite(payload)
+			.then(response => {
+				this.store.update({
+					site: response,
+				});
+			})
+			.catch(err => {
+				this.store.setError(err);
+			})
+			.finally(() => this.store.setIsFetching(false));
+	}
 }
 
-export const sitesFacade = new SitesFacade(sitesStore, sitesApiService, sitesQuery);
+export const sitesFacade = new SitesFacade(
+	sitesStore,
+	sitesApiService,
+	usersApiService,
+	sitesQuery
+);

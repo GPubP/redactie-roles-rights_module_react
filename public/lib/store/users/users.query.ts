@@ -1,6 +1,5 @@
-import { QueryEntity } from '@datorama/akita';
-import { isNil } from 'ramda';
-import { distinctUntilChanged, filter, map } from 'rxjs/operators';
+import { filterNil, QueryEntity } from '@datorama/akita';
+import { distinctUntilChanged, map } from 'rxjs/operators';
 
 import { LoadingState } from '../../roles.types';
 
@@ -20,20 +19,27 @@ export class UsersQuery extends QueryEntity<UsersState> {
 		return LoadingState.Loaded;
 	}
 
-	public meta$ = this.select(state => state.meta).pipe(
-		filter(meta => !isNil(meta), distinctUntilChanged())
-	);
+	public meta$ = this.select(state => state.meta).pipe(filterNil, distinctUntilChanged());
 	public users$ = this.selectAll();
-	public user$ = this.select(state => state.user).pipe(
-		filter(user => !isNil(user), distinctUntilChanged())
+	public user$ = this.select(state => state.userDetail).pipe(filterNil, distinctUntilChanged());
+	public userRolesForTenant$ = this.select(state => state.userDetail?.activeTenantRoles).pipe(
+		filterNil,
+		distinctUntilChanged()
 	);
-	public userRoles$ = this.select(state => state.userRoles).pipe(
-		filter(user => !isNil(user), distinctUntilChanged())
+	public userRolesForSite$ = this.select(state => state.userDetail?.activeSiteRoles).pipe(
+		filterNil,
+		distinctUntilChanged()
 	);
 
 	// State
-	public error$ = this.selectError().pipe(filter(error => !isNil(error), distinctUntilChanged()));
+	public error$ = this.selectError().pipe(filterNil, distinctUntilChanged());
 	public isFetching$ = this.select(state => state.isFetching).pipe(
+		map(this.convertBoolToLoadingState)
+	);
+	public isUpdating$ = this.select(state => state.isUpdating).pipe(
+		map(this.convertBoolToLoadingState)
+	);
+	public isAddingUserToSite$ = this.select(state => state.isAddingUserToSite).pipe(
 		map(this.convertBoolToLoadingState)
 	);
 }

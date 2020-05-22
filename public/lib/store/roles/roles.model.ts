@@ -1,17 +1,31 @@
-import { EntityState } from '@datorama/akita';
+import { RoleResponse, RolesMetaResponse } from '../../services/roles';
 
-import { RoleResponse, RolesMetaResponse, RolesResponse } from '../../services/roles';
+export enum RoleEntityTypes {
+	TENANT = 'tenant',
+	SITE = 'site',
+}
 
 export type RoleModel = RoleResponse;
-export type RolesModel = RolesResponse;
 export type RolesMetaModel = RolesMetaResponse;
 
-export interface RolesState extends EntityState<RolesModel, string> {
+export interface RoleEntityState {
 	meta?: RolesMetaModel;
-	roles?: RoleModel[];
+	roles: RoleModel[];
 	isFetching: boolean;
 }
 
+export interface RolesState {
+	tenant: RoleEntityState;
+	site: RoleEntityState;
+}
+
 export const createInitialRolesState = (): RolesState => ({
-	isFetching: false,
+	tenant: {
+		roles: [],
+		isFetching: false,
+	},
+	site: {
+		roles: [],
+		isFetching: false,
+	},
 });

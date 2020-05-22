@@ -4,16 +4,14 @@ import { LoadingState } from '../../roles.types';
 import { RoleModel } from '../../store/roles';
 import { usersFacade } from '../../store/users';
 
-const useUserRoles = (
-	uuid: string | null = null
-): [LoadingState | null, RoleModel[] | undefined] => {
+const useUserRolesForSite = (): [LoadingState | null, RoleModel[] | null | undefined] => {
 	const [loading] = useObservable(usersFacade.isFetching$, null);
-	const [userRoles] = useObservable(usersFacade.userRoles$, []);
+	const [userRolesForSite] = useObservable(usersFacade.userRolesForSite$, null);
 	const [error] = useObservable(usersFacade.error$, null);
 
-	const loadingState = error || !uuid ? LoadingState.Error : loading;
+	const loadingState = error ? LoadingState.Error : loading;
 
-	return [loadingState, userRoles];
+	return [loadingState, userRolesForSite];
 };
 
-export default useUserRoles;
+export default useUserRolesForSite;
