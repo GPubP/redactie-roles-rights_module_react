@@ -12,9 +12,11 @@ export type RoleModel = RoleResponse;
 export interface SecurityRightsState {
 	data: SecurityRightMatrixModel | null;
 	isFetching: boolean;
+	isUpdating: boolean;
 }
 
 export const createInitialSecurityRightsState = (): SecurityRightsState => ({
 	data: null,
 	isFetching: false,
+	isUpdating: false,
 });

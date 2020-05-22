@@ -27,6 +27,9 @@ export class SecurityRightsQuery extends Query<SecurityRightsState> {
 	public isFetching$ = this.select(state => state.isFetching).pipe(
 		map(this.convertBoolToLoadingState)
 	);
+	public isUpdating$ = this.select(state => state.isUpdating).pipe(
+		map(this.convertBoolToLoadingState)
+	);
 }
 
 export const securityRightsQuery = new SecurityRightsQuery(securityRightsStore);

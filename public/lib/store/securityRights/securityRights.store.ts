@@ -13,6 +13,12 @@ export class SecurityRightsStore extends Store<SecurityRightsState> {
 			isFetching,
 		});
 	}
+
+	public setIsUpdating(isUpdating = false): void {
+		this.update({
+			isUpdating,
+		});
+	}
 }
 
 export const securityRightsStore = new SecurityRightsStore();

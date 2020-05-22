@@ -4,6 +4,7 @@ import { DEFAULT_SECURITYRIGHTS_SEARCH_PARAMS } from './roles.service.const';
 import {
 	GetSecurityRightsPayload,
 	SecurityRightMatrixResponse,
+	UpdateRolesMatrixPayload,
 } from './securityRights.service.types';
 
 export class SecurityRightsApiService {
@@ -16,6 +17,19 @@ export class SecurityRightsApiService {
 				searchParams: parseSearchParams(searchParams),
 			})
 			.json<SecurityRightMatrixResponse>();
+	}
+
+	public async updateSecurityRightsForSite(
+		siteId: string,
+		rolesSecurityRights: UpdateRolesMatrixPayload
+	): Promise<SecurityRightMatrixResponse> {
+		return await api
+			.put(`sites/${siteId}/roles-security-rights-matrix`, {
+				json: {
+					rolesSecurityRights,
+				},
+			})
+			.json();
 	}
 }
 

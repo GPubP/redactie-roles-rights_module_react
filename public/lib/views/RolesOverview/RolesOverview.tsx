@@ -114,6 +114,9 @@ const RolesOverview: FC<RolesRouteProps<{ siteId: string }>> = ({ match }) => {
 		}, [] as UpdateRolesMatrixPayload);
 
 	const onConfigSave = (): void => {
+		// if (formValues) {
+		// 	securityRightsFacade.updateSecurityRightsForSite(formValues, siteId);
+		// }
 		console.log(formValues);
 	};
 
