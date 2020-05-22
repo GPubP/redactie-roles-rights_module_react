@@ -1,6 +1,6 @@
 import { EntityStore, StoreConfig } from '@datorama/akita';
 
-import { createInitialUsersState, UserModel, UsersState } from './users.model';
+import { createInitialUsersState, UserDetailModel, UserModel, UsersState } from './users.model';
 
 @StoreConfig({ name: 'users', idKey: 'id' })
 export class UsersStore extends EntityStore<UsersState, UserModel> {
@@ -12,6 +12,28 @@ export class UsersStore extends EntityStore<UsersState, UserModel> {
 		this.update({
 			isFetching,
 		});
+	}
+
+	public setIsUpdating(isUpdating = false): void {
+		this.update({
+			isUpdating,
+		});
+	}
+
+	public setIsAddingUserToSite(isAddingUserToSite = false): void {
+		this.update({
+			isAddingUserToSite,
+		});
+	}
+
+	public setUserDetail(userDetail: Partial<UserDetailModel>): void {
+		this.update(state => ({
+			...state,
+			userDetail: {
+				...state.userDetail,
+				...userDetail,
+			},
+		}));
 	}
 }
 

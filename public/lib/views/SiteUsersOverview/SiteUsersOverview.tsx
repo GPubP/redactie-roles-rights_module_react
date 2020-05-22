@@ -1,12 +1,9 @@
-import { Button } from '@acpaas-ui/react-components';
 import {
 	Container,
 	ContextHeader,
-	ContextHeaderActionsSection,
 	ContextHeaderTopSection,
 	PaginatedTable,
 } from '@acpaas-ui/react-editorial-components';
-import { CORE_TRANSLATIONS } from '@redactie/translations-module/public/lib/i18next/translations.const';
 import React, { FC, ReactElement, useEffect, useState } from 'react';
 
 import { DataLoader, FilterForm, FilterFormState } from '../../components';
@@ -15,7 +12,7 @@ import { useRoutesBreadcrumbs, useSiteNavigate, useUsers } from '../../hooks';
 import { MODULE_PATHS } from '../../roles.const';
 import { LoadingState, RolesRouteProps } from '../../roles.types';
 import { DEFAULT_USERS_SEARCH_PARAMS } from '../../services/users/users.service.const';
-import { usersService } from '../../store/users';
+import { usersFacade } from '../../store/users';
 
 import { CONTENT_INITIAL_FILTER_STATE, USERS_OVERVIEW_COLUMNS } from './SiteUsersOverview.const';
 import { FilterItemSchema, OrderBy, UsersOverviewTableRow } from './SiteUsersOverview.types';
@@ -39,7 +36,7 @@ const SiteUsersOverview: FC<RolesRouteProps<{ siteId: string }>> = ({ match }) =
 	const [t] = useCoreTranslation();
 
 	useEffect(() => {
-		usersService.getUsersBySite(usersSearchParams, siteId);
+		usersFacade.getUsersBySite(usersSearchParams, siteId);
 	}, [siteId, usersSearchParams]);
 
 	useEffect(() => {
@@ -169,14 +166,6 @@ const SiteUsersOverview: FC<RolesRouteProps<{ siteId: string }>> = ({ match }) =
 		<>
 			<ContextHeader title="Gebruikers">
 				<ContextHeaderTopSection>{breadcrumbs}</ContextHeaderTopSection>
-				<ContextHeaderActionsSection>
-					<Button
-						onClick={() => navigate(MODULE_PATHS.users.overview, { siteId })}
-						iconLeft="plus"
-					>
-						{t(CORE_TRANSLATIONS['BUTTON_CREATE-NEW'])}
-					</Button>
-				</ContextHeaderActionsSection>
 			</ContextHeader>
 			<Container>
 				<DataLoader loadingState={initialLoading} render={renderOverview} />

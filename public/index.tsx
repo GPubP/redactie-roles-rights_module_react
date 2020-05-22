@@ -1,3 +1,4 @@
+import { akitaDevtools } from '@datorama/akita';
 import Core, { ModuleRouteConfig } from '@redactie/redactie-core';
 import React, { FC } from 'react';
 import { Redirect } from 'react-router-dom';
@@ -15,6 +16,8 @@ import {
 	UsersOverview,
 	UserUpdate,
 } from './lib/views';
+
+akitaDevtools();
 
 const SiteRolesComponent: FC<RolesModuleProps> = ({ route, location, tenantId }) => {
 	// if path is /users, redirect to /users/overzicht
