@@ -7,7 +7,7 @@ import {
 	ContextHeaderTopSection,
 } from '@acpaas-ui/react-editorial-components';
 import { CORE_TRANSLATIONS } from '@redactie/translations-module/public/lib/i18next/translations.const';
-import React, { FC, ReactElement, useEffect, useMemo, useState } from 'react';
+import React, { FC, ReactElement, useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 
 import { DataLoader, FormViewUserRoles } from '../../components';
@@ -18,7 +18,6 @@ import {
 	useRoutesBreadcrumbs,
 	useSite,
 	useSiteRoles,
-	useUser,
 	useUserRolesForSite,
 	useUsersLoadingStates,
 } from '../../hooks';
@@ -77,7 +76,7 @@ const SiteUserDetailRolesUpdate: FC<RolesRouteProps> = () => {
 	 * Methods
 	 */
 	const handleSubmit = (): void => {
-		if (mapUserRoles(userRoles) !== selectedRoles) {
+		if (userRoles && mapUserRoles(userRoles) !== selectedRoles) {
 			usersFacade.updateUserRolesForSite({
 				userId: userUuid,
 				siteUuid: siteId,
@@ -95,8 +94,6 @@ const SiteUserDetailRolesUpdate: FC<RolesRouteProps> = () => {
 			userUuid,
 		});
 	};
-
-	console.log(selectedRoles);
 
 	/**
 	 * Render
