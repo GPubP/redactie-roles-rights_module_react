@@ -10,7 +10,7 @@ const ModulesList: FC<ModulesListProps> = ({ modules, onClick }) => {
 			<li>
 				<div onClick={() => onClick('')}>Alle permissies</div>
 			</li>
-			{modules?.map(({ name, id }, index) => (
+			{modules?.map(({ name }, index) => (
 				<li key={`nav-list-${index}`}>
 					<div onClick={() => onClick(name)}>{name}</div>
 				</li>
