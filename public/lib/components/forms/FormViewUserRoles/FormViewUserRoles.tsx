@@ -17,7 +17,7 @@ const FormViewUserRoles: FC<FormViewUserRolesProps> = ({ formState, availableRol
 		};
 	}, [formState]);
 	return (
-		<Formik enableReinitialize={true} initialValues={initialValues} onSubmit={handleFormSubmit}>
+		<Formik initialValues={initialValues} onSubmit={handleFormSubmit}>
 			{({ values, submitForm }) => (
 				<FieldArray
 					name="roleIds"

@@ -9,7 +9,6 @@ import {
 	usersApiService,
 	UsersApiService,
 } from '../../services/users';
-import { RoleModel } from '../roles';
 
 import { UsersQuery, usersQuery } from './users.query';
 import { UsersStore, usersStore } from './users.store';
@@ -105,13 +104,9 @@ export class UsersFacade {
 		this.store.setIsUpdating(true);
 		this.service
 			.updateUserRolesForTenant(payload)
-			.then(() => {
+			.then(response => {
 				this.store.setUserDetail({
-					activeTenantRoles: payload.roles.map(roleId => {
-						return payload.roleDetails?.find(
-							roleDetail => roleDetail.id == roleId
-						) as RoleModel;
-					}),
+					activeTenantRoles: response._embedded,
 				});
 			})
 			.catch(err => {
@@ -137,14 +132,9 @@ export class UsersFacade {
 		this.store.setIsUpdating(true);
 		return this.service
 			.updateUserRolesForSite(payload)
-			.then(() => {
+			.then(response => {
 				this.store.setUserDetail({
-					activeSiteRoles: payload.roles.map(roleId => {
-						console.log(payload.roleDetails, 'roles details');
-						return payload.roleDetails?.find(
-							roleDetail => roleDetail.id == roleId
-						) as RoleModel;
-					}),
+					activeSiteRoles: response._embedded,
 				});
 			})
 			.catch(err => this.store.setError(err))
