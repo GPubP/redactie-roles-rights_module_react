@@ -56,7 +56,6 @@ module.exports = env => {
 			yup: 'yup',
 			ramda: 'ramda',
 			rxjs: 'rxjs',
-			moment: 'moment',
 			'rxjs/operators': 'rxjs/operators',
 			'@datorama/akita': '@datorama/akita',
 			'react-dom': 'react-dom',
