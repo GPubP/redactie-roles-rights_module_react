@@ -59,3 +59,10 @@ export interface GetSecurityRightPayload {
 }
 
 export type GetSecurityRightsPayload = SearchParams;
+
+export interface UpdateRolesMatrix {
+	roleId: string;
+	securityRights: string[];
+}
+
+export type UpdateRolesMatrixPayload = UpdateRolesMatrix[];

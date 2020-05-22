@@ -9,56 +9,66 @@ import { RoleSecurityRight } from '../../views/RolesOverview/RolesOverview.types
 
 import { RolesPermissionsProps } from './RolesPermissionsList.types';
 
-const RolesPermissionsList: FC<RolesPermissionsProps> = ({ roles, permissions, formState }) => {
-	const handleFormSubmit = (value: any): void => {
-		console.log(value);
-	};
-
+const RolesPermissionsList: FC<RolesPermissionsProps> = ({
+	roles,
+	permissions,
+	formState,
+	onChange,
+}) => {
 	const renderSecurityRightsRows = (
 		securityRights: SecurityRightResponse[],
 		submitForm: any,
 		values: any
 	): ReactNode => {
-		return securityRights.map((securityRight: SecurityRightResponse) => (
-			<tr key={securityRight.id}>
-				<td className="a-table-header--side">{securityRight.name}</td>
-				<FieldArray
-					// Names are made out of dots, to avoid that formik creates a nested structure we have added this funky fieldname:
-					// https://github.com/italodeandra/formik/blob/patch-1/docs/guides/arrays.md
-					name={`['${securityRight.id}']`}
-					render={arrayHelpers =>
-						roles?.map((role: RoleResponse) => (
-							<td
-								className="a-table-checkbox"
-								key={`${securityRight.id}_${role.role.id}`}
-							>
-								<Field
-									as={Checkbox}
-									checked={
-										values[securityRight.id] &&
-										values[securityRight.id].includes(role.role.id)
-									}
-									id={`${securityRight.id}_${role.role.id}`}
-									name={`${securityRight.id}_${role.role.id}`}
-									onChange={(e: ChangeEvent<HTMLInputElement>) => {
-										if (e.target.checked) {
-											arrayHelpers.push(role.role.id);
-										} else {
-											const idx = values[securityRight.id].indexOf(
-												role.role.id
-											);
-											arrayHelpers.remove(idx);
-										}
-										submitForm();
-									}}
-								/>
-							</td>
-						))
-					}
-				/>
-				<td></td>
-			</tr>
-		));
+		console.log('£@)£$£$');
+		console.log(securityRights);
+		return securityRights.map((securityRight: SecurityRightResponse) => {
+			if (securityRight.id === 'int-district01.cms.v1-wcm-create-site-dev-cfcc847') {
+				console.log(values['int-district01.cms.v1-wcm-create-site-dev-cfcc847']);
+			}
+			return (
+				<tr key={securityRight.id}>
+					<td className="a-table-header--side">{securityRight.name}</td>
+					<FieldArray
+						// Names are made out of dots, to avoid that formik creates a nested structure we have added this funky fieldname:
+						// https://github.com/italodeandra/formik/blob/patch-1/docs/guides/arrays.md
+						name={`['${securityRight.id}']`}
+						render={arrayHelpers =>
+							roles?.map((role: RoleResponse) => {
+								return (
+									<td
+										className="a-table-checkbox"
+										key={`${securityRight.id}_${role.role.id}`}
+									>
+										<Field
+											as={Checkbox}
+											checked={
+												values[securityRight.id] &&
+												values[securityRight.id].includes(role.role.id)
+											}
+											id={`${securityRight.id}_${role.role.id}`}
+											name={`${securityRight.id}_${role.role.id}`}
+											onChange={(e: ChangeEvent<HTMLInputElement>) => {
+												if (e.target.checked) {
+													arrayHelpers.push(role.role.id);
+												} else {
+													const idx = values[securityRight.id].indexOf(
+														role.role.id
+													);
+													arrayHelpers.remove(idx);
+												}
+												submitForm();
+											}}
+										/>
+									</td>
+								);
+							})
+						}
+					/>
+					<td></td>
+				</tr>
+			);
+		});
 	};
 
 	const renderModuleSecurityRights = (
@@ -77,7 +87,7 @@ const RolesPermissionsList: FC<RolesPermissionsProps> = ({ roles, permissions, f
 	};
 
 	return (
-		<Formik initialValues={formState} onSubmit={handleFormSubmit}>
+		<Formik initialValues={formState} onSubmit={onChange}>
 			{({ values, submitForm }) => (
 				<Card>
 					<CardBody>
