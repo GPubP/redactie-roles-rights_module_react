@@ -1,6 +1,6 @@
 import { SearchParams } from '../api';
 
-export interface SecurityRightsResponse {
+export interface SecurityRightMatrixResponse {
 	modules: ModuleResponse[];
 	securityRights: SecurityRightResponse[];
 	roles: RoleResponse[];

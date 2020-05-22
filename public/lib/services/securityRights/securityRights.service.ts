@@ -1,18 +1,21 @@
 import api, { parseSearchParams } from '../api/api.service';
 
 import { DEFAULT_SECURITYRIGHTS_SEARCH_PARAMS } from './roles.service.const';
-import { GetSecurityRightsPayload, SecurityRightsResponse } from './securityRights.service.types';
+import {
+	GetSecurityRightsPayload,
+	SecurityRightMatrixResponse,
+} from './securityRights.service.types';
 
 export class SecurityRightsApiService {
 	public async getRolesBySite(
 		searchParams: GetSecurityRightsPayload = DEFAULT_SECURITYRIGHTS_SEARCH_PARAMS,
 		siteId: string
-	): Promise<SecurityRightsResponse> {
+	): Promise<SecurityRightMatrixResponse> {
 		return await api
 			.get(`sites/${siteId}/roles-security-rights-matrix`, {
 				searchParams: parseSearchParams(searchParams),
 			})
-			.json<SecurityRightsResponse>();
+			.json<SecurityRightMatrixResponse>();
 	}
 }
 

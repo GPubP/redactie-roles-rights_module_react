@@ -56,7 +56,7 @@ export const fakeApi = {
 				validFrom: null,
 				validTo: null,
 			},
-			securityRights: [],
+			securityRights: ['int-district01.cms.v1-wcm-create-site-dev-cfcc847'],
 		},
 		{
 			role: {
@@ -104,7 +104,10 @@ export const fakeApi = {
 				validFrom: null,
 				validTo: null,
 			},
-			securityRights: ['int-district01.cms.v1-wcm-create-site-dev-cfcc847'],
+			securityRights: [
+				'int-district01.cms.v1-wcm-create-site-dev-cfcc847',
+				'int-district01.cms.v1-wcm-create-site-test-8d67ffb',
+			],
 		},
 	],
 };

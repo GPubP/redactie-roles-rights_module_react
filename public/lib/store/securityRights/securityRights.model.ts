@@ -1,18 +1,13 @@
-import { EntityState } from '@datorama/akita';
+import { SecurityRightMatrixResponse } from '../../services/securityRights';
 
-import { ModuleResponse, RoleResponse, SecurityRightResponse } from '../../services/securityRights';
+export type SecurityRightMatrixModel = SecurityRightMatrixResponse;
 
-export type RoleModel = RoleResponse;
-export type SecurityRightModel = SecurityRightResponse;
-export type ModuleModel = ModuleResponse;
-
-export interface SecurityRightsState extends EntityState<RoleResponse, string> {
-	securityRight?: SecurityRightModel;
-	role?: RoleModel;
-	module?: ModuleModel;
+export interface SecurityRightsState {
+	data: SecurityRightMatrixModel | null;
 	isFetching: boolean;
 }
 
 export const createInitialSecurityRightsState = (): SecurityRightsState => ({
+	data: null,
 	isFetching: false,
 });

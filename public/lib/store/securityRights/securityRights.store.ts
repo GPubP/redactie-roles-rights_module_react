@@ -1,13 +1,9 @@
-import { EntityStore, StoreConfig } from '@datorama/akita';
+import { Store, StoreConfig } from '@datorama/akita';
 
-import {
-	createInitialSecurityRightsState,
-	RoleModel,
-	SecurityRightsState,
-} from './securityRights.model';
+import { createInitialSecurityRightsState, SecurityRightsState } from './securityRights.model';
 
-@StoreConfig({ name: 'securityRights', idKey: 'id' })
-export class SecurityRightsStore extends EntityStore<SecurityRightsState, RoleModel> {
+@StoreConfig({ name: 'securityRights' })
+export class SecurityRightsStore extends Store<SecurityRightsState> {
 	constructor() {
 		super(createInitialSecurityRightsState());
 	}
