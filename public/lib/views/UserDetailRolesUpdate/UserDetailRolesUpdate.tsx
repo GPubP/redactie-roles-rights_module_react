@@ -58,7 +58,7 @@ const UserDetailRolesUpdate: FC<RolesRouteProps<{ userUuid?: string; siteUuid?: 
 	const [rolesLoadingState, roles] = useSiteRoles();
 	const [siteLoadingState, site] = useSite();
 	const [userRolesLoadingState, userRoles] = useUserRolesForSite();
-	const [selectedRoles, updateSelectedRoles] = useState<string[]>([]);
+	const [selectedRoles, updateSelectedRoles] = useState<string[] | null>(null);
 
 	useEffect(() => {
 		if (userUuid && siteUuid) {
@@ -95,7 +95,7 @@ const UserDetailRolesUpdate: FC<RolesRouteProps<{ userUuid?: string; siteUuid?: 
 	 * Methods
 	 */
 	const handleSubmit = (): void => {
-		if (mapUserRoles(userRoles) !== selectedRoles) {
+		if (selectedRoles && userRoles && mapUserRoles(userRoles) !== selectedRoles) {
 			usersFacade
 				.updateUserRolesForSite({
 					userId: userUuid,
@@ -120,15 +120,14 @@ const UserDetailRolesUpdate: FC<RolesRouteProps<{ userUuid?: string; siteUuid?: 
 		});
 	};
 
-	console.log(selectedRoles);
-
 	/**
 	 * Render
 	 */
 	const renderSiteRolesForm = (): ReactElement | null => {
-		if (!roles) {
+		if (!roles || !selectedRoles) {
 			return null;
 		}
+
 		return (
 			<>
 				<h3>Rollen</h3>

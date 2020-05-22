@@ -2,30 +2,9 @@ import { Button } from '@acpaas-ui/react-components';
 import { CORE_TRANSLATIONS } from '@redactie/translations-module/public/lib/i18next/translations.const';
 import { TranslateFunc } from '@redactie/translations-module/public/lib/i18next/useTranslation';
 import React from 'react';
-import { Link } from 'react-router-dom';
-import { array, object, string } from 'yup';
 
 import { LoadingState } from '../../roles.types';
 import { RoleModel } from '../../store/roles';
-
-export const DUMMY_SITES = [
-	{
-		name: 'Antwerpen.be',
-		roles: ['Sitebeheerder', 'Hoofdredacteur', 'Eindredacteur', 'Redacteur'],
-	},
-	{
-		name: 'Nogeensite.be',
-		roles: ['Eindredacteur', 'Redacteur'],
-	},
-	{
-		name: 'Nogeensite.be',
-		roles: ['Redacteur'],
-	},
-	{
-		name: 'Nogeensite.be',
-		roles: [],
-	},
-];
 
 export const SITE_COLUMNS = (
 	t: TranslateFunc,
@@ -34,16 +13,10 @@ export const SITE_COLUMNS = (
 ): any[] => [
 	{
 		label: t(CORE_TRANSLATIONS.TABLE_NAME),
+		disableSorting: true,
 		value: 'name',
-		component(value: string, rowData: any) {
-			const { path, setActiveField } = rowData;
-			return (
-				<>
-					<Link to={path} onClick={() => setActiveField()}>
-						{value}
-					</Link>
-				</>
-			);
+		component(value: string) {
+			return <>{value}</>;
 		},
 	},
 	{
@@ -51,12 +24,13 @@ export const SITE_COLUMNS = (
 		value: 'roles',
 		disableSorting: true,
 		component(value: any, rowData: any) {
-			if (rowData.roles.length === 0) {
+			const { hasAccess, roles = [] } = rowData;
+			if (!hasAccess) {
 				return <span className="u-text-light">Geen toegang</span>;
 			}
 			return (
 				<span>
-					{rowData.roles.map((role: RoleModel) => role.attributes.displayName).join(',')}
+					{roles.map((role: RoleModel) => role.attributes.displayName).join(',') || '/'}
 				</span>
 			);
 		},
@@ -65,12 +39,12 @@ export const SITE_COLUMNS = (
 		label: '',
 		disableSorting: true,
 		component(value: string, rowData: any) {
-			const { editAccess, giveAccess } = rowData;
+			const { editAccess, giveAccess, hasAccess } = rowData;
 			const isGivingAccess =
 				giveAccessSiteId === rowData.siteUuid &&
 				isAddingUserToSite === LoadingState.Loading;
 
-			if (rowData.hasAccess) {
+			if (hasAccess) {
 				return (
 					<Button
 						ariaLabel="Edit"
@@ -86,6 +60,7 @@ export const SITE_COLUMNS = (
 				<Button
 					iconLeft={isGivingAccess ? 'circle-o-notch fa-spin' : null}
 					disabled={isGivingAccess}
+					size="small"
 					onClick={() => giveAccess()}
 					type="primary"
 					outline
@@ -96,12 +71,3 @@ export const SITE_COLUMNS = (
 		},
 	},
 ];
-
-export const SITE_VALIDATION_SCHEMA = object().shape({
-	fields: array(
-		object().shape({
-			name: string(),
-			roles: array(string()),
-		})
-	),
-});

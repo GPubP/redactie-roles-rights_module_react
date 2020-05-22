@@ -1,7 +1,6 @@
 import { Button, Card } from '@acpaas-ui/react-components';
 import { ActionBar, ActionBarContentSection, Table } from '@acpaas-ui/react-editorial-components';
 import { CORE_TRANSLATIONS } from '@redactie/translations-module/public/lib/i18next/translations.const';
-import { Field, Formik } from 'formik';
 import React, { FC, ReactElement, useState } from 'react';
 
 import { FormViewUserRoles } from '../../components';
@@ -12,7 +11,7 @@ import { MODULE_PATHS } from '../../roles.const';
 import { ContentType, LoadingState } from '../../roles.types';
 import { usersFacade } from '../../store/users';
 
-import { SITE_COLUMNS, SITE_VALIDATION_SCHEMA } from './UserDetailRoles.const';
+import { SITE_COLUMNS } from './UserDetailRoles.const';
 import { SiteRow, UserDetailRolesProps } from './UserDetailRoles.types';
 
 const UserDetailRoles: FC<UserDetailRolesProps> = ({
@@ -34,7 +33,7 @@ const UserDetailRoles: FC<UserDetailRolesProps> = ({
 	 */
 	const onConfigSave = (): void => {
 		if (mapUserRoles(userRoles) !== selectedRoles) {
-			onSubmit(user, selectedRoles, userRoles, ContentType.UserRoles);
+			onSubmit(user, selectedRoles, ContentType.UserRoles);
 		}
 	};
 
@@ -51,22 +50,20 @@ const UserDetailRoles: FC<UserDetailRolesProps> = ({
 	/**
 	 * Render
 	 */
-	const renderTableField = ({ value: fields }: { value: SiteRow[] }): ReactElement => {
-		const siteRows: any[] = (fields || []).map(site => ({
-			name: site.name,
+	const renderTable = (): ReactElement => {
+		const siteRows: SiteRow[] = sites.map(site => ({
+			name: site.data.name,
 			roles: site.roles,
-			siteUuid: site.id,
-			path: '#',
-			setActiveField: () => console.log(site),
-			editAccess: () => redirectToSitesRolesDetail(user.id, site.id),
+			siteUuid: site.uuid,
+			editAccess: () => redirectToSitesRolesDetail(user.id, site.uuid),
 			giveAccess: () => {
-				setGiveAccessSiteId(site.id);
+				setGiveAccessSiteId(site.uuid);
 				usersFacade.addUserToSite(
 					{
-						siteUuid: site.id,
+						siteUuid: site.uuid,
 						userId: user.id,
 					},
-					() => redirectToSitesRolesDetail(user.id, site.id)
+					() => redirectToSitesRolesDetail(user.id, site.uuid)
 				);
 			},
 			hasAccess: site?.hasAccess,
@@ -82,25 +79,6 @@ const UserDetailRoles: FC<UserDetailRolesProps> = ({
 		);
 	};
 
-	const renderTableForm = (): ReactElement => {
-		const sitesRows: SiteRow[] = sites.map(site => ({
-			id: site.uuid,
-			name: site.data.name,
-			roles: site.roles,
-			hasAccess: site.hasAccess,
-		}));
-
-		return (
-			<Formik
-				initialValues={{ fields: sitesRows }}
-				onSubmit={onConfigChange}
-				validationSchema={SITE_VALIDATION_SCHEMA}
-			>
-				{() => <Field name="fields" placeholder="No fields" as={renderTableField} />}
-			</Formik>
-		);
-	};
-
 	return (
 		<Card>
 			<div className="u-margin">
@@ -110,7 +88,8 @@ const UserDetailRoles: FC<UserDetailRolesProps> = ({
 					availableRoles={roles}
 					onSubmit={onConfigChange}
 				/>
-				{renderTableForm()}
+				<h5 className="u-margin-bottom u-margin-top">Rol(len) per site</h5>
+				{renderTable()}
 				<ActionBar className="o-action-bar--fixed" isOpen>
 					<ActionBarContentSection>
 						<div className="u-wrapper row end-xs">

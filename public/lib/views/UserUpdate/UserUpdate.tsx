@@ -10,14 +10,16 @@ import { generatePath, Redirect, useParams } from 'react-router-dom';
 
 import { DataLoader, NavList } from '../../components';
 import {
+	useNavigate,
 	useRoutesBreadcrumbs,
 	useSites,
 	useTenantRoles,
 	useUser,
 	useUserRolesForTenant,
 } from '../../hooks';
+import { MODULE_PATHS } from '../../roles.const';
 import { ContentType, LoadingState, RolesRouteProps } from '../../roles.types';
-import { rolesFacade, RoleModel } from '../../store/roles';
+import { rolesFacade } from '../../store/roles';
 import { sitesFacade } from '../../store/sites';
 import { UserModel, usersFacade } from '../../store/users';
 
@@ -34,6 +36,7 @@ const UserUpdate: FC<RolesRouteProps<{ userUuid?: string }>> = ({ route, match }
 	const [userRolesLoadingState, userRoles] = useUserRolesForTenant(userUuid);
 	const [rolesLoadingState, roles] = useTenantRoles();
 	const [sitesLoadingState, sites] = useSites();
+	const { navigate } = useNavigate();
 
 	useEffect(() => {
 		if (userUuid) {
@@ -61,23 +64,21 @@ const UserUpdate: FC<RolesRouteProps<{ userUuid?: string }>> = ({ route, match }
 	/**
 	 * Functions
 	 */
-	const handleSubmit = (
-		user: UserModel,
-		content: any,
-		userRoles: RoleModel[],
-		contentType: ContentType
-	): void => {
+	const handleSubmit = (user: UserModel, content: any, contentType: ContentType): void => {
 		switch (contentType) {
 			case ContentType.UserRoles:
 				usersFacade.updateUserRolesForTenant({
 					id: user.id,
 					roles: content,
-					roleDetails: userRoles,
 				});
 				break;
 			default:
 				break;
 		}
+	};
+
+	const handleCancel = (): void => {
+		navigate(MODULE_PATHS.tenantUsersOverview);
 	};
 
 	/**
@@ -102,7 +103,7 @@ const UserUpdate: FC<RolesRouteProps<{ userUuid?: string }>> = ({ route, match }
 			userRoles,
 			roles,
 			sites,
-			onCancel: () => console.log('cancel'),
+			onCancel: handleCancel,
 			onSubmit: handleSubmit,
 		});
 	};

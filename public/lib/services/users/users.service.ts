@@ -49,7 +49,7 @@ export class UsersApiService {
 	public async updateUserRolesForTenant({
 		id,
 		roles,
-	}: UpdateUserRolesForTenantPayload): Promise<any> {
+	}: UpdateUserRolesForTenantPayload): Promise<RolesResponse> {
 		return await api
 			.put(`users/${id}/roles`, {
 				json: {
