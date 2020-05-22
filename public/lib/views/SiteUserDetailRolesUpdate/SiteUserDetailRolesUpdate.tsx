@@ -7,7 +7,7 @@ import {
 	ContextHeaderTopSection,
 } from '@acpaas-ui/react-editorial-components';
 import { CORE_TRANSLATIONS } from '@redactie/translations-module/public/lib/i18next/translations.const';
-import React, { FC, ReactElement, useEffect, useState } from 'react';
+import React, { FC, ReactElement, useEffect, useMemo, useState } from 'react';
 import { useParams } from 'react-router-dom';
 
 import { DataLoader, FormViewUserRoles } from '../../components';
@@ -18,6 +18,7 @@ import {
 	useRoutesBreadcrumbs,
 	useSite,
 	useSiteRoles,
+	useUser,
 	useUserRolesForSite,
 	useUsersLoadingStates,
 } from '../../hooks';
@@ -35,10 +36,19 @@ const SiteUserDetailRolesUpdate: FC<RolesRouteProps> = () => {
 	const [initialLoading, setInitialLoading] = useState(LoadingState.Loading);
 	const [t] = useCoreTranslation();
 	const { navigate } = useNavigate();
-	const breadcrumbs = useRoutesBreadcrumbs();
 	const { isUpdating } = useUsersLoadingStates();
+	const [userLoadingState, user] = useUser(userUuid);
 	const [rolesLoadingState, roles] = useSiteRoles();
 	const [siteLoadingState, site] = useSite();
+	const extraBreadcrumbs = useMemo(() => {
+		return [
+			{
+				name: site ? site.data.name : '...',
+				target: '',
+			},
+		];
+	}, [site]);
+	const breadcrumbs = useRoutesBreadcrumbs(extraBreadcrumbs);
 	const [userRolesLoadingState, userRoles] = useUserRolesForSite();
 	const [selectedRoles, updateSelectedRoles] = useState<string[]>([]);
 
@@ -56,6 +66,7 @@ const SiteUserDetailRolesUpdate: FC<RolesRouteProps> = () => {
 
 	useEffect(() => {
 		if (
+			userLoadingState !== LoadingState.Loading &&
 			userRolesLoadingState !== LoadingState.Loading &&
 			rolesLoadingState !== LoadingState.Loading &&
 			siteLoadingState !== LoadingState.Loading
@@ -64,7 +75,7 @@ const SiteUserDetailRolesUpdate: FC<RolesRouteProps> = () => {
 		}
 
 		setInitialLoading(LoadingState.Loading);
-	}, [rolesLoadingState, siteLoadingState, userRolesLoadingState]);
+	}, [rolesLoadingState, siteLoadingState, userLoadingState, userRolesLoadingState]);
 
 	useEffect(() => {
 		if (userRoles) {
@@ -140,7 +151,7 @@ const SiteUserDetailRolesUpdate: FC<RolesRouteProps> = () => {
 
 	return (
 		<>
-			<ContextHeader title={site ? site.data.name : ''}>
+			<ContextHeader title={user ? `${user?.firstname} ${user?.lastname}` : ''}>
 				<ContextHeaderTopSection>{breadcrumbs}</ContextHeaderTopSection>
 			</ContextHeader>
 			<Container>

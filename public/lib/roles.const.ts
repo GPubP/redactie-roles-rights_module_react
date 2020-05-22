@@ -8,6 +8,9 @@ export const BREADCRUMB_OPTIONS = {
 		'/:tenantId/users/:userId/sites',
 		'/:tenantId/users/:userId/sites/:siteUuid',
 		'/:tenantId/users/:userId/sites/:siteUuid/rollen',
+		'/:tenantId/sites',
+		'/:tenantId/sites/:siteUuid/users',
+		'/:tenantId/sites/:siteUuid/users/:userId',
 	],
 };
 
