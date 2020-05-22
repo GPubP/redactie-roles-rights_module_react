@@ -101,8 +101,8 @@ const SiteUserDetailRolesUpdate: FC<RolesRouteProps> = () => {
 	};
 
 	const onCancel = (): void => {
-		navigate(MODULE_PATHS.tenantUserDetailRoles, {
-			userUuid,
+		navigate(`/sites${MODULE_PATHS.siteRoot}`, {
+			siteId,
 		});
 	};
 
