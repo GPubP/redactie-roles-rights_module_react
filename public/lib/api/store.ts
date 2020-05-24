@@ -1,13 +1,13 @@
 import { rolesQuery, rolesService } from '../store/roles';
 import { securityRightsFacade, securityRightsQuery } from '../store/securityRights';
-import { usersQuery, usersService } from '../store/users';
+import { usersQuery, usersFacade } from '../store/users';
 
 export const store = {
 	users: {
 		service: {
-			getUsersBySite: usersService.getUsersBySite,
-			getUser: usersService.getUser,
-			getUsers: usersService.getUsers,
+			getUsersBySite: usersFacade.getUsersBySite,
+			getUser: usersFacade.getUser,
+			getUsers: usersFacade.getUsers,
 		},
 		query: usersQuery,
 	},

@@ -1,3 +1,4 @@
+import { akitaDevtools } from '@datorama/akita';
 import Core, { ModuleRouteConfig } from '@redactie/redactie-core';
 import React, { FC } from 'react';
 import { Redirect } from 'react-router-dom';
@@ -9,6 +10,7 @@ import { MODULE_PATHS } from './lib/roles.const';
 import { RolesModuleProps } from './lib/roles.types';
 import {
 	RolesOverview,
+	SiteUserDetailRolesUpdate,
 	SiteUsersOverview,
 	UserDetailGeneral,
 	UserDetailRoles,
@@ -16,6 +18,8 @@ import {
 	UsersOverview,
 	UserUpdate,
 } from './lib/views';
+
+akitaDevtools();
 
 const SiteRolesComponent: FC<RolesModuleProps> = ({ route, location, tenantId }) => {
 	// if path is /users, redirect to /users/overzicht
@@ -60,6 +64,10 @@ registerRoutes({
 		label: 'Gebruikers',
 	},
 	routes: [
+		{
+			path: MODULE_PATHS.siteUserDetailRolesUpdate,
+			component: SiteUserDetailRolesUpdate,
+		},
 		{
 			path: MODULE_PATHS.users.root,
 			component: SiteUsersOverview,

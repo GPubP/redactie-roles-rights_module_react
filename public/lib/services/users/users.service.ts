@@ -1,11 +1,15 @@
-import { RolesModel } from '../../store/roles';
 import api, { parseSearchParams } from '../api/api.service';
+import { RolesResponse } from '../roles';
 
 import { DEFAULT_USERS_SEARCH_PARAMS } from './users.service.const';
 import {
+	AddUserToSitePayload,
 	GetUserPayload,
+	GetUserRolesForSitePayload,
+	GetUserRolesForTenantPayload,
 	GetUsersPayload,
-	UpdateUserRolesPayload,
+	UpdateUserRolesForSitePayload,
+	UpdateUserRolesForTenantPayload,
 	UserResponse,
 	UsersResponse,
 } from './users.service.types';
@@ -33,21 +37,57 @@ export class UsersApiService {
 	}
 
 	public async getUser({ id }: GetUserPayload): Promise<UserResponse> {
-		return await api.get(`users/${id}`).json<UserResponse>();
+		return await api.get(`users/${id}`).json();
 	}
 
-	public async getUserRoles({ id }: GetUserPayload): Promise<RolesModel> {
-		return await api.get(`users/${id}/roles`).json<RolesModel>();
+	public async getUserRolesForTenant({
+		id,
+	}: GetUserRolesForTenantPayload): Promise<RolesResponse> {
+		return await api.get(`users/${id}/roles`).json();
 	}
 
-	public async updateUserRoles({ id, roles }: UpdateUserRolesPayload): Promise<any> {
+	public async updateUserRolesForTenant({
+		id,
+		roles,
+	}: UpdateUserRolesForTenantPayload): Promise<RolesResponse> {
 		return await api
-			.post(`users/${id}/roles`, {
+			.put(`users/${id}/roles`, {
 				json: {
 					roles: roles,
 				},
 			})
-			.json<any>();
+			.json();
+	}
+
+	public async getUserRolesForSite({
+		id,
+		siteUuid,
+	}: GetUserRolesForSitePayload): Promise<RolesResponse> {
+		return await api.get(`sites/${siteUuid}/users/${id}/roles`).json();
+	}
+
+	public async updateUserRolesForSite({
+		userId,
+		siteUuid,
+		roles,
+	}: UpdateUserRolesForSitePayload): Promise<RolesResponse> {
+		return await api
+			.put(`sites/${siteUuid}/users/${userId}/roles`, {
+				json: {
+					roles,
+				},
+			})
+			.json();
+	}
+
+	public async addUserToSite({ siteUuid, userId }: AddUserToSitePayload): Promise<any> {
+		return await api
+			.post(`sites/${siteUuid}/users`, {
+				json: {
+					userId,
+				},
+			})
+			.json();
 	}
 }
 

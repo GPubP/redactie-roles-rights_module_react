@@ -28,49 +28,41 @@ import { rolesFacade } from '../../store/roles';
 import { sitesFacade } from '../../store/sites';
 import { usersFacade } from '../../store/users';
 
-const UserDetailRolesUpdate: FC<RolesRouteProps<{ userUuid?: string; siteUuid?: string }>> = () => {
+const SiteUserDetailRolesUpdate: FC<RolesRouteProps> = () => {
 	/**
 	 * Hooks
 	 */
-	const { userUuid, siteUuid } = useParams();
+	const { userUuid, siteId } = useParams();
 	const [initialLoading, setInitialLoading] = useState(LoadingState.Loading);
 	const [t] = useCoreTranslation();
+	const { navigate } = useNavigate();
+	const { isUpdating } = useUsersLoadingStates();
 	const [userLoadingState, user] = useUser(userUuid);
-	const { navigate, generatePath } = useNavigate();
+	const [rolesLoadingState, roles] = useSiteRoles();
+	const [siteLoadingState, site] = useSite();
 	const extraBreadcrumbs = useMemo(() => {
 		return [
 			{
-				name: user ? `${user.firstname} ${user.lastname}` : '...',
-				target: generatePath(MODULE_PATHS.tenantUserDetail, {
-					userUuid,
-				}),
-			},
-			// The last breadcrumb will be removed so we need to set a dummy
-			// breadcrumb to make sure that the user breadcrumb is visible
-			{
-				name: 'last',
+				name: site ? site.data.name : '...',
 				target: '',
 			},
 		];
-	}, [user, generatePath, userUuid]);
+	}, [site]);
 	const breadcrumbs = useRoutesBreadcrumbs(extraBreadcrumbs);
-	const { isUpdating } = useUsersLoadingStates();
-	const [rolesLoadingState, roles] = useSiteRoles();
-	const [siteLoadingState, site] = useSite();
 	const [userRolesLoadingState, userRoles] = useUserRolesForSite();
-	const [selectedRoles, updateSelectedRoles] = useState<string[] | null>(null);
+	const [selectedRoles, updateSelectedRoles] = useState<string[]>([]);
 
 	useEffect(() => {
-		if (userUuid && siteUuid) {
+		if (userUuid && siteId) {
 			usersFacade.getUserRolesForSite({
 				id: userUuid,
-				siteUuid,
+				siteUuid: siteId,
 			});
 			usersFacade.getUser({ id: userUuid });
-			rolesFacade.getSiteRoles(siteUuid);
-			sitesFacade.getSite({ id: siteUuid });
+			rolesFacade.getSiteRoles(siteId);
+			sitesFacade.getSite({ id: siteId });
 		}
-	}, [userUuid, siteUuid]);
+	}, [siteId, userUuid]);
 
 	useEffect(() => {
 		if (
@@ -83,7 +75,7 @@ const UserDetailRolesUpdate: FC<RolesRouteProps<{ userUuid?: string; siteUuid?: 
 		}
 
 		setInitialLoading(LoadingState.Loading);
-	}, [rolesLoadingState, userLoadingState, siteLoadingState, userRolesLoadingState]);
+	}, [rolesLoadingState, siteLoadingState, userLoadingState, userRolesLoadingState]);
 
 	useEffect(() => {
 		if (userRoles) {
@@ -95,18 +87,12 @@ const UserDetailRolesUpdate: FC<RolesRouteProps<{ userUuid?: string; siteUuid?: 
 	 * Methods
 	 */
 	const handleSubmit = (): void => {
-		if (selectedRoles && userRoles && mapUserRoles(userRoles) !== selectedRoles) {
-			usersFacade
-				.updateUserRolesForSite({
-					userId: userUuid,
-					siteUuid,
-					roles: selectedRoles,
-				})
-				.then(() =>
-					navigate(MODULE_PATHS.tenantUserDetailRoles, {
-						userUuid,
-					})
-				);
+		if (userRoles && mapUserRoles(userRoles) !== selectedRoles) {
+			usersFacade.updateUserRolesForSite({
+				userId: userUuid,
+				siteUuid: siteId,
+				roles: selectedRoles,
+			});
 		}
 	};
 
@@ -115,8 +101,8 @@ const UserDetailRolesUpdate: FC<RolesRouteProps<{ userUuid?: string; siteUuid?: 
 	};
 
 	const onCancel = (): void => {
-		navigate(MODULE_PATHS.tenantUserDetailRoles, {
-			userUuid,
+		navigate(`/sites${MODULE_PATHS.siteRoot}`, {
+			siteId,
 		});
 	};
 
@@ -124,10 +110,9 @@ const UserDetailRolesUpdate: FC<RolesRouteProps<{ userUuid?: string; siteUuid?: 
 	 * Render
 	 */
 	const renderSiteRolesForm = (): ReactElement | null => {
-		if (!roles || !selectedRoles) {
+		if (!roles) {
 			return null;
 		}
-
 		return (
 			<>
 				<h3>Rollen</h3>
@@ -166,7 +151,7 @@ const UserDetailRolesUpdate: FC<RolesRouteProps<{ userUuid?: string; siteUuid?: 
 
 	return (
 		<>
-			<ContextHeader title={site ? site.data.name : ''}>
+			<ContextHeader title={user ? `${user?.firstname} ${user?.lastname}` : ''}>
 				<ContextHeaderTopSection>{breadcrumbs}</ContextHeaderTopSection>
 			</ContextHeader>
 			<Container>
@@ -176,4 +161,4 @@ const UserDetailRolesUpdate: FC<RolesRouteProps<{ userUuid?: string; siteUuid?: 
 	);
 };
 
-export default UserDetailRolesUpdate;
+export default SiteUserDetailRolesUpdate;

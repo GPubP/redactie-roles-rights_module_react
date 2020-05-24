@@ -1,6 +1,6 @@
 import { Checkbox } from '@acpaas-ui/react-components';
 import { Field, FieldArray, Formik } from 'formik';
-import React, { ChangeEvent, FC } from 'react';
+import React, { ChangeEvent, FC, useMemo } from 'react';
 
 import { RoleModel } from '../../../store/roles';
 
@@ -10,8 +10,14 @@ const FormViewUserRoles: FC<FormViewUserRolesProps> = ({ formState, availableRol
 	const handleFormSubmit = (object: RoleIds): void => {
 		onSubmit(object.roleIds);
 	};
+
+	const initialValues = useMemo(() => {
+		return {
+			roleIds: formState,
+		};
+	}, [formState]);
 	return (
-		<Formik initialValues={{ roleIds: formState }} onSubmit={handleFormSubmit}>
+		<Formik initialValues={initialValues} onSubmit={handleFormSubmit}>
 			{({ values, submitForm }) => (
 				<FieldArray
 					name="roleIds"
