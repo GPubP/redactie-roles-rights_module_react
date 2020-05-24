@@ -1,16 +1,16 @@
 import { useObservable } from '@mindspace-io/react';
 
 import { LoadingState } from '../../roles.types';
-import { SiteModel, sitesFacade } from '../../store/sites';
+import { SiteDetail, sitesFacade } from '../../store/sites';
 
-const useSites = (): [LoadingState | null, SiteModel[] | null | undefined] => {
+const useSite = (): [LoadingState | null, SiteDetail | null | undefined] => {
 	const [loading] = useObservable(sitesFacade.isFetching$, null);
-	const [sites] = useObservable(sitesFacade.sites$, null);
+	const [site] = useObservable(sitesFacade.site$, null);
 	const [error] = useObservable(sitesFacade.error$, null);
 
 	const loadingState = error ? LoadingState.Error : loading;
 
-	return [loadingState, sites];
+	return [loadingState, site];
 };
 
-export default useSites;
+export default useSite;

@@ -28,11 +28,10 @@ export interface SitesMetaResponse {
 	number: string;
 }
 
-export interface GetSitesPayload {
+export interface GetSitePayload {
 	id: string;
 }
 
-export interface GetUserRolesForSitePayload {
+export interface GetSitesPayload {
 	id: string;
-	siteUuid: string;
 }

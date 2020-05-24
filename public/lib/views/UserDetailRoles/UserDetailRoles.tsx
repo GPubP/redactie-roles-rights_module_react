@@ -1,16 +1,18 @@
 import { Button, Card } from '@acpaas-ui/react-components';
 import { ActionBar, ActionBarContentSection, Table } from '@acpaas-ui/react-editorial-components';
 import { CORE_TRANSLATIONS } from '@redactie/translations-module/public/lib/i18next/translations.const';
-import { Field, Formik } from 'formik';
 import React, { FC, ReactElement, useState } from 'react';
 
 import { FormViewUserRoles } from '../../components';
 import { useCoreTranslation } from '../../connectors/translations';
 import { mapUserRoles } from '../../helpers';
-import { ContentType } from '../../roles.types';
+import { useNavigate, useUsersLoadingStates } from '../../hooks';
+import { MODULE_PATHS } from '../../roles.const';
+import { ContentType, LoadingState } from '../../roles.types';
+import { usersFacade } from '../../store/users';
 
-import { SITE_COLUMNS, SITE_VALIDATION_SCHEMA } from './UserDetailRoles.const';
-import { UserDetailRolesProps } from './UserDetailRoles.types';
+import { SITE_COLUMNS } from './UserDetailRoles.const';
+import { SiteRow, UserDetailRolesProps } from './UserDetailRoles.types';
 
 const UserDetailRoles: FC<UserDetailRolesProps> = ({
 	user,
@@ -22,6 +24,9 @@ const UserDetailRoles: FC<UserDetailRolesProps> = ({
 }) => {
 	const [t] = useCoreTranslation();
 	const [selectedRoles, updateSelectedRoles] = useState(mapUserRoles(userRoles));
+	const { isAddingUserToSite, isUpdating } = useUsersLoadingStates();
+	const [giveAccesSiteId, setGiveAccessSiteId] = useState<string | null>(null);
+	const { navigate } = useNavigate();
 
 	/**
 	 * Functions
@@ -35,45 +40,42 @@ const UserDetailRoles: FC<UserDetailRolesProps> = ({
 	const onConfigChange = (updatedRoles: any): void => {
 		updateSelectedRoles(updatedRoles);
 	};
+
+	const redirectToSitesRolesDetail = (userId: string, siteId: string): void => {
+		navigate(MODULE_PATHS.tenantUserDetailRolesUpdate, {
+			siteUuid: siteId,
+			userUuid: userId,
+		});
+	};
 	/**
 	 * Render
 	 */
-	const renderTableField = ({ value: fields }: { value: any[] }): ReactElement => {
-		const siteRows: any[] = (fields || []).map(site => ({
-			name: site.name,
+	const renderTable = (): ReactElement => {
+		const siteRows: SiteRow[] = sites.map(site => ({
+			name: site.data.name,
 			roles: site.roles,
 			siteUuid: site.uuid,
-			path: '#',
-			setActiveField: () => console.log(site),
-			editAccess: () => console.log('edit acccess', site),
-			giveAccess: () => console.log('give acccess', site),
+			editAccess: () => redirectToSitesRolesDetail(user.id, site.uuid),
+			giveAccess: () => {
+				setGiveAccessSiteId(site.uuid);
+				usersFacade.addUserToSite(
+					{
+						siteUuid: site.uuid,
+						userId: user.id,
+					},
+					() => redirectToSitesRolesDetail(user.id, site.uuid)
+				);
+			},
+			hasAccess: site?.hasAccess,
 		}));
 
 		return (
 			<Table
 				className="u-margin-top"
-				columns={SITE_COLUMNS(t)}
+				columns={SITE_COLUMNS(t, isAddingUserToSite, giveAccesSiteId)}
 				rows={siteRows}
 				totalValues={sites.length}
 			/>
-		);
-	};
-
-	const renderTableForm = (): ReactElement => {
-		const sitesRows = sites.map(site => ({
-			id: site.uuid,
-			name: site.data.name,
-			roles: site.roles,
-		}));
-
-		return (
-			<Formik
-				initialValues={{ fields: sitesRows }}
-				onSubmit={onConfigChange}
-				validationSchema={SITE_VALIDATION_SCHEMA}
-			>
-				{() => <Field name="fields" placeholder="No fields" as={renderTableField} />}
-			</Formik>
 		);
 	};
 
@@ -86,7 +88,8 @@ const UserDetailRoles: FC<UserDetailRolesProps> = ({
 					availableRoles={roles}
 					onSubmit={onConfigChange}
 				/>
-				{renderTableForm()}
+				<h5 className="u-margin-bottom u-margin-top">Rol(len) per site</h5>
+				{renderTable()}
 				<ActionBar className="o-action-bar--fixed" isOpen>
 					<ActionBarContentSection>
 						<div className="u-wrapper row end-xs">
@@ -94,6 +97,12 @@ const UserDetailRoles: FC<UserDetailRolesProps> = ({
 								{t(CORE_TRANSLATIONS.BUTTON_CANCEL)}
 							</Button>
 							<Button
+								iconLeft={
+									isUpdating === LoadingState.Loading
+										? 'circle-o-notch fa-spin'
+										: null
+								}
+								disabled={isUpdating === LoadingState.Loading}
 								className="u-margin-left-xs"
 								onClick={onConfigSave}
 								type="success"
