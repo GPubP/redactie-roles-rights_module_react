@@ -55,7 +55,7 @@ const TenantRolesComponent: FC<RolesModuleProps> = ({ route, location, tenantId 
 	);
 };
 
-registerRoutes({
+console.log({
 	path: MODULE_PATHS.siteRoot,
 	component: SiteRolesComponent,
 	navigation: {
@@ -83,6 +83,40 @@ registerRoutes({
 			navigation: {
 				context: 'site',
 				label: 'Rollen en rechten',
+				parentPath: MODULE_PATHS.siteRoot,
+			},
+		},
+	],
+});
+
+registerRoutes({
+	path: MODULE_PATHS.siteRoot,
+	component: SiteRolesComponent,
+	navigation: {
+		renderContext: 'site',
+		context: 'site',
+		label: 'Gebruikers',
+	},
+	routes: [
+		{
+			path: MODULE_PATHS.siteUserDetailRolesUpdate,
+			component: SiteUserDetailRolesUpdate,
+		},
+		{
+			path: MODULE_PATHS.roles.root,
+			component: RolesOverview,
+			navigation: {
+				context: 'site',
+				label: 'Rollen en rechten',
+				parentPath: MODULE_PATHS.siteRoot,
+			},
+		},
+		{
+			path: MODULE_PATHS.users.root,
+			component: SiteUsersOverview,
+			navigation: {
+				context: 'site',
+				label: 'Gebruikers',
 				parentPath: MODULE_PATHS.siteRoot,
 			},
 		},

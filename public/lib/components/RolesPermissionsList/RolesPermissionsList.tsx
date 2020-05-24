@@ -20,12 +20,11 @@ const RolesPermissionsList: FC<RolesPermissionsProps> = ({
 		submitForm: any,
 		values: any
 	): ReactNode => {
-		console.log('£@)£$£$');
-		console.log(securityRights);
 		return securityRights.map((securityRight: SecurityRightResponse) => {
 			if (securityRight.id === 'int-district01.cms.v1-wcm-create-site-dev-cfcc847') {
 				console.log(values['int-district01.cms.v1-wcm-create-site-dev-cfcc847']);
 			}
+
 			return (
 				<tr key={securityRight.id}>
 					<td className="a-table-header--side">{securityRight.name}</td>
@@ -98,7 +97,9 @@ const RolesPermissionsList: FC<RolesPermissionsProps> = ({
 									<th></th>
 									{roles.map((role: RoleResponse) => (
 										<th key={role.role.id} className="a-table-header--top">
-											{role.role.name}
+											<div>
+												<span>{role.role?.attributes.displayName}</span>
+											</div>
 										</th>
 									))}
 									<th></th>

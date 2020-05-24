@@ -7,7 +7,7 @@ import {
 	ContextHeaderTopSection,
 } from '@acpaas-ui/react-editorial-components';
 import { CORE_TRANSLATIONS } from '@redactie/translations-module/public/lib/i18next/translations.const';
-import React, { FC, ReactElement, useEffect, useState, useMemo } from 'react';
+import React, { FC, ReactElement, useEffect, useMemo, useState } from 'react';
 
 import { DataLoader, ModulesList, RolesPermissionsList } from '../../components';
 import { FormState } from '../../components/RolesPermissionsList/RolesPermissionsList.types';

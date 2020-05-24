@@ -13,12 +13,9 @@
 	.a-table-header {
 		&--top {
 			height: 180px;
-			max-width: 48px;
 			border-left: 1px solid #c0c0c0;
 			border-right: 1px solid #c0c0c0;
-			text-align: left;
-			transform-origin: 50% 50%;
-			transform: rotate(-90deg);
+			padding-left: 0;
 		}
 
 		&--side {
@@ -26,6 +23,19 @@
 			border-top: 1px solid #c0c0c0;
 			width: 180px;
 		}
+	}
+
+	th.a-table-header--top > div {
+		transform: translate3d(0px, 55px, 0) rotate(270deg);
+		width: 48px;
+	}
+
+	th.a-table-header--top > div > span {
+		display: inline-block;
+		white-space: nowrap;
+		overflow: hidden;
+		text-overflow: ellipsis;
+		width: 155px;
 	}
 
 	tr {
@@ -49,5 +59,9 @@
 	.a-table-checkbox {
 		width: 36px;
 		border: 1px solid #c0c0c0;
+
+		.a-input__checkbox {
+			padding-left: 2.5rem;
+		}
 	}
 }
