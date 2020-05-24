@@ -1,8 +1,8 @@
 import { ModuleRouteConfig, RouteConfigComponentProps } from '@redactie/redactie-core';
 
-import { RolesQuery, RolesService } from './store/roles';
+import { RolesFacade, RolesQuery } from './store/roles';
 import { SecurityRightsFacade, SecurityRightsQuery } from './store/securityRights';
-import { UsersQuery, UsersService, usersFacade } from './store/users';
+import { UsersFacade, UsersQuery } from './store/users';
 
 export interface RolesModuleProps extends RouteConfigComponentProps {
 	routes: ModuleRouteConfig[];
@@ -37,7 +37,7 @@ export interface UsersModuleAPI {
 			query: UsersQuery;
 		};
 		roles: {
-			service: Partial<RolesService>;
+			service: Partial<RolesFacade>;
 			query: RolesQuery;
 		};
 		securityRights: {

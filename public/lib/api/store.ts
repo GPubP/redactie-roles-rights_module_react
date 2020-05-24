@@ -1,6 +1,6 @@
-import { rolesQuery, rolesService } from '../store/roles';
+import { rolesFacade, rolesQuery } from '../store/roles';
 import { securityRightsFacade, securityRightsQuery } from '../store/securityRights';
-import { usersQuery, usersFacade } from '../store/users';
+import { usersFacade, usersQuery } from '../store/users';
 
 export const store = {
 	users: {
@@ -13,7 +13,8 @@ export const store = {
 	},
 	roles: {
 		service: {
-			getRoles: rolesService.getRoles,
+			gitSiteRoles: rolesFacade.getSiteRoles,
+			gitTenantRoles: rolesFacade.getTenantRoles,
 		},
 		query: rolesQuery,
 	},
