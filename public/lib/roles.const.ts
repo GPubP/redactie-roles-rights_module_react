@@ -37,11 +37,9 @@ export const MODULE_PATHS = {
 	tenantRoot,
 	tenantUsersOverview,
 	users: {
-		root: siteUsersRoot,
 		overview: siteUsersOverview,
 	},
 	roles: {
-		root: siteRolesRoot,
 		overview: siteRolesOverview,
 	},
 	tenantUserDetail,
