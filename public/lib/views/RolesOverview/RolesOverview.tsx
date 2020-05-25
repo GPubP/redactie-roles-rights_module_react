@@ -7,12 +7,13 @@ import {
 	ContextHeaderTopSection,
 } from '@acpaas-ui/react-editorial-components';
 import { CORE_TRANSLATIONS } from '@redactie/translations-module/public/lib/i18next/translations.const';
-import React, { FC, ReactElement, useEffect, useMemo, useState } from 'react';
+import React, { FC, ReactElement, useEffect, useState } from 'react';
 
 import { DataLoader, ModulesList, RolesPermissionsList } from '../../components';
 import { FormState } from '../../components/RolesPermissionsList/RolesPermissionsList.types';
 import { useCoreTranslation } from '../../connectors/translations';
-import { useRoutesBreadcrumbs, useSecurityRights } from '../../hooks';
+import { useRoutesBreadcrumbs, useSecurityRights, useSiteNavigate } from '../../hooks';
+import { MODULE_PATHS } from '../../roles.const';
 import { LoadingState, RolesRouteProps } from '../../roles.types';
 import { DEFAULT_ROLES_SEARCH_PARAMS } from '../../services/roles/roles.service.const';
 import { UpdateRolesMatrixPayload } from '../../services/securityRights';
@@ -36,6 +37,7 @@ const RolesOverview: FC<RolesRouteProps<{ siteId: string }>> = ({ match }) => {
 	const [loadingState, securityRightMatrix] = useSecurityRights();
 	const [initialLoading, setInitialLoading] = useState(LoadingState.Loading);
 	const [formValues, setFormValues] = useState<UpdateRolesMatrixPayload | null>(null);
+	const { navigate, generatePath } = useSiteNavigate();
 	const { modules = [], securityRights = [], roles = [] } = securityRightMatrix || {};
 
 	useEffect(() => {
@@ -53,12 +55,12 @@ const RolesOverview: FC<RolesRouteProps<{ siteId: string }>> = ({ match }) => {
 	const handleClick = (module: string): any => {
 		setRolesSearchParams({
 			...rolesSearchParams,
-			search: module,
+			module: module,
 		});
 	};
 
 	const onCancel = (): void => {
-		console.log('cancel');
+		navigate(MODULE_PATHS.roles.root, { siteId });
 	};
 
 	const securityRightsByModule = (
@@ -89,7 +91,7 @@ const RolesOverview: FC<RolesRouteProps<{ siteId: string }>> = ({ match }) => {
 			}, [] as string[]);
 
 			return acc;
-		}, {} as any);
+		}, {} as FormState);
 
 	const parseFormResult = (formState: FormState): UpdateRolesMatrixPayload =>
 		Object.keys(formState).reduce((roles, securityRightId) => {
@@ -114,10 +116,9 @@ const RolesOverview: FC<RolesRouteProps<{ siteId: string }>> = ({ match }) => {
 		}, [] as UpdateRolesMatrixPayload);
 
 	const onConfigSave = (): void => {
-		// if (formValues) {
-		// 	securityRightsFacade.updateSecurityRightsForSite(formValues, siteId);
-		// }
-		console.log(formValues);
+		if (formValues) {
+			securityRightsFacade.updateSecurityRightsForSite(formValues, siteId);
+		}
 	};
 
 	const onFormChange = (value: FormState): void => {
