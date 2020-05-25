@@ -5,8 +5,8 @@ import {
 	UpdateRolesMatrixPayload,
 } from '../../services/securityRights';
 
-import { securityRightsQuery, SecurityRightsQuery } from './securityRights.query';
-import { securityRightsStore, SecurityRightsStore } from './securityRights.store';
+import { securityRightsQuery, SecurityRightsQuery } from './securityRightsMatrix.query';
+import { securityRightsStore, SecurityRightsStore } from './securityRightsMatrix.store';
 
 export class SecurityRightsFacade {
 	constructor(

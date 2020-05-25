@@ -1,5 +1,5 @@
 import { rolesFacade, rolesQuery } from '../store/roles';
-import { securityRightsFacade, securityRightsQuery } from '../store/securityRights';
+import { securityRightsFacade, securityRightsQuery } from '../store/securityRightsMatrix';
 import { usersFacade, usersQuery } from '../store/users';
 
 export const store = {

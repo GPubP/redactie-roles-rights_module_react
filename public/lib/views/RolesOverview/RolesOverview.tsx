@@ -22,7 +22,7 @@ import {
 	RoleModel,
 	SecurityRightModel,
 	securityRightsFacade,
-} from '../../store/securityRights';
+} from '../../store/securityRightsMatrix';
 
 import { RoleSecurityRight } from './RolesOverview.types';
 
@@ -37,7 +37,7 @@ const RolesOverview: FC<RolesRouteProps<{ siteId: string }>> = ({ match }) => {
 	const [loadingState, securityRightMatrix] = useSecurityRights();
 	const [initialLoading, setInitialLoading] = useState(LoadingState.Loading);
 	const [formValues, setFormValues] = useState<UpdateRolesMatrixPayload | null>(null);
-	const { navigate, generatePath } = useSiteNavigate();
+	const { navigate } = useSiteNavigate();
 	const { modules = [], securityRights = [], roles = [] } = securityRightMatrix || {};
 
 	useEffect(() => {
@@ -60,7 +60,7 @@ const RolesOverview: FC<RolesRouteProps<{ siteId: string }>> = ({ match }) => {
 	};
 
 	const onCancel = (): void => {
-		navigate(MODULE_PATHS.roles.root, { siteId });
+		navigate(MODULE_PATHS.roles.overview, { siteId });
 	};
 
 	const securityRightsByModule = (

@@ -1,6 +1,9 @@
 import { Store, StoreConfig } from '@datorama/akita';
 
-import { createInitialSecurityRightsState, SecurityRightsState } from './securityRights.model';
+import {
+	createInitialSecurityRightsState,
+	SecurityRightsState,
+} from './securityRightsMatrix.model';
 
 @StoreConfig({ name: 'securityRights' })
 export class SecurityRightsStore extends Store<SecurityRightsState> {
