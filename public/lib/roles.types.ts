@@ -1,5 +1,10 @@
 import { ModuleRouteConfig, RouteConfigComponentProps } from '@redactie/redactie-core';
 
+import {
+	MySecurityRightModel,
+	MySecurityRightsFacade,
+	MySecurityRightsQuery,
+} from './store/mySecurityRights';
 import { RolesFacade, RolesQuery } from './store/roles';
 import { SecurityRightsFacade, SecurityRightsQuery } from './store/securityRights';
 import { UsersFacade, UsersQuery } from './store/users';
@@ -29,6 +34,37 @@ export enum ContentType {
 	SiteRoles = 'SiteRoles',
 }
 
+export interface Page {
+	size: number;
+	totalElements: number;
+	totalPages: number;
+	number: number;
+}
+
+export interface Links {
+	self?: {
+		href: string;
+	};
+	first?: {
+		href: string;
+	};
+	last?: {
+		href: string;
+	};
+	prev?: {
+		href: string;
+	};
+	next?: {
+		href: string;
+	};
+}
+
+export interface EmbeddedResponse<T> {
+	_embedded: T[];
+	_links: Links;
+	_page: Page;
+}
+
 export interface UsersModuleAPI {
 	routes: ModuleRouteConfig;
 	store: {
@@ -44,5 +80,13 @@ export interface UsersModuleAPI {
 			service: Partial<SecurityRightsFacade>;
 			query: SecurityRightsQuery;
 		};
+		mySecurityRights: {
+			service: Partial<MySecurityRightsFacade>;
+			query: MySecurityRightsQuery;
+		};
+	};
+	hooks: {
+		useMySecurityRightsForSite: () => [LoadingState, MySecurityRightModel[]];
+		useMySecurityRightsForTenant: () => [LoadingState, MySecurityRightModel[]];
 	};
 }

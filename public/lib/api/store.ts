@@ -1,3 +1,4 @@
+import { mySecurityRightsFacade, mySecurityRightsQuery } from '../store/mySecurityRights';
 import { rolesFacade, rolesQuery } from '../store/roles';
 import { securityRightsFacade, securityRightsQuery } from '../store/securityRights';
 import { usersFacade, usersQuery } from '../store/users';
@@ -13,8 +14,8 @@ export const store = {
 	},
 	roles: {
 		service: {
-			gitSiteRoles: rolesFacade.getSiteRoles,
-			gitTenantRoles: rolesFacade.getTenantRoles,
+			getSiteRoles: rolesFacade.getSiteRoles,
+			getTenantRoles: rolesFacade.getTenantRoles,
 		},
 		query: rolesQuery,
 	},
@@ -23,5 +24,13 @@ export const store = {
 			getSecurityRightsBySite: securityRightsFacade.getSecurityRightsBySite,
 		},
 		query: securityRightsQuery,
+	},
+	mySecurityRights: {
+		service: {
+			getMyTenantSecurityRights: mySecurityRightsFacade.getMyTenantSecurityRights,
+			getMySiteSecurityRights: mySecurityRightsFacade.getMySiteSecurityRights,
+			getMySecurityRights: mySecurityRightsFacade.getMySecurityRights,
+		},
+		query: mySecurityRightsQuery,
 	},
 };

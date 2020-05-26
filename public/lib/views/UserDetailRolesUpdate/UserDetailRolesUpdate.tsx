@@ -63,10 +63,10 @@ const UserDetailRolesUpdate: FC<RolesRouteProps<{ userUuid?: string; siteUuid?: 
 	useEffect(() => {
 		if (userUuid && siteUuid) {
 			usersFacade.getUserRolesForSite({
-				id: userUuid,
+				userUuid,
 				siteUuid,
 			});
-			usersFacade.getUser({ id: userUuid });
+			usersFacade.getUser({ userUuid });
 			rolesFacade.getSiteRoles(siteUuid);
 			sitesFacade.getSite({ id: siteUuid });
 		}
@@ -98,7 +98,7 @@ const UserDetailRolesUpdate: FC<RolesRouteProps<{ userUuid?: string; siteUuid?: 
 		if (selectedRoles && userRoles && mapUserRoles(userRoles) !== selectedRoles) {
 			usersFacade
 				.updateUserRolesForSite({
-					userId: userUuid,
+					userUuid,
 					siteUuid,
 					roles: selectedRoles,
 				})

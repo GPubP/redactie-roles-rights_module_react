@@ -1,9 +1,7 @@
+import { EmbeddedResponse } from '../../roles.types';
 import { RoleModel } from '../../store/roles';
 
-export interface SitesResponse {
-	_embedded: SiteResponse[];
-	_page: SitesMetaResponse;
-}
+export type SitesResponse = EmbeddedResponse<SiteResponse>;
 
 export interface SiteResponse {
 	uuid: string;
@@ -19,13 +17,6 @@ export interface SiteResponse {
 		active: boolean;
 	};
 	roles: RoleModel[];
-}
-
-export interface SitesMetaResponse {
-	size: string;
-	totalElements: number;
-	totalPages: number;
-	number: string;
 }
 
 export interface GetSitePayload {

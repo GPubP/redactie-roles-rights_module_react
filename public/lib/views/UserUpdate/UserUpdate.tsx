@@ -40,8 +40,8 @@ const UserUpdate: FC<RolesRouteProps<{ userUuid?: string }>> = ({ route, match }
 
 	useEffect(() => {
 		if (userUuid) {
-			usersFacade.getUser({ id: userUuid });
-			usersFacade.getUserRolesForTenant({ id: userUuid });
+			usersFacade.getUser({ userUuid });
+			usersFacade.getUserRolesForTenant({ userUuid });
 			rolesFacade.getTenantRoles();
 			sitesFacade.getSites({ id: userUuid });
 			return;
@@ -68,7 +68,7 @@ const UserUpdate: FC<RolesRouteProps<{ userUuid?: string }>> = ({ route, match }
 		switch (contentType) {
 			case ContentType.UserRoles:
 				usersFacade.updateUserRolesForTenant({
-					id: user.id,
+					userUuid: user.id,
 					roles: content,
 				});
 				break;

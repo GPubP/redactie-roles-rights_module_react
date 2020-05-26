@@ -1,3 +1,5 @@
+import { EmbeddedResponse } from '../../roles.types';
+
 export interface RoleAttributes {
 	displayName?: string;
 	level?: string;
@@ -17,14 +19,4 @@ export interface RoleResponse {
 	validTo: Date | null;
 }
 
-export interface RolesMetaResponse {
-	size: number;
-	totalElements: boolean;
-	totalPages: number;
-	number: number;
-}
-
-export interface RolesResponse {
-	_embedded: RoleResponse[];
-	_page: RolesMetaResponse;
-}
+export type RolesResponse = EmbeddedResponse<RoleResponse>;
