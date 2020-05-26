@@ -5,3 +5,7 @@ export interface RoleSecurityRight {
 	name: string;
 	securityRights: SecurityRightResponse[];
 }
+
+export interface MatrixTitle {
+	id: string;
+}

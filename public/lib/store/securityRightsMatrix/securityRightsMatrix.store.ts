@@ -1,14 +1,14 @@
 import { Store, StoreConfig } from '@datorama/akita';
 
 import {
-	createInitialSecurityRightsState,
-	SecurityRightsState,
+	createInitialSecurityRightsMatrixState,
+	SecurityRightsMatrixState,
 } from './securityRightsMatrix.model';
 
 @StoreConfig({ name: 'securityRights' })
-export class SecurityRightsStore extends Store<SecurityRightsState> {
+export class SecurityRightsMatrixStore extends Store<SecurityRightsMatrixState> {
 	constructor() {
-		super(createInitialSecurityRightsState());
+		super(createInitialSecurityRightsMatrixState());
 	}
 
 	public setIsFetching(isFetching = false): void {
@@ -24,4 +24,4 @@ export class SecurityRightsStore extends Store<SecurityRightsState> {
 	}
 }
 
-export const securityRightsStore = new SecurityRightsStore();
+export const securityRightsMatrixStore = new SecurityRightsMatrixStore();

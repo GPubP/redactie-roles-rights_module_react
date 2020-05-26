@@ -21,7 +21,7 @@ import {
 	ModuleModel,
 	RoleModel,
 	SecurityRightModel,
-	securityRightsFacade,
+	securityRightsMatrixFacade,
 } from '../../store/securityRightsMatrix';
 
 import { RoleSecurityRight } from './RolesOverview.types';
@@ -39,9 +39,10 @@ const RolesOverview: FC<RolesRouteProps<{ siteId: string }>> = ({ match }) => {
 	const [formValues, setFormValues] = useState<UpdateRolesMatrixPayload | null>(null);
 	const { navigate } = useSiteNavigate();
 	const { modules = [], securityRights = [], roles = [] } = securityRightMatrix || {};
+	const [matrixTitle, setMatrixTitle] = useState<string>('');
 
 	useEffect(() => {
-		securityRightsFacade.getSecurityRightsBySite(rolesSearchParams, siteId);
+		securityRightsMatrixFacade.getSecurityRightsBySite(rolesSearchParams, siteId);
 	}, [rolesSearchParams, siteId]);
 
 	useEffect(() => {
@@ -57,6 +58,7 @@ const RolesOverview: FC<RolesRouteProps<{ siteId: string }>> = ({ match }) => {
 			...rolesSearchParams,
 			module: module,
 		});
+		setMatrixTitle(module);
 	};
 
 	const onCancel = (): void => {
@@ -117,7 +119,7 @@ const RolesOverview: FC<RolesRouteProps<{ siteId: string }>> = ({ match }) => {
 
 	const onConfigSave = (): void => {
 		if (formValues) {
-			securityRightsFacade.updateSecurityRightsForSite(formValues, siteId);
+			securityRightsMatrixFacade.updateSecurityRightsForSite(formValues, siteId);
 		}
 	};
 
@@ -156,6 +158,7 @@ const RolesOverview: FC<RolesRouteProps<{ siteId: string }>> = ({ match }) => {
 							permissions={securityRightsByModule(securityRights, modules)}
 							formState={createInitialFormState(securityRights, roles)}
 							onChange={onFormChange}
+							title={matrixTitle}
 						/>
 					</div>
 				</div>

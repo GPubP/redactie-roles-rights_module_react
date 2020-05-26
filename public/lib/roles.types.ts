@@ -1,7 +1,10 @@
 import { ModuleRouteConfig, RouteConfigComponentProps } from '@redactie/redactie-core';
 
 import { RolesFacade, RolesQuery } from './store/roles';
-import { SecurityRightsFacade, SecurityRightsQuery } from './store/securityRightsMatrix';
+import {
+	SecurityRightsMatrixFacade,
+	SecurityRightsMatrixQuery,
+} from './store/securityRightsMatrix';
 import { UsersFacade, UsersQuery } from './store/users';
 
 export interface RolesModuleProps extends RouteConfigComponentProps {
@@ -41,8 +44,8 @@ export interface UsersModuleAPI {
 			query: RolesQuery;
 		};
 		securityRights: {
-			service: Partial<SecurityRightsFacade>;
-			query: SecurityRightsQuery;
+			service: Partial<SecurityRightsMatrixFacade>;
+			query: SecurityRightsMatrixQuery;
 		};
 	};
 }

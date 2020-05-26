@@ -1,6 +1,6 @@
 import { UsersModuleAPI } from '../roles.types';
 import { RoleModel, RolesMetaModel, RolesState } from '../store/roles';
-import { SecurityRightMatrixModel, SecurityRightsState } from '../store/securityRightsMatrix';
+import { SecurityRightMatrixModel, SecurityRightsMatrixState } from '../store/securityRightsMatrix';
 import { UserModel, UsersMetaModel, UsersState } from '../store/users';
 
 export {
@@ -11,6 +11,6 @@ export {
 	RoleModel,
 	RolesMetaModel,
 	SecurityRightMatrixModel,
-	SecurityRightsState,
+	SecurityRightsMatrixState,
 	RolesState,
 };

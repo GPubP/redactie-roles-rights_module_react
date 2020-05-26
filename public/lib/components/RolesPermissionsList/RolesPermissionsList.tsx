@@ -14,6 +14,7 @@ const RolesPermissionsList: FC<RolesPermissionsProps> = ({
 	permissions,
 	formState,
 	onChange,
+	title,
 }) => {
 	const renderSecurityRightsRows = (
 		securityRights: SecurityRightResponse[],
@@ -21,10 +22,6 @@ const RolesPermissionsList: FC<RolesPermissionsProps> = ({
 		values: any
 	): ReactNode => {
 		return securityRights.map((securityRight: SecurityRightResponse) => {
-			if (securityRight.id === 'int-district01.cms.v1-wcm-create-site-dev-cfcc847') {
-				console.log(values['int-district01.cms.v1-wcm-create-site-dev-cfcc847']);
-			}
-
 			return (
 				<tr key={securityRight.id}>
 					<td className="a-table-header--side">{securityRight.name}</td>
@@ -75,14 +72,27 @@ const RolesPermissionsList: FC<RolesPermissionsProps> = ({
 		submitForm: any,
 		values: any
 	): ReactNode => {
-		return modules.map((module: RoleSecurityRight) => (
-			<>
-				<tr key={module.id}>
-					<th>{module.name}</th>
-				</tr>
-				{renderSecurityRightsRows(module.securityRights, submitForm, values)}
-			</>
-		));
+		return modules.map((module: RoleSecurityRight) =>
+			module.securityRights ? (
+				<>
+					<tr key={module.id}>
+						<th>{module.name}</th>
+					</tr>
+					{renderSecurityRightsRows(module.securityRights, submitForm, values)}
+				</>
+			) : (
+				''
+			)
+		);
+	};
+
+	const getModuleTitle = (modules: RoleSecurityRight[], moduleId: string): ReactNode => {
+		const matrixTitle = modules.find(module => module.id === moduleId)?.name;
+		if (matrixTitle !== undefined) {
+			return <CardTitle>{matrixTitle}</CardTitle>;
+		} else {
+			return <CardTitle>Alle permissies</CardTitle>;
+		}
 	};
 
 	return (
@@ -90,7 +100,7 @@ const RolesPermissionsList: FC<RolesPermissionsProps> = ({
 			{({ values, submitForm }) => (
 				<Card>
 					<CardBody>
-						<CardTitle>Module Titel</CardTitle>
+						{getModuleTitle(permissions, title)}
 						<table className="m-table">
 							<thead>
 								<tr className="m-table--header">

@@ -6,6 +6,7 @@ export interface RolesPermissionsProps {
 	permissions: RoleSecurityRight[];
 	formState: FormState;
 	onChange: (formValues: FormState) => void;
+	title: string;
 }
 
 export interface FormState {

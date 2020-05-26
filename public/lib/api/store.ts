@@ -1,5 +1,8 @@
 import { rolesFacade, rolesQuery } from '../store/roles';
-import { securityRightsFacade, securityRightsQuery } from '../store/securityRightsMatrix';
+import {
+	securityRightsMatrixFacade,
+	securityRightsMatrixQuery,
+} from '../store/securityRightsMatrix';
 import { usersFacade, usersQuery } from '../store/users';
 
 export const store = {
@@ -20,8 +23,8 @@ export const store = {
 	},
 	securityRights: {
 		service: {
-			getSecurityRightsBySite: securityRightsFacade.getSecurityRightsBySite,
+			getSecurityRightsBySite: securityRightsMatrixFacade.getSecurityRightsBySite,
 		},
-		query: securityRightsQuery,
+		query: securityRightsMatrixQuery,
 	},
 };

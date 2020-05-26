@@ -3,11 +3,11 @@ import { distinctUntilChanged, map } from 'rxjs/operators';
 
 import { LoadingState } from '../../roles.types';
 
-import { SecurityRightsState } from './securityRightsMatrix.model';
-import { securityRightsStore, SecurityRightsStore } from './securityRightsMatrix.store';
+import { SecurityRightsMatrixState } from './securityRightsMatrix.model';
+import { securityRightsMatrixStore, SecurityRightsMatrixStore } from './securityRightsMatrix.store';
 
-export class SecurityRightsQuery extends Query<SecurityRightsState> {
-	constructor(protected store: SecurityRightsStore) {
+export class SecurityRightsMatrixQuery extends Query<SecurityRightsMatrixState> {
+	constructor(protected store: SecurityRightsMatrixStore) {
 		super(store);
 	}
 
@@ -32,4 +32,4 @@ export class SecurityRightsQuery extends Query<SecurityRightsState> {
 	);
 }
 
-export const securityRightsQuery = new SecurityRightsQuery(securityRightsStore);
+export const securityRightsMatrixQuery = new SecurityRightsMatrixQuery(securityRightsMatrixStore);
