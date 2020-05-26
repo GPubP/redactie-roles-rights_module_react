@@ -17,40 +17,30 @@ export interface UserResponse {
 	username: string;
 }
 
-// Tenant
-export interface GetUserRolesForTenantPayload {
+export interface UsersBasePayload {
 	userUuid: string;
 }
 
-export interface UpdateUserRolesForTenantPayload {
-	userUuid: string;
+// Tenant
+export type GetUserRolesForTenantPayload = UsersBasePayload;
+export type GetUserSecurityRightsForTenantPayload = UsersBasePayload;
+export type GetUserPayload = UsersBasePayload;
+export type GetUsersPayload = SearchParams;
+export interface UpdateUserRolesForTenantPayload extends UsersBasePayload {
 	roles: Array<string>;
 }
-
-export type GetUserSecurityRightsForTenantPayload = {
-	userUuid: string;
-};
-
-export interface GetUserPayload {
-	userUuid: string;
-}
-
-export type GetUsersPayload = SearchParams;
 
 // Site
-export interface GetUserRolesForSitePayload {
-	userUuid: string;
+export interface GetUserRolesForSitePayload extends UsersBasePayload {
 	siteUuid: string;
 }
 
-export interface UpdateUserRolesForSitePayload {
-	userUuid: string;
+export interface UpdateUserRolesForSitePayload extends UsersBasePayload {
 	siteUuid: string;
 	roles: Array<string>;
 }
 
-export interface AddUserToSitePayload {
-	userUuid: string;
+export interface AddUserToSitePayload extends UsersBasePayload {
 	siteUuid: string;
 }
 

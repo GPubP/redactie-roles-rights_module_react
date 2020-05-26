@@ -7,6 +7,7 @@ export interface SecurityRightMatrixResponse {
 }
 
 export interface SecurityRightAttributes {
+	key: string;
 	level: string;
 	module: string;
 	site: string;

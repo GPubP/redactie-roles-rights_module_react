@@ -1,5 +1,7 @@
 import { ModuleRouteConfig, RouteConfigComponentProps } from '@redactie/redactie-core';
+import { FC } from 'react';
 
+import { SecurableRenderProps } from './components/SecurableRender/SecurableRender.types';
 import {
 	MySecurityRightModel,
 	MySecurityRightsFacade,
@@ -65,8 +67,7 @@ export interface EmbeddedResponse<T> {
 	_page: Page;
 }
 
-export interface UsersModuleAPI {
-	routes: ModuleRouteConfig;
+export interface RolesRightsModuleAPI {
 	store: {
 		users: {
 			service: Partial<UsersFacade>;
@@ -86,7 +87,15 @@ export interface UsersModuleAPI {
 		};
 	};
 	hooks: {
-		useMySecurityRightsForSite: () => [LoadingState, MySecurityRightModel[]];
-		useMySecurityRightsForTenant: () => [LoadingState, MySecurityRightModel[]];
+		useMySecurityRightsForSite: (options: {
+			module?: string;
+			onlyKeys: boolean;
+		}) => [LoadingState | null, MySecurityRightModel[] | string[] | undefined];
+		useMySecurityRightsForTenant: (
+			onlyKeys: boolean
+		) => [LoadingState | null, MySecurityRightModel[] | string[] | undefined];
+	};
+	components: {
+		SecurableRender: FC<SecurableRenderProps>;
 	};
 }
