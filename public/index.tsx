@@ -94,7 +94,7 @@ Core.routes.register({
 	path: MODULE_PATHS.tenantRoot,
 	component: TenantRolesComponent,
 	guardOptions: {
-		guards: [securityRightsTenantGuard(['site-read-admin', 'site-fuck-admin'])],
+		guards: [securityRightsTenantGuard(['site-read-admin'])],
 	},
 	navigation: {
 		label: 'Gebruikers',
