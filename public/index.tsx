@@ -6,6 +6,7 @@ import { Redirect } from 'react-router-dom';
 import { registerRolesAPI } from './lib/api';
 import { registerRoutes } from './lib/connectors/sites';
 import { TenantContext } from './lib/context';
+import { securityRightsTenantGuard } from './lib/guards';
 import { MODULE_PATHS } from './lib/roles.const';
 import { RolesModuleProps } from './lib/roles.types';
 import {
@@ -92,6 +93,9 @@ registerRoutes({
 Core.routes.register({
 	path: MODULE_PATHS.tenantRoot,
 	component: TenantRolesComponent,
+	guardOptions: {
+		guards: [securityRightsTenantGuard(['site-read-admin', 'site-fuck-admin'])],
+	},
 	navigation: {
 		label: 'Gebruikers',
 	},

@@ -47,7 +47,10 @@ export class MySecurityRightsFacade {
 					this.store.setHasCache(true);
 					this.store.setTenantRights(response._embedded);
 				})
-				.catch(err => this.store.setError(err))
+				.catch(err => {
+					this.store.setError(err);
+					throw new Error(err);
+				})
 				.finally(() => this.store.setIsFetching(false));
 		}
 
@@ -76,7 +79,10 @@ export class MySecurityRightsFacade {
 					this.store.setHasCache(true);
 					this.store.setSiteRights(response._embedded);
 				})
-				.catch(err => this.store.setError(err))
+				.catch(err => {
+					this.store.setError(err);
+					throw new Error(err);
+				})
 				.finally(() => this.store.setIsFetching(false));
 		}
 
