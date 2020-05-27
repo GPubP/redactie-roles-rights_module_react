@@ -27,7 +27,7 @@ export class MySecurityRightsFacade {
 		return this.query.selectSiteRightsByModule(module);
 	}
 
-	public getMyTenantSecurityRights(clearCache = false): void {
+	public getMyTenantSecurityRights(clearCache = false): Promise<void> {
 		if (clearCache) {
 			this.store.setTenantRightsCache(false);
 		}
@@ -37,7 +37,7 @@ export class MySecurityRightsFacade {
 		// Therefore we are using a simple caching system
 		if (!this.query.getTenantRightsHasCache()) {
 			this.store.setIsFetching(true);
-			this.service
+			return this.service
 				.getUserSecurityRightsForTenant({
 					// Remove this when the `me` call is ready
 					userUuid: 'b5ababdc-a1cb-4224-9f1e-d919eda9bdeb',
@@ -50,9 +50,11 @@ export class MySecurityRightsFacade {
 				.catch(err => this.store.setError(err))
 				.finally(() => this.store.setIsFetching(false));
 		}
+
+		return Promise.resolve();
 	}
 
-	public getMySiteSecurityRights(siteUuid: string, clearCache = false): void {
+	public getMySiteSecurityRights(siteUuid: string, clearCache = false): Promise<void> {
 		if (clearCache) {
 			this.store.setSiteRightsCache(false);
 		}
@@ -63,7 +65,7 @@ export class MySecurityRightsFacade {
 		// Therefore we are using a simple caching system
 		if (!alreadyInCache || !this.query.getSiteRightsHasCache()) {
 			this.store.setIsFetching(true);
-			this.service
+			return this.service
 				.getUserSecurityRightsForSite({
 					// Remove this when the `me` call is ready
 					userUuid: 'b5ababdc-a1cb-4224-9f1e-d919eda9bdeb',
@@ -77,6 +79,8 @@ export class MySecurityRightsFacade {
 				.catch(err => this.store.setError(err))
 				.finally(() => this.store.setIsFetching(false));
 		}
+
+		return Promise.resolve();
 	}
 
 	public getMySecurityRights(siteUuid?: string, clearCache = false): void {

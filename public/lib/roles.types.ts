@@ -2,6 +2,7 @@ import { ModuleRouteConfig, RouteConfigComponentProps } from '@redactie/redactie
 import { FC } from 'react';
 
 import { SecurableRenderProps } from './components/SecurableRender/SecurableRender.types';
+import { SecurityRightsSiteGuardFunction, SecurityRightsTenantGuardFunction } from './guards';
 import {
 	MySecurityRightModel,
 	MySecurityRightsFacade,
@@ -97,5 +98,9 @@ export interface RolesRightsModuleAPI {
 	};
 	components: {
 		SecurableRender: FC<SecurableRenderProps>;
+	};
+	guards: {
+		securityRightsTenantGuard: SecurityRightsTenantGuardFunction;
+		securityRightsSiteGuard: SecurityRightsSiteGuardFunction;
 	};
 }
