@@ -7,6 +7,7 @@ export interface MySecurityRightsState {
 		tenantRights: MySecurityRightModel[] | null;
 		siteRights: MySecurityRightModel[] | null;
 	};
+	siteUuid?: string;
 	isFetching: boolean;
 }
 

@@ -6,11 +6,14 @@ import {
 	MySecurityRightModel,
 	MySecurityRightsState,
 } from './mySecurityRights.model';
+import { SiteRightsCache } from './mySecurityRights.types';
 
 @StoreConfig({ name: 'mySecurityRights' })
 export class MySecurityRightsStore extends Store<MySecurityRightsState> {
 	public tenantRightsCache = new BehaviorSubject<boolean>(false);
-	public siteRightsCache = new BehaviorSubject<boolean>(false);
+	public siteRightsCache: SiteRightsCache = {
+		active: new BehaviorSubject<boolean>(false),
+	};
 
 	constructor() {
 		super(createInitialMySecurityRightsState());
@@ -22,9 +25,10 @@ export class MySecurityRightsStore extends Store<MySecurityRightsState> {
 		}
 	}
 
-	public setSiteRightsCache(hasCache: boolean): void {
-		if (hasCache !== this.siteRightsCache.value) {
-			this.siteRightsCache.next(hasCache);
+	public setSiteRightsCache(hasCache: boolean, siteUuid?: string): void {
+		if (hasCache !== this.siteRightsCache.active.value) {
+			this.siteRightsCache.active.next(hasCache);
+			this.siteRightsCache.siteUuid = siteUuid;
 		}
 	}
 

@@ -57,14 +57,11 @@ export class MySecurityRightsFacade {
 			this.store.setSiteRightsCache(false);
 		}
 
-		const state = this.query.getValue();
-		const siteRights = state?.data?.siteRights;
-		const currentSite = siteRights?.find(siteRight => siteRight.attributes.site === siteUuid);
-
+		const alreadyInCache = this.query.getSiteRightsCacheSiteUuid() === siteUuid;
 		// Almost every module needs tenant or site security rights
 		// We don't want to get the same information multiple times
 		// Therefore we are using a simple caching system
-		if (!currentSite || !this.query.getSiteRightsHasCache()) {
+		if (!alreadyInCache || !this.query.getSiteRightsHasCache()) {
 			this.store.setIsFetching(true);
 			this.service
 				.getUserSecurityRightsForSite({
@@ -73,7 +70,7 @@ export class MySecurityRightsFacade {
 					siteUuid,
 				})
 				.then(response => {
-					this.store.setSiteRightsCache(true);
+					this.store.setSiteRightsCache(true, siteUuid);
 					this.store.setHasCache(true);
 					this.store.setSiteRights(response._embedded);
 				})

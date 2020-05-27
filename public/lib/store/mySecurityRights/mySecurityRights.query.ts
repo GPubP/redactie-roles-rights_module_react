@@ -44,7 +44,11 @@ export class MySecurityRightsQuery extends Query<MySecurityRightsState> {
 	}
 
 	public getSiteRightsHasCache(): boolean {
-		return this.store.siteRightsCache.value;
+		return this.store.siteRightsCache.active.value;
+	}
+
+	public getSiteRightsCacheSiteUuid(): string | undefined {
+		return this.store.siteRightsCache.siteUuid;
 	}
 
 	public selectSiteRightsByModule(module: string): Observable<MySecurityRightModel[]> {
