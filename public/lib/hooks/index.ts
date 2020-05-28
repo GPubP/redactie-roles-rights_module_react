@@ -11,3 +11,5 @@ export { default as useSiteRoles } from './useSiteRoles/useSiteRoles';
 export { default as useUserRolesForTenant } from './useUserRolesForTenant/useUserRolesForTenant';
 export { default as useUserRolesForSite } from './useUserRolesForSite/useUserRolesForSite';
 export { default as useUsersLoadingStates } from './useUsersLoadingStates/useUsersLoadingStates';
+export { default as useMySecurityRightsForTenant } from './useMySecurityRightsForTenant/useMySecurityRightsForTenant';
+export { default as useMySecurityRightsForSite } from './useMySecurityRightsForSite/useMySecurityRightsForSite';

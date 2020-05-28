@@ -1,4 +1,5 @@
-import { RoleResponse, RolesMetaResponse } from '../../services/roles';
+import { Page } from '../../roles.types';
+import { RoleResponse } from '../../services/roles';
 
 export enum RoleEntityTypes {
 	TENANT = 'tenant',
@@ -6,7 +7,7 @@ export enum RoleEntityTypes {
 }
 
 export type RoleModel = RoleResponse;
-export type RolesMetaModel = RolesMetaResponse;
+export type RolesMetaModel = Page;
 
 export interface RoleEntityState {
 	meta?: RolesMetaModel;

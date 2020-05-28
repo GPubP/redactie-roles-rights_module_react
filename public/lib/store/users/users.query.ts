@@ -22,11 +22,11 @@ export class UsersQuery extends QueryEntity<UsersState> {
 	public meta$ = this.select(state => state.meta).pipe(filterNil, distinctUntilChanged());
 	public users$ = this.selectAll();
 	public user$ = this.select(state => state.userDetail).pipe(filterNil, distinctUntilChanged());
-	public userRolesForTenant$ = this.select(state => state.userDetail?.activeTenantRoles).pipe(
+	public userRolesForTenant$ = this.select(state => state.userDetail?.tenantRoles).pipe(
 		filterNil,
 		distinctUntilChanged()
 	);
-	public userRolesForSite$ = this.select(state => state.userDetail?.activeSiteRoles).pipe(
+	public userRolesForSite$ = this.select(state => state.userDetail?.siteRoles).pipe(
 		filterNil,
 		distinctUntilChanged()
 	);

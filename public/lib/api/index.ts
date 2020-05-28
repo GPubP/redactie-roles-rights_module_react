@@ -1,8 +1,21 @@
 import Core from '@redactie/redactie-core';
 
-import { store } from './store';
+import { RolesRightsModuleAPI } from '../roles.types';
 
-export const registerRolesAPI = (): void =>
-	Core.modules.exposeModuleApi('roles-rights-module', {
+import { components } from './components';
+import { guards } from './guards';
+import { hooks } from './hooks';
+import { store } from './store';
+import { views } from './views';
+
+export const registerRolesAPI = (): void => {
+	const api: RolesRightsModuleAPI = {
 		store,
-	});
+		hooks,
+		components,
+		guards,
+		views,
+	};
+
+	Core.modules.exposeModuleApi('roles-rights-module', api);
+};

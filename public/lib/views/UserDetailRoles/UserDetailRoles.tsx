@@ -61,7 +61,7 @@ const UserDetailRoles: FC<UserDetailRolesProps> = ({
 				usersFacade.addUserToSite(
 					{
 						siteUuid: site.uuid,
-						userId: user.id,
+						userUuid: user.id,
 					},
 					() => redirectToSitesRolesDetail(user.id, site.uuid)
 				);

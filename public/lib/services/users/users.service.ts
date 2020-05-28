@@ -7,6 +7,8 @@ import {
 	GetUserPayload,
 	GetUserRolesForSitePayload,
 	GetUserRolesForTenantPayload,
+	GetUserSecurityRightsForSitePayload,
+	GetUserSecurityRightsForTenantPayload,
 	GetUsersPayload,
 	UpdateUserRolesForSitePayload,
 	UpdateUserRolesForTenantPayload,
@@ -36,22 +38,22 @@ export class UsersApiService {
 			.json<UsersResponse>();
 	}
 
-	public async getUser({ id }: GetUserPayload): Promise<UserResponse> {
-		return await api.get(`users/${id}`).json();
+	public async getUser({ userUuid }: GetUserPayload): Promise<UserResponse> {
+		return await api.get(`users/${userUuid}`).json();
 	}
 
 	public async getUserRolesForTenant({
-		id,
+		userUuid,
 	}: GetUserRolesForTenantPayload): Promise<RolesResponse> {
-		return await api.get(`users/${id}/roles`).json();
+		return await api.get(`users/${userUuid}/roles`).json();
 	}
 
 	public async updateUserRolesForTenant({
-		id,
+		userUuid,
 		roles,
 	}: UpdateUserRolesForTenantPayload): Promise<RolesResponse> {
 		return await api
-			.put(`users/${id}/roles`, {
+			.put(`users/${userUuid}/roles`, {
 				json: {
 					roles: roles,
 				},
@@ -60,19 +62,19 @@ export class UsersApiService {
 	}
 
 	public async getUserRolesForSite({
-		id,
+		userUuid,
 		siteUuid,
 	}: GetUserRolesForSitePayload): Promise<RolesResponse> {
-		return await api.get(`sites/${siteUuid}/users/${id}/roles`).json();
+		return await api.get(`sites/${siteUuid}/users/${userUuid}/roles`).json();
 	}
 
 	public async updateUserRolesForSite({
-		userId,
+		userUuid,
 		siteUuid,
 		roles,
 	}: UpdateUserRolesForSitePayload): Promise<RolesResponse> {
 		return await api
-			.put(`sites/${siteUuid}/users/${userId}/roles`, {
+			.put(`sites/${siteUuid}/users/${userUuid}/roles`, {
 				json: {
 					roles,
 				},
@@ -80,14 +82,27 @@ export class UsersApiService {
 			.json();
 	}
 
-	public async addUserToSite({ siteUuid, userId }: AddUserToSitePayload): Promise<any> {
+	public async addUserToSite({ siteUuid, userUuid }: AddUserToSitePayload): Promise<any> {
 		return await api
 			.post(`sites/${siteUuid}/users`, {
 				json: {
-					userId,
+					userId: userUuid,
 				},
 			})
 			.json();
+	}
+
+	public async getUserSecurityRightsForTenant({
+		userUuid,
+	}: GetUserSecurityRightsForTenantPayload): Promise<any> {
+		return await api.get(`users/${userUuid}/security-rights`).json();
+	}
+
+	public async getUserSecurityRightsForSite({
+		siteUuid,
+		userUuid,
+	}: GetUserSecurityRightsForSitePayload): Promise<any> {
+		return await api.get(`sites/${siteUuid}/users/${userUuid}/security-rights`).json();
 	}
 }
 

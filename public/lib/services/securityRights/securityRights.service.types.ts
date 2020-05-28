@@ -7,10 +7,11 @@ export interface SecurityRightMatrixResponse {
 }
 
 export interface SecurityRightAttributes {
+	identifier: string;
+	key: string;
 	level: string;
 	module: string;
-	site: string;
-	tenant: string;
+	moduleVersion: string;
 	type: string;
 }
 export interface SecurityRightResponse {
