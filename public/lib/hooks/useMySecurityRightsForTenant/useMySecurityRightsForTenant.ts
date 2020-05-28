@@ -4,9 +4,16 @@ import { map } from 'rxjs/operators';
 import { LoadingState } from '../../roles.types';
 import { MySecurityRightModel, mySecurityRightsFacade } from '../../store/mySecurityRights';
 
-const useMySecurityRightsForTenant = (
-	onlyKeys = true
-): [LoadingState | null, MySecurityRightModel[] | string[] | undefined] => {
+function useMySecurityRightsForTenant(onlyKeys: true): [LoadingState | null, string[] | undefined];
+function useMySecurityRightsForTenant(
+	onlyKeys: false
+): [LoadingState | null, MySecurityRightModel[] | undefined];
+function useMySecurityRightsForTenant(
+	onlyKeys: boolean
+): [LoadingState | null, MySecurityRightModel[] | string[] | undefined];
+function useMySecurityRightsForTenant(
+	onlyKeys: boolean
+): [LoadingState | null, MySecurityRightModel[] | string[] | undefined] {
 	const [loading] = useObservable(mySecurityRightsFacade.isFetching$, null);
 	const [tenantRights] = useObservable(
 		mySecurityRightsFacade.tenantRights$.pipe(
@@ -23,7 +30,11 @@ const useMySecurityRightsForTenant = (
 
 	const loadingState = error ? LoadingState.Error : loading;
 
-	return [loadingState, tenantRights];
-};
+	if (onlyKeys) {
+		return [loadingState, tenantRights as string[]];
+	}
+
+	return [loadingState, tenantRights as MySecurityRightModel[]];
+}
 
 export default useMySecurityRightsForTenant;

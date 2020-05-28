@@ -4,14 +4,22 @@ import { map } from 'rxjs/operators';
 import { LoadingState } from '../../roles.types';
 import { MySecurityRightModel, mySecurityRightsFacade } from '../../store/mySecurityRights';
 
-const useMySecurityRightsForSite = (
-	options: {
-		module?: string;
-		onlyKeys: boolean;
-	} = {
-		onlyKeys: true,
-	}
-): [LoadingState | null, MySecurityRightModel[] | string[] | undefined] => {
+function useMySecurityRightsForSite(options: {
+	module?: string;
+	onlyKeys: true;
+}): [LoadingState | null, string[] | undefined];
+function useMySecurityRightsForSite(options: {
+	module?: string;
+	onlyKeys: false;
+}): [LoadingState | null, MySecurityRightModel[] | undefined];
+function useMySecurityRightsForSite(options: {
+	module?: string;
+	onlyKeys: boolean;
+}): [LoadingState | null, MySecurityRightModel[] | string[] | undefined];
+function useMySecurityRightsForSite(options: {
+	module?: string;
+	onlyKeys: boolean;
+}): [LoadingState | null, MySecurityRightModel[] | string[] | undefined] {
 	const [loading] = useObservable(mySecurityRightsFacade.isFetching$, null);
 	const [siteRights] = useObservable(
 		mySecurityRightsFacade.selectSiteRightsByModule(options.module).pipe(
@@ -28,6 +36,6 @@ const useMySecurityRightsForSite = (
 	const loadingState = error ? LoadingState.Error : loading;
 
 	return [loadingState, siteRights];
-};
+}
 
 export default useMySecurityRightsForSite;

@@ -1,3 +1,4 @@
+import { SecurityRightsSiteGuardFunction, SecurityRightsTenantGuardFunction } from '../guards';
 import { RolesRightsModuleAPI } from '../roles.types';
 import { MySecurityRightModel, MySecurityRightsState } from '../store/mySecurityRights';
 import { RoleModel, RolesMetaModel, RolesState } from '../store/roles';
@@ -16,4 +17,6 @@ export {
 	RolesState,
 	MySecurityRightModel,
 	MySecurityRightsState,
+	SecurityRightsSiteGuardFunction,
+	SecurityRightsTenantGuardFunction,
 };

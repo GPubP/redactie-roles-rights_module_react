@@ -38,22 +38,22 @@ export class MySecurityRightsStore extends Store<MySecurityRightsState> {
 		});
 	}
 
-	public setTenantRights(tenantRigths: MySecurityRightModel[]): void {
+	public setTenantRights(tenantRights: MySecurityRightModel[]): void {
 		this.update(state => ({
 			...state,
 			data: {
 				...state.data,
-				tenantRigths,
+				tenantRights,
 			},
 		}));
 	}
 
-	public setSiteRights(siteRigths: MySecurityRightModel[]): void {
+	public setSiteRights(siteRights: MySecurityRightModel[]): void {
 		this.update(state => ({
 			...state,
 			data: {
 				...state.data,
-				siteRigths,
+				siteRights,
 			},
 		}));
 	}
