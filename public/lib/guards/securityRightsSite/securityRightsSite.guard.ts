@@ -27,8 +27,7 @@ const securityRightsSiteGuard: SecurityRightsSiteGuardFunction = (
 			if (checkSecurityRights(mySecurityRights, requiredSecurityRights, oneSecurityRight)) {
 				next();
 			} else {
-				// Change this with a redirect to a 403 page?
-				next.redirect(generatePath(MODULE_PATHS.dashboard));
+				next.redirect(generatePath(MODULE_PATHS.forbidden403));
 			}
 		});
 	} catch {

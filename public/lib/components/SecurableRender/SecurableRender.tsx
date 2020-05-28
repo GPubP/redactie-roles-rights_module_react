@@ -5,8 +5,8 @@ import { checkSecurityRights } from '../../helpers';
 import { SecurableRenderProps } from './SecurableRender.types';
 
 const SecurableRender: FC<SecurableRenderProps> = ({
-	userSecurityRights,
-	requiredSecurityRights,
+	userSecurityRights = [],
+	requiredSecurityRights = [],
 	oneSecurityRight = false,
 	renderOtherwise,
 	children,

@@ -6,3 +6,4 @@ export { default as UserDetailGeneral } from './UserDetailGeneral/UserDetailGene
 export { default as UserDetailRoles } from './UserDetailRoles/UserDetailRoles';
 export { default as UserDetailRolesUpdate } from './UserDetailRolesUpdate/UserDetailRolesUpdate';
 export { default as SiteUserDetailRolesUpdate } from './SiteUserDetailRolesUpdate/SiteUserDetailRolesUpdate';
+export { default as Forbidden403View } from './Forbidden403View/Forbidden403View';

@@ -103,4 +103,7 @@ export interface RolesRightsModuleAPI {
 		securityRightsTenantGuard: SecurityRightsTenantGuardFunction;
 		securityRightsSiteGuard: SecurityRightsSiteGuardFunction;
 	};
+	views: {
+		Forbidden403View: FC;
+	};
 }
