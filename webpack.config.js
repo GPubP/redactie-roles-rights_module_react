@@ -60,6 +60,7 @@ module.exports = env => {
 			'@datorama/akita': '@datorama/akita',
 			'react-dom': 'react-dom',
 			'react-router-dom': 'react-router-dom',
+			'react-router-guards': 'react-router-guards',
 			'@redactie/redactie-core': '@redactie/redactie-core',
 			'@redactie/utils': '@redactie/utils',
 			'@acpaas-ui/react-components': '@acpaas-ui/react-components',

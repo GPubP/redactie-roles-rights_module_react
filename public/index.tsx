@@ -1,4 +1,5 @@
-import { akitaDevtools } from '@datorama/akita';
+// uncomment to enable akita devTools
+// import { akitaDevtools } from '@datorama/akita';
 import Core, { ModuleRouteConfig } from '@redactie/redactie-core';
 import React, { FC } from 'react';
 import { Redirect } from 'react-router-dom';
@@ -9,6 +10,7 @@ import { TenantContext } from './lib/context';
 import { MODULE_PATHS } from './lib/roles.const';
 import { RolesModuleProps } from './lib/roles.types';
 import {
+	Forbidden403View,
 	RolesOverview,
 	SiteUserDetailRolesUpdate,
 	SiteUsersOverview,
@@ -19,7 +21,8 @@ import {
 	UserUpdate,
 } from './lib/views';
 
-akitaDevtools();
+// uncomment to enable akita devTools
+// akitaDevtools();
 
 const SiteRolesComponent: FC<RolesModuleProps> = ({ route, location, tenantId }) => {
 	// if path is /users, redirect to /users/overzicht
@@ -69,20 +72,20 @@ registerRoutes({
 			component: SiteUserDetailRolesUpdate,
 		},
 		{
-			path: MODULE_PATHS.users.root,
-			component: SiteUsersOverview,
-			navigation: {
-				context: 'site',
-				label: 'Gebruikers',
-				parentPath: MODULE_PATHS.siteRoot,
-			},
-		},
-		{
-			path: MODULE_PATHS.roles.root,
+			path: MODULE_PATHS.roles.overview,
 			component: RolesOverview,
 			navigation: {
 				context: 'site',
 				label: 'Rollen en rechten',
+				parentPath: MODULE_PATHS.siteRoot,
+			},
+		},
+		{
+			path: MODULE_PATHS.users.overview,
+			component: SiteUsersOverview,
+			navigation: {
+				context: 'site',
+				label: 'Gebruikers',
 				parentPath: MODULE_PATHS.siteRoot,
 			},
 		},
@@ -124,6 +127,11 @@ Core.routes.register({
 			],
 		},
 	],
+});
+
+Core.routes.register({
+	path: MODULE_PATHS.forbidden403,
+	component: Forbidden403View,
 });
 
 // API export

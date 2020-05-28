@@ -1,0 +1,19 @@
+@import '~@a-ui/core/dist/assets/styles/_quarks';
+
+.m-nav-list {
+	li {
+		border: 1.3px solid #949494;
+		border-bottom: none;
+		border-top: none;
+
+		&:hover {
+			cursor: pointer;
+			background-color: #f3f3f3;
+		}
+
+		div {
+			text-align: left;
+			padding-left: $spacer;
+		}
+	}
+}
