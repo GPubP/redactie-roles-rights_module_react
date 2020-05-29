@@ -12,7 +12,8 @@ import React, { FC, ReactElement, useEffect, useState } from 'react';
 import { DataLoader, ModulesList, RolesPermissionsList } from '../../components';
 import { FormState } from '../../components/RolesPermissionsList/RolesPermissionsList.types';
 import { useCoreTranslation } from '../../connectors/translations';
-import { useRoutesBreadcrumbs, useSecurityRights } from '../../hooks';
+import { useRoutesBreadcrumbs, useSecurityRights, useSiteNavigate } from '../../hooks';
+import { MODULE_PATHS } from '../../roles.const';
 import { LoadingState, RolesRouteProps } from '../../roles.types';
 import { DEFAULT_ROLES_SEARCH_PARAMS } from '../../services/roles/roles.service.const';
 import { UpdateRolesMatrixPayload } from '../../services/securityRights';
@@ -20,8 +21,8 @@ import {
 	ModuleModel,
 	RoleModel,
 	SecurityRightModel,
-	securityRightsFacade,
-} from '../../store/securityRights';
+	securityRightsMatrixFacade,
+} from '../../store/securityRightsMatrix';
 
 import { RoleSecurityRight } from './RolesOverview.types';
 
@@ -36,10 +37,12 @@ const RolesOverview: FC<RolesRouteProps<{ siteId: string }>> = ({ match }) => {
 	const [loadingState, securityRightMatrix] = useSecurityRights();
 	const [initialLoading, setInitialLoading] = useState(LoadingState.Loading);
 	const [formValues, setFormValues] = useState<UpdateRolesMatrixPayload | null>(null);
+	const { navigate } = useSiteNavigate();
 	const { modules = [], securityRights = [], roles = [] } = securityRightMatrix || {};
+	const [matrixTitle, setMatrixTitle] = useState<string>('');
 
 	useEffect(() => {
-		securityRightsFacade.getSecurityRightsBySite(rolesSearchParams, siteId);
+		securityRightsMatrixFacade.getSecurityRightsBySite(rolesSearchParams, siteId);
 	}, [rolesSearchParams, siteId]);
 
 	useEffect(() => {
@@ -53,12 +56,13 @@ const RolesOverview: FC<RolesRouteProps<{ siteId: string }>> = ({ match }) => {
 	const handleClick = (module: string): any => {
 		setRolesSearchParams({
 			...rolesSearchParams,
-			search: module,
+			module: module,
 		});
+		setMatrixTitle(module);
 	};
 
 	const onCancel = (): void => {
-		console.log('cancel');
+		navigate(MODULE_PATHS.roles.overview, { siteId });
 	};
 
 	const securityRightsByModule = (
@@ -89,7 +93,7 @@ const RolesOverview: FC<RolesRouteProps<{ siteId: string }>> = ({ match }) => {
 			}, [] as string[]);
 
 			return acc;
-		}, {} as any);
+		}, {} as FormState);
 
 	const parseFormResult = (formState: FormState): UpdateRolesMatrixPayload =>
 		Object.keys(formState).reduce((roles, securityRightId) => {
@@ -114,10 +118,9 @@ const RolesOverview: FC<RolesRouteProps<{ siteId: string }>> = ({ match }) => {
 		}, [] as UpdateRolesMatrixPayload);
 
 	const onConfigSave = (): void => {
-		// if (formValues) {
-		// 	securityRightsFacade.updateSecurityRightsForSite(formValues, siteId);
-		// }
-		console.log(formValues);
+		if (formValues) {
+			securityRightsMatrixFacade.updateSecurityRightsForSite(formValues, siteId);
+		}
 	};
 
 	const onFormChange = (value: FormState): void => {
@@ -155,6 +158,7 @@ const RolesOverview: FC<RolesRouteProps<{ siteId: string }>> = ({ match }) => {
 							permissions={securityRightsByModule(securityRights, modules)}
 							formState={createInitialFormState(securityRights, roles)}
 							onChange={onFormChange}
+							title={matrixTitle}
 						/>
 					</div>
 				</div>

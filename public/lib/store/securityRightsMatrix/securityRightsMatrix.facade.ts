@@ -5,14 +5,14 @@ import {
 	UpdateRolesMatrixPayload,
 } from '../../services/securityRights';
 
-import { securityRightsQuery, SecurityRightsQuery } from './securityRights.query';
-import { securityRightsStore, SecurityRightsStore } from './securityRights.store';
+import { securityRightsMatrixQuery, SecurityRightsMatrixQuery } from './securityRightsMatrix.query';
+import { securityRightsMatrixStore, SecurityRightsMatrixStore } from './securityRightsMatrix.store';
 
-export class SecurityRightsFacade {
+export class SecurityRightsMatrixFacade {
 	constructor(
-		private store: SecurityRightsStore,
+		private store: SecurityRightsMatrixStore,
 		private service: SecurityRightsApiService,
-		private query: SecurityRightsQuery
+		private query: SecurityRightsMatrixQuery
 	) {}
 
 	public readonly data$ = this.query.data$;
@@ -51,8 +51,8 @@ export class SecurityRightsFacade {
 	}
 }
 
-export const securityRightsFacade = new SecurityRightsFacade(
-	securityRightsStore,
+export const securityRightsMatrixFacade = new SecurityRightsMatrixFacade(
+	securityRightsMatrixStore,
 	securityRightsApiService,
-	securityRightsQuery
+	securityRightsMatrixQuery
 );

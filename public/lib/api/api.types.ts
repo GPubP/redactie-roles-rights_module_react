@@ -2,7 +2,7 @@ import { SecurityRightsSiteGuardFunction, SecurityRightsTenantGuardFunction } fr
 import { RolesRightsModuleAPI } from '../roles.types';
 import { MySecurityRightModel, MySecurityRightsState } from '../store/mySecurityRights';
 import { RoleModel, RolesMetaModel, RolesState } from '../store/roles';
-import { SecurityRightMatrixModel, SecurityRightsState } from '../store/securityRights';
+import { SecurityRightMatrixModel, SecurityRightsMatrixState } from '../store/securityRightsMatrix';
 import { UserModel, UsersMetaModel, UsersState } from '../store/users';
 
 export {
@@ -13,7 +13,7 @@ export {
 	RoleModel,
 	RolesMetaModel,
 	SecurityRightMatrixModel,
-	SecurityRightsState,
+	SecurityRightsMatrixState,
 	RolesState,
 	MySecurityRightModel,
 	MySecurityRightsState,

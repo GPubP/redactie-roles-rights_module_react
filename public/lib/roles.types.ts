@@ -9,7 +9,10 @@ import {
 	MySecurityRightsQuery,
 } from './store/mySecurityRights';
 import { RolesFacade, RolesQuery } from './store/roles';
-import { SecurityRightsFacade, SecurityRightsQuery } from './store/securityRights';
+import {
+	SecurityRightsMatrixFacade,
+	SecurityRightsMatrixQuery,
+} from './store/securityRightsMatrix';
 import { UsersFacade, UsersQuery } from './store/users';
 
 export interface RolesModuleProps extends RouteConfigComponentProps {
@@ -79,8 +82,8 @@ export interface RolesRightsModuleAPI {
 			query: RolesQuery;
 		};
 		securityRights: {
-			service: Partial<SecurityRightsFacade>;
-			query: SecurityRightsQuery;
+			service: Partial<SecurityRightsMatrixFacade>;
+			query: SecurityRightsMatrixQuery;
 		};
 		mySecurityRights: {
 			service: Partial<MySecurityRightsFacade>;

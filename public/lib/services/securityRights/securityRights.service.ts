@@ -21,12 +21,12 @@ export class SecurityRightsApiService {
 
 	public async updateSecurityRightsForSite(
 		siteId: string,
-		rolesSecurityRights: UpdateRolesMatrixPayload
+		roles: UpdateRolesMatrixPayload
 	): Promise<SecurityRightMatrixResponse> {
 		return await api
 			.put(`sites/${siteId}/roles-security-rights-matrix`, {
 				json: {
-					rolesSecurityRights,
+					roles,
 				},
 			})
 			.json();
