@@ -1,6 +1,7 @@
 import { ModuleRouteConfig, RouteConfigComponentProps } from '@redactie/redactie-core';
 import { FC } from 'react';
 
+import { SecurityRightsTenantCanShownFunction } from './canShowns';
 import { SecurableRenderProps } from './components/SecurableRender/SecurableRender.types';
 import { SecurityRightsSiteGuardFunction, SecurityRightsTenantGuardFunction } from './guards';
 import {
@@ -105,6 +106,9 @@ export interface RolesRightsModuleAPI {
 	guards: {
 		securityRightsTenantGuard: SecurityRightsTenantGuardFunction;
 		securityRightsSiteGuard: SecurityRightsSiteGuardFunction;
+	};
+	canShowns: {
+		securityRightsTenantCanShown: SecurityRightsTenantCanShownFunction;
 	};
 	views: {
 		Forbidden403View: FC;

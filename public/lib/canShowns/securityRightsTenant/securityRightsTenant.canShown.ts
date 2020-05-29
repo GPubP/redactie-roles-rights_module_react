@@ -1,19 +1,16 @@
-import { generatePath } from 'react-router-dom';
 import { take } from 'rxjs/operators';
 
 import { checkSecurityRights } from '../../helpers';
-import { MODULE_PATHS } from '../../roles.const';
 import { mySecurityRightsFacade, mySecurityRightsQuery } from '../../store/mySecurityRights';
 
-import { SecurityRightsTenantGuardFunction } from './securityRightsTenant.guard.types';
+import { SecurityRightsTenantCanShownFunction } from './securityRightsTenant.canShown.types';
 
-const securityRightsTenantGuard: SecurityRightsTenantGuardFunction = (
+const securityRightsTenantCanShown: SecurityRightsTenantCanShownFunction = (
 	requiredSecurityRights = [],
 	oneSecurityRight = false
-) => async (to, from, next): Promise<void> => {
+) => async (props, next): Promise<void> => {
 	try {
 		await mySecurityRightsFacade.getMyTenantSecurityRights();
-
 		const result = await mySecurityRightsQuery.tenantRights$.pipe(take(1)).toPromise();
 		const mySecurityRights = result.map(right => right.attributes.key);
 
@@ -25,11 +22,11 @@ const securityRightsTenantGuard: SecurityRightsTenantGuardFunction = (
 		if (checkSecurityRights(mySecurityRights, requiredSecurityRights, oneSecurityRight)) {
 			next();
 		} else {
-			next.redirect(generatePath(MODULE_PATHS.forbidden403));
+			throw new Error('No permission to see navigation item');
 		}
-	} catch {
-		throw new Error('Tenant does not exist');
+	} catch (err) {
+		throw new Error(err);
 	}
 };
 
-export default securityRightsTenantGuard;
+export default securityRightsTenantCanShown;

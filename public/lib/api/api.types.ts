@@ -1,3 +1,4 @@
+import { SecurityRightsTenantCanShownFunction } from '../canShowns';
 import { SecurityRightsSiteGuardFunction, SecurityRightsTenantGuardFunction } from '../guards';
 import { RolesRightsModuleAPI } from '../roles.types';
 import { MySecurityRightModel, MySecurityRightsState } from '../store/mySecurityRights';
@@ -19,4 +20,5 @@ export {
 	MySecurityRightsState,
 	SecurityRightsSiteGuardFunction,
 	SecurityRightsTenantGuardFunction,
+	SecurityRightsTenantCanShownFunction,
 };

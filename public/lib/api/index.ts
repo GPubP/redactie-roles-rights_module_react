@@ -2,6 +2,7 @@ import Core from '@redactie/redactie-core';
 
 import { RolesRightsModuleAPI } from '../roles.types';
 
+import { canShowns } from './canShowns';
 import { components } from './components';
 import { guards } from './guards';
 import { hooks } from './hooks';
@@ -15,6 +16,7 @@ export const registerRolesAPI = (): void => {
 		components,
 		guards,
 		views,
+		canShowns,
 	};
 
 	Core.modules.exposeModuleApi('roles-rights-module', api);
