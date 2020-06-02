@@ -1,14 +1,15 @@
 import { EntityState } from '@datorama/akita';
 
-import { UserMetaResponse, UserResponse } from '../../services/users';
+import { Page } from '../../roles.types';
+import { UserResponse } from '../../services/users';
 import { RoleModel } from '../roles';
 
 export type UserModel = UserResponse;
 export interface UserDetailModel extends UserModel {
-	activeTenantRoles: RoleModel[];
-	activeSiteRoles: RoleModel[];
+	tenantRoles: RoleModel[];
+	siteRoles: RoleModel[];
 }
-export type UsersMetaModel = UserMetaResponse;
+export type UsersMetaModel = Page;
 
 export interface UsersState extends EntityState<UserModel, string> {
 	meta?: UsersMetaModel;

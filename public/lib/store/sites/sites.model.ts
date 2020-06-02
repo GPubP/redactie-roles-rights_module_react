@@ -1,14 +1,15 @@
 import { EntityState } from '@datorama/akita';
 
+import { Page } from '../../roles.types';
 import { RoleResponse } from '../../services/roles';
-import { SiteResponse, SitesMetaResponse } from '../../services/sites';
+import { SiteResponse } from '../../services/sites';
 
 export interface SiteModel extends SiteResponse {
 	hasAccess: boolean;
 	roles: RoleResponse[];
 }
 export type SiteDetail = SiteResponse;
-export type SitesMetaModel = SitesMetaResponse;
+export type SitesMetaModel = Page;
 
 export interface SitesState extends EntityState<SiteModel, string> {
 	meta?: SitesMetaModel;

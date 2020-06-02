@@ -1,0 +1,67 @@
+@import '~@a-ui/core/dist/assets/styles/_quarks';
+
+.m-table {
+	width: 100%;
+	margin: $spacer 0;
+	border-collapse: collapse;
+
+	&--header {
+		height: 10rem;
+		background-color: #f3f3f3;
+	}
+
+	.a-table-header {
+		&--top {
+			height: 180px;
+			border-left: 1px solid #c0c0c0;
+			border-right: 1px solid #c0c0c0;
+			padding-left: 0;
+		}
+
+		&--side {
+			border-bottom: 1px solid #c0c0c0;
+			border-top: 1px solid #c0c0c0;
+			width: 180px;
+		}
+	}
+
+	th.a-table-header--top > div {
+		transform: translate3d(0, 55px, 0) rotate(270deg);
+		width: 48px;
+	}
+
+	th.a-table-header--top > div > span {
+		display: inline-block;
+		white-space: nowrap;
+		overflow: hidden;
+		text-overflow: ellipsis;
+		width: 155px;
+	}
+
+	tr {
+		height: 48px;
+		text-align: left;
+	}
+
+	tr:nth-child(even) {
+		background-color: #f3f3f3;
+	}
+
+	th {
+		padding-left: $spacer;
+	}
+
+	td {
+		border-bottom: 1px solid #c0c0c0;
+		border-top: 1px solid #c0c0c0;
+	}
+
+	.a-table-checkbox {
+		width: 36px;
+		border: 1px solid #c0c0c0;
+
+		.a-input__checkbox {
+			padding-left: 2.5rem;
+		}
+	}
+}

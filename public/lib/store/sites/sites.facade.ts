@@ -34,7 +34,7 @@ export class SitesFacade {
 					(site): Promise<SiteModel> =>
 						new Promise(resolve => {
 							this.userService
-								.getUserRolesForSite({ id: payload.id, siteUuid: site.uuid })
+								.getUserRolesForSite({ userUuid: payload.id, siteUuid: site.uuid })
 								.then(rolesResponse => {
 									return resolve({
 										...site,

@@ -1,6 +1,7 @@
 export { default as useRoutesBreadcrumbs } from './useRoutesBreadcrumbs/useRoutesBreadcrumbs';
 export { default as useNavigate } from './useNavigate/useNavigate';
 export { default as useUsers } from './useUsers/useUsers';
+export { default as useSecurityRights } from './useSecurityRights/useSecurityRights';
 export { default as useSiteNavigate } from './useSiteNavigate/useSiteNavigate';
 export { default as useUser } from './useUser/useUser';
 export { default as useSites } from './useSites/useSites';
@@ -10,3 +11,5 @@ export { default as useSiteRoles } from './useSiteRoles/useSiteRoles';
 export { default as useUserRolesForTenant } from './useUserRolesForTenant/useUserRolesForTenant';
 export { default as useUserRolesForSite } from './useUserRolesForSite/useUserRolesForSite';
 export { default as useUsersLoadingStates } from './useUsersLoadingStates/useUsersLoadingStates';
+export { default as useMySecurityRightsForTenant } from './useMySecurityRightsForTenant/useMySecurityRightsForTenant';
+export { default as useMySecurityRightsForSite } from './useMySecurityRightsForSite/useMySecurityRightsForSite';

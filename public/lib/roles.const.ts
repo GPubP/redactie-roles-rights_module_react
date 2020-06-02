@@ -14,6 +14,7 @@ export const BREADCRUMB_OPTIONS = {
 	],
 };
 
+const forbidden403 = '/403';
 const siteRoot = '/:siteId/users';
 const tenantRoot = '/users';
 const tenantUsersOverview = `${tenantRoot}/overzicht`;
@@ -32,16 +33,15 @@ const siteUserDetailRolesUpdate = `${siteUsersRoot}/:userUuid/rollen`;
 const tenantRolesRoot = `${tenantRoot}/roles`;
 
 export const MODULE_PATHS = {
+	forbidden403,
 	siteRoot,
 	dashboard: '/dashboard',
 	tenantRoot,
 	tenantUsersOverview,
 	users: {
-		root: siteUsersRoot,
 		overview: siteUsersOverview,
 	},
 	roles: {
-		root: siteRolesRoot,
 		overview: siteRolesOverview,
 	},
 	tenantUserDetail,

@@ -9,6 +9,7 @@ import {
 	usersApiService,
 	UsersApiService,
 } from '../../services/users';
+import { MySecurityRightsStore, mySecurityRightsStore } from '../mySecurityRights';
 
 import { UsersQuery, usersQuery } from './users.query';
 import { UsersStore, usersStore } from './users.store';
@@ -16,6 +17,7 @@ import { UsersStore, usersStore } from './users.store';
 export class UsersFacade {
 	constructor(
 		private store: UsersStore,
+		private mySecurityRightsStore: MySecurityRightsStore,
 		private service: UsersApiService,
 		private query: UsersQuery
 	) {}
@@ -91,7 +93,7 @@ export class UsersFacade {
 			.getUserRolesForTenant(payload)
 			.then(response => {
 				this.store.setUserDetail({
-					activeTenantRoles: response._embedded,
+					tenantRoles: response._embedded,
 				});
 			})
 			.catch(err => {
@@ -105,8 +107,9 @@ export class UsersFacade {
 		this.service
 			.updateUserRolesForTenant(payload)
 			.then(response => {
+				this.mySecurityRightsStore.setTenantRightsCache(false);
 				this.store.setUserDetail({
-					activeTenantRoles: response._embedded,
+					tenantRoles: response._embedded,
 				});
 			})
 			.catch(err => {
@@ -121,7 +124,7 @@ export class UsersFacade {
 			.getUserRolesForSite(payload)
 			.then(response => {
 				this.store.setUserDetail({
-					activeSiteRoles: response._embedded,
+					siteRoles: response._embedded,
 				});
 			})
 			.catch(err => this.store.setError(err))
@@ -133,8 +136,9 @@ export class UsersFacade {
 		return this.service
 			.updateUserRolesForSite(payload)
 			.then(response => {
+				this.mySecurityRightsStore.setSiteRightsCache(false);
 				this.store.setUserDetail({
-					activeSiteRoles: response._embedded,
+					siteRoles: response._embedded,
 				});
 			})
 			.catch(err => this.store.setError(err))
@@ -157,4 +161,9 @@ export class UsersFacade {
 	}
 }
 
-export const usersFacade = new UsersFacade(usersStore, usersApiService, usersQuery);
+export const usersFacade = new UsersFacade(
+	usersStore,
+	mySecurityRightsStore,
+	usersApiService,
+	usersQuery
+);

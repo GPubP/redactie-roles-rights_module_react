@@ -1,15 +1,7 @@
+import { EmbeddedResponse } from '../../roles.types';
 import { SearchParams } from '../api';
 
-export interface UsersResponse {
-	_embedded: UserResponse[];
-	_page: UserMetaResponse;
-}
-export interface UserMetaResponse {
-	size: number;
-	totalElements: boolean;
-	totalPages: number;
-	number: number;
-}
+export type UsersResponse = EmbeddedResponse<UserResponse>;
 
 export interface UserResponse {
 	address: string;
@@ -25,33 +17,31 @@ export interface UserResponse {
 	username: string;
 }
 
-export interface GetUserPayload {
-	id: string;
+export interface UsersBasePayload {
+	userUuid: string;
 }
 
-export interface GetUserRolesForTenantPayload {
-	id: string;
-}
-
-export interface UpdateUserRolesForTenantPayload {
-	id: string;
-	roles: Array<string>;
-}
-
-export interface GetUserRolesForSitePayload {
-	id: string;
-	siteUuid: string;
-}
-
-export interface UpdateUserRolesForSitePayload {
-	userId: string;
-	siteUuid: string;
-	roles: Array<string>;
-}
-
-export interface AddUserToSitePayload {
-	userId: string;
-	siteUuid: string;
-}
-
+// Tenant
+export type GetUserRolesForTenantPayload = UsersBasePayload;
+export type GetUserSecurityRightsForTenantPayload = UsersBasePayload;
+export type GetUserPayload = UsersBasePayload;
 export type GetUsersPayload = SearchParams;
+export interface UpdateUserRolesForTenantPayload extends UsersBasePayload {
+	roles: Array<string>;
+}
+
+// Site
+export interface GetUserRolesForSitePayload extends UsersBasePayload {
+	siteUuid: string;
+}
+
+export interface UpdateUserRolesForSitePayload extends UsersBasePayload {
+	siteUuid: string;
+	roles: Array<string>;
+}
+
+export interface AddUserToSitePayload extends UsersBasePayload {
+	siteUuid: string;
+}
+
+export type GetUserSecurityRightsForSitePayload = AddUserToSitePayload;
