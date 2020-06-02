@@ -13,6 +13,7 @@ const securityRightsSiteGuard: SecurityRightsSiteGuardFunction = (
 	oneSecurityRight = false
 ) => async (to, from, next): Promise<void> => {
 	const siteUuid = to.match.params[urlSiteParam];
+	const tenantId = from?.match.params.tenantId || to.meta.tenantId;
 
 	try {
 		await mySecurityRightsFacade.getMySiteSecurityRights(siteUuid);
@@ -27,7 +28,7 @@ const securityRightsSiteGuard: SecurityRightsSiteGuardFunction = (
 			if (checkSecurityRights(mySecurityRights, requiredSecurityRights, oneSecurityRight)) {
 				next();
 			} else {
-				next.redirect(generatePath(MODULE_PATHS.forbidden403));
+				next.redirect(generatePath(`/${tenantId}${MODULE_PATHS.forbidden403}`));
 			}
 		});
 	} catch {

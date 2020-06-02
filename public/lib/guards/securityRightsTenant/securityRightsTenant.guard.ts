@@ -13,7 +13,7 @@ const securityRightsTenantGuard: SecurityRightsTenantGuardFunction = (
 ) => async (to, from, next): Promise<void> => {
 	try {
 		await mySecurityRightsFacade.getMyTenantSecurityRights();
-
+		const tenantId = from?.match.params.tenantId || to.meta.tenantId;
 		const result = await mySecurityRightsQuery.tenantRights$.pipe(take(1)).toPromise();
 		const mySecurityRights = result.map(right => right.attributes.key);
 
@@ -25,7 +25,7 @@ const securityRightsTenantGuard: SecurityRightsTenantGuardFunction = (
 		if (checkSecurityRights(mySecurityRights, requiredSecurityRights, oneSecurityRight)) {
 			next();
 		} else {
-			next.redirect(generatePath(MODULE_PATHS.forbidden403));
+			next.redirect(generatePath(`/${tenantId}${MODULE_PATHS.forbidden403}`));
 		}
 	} catch {
 		throw new Error('Tenant does not exist');
