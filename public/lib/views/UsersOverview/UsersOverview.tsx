@@ -8,7 +8,12 @@ import React, { FC, ReactElement, useEffect, useState } from 'react';
 
 import { DataLoader, FilterForm, FilterFormState } from '../../components';
 import { useCoreTranslation } from '../../connectors/translations';
-import { useNavigate, useRoutesBreadcrumbs, useUsers } from '../../hooks';
+import {
+	useMySecurityRightsForTenant,
+	useNavigate,
+	useRoutesBreadcrumbs,
+	useUsers,
+} from '../../hooks';
 import { MODULE_PATHS } from '../../roles.const';
 import { LoadingState, RolesRouteProps } from '../../roles.types';
 import { DEFAULT_USERS_SEARCH_PARAMS } from '../../services/users/users.service.const';
@@ -32,6 +37,7 @@ const UsersOverview: FC<RolesRouteProps> = () => {
 	const [loadingState, users, usersMeta] = useUsers();
 	const [initialLoading, setInitialLoading] = useState(LoadingState.Loading);
 	const [activeSorting, setActiveSorting] = useState<OrderBy>();
+	const [mySecurityRightsLoadingState, mySecurityRights] = useMySecurityRightsForTenant(true);
 	const [t] = useCoreTranslation();
 
 	useEffect(() => {
@@ -39,10 +45,13 @@ const UsersOverview: FC<RolesRouteProps> = () => {
 	}, [usersSearchParams]);
 
 	useEffect(() => {
-		if (loadingState === LoadingState.Loaded || loadingState === LoadingState.Error) {
+		if (
+			loadingState !== LoadingState.Loading &&
+			mySecurityRightsLoadingState !== LoadingState.Loading
+		) {
 			setInitialLoading(LoadingState.Loaded);
 		}
-	}, [loadingState]);
+	}, [loadingState, mySecurityRightsLoadingState]);
 	/**
 	 * Methods
 	 */
@@ -145,7 +154,7 @@ const UsersOverview: FC<RolesRouteProps> = () => {
 				</div>
 				<PaginatedTable
 					className="u-margin-top"
-					columns={USERS_OVERVIEW_COLUMNS(t)}
+					columns={USERS_OVERVIEW_COLUMNS(t, mySecurityRights)}
 					rows={usersRows}
 					currentPage={currentPage}
 					itemsPerPage={DEFAULT_USERS_SEARCH_PARAMS.limit}

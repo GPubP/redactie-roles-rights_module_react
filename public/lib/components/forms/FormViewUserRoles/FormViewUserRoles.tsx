@@ -6,7 +6,12 @@ import { RoleModel } from '../../../store/roles';
 
 import { FormViewUserRolesProps, RoleIds } from './FormViewUserRoles.types';
 
-const FormViewUserRoles: FC<FormViewUserRolesProps> = ({ formState, availableRoles, onSubmit }) => {
+const FormViewUserRoles: FC<FormViewUserRolesProps> = ({
+	formState,
+	availableRoles,
+	readonly = false,
+	onSubmit,
+}) => {
 	const handleFormSubmit = (object: RoleIds): void => {
 		onSubmit(object.roleIds);
 	};
@@ -27,6 +32,7 @@ const FormViewUserRoles: FC<FormViewUserRolesProps> = ({ formState, availableRol
 							<Field
 								key={role.id}
 								as={Checkbox}
+								disabled={readonly}
 								checked={values.roleIds && values.roleIds.includes(role.id)}
 								id={role.id}
 								name={role.name}

@@ -133,6 +133,7 @@ const UserDetailRolesUpdate: FC<RolesRouteProps<{ userUuid?: string; siteUuid?: 
 				<h3>Rollen</h3>
 				<div className="u-margin-top">
 					<FormViewUserRoles
+						readonly={false}
 						formState={selectedRoles}
 						availableRoles={roles}
 						onSubmit={onFormChange}

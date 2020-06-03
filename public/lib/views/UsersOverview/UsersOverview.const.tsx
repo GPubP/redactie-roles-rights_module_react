@@ -3,39 +3,57 @@ import { CORE_TRANSLATIONS } from '@redactie/translations-module/public/lib/i18n
 import { TranslateFunc } from '@redactie/translations-module/public/lib/i18next/useTranslation';
 import React from 'react';
 
+import { checkSecurityRights } from '../../helpers';
+import { SecurityRightsTenant } from '../../roles.const';
+
 import { UsersOverviewTableRow } from './UsersOverview.types';
 
 export const CONTENT_INITIAL_FILTER_STATE = {
 	name: '',
 };
 
-export const USERS_OVERVIEW_COLUMNS = (t: TranslateFunc): any[] => [
-	{
-		label: t(CORE_TRANSLATIONS.TABLE_NAME),
-		disableSorting: true,
-		value: 'name',
-	},
-	{
-		label: t(CORE_TRANSLATIONS.TABLE_TYPE),
-		disableSorting: true,
-		value: 'type',
-	},
-	{
-		label: '',
-		classList: ['u-text-right'],
-		disableSorting: true,
-		component(value: unknown, rowData: UsersOverviewTableRow) {
-			const { uuid, navigate } = rowData;
-
-			return (
-				<Button
-					ariaLabel="Edit"
-					icon="edit"
-					onClick={() => navigate(uuid)}
-					type="primary"
-					transparent
-				></Button>
-			);
+export const USERS_OVERVIEW_COLUMNS = (t: TranslateFunc, mySecurityRights: string[]): any[] => {
+	const canReadOne = checkSecurityRights(
+		mySecurityRights,
+		[SecurityRightsTenant.UsersReadOne],
+		false
+	);
+	const defaultColumns = [
+		{
+			label: t(CORE_TRANSLATIONS.TABLE_NAME),
+			disableSorting: true,
+			value: 'name',
 		},
-	},
-];
+		{
+			label: t(CORE_TRANSLATIONS.TABLE_TYPE),
+			disableSorting: true,
+			value: 'type',
+		},
+	];
+
+	if (!canReadOne) {
+		return defaultColumns;
+	}
+
+	return [
+		...defaultColumns,
+		{
+			label: '',
+			classList: ['u-text-right'],
+			disableSorting: true,
+			component(value: unknown, rowData: UsersOverviewTableRow) {
+				const { uuid, navigate } = rowData;
+
+				return (
+					<Button
+						ariaLabel="Edit"
+						icon="edit"
+						onClick={() => navigate(uuid)}
+						type="primary"
+						transparent
+					></Button>
+				);
+			},
+		},
+	];
+};

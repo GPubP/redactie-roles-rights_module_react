@@ -3,11 +3,14 @@ import { CORE_TRANSLATIONS } from '@redactie/translations-module/public/lib/i18n
 import { TranslateFunc } from '@redactie/translations-module/public/lib/i18next/useTranslation';
 import React from 'react';
 
+import { SecurableRender } from '../../components';
+import { SecurityRightsTenant } from '../../roles.const';
 import { LoadingState } from '../../roles.types';
 import { RoleModel } from '../../store/roles';
 
 export const SITE_COLUMNS = (
 	t: TranslateFunc,
+	mySecurityRights: string[],
 	isAddingUserToSite: LoadingState | null,
 	giveAccessSiteId: string | null
 ): any[] => [
@@ -46,27 +49,37 @@ export const SITE_COLUMNS = (
 
 			if (hasAccess) {
 				return (
-					<Button
-						ariaLabel="Edit"
-						icon="edit"
-						onClick={() => editAccess()}
-						type="primary"
-						transparent
-					/>
+					<SecurableRender
+						userSecurityRights={mySecurityRights}
+						requiredSecurityRights={[SecurityRightsTenant.UsersUpdateSiteRoles]}
+					>
+						<Button
+							ariaLabel="Edit"
+							icon="edit"
+							onClick={() => editAccess()}
+							type="primary"
+							transparent
+						/>
+					</SecurableRender>
 				);
 			}
 
 			return (
-				<Button
-					iconLeft={isGivingAccess ? 'circle-o-notch fa-spin' : null}
-					disabled={isGivingAccess}
-					size="small"
-					onClick={() => giveAccess()}
-					type="primary"
-					outline
+				<SecurableRender
+					userSecurityRights={mySecurityRights}
+					requiredSecurityRights={[SecurityRightsTenant.UsersGrantSiteAccess]}
 				>
-					Toegang geven
-				</Button>
+					<Button
+						iconLeft={isGivingAccess ? 'circle-o-notch fa-spin' : null}
+						disabled={isGivingAccess}
+						size="small"
+						onClick={() => giveAccess()}
+						type="primary"
+						outline
+					>
+						Toegang geven
+					</Button>
+				</SecurableRender>
 			);
 		},
 	},

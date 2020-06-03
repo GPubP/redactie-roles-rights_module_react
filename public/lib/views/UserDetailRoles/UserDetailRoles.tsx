@@ -3,11 +3,11 @@ import { ActionBar, ActionBarContentSection, Table } from '@acpaas-ui/react-edit
 import { CORE_TRANSLATIONS } from '@redactie/translations-module/public/lib/i18next/translations.const';
 import React, { FC, ReactElement, useState } from 'react';
 
-import { FormViewUserRoles } from '../../components';
+import { FormViewUserRoles, SecurableRender } from '../../components';
 import { useCoreTranslation } from '../../connectors/translations';
 import { mapUserRoles } from '../../helpers';
 import { useNavigate, useUsersLoadingStates } from '../../hooks';
-import { MODULE_PATHS } from '../../roles.const';
+import { MODULE_PATHS, SecurityRightsTenant } from '../../roles.const';
 import { ContentType, LoadingState } from '../../roles.types';
 import { usersFacade } from '../../store/users';
 
@@ -19,6 +19,7 @@ const UserDetailRoles: FC<UserDetailRolesProps> = ({
 	userRoles,
 	roles,
 	sites,
+	mySecurityRights,
 	onCancel,
 	onSubmit,
 }) => {
@@ -72,7 +73,7 @@ const UserDetailRoles: FC<UserDetailRolesProps> = ({
 		return (
 			<Table
 				className="u-margin-top"
-				columns={SITE_COLUMNS(t, isAddingUserToSite, giveAccesSiteId)}
+				columns={SITE_COLUMNS(t, mySecurityRights, isAddingUserToSite, giveAccesSiteId)}
 				rows={siteRows}
 				totalValues={sites.length}
 			/>
@@ -84,34 +85,42 @@ const UserDetailRoles: FC<UserDetailRolesProps> = ({
 			<div className="u-margin">
 				<h5 className="u-margin-bottom">Rollen</h5>
 				<FormViewUserRoles
+					readonly={
+						!mySecurityRights.includes(SecurityRightsTenant.UsersUpdateTenantRoles)
+					}
 					formState={selectedRoles}
 					availableRoles={roles}
 					onSubmit={onConfigChange}
 				/>
 				<h5 className="u-margin-bottom u-margin-top">Rol(len) per site</h5>
 				{renderTable()}
-				<ActionBar className="o-action-bar--fixed" isOpen>
-					<ActionBarContentSection>
-						<div className="u-wrapper row end-xs">
-							<Button onClick={onCancel} negative>
-								{t(CORE_TRANSLATIONS.BUTTON_CANCEL)}
-							</Button>
-							<Button
-								iconLeft={
-									isUpdating === LoadingState.Loading
-										? 'circle-o-notch fa-spin'
-										: null
-								}
-								disabled={isUpdating === LoadingState.Loading}
-								className="u-margin-left-xs"
-								onClick={onConfigSave}
-								type="success"
-							>
-								{t(CORE_TRANSLATIONS.BUTTON_SAVE)}
-							</Button>
-						</div>
-					</ActionBarContentSection>
-				</ActionBar>
+				<SecurableRender
+					userSecurityRights={mySecurityRights}
+					requiredSecurityRights={[SecurityRightsTenant.UsersUpdateTenantRoles]}
+				>
+					<ActionBar className="o-action-bar--fixed" isOpen>
+						<ActionBarContentSection>
+							<div className="u-wrapper row end-xs">
+								<Button onClick={onCancel} negative>
+									{t(CORE_TRANSLATIONS.BUTTON_CANCEL)}
+								</Button>
+								<Button
+									iconLeft={
+										isUpdating === LoadingState.Loading
+											? 'circle-o-notch fa-spin'
+											: null
+									}
+									disabled={isUpdating === LoadingState.Loading}
+									className="u-margin-left-xs"
+									onClick={onConfigSave}
+									type="success"
+								>
+									{t(CORE_TRANSLATIONS.BUTTON_SAVE)}
+								</Button>
+							</div>
+						</ActionBarContentSection>
+					</ActionBar>
+				</SecurableRender>
 			</div>
 		</Card>
 	);

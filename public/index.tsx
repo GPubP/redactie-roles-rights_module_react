@@ -1,13 +1,20 @@
 // uncomment to enable akita devTools
 // import { akitaDevtools } from '@datorama/akita';
 import Core, { ModuleRouteConfig } from '@redactie/redactie-core';
-import React, { FC } from 'react';
+import React, { FC, ReactNode } from 'react';
 import { Redirect } from 'react-router-dom';
 
 import { registerRolesAPI } from './lib/api';
+import { securityRightsSiteCanShown, securityRightsTenantCanShown } from './lib/canShowns';
 import { registerRoutes } from './lib/connectors/sites';
 import { TenantContext } from './lib/context';
-import { MODULE_PATHS } from './lib/roles.const';
+import { securityRightsSiteGuard, securityRightsTenantGuard } from './lib/guards';
+import {
+	MODULE_PATHS,
+	SecurityRightsSite,
+	SecurityRightsTenant,
+	urlSiteParam,
+} from './lib/roles.const';
 import { RolesModuleProps } from './lib/roles.types';
 import {
 	Forbidden403View,
@@ -24,6 +31,23 @@ import {
 // uncomment to enable akita devTools
 // akitaDevtools();
 
+const renderRoutes = (routes: ModuleRouteConfig[] | undefined, tenantId: string): ReactNode => {
+	return Core.routes.render(
+		routes?.map(route => ({
+			...route,
+			guardOptions: {
+				...route.guardOptions,
+				meta: {
+					tenantId,
+				},
+			},
+		})),
+		{
+			routes: routes,
+		}
+	);
+};
+
 const SiteRolesComponent: FC<RolesModuleProps> = ({ route, location, tenantId }) => {
 	// if path is /users, redirect to /users/overzicht
 	if (
@@ -36,9 +60,7 @@ const SiteRolesComponent: FC<RolesModuleProps> = ({ route, location, tenantId })
 
 	return (
 		<TenantContext.Provider value={{ tenantId }}>
-			{Core.routes.render(route.routes as ModuleRouteConfig[], {
-				routes: route.routes,
-			})}
+			{renderRoutes(route.routes, tenantId)}
 		</TenantContext.Provider>
 	);
 };
@@ -51,9 +73,7 @@ const TenantRolesComponent: FC<RolesModuleProps> = ({ route, location, tenantId 
 
 	return (
 		<TenantContext.Provider value={{ tenantId }}>
-			{Core.routes.render(route.routes as ModuleRouteConfig[], {
-				routes: route.routes,
-			})}
+			{renderRoutes(route.routes, tenantId)}
 		</TenantContext.Provider>
 	);
 };
@@ -65,28 +85,59 @@ registerRoutes({
 		renderContext: 'site',
 		context: 'site',
 		label: 'Gebruikers',
+		canShown: [
+			securityRightsSiteCanShown(urlSiteParam, [
+				SecurityRightsSite.RolesRightsReadRolePermissions,
+				SecurityRightsSite.UsersReadAll,
+			]),
+		],
 	},
 	routes: [
 		{
 			path: MODULE_PATHS.siteUserDetailRolesUpdate,
 			component: SiteUserDetailRolesUpdate,
+			guardOptions: {
+				guards: [
+					securityRightsSiteGuard(urlSiteParam, [
+						SecurityRightsSite.UsersUpdateSiteRoles,
+					]),
+				],
+			},
 		},
 		{
 			path: MODULE_PATHS.roles.overview,
 			component: RolesOverview,
+			guardOptions: {
+				guards: [
+					securityRightsSiteGuard(urlSiteParam, [
+						SecurityRightsSite.RolesRightsReadRolePermissions,
+					]),
+				],
+			},
 			navigation: {
 				context: 'site',
 				label: 'Rollen en rechten',
 				parentPath: MODULE_PATHS.siteRoot,
+				canShown: [
+					securityRightsSiteCanShown(urlSiteParam, [
+						SecurityRightsSite.RolesRightsReadRolePermissions,
+					]),
+				],
 			},
 		},
 		{
 			path: MODULE_PATHS.users.overview,
 			component: SiteUsersOverview,
+			guardOptions: {
+				guards: [securityRightsSiteGuard(urlSiteParam, [SecurityRightsSite.UsersReadAll])],
+			},
 			navigation: {
 				context: 'site',
 				label: 'Gebruikers',
 				parentPath: MODULE_PATHS.siteRoot,
+				canShown: [
+					securityRightsSiteCanShown(urlSiteParam, [SecurityRightsSite.UsersReadAll]),
+				],
 			},
 		},
 	],
@@ -95,8 +146,12 @@ registerRoutes({
 Core.routes.register({
 	path: MODULE_PATHS.tenantRoot,
 	component: TenantRolesComponent,
+	guardOptions: {
+		guards: [securityRightsTenantGuard([SecurityRightsTenant.UsersReadAll])],
+	},
 	navigation: {
 		label: 'Gebruikers',
+		canShown: [securityRightsTenantCanShown([SecurityRightsTenant.UsersReadAll])],
 	},
 	exact: true,
 	routes: [
@@ -111,10 +166,16 @@ Core.routes.register({
 		{
 			path: MODULE_PATHS.tenantUserDetailRolesUpdate,
 			component: UserDetailRolesUpdate,
+			guardOptions: {
+				guards: [securityRightsTenantGuard([SecurityRightsTenant.UsersUpdateSiteRoles])],
+			},
 		},
 		{
 			path: MODULE_PATHS.tenantUserDetail,
 			component: UserUpdate,
+			guardOptions: {
+				guards: [securityRightsTenantGuard([SecurityRightsTenant.UsersReadOne])],
+			},
 			routes: [
 				{
 					path: MODULE_PATHS.tenantUserDetailGeneral,
