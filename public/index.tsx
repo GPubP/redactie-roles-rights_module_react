@@ -86,10 +86,14 @@ registerRoutes({
 		context: 'site',
 		label: 'Gebruikers',
 		canShown: [
-			securityRightsSiteCanShown(urlSiteParam, [
-				SecurityRightsSite.RolesRightsReadRolePermissions,
-				SecurityRightsSite.UsersReadAll,
-			]),
+			securityRightsSiteCanShown(
+				urlSiteParam,
+				[
+					SecurityRightsSite.RolesRightsReadRolePermissions,
+					SecurityRightsSite.UsersReadAll,
+				],
+				true
+			),
 		],
 	},
 	routes: [
@@ -97,11 +101,7 @@ registerRoutes({
 			path: MODULE_PATHS.siteUserDetailRolesUpdate,
 			component: SiteUserDetailRolesUpdate,
 			guardOptions: {
-				guards: [
-					securityRightsSiteGuard(urlSiteParam, [
-						SecurityRightsSite.UsersUpdateSiteRoles,
-					]),
-				],
+				guards: [securityRightsSiteGuard(urlSiteParam, [SecurityRightsSite.UsersReadOne])],
 			},
 		},
 		{
