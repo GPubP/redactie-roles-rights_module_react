@@ -13,9 +13,9 @@ export const CONTENT_INITIAL_FILTER_STATE = {
 };
 
 export const USERS_OVERVIEW_COLUMNS = (t: TranslateFunc, mySecurityRights: string[]): any[] => {
-	const canReadOne = checkSecurityRights(
+	const canUpdate = checkSecurityRights(
 		mySecurityRights,
-		[SecurityRightsTenant.UsersReadOne],
+		[SecurityRightsTenant.UsersUpdateTenantRoles],
 		false
 	);
 	const defaultColumns = [
@@ -31,7 +31,7 @@ export const USERS_OVERVIEW_COLUMNS = (t: TranslateFunc, mySecurityRights: strin
 		},
 	];
 
-	if (!canReadOne) {
+	if (!canUpdate) {
 		return defaultColumns;
 	}
 

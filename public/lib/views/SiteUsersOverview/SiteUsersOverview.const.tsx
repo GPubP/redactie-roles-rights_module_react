@@ -13,7 +13,9 @@ export const CONTENT_INITIAL_FILTER_STATE = {
 };
 
 export const USERS_OVERVIEW_COLUMNS = (t: TranslateFunc, mySecurityRights: string[]): any[] => {
-	const canReadOne = checkSecurityRights(mySecurityRights, [SecurityRightsSite.UsersReadOne]);
+	const canUpdate = checkSecurityRights(mySecurityRights, [
+		SecurityRightsSite.UsersUpdateSiteRoles,
+	]);
 	const defaultColumns = [
 		{
 			label: t(CORE_TRANSLATIONS.TABLE_NAME),
@@ -27,7 +29,7 @@ export const USERS_OVERVIEW_COLUMNS = (t: TranslateFunc, mySecurityRights: strin
 		},
 	];
 
-	if (!canReadOne) {
+	if (!canUpdate) {
 		return defaultColumns;
 	}
 

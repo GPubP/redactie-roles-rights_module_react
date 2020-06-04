@@ -54,18 +54,15 @@ export const MODULE_PATHS = {
 };
 
 export enum SecurityRightsSite {
-	UsersReadAll = 'users-read-all',
-	UsersReadOne = 'users-read-one',
+	UsersRead = 'users-read-all',
 	UsersUpdateSiteRoles = 'users-update-site-roles',
 	RolesRightsReadRolePermissions = 'read-role-permissions',
 	RolesRightsUpdateRolePermissions = 'update-role-permissions',
 }
 
 export enum SecurityRightsTenant {
-	UsersReadAll = 'users-read-all',
-	UsersReadOne = 'users-read-one',
+	UsersRead = 'users-read-all',
 	UsersUpdateTenantRoles = 'users-update-tenant-roles',
 	UsersGrantSiteAccess = 'users-grant-site-access',
-	UsersRevokeSiteAccess = 'users-revoke-to-site-access',
 	UsersUpdateSiteRoles = 'users-update-site-roles',
 }

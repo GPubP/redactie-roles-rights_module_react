@@ -10,11 +10,10 @@ import { CORE_TRANSLATIONS } from '@redactie/translations-module/public/lib/i18n
 import React, { FC, ReactElement, useEffect, useMemo, useState } from 'react';
 import { useParams } from 'react-router-dom';
 
-import { DataLoader, FormViewUserRoles, SecurableRender } from '../../components';
+import { DataLoader, FormViewUserRoles } from '../../components';
 import { useCoreTranslation } from '../../connectors/translations';
 import { mapUserRoles } from '../../helpers';
 import {
-	useMySecurityRightsForSite,
 	useNavigate,
 	useRoutesBreadcrumbs,
 	useSite,
@@ -23,7 +22,7 @@ import {
 	useUserRolesForSite,
 	useUsersLoadingStates,
 } from '../../hooks';
-import { MODULE_PATHS, SecurityRightsSite } from '../../roles.const';
+import { MODULE_PATHS } from '../../roles.const';
 import { LoadingState, RolesRouteProps } from '../../roles.types';
 import { rolesFacade } from '../../store/roles';
 import { sitesFacade } from '../../store/sites';
@@ -52,9 +51,6 @@ const SiteUserDetailRolesUpdate: FC<RolesRouteProps> = () => {
 	const breadcrumbs = useRoutesBreadcrumbs(extraBreadcrumbs);
 	const [userRolesLoadingState, userRoles] = useUserRolesForSite();
 	const [selectedRoles, updateSelectedRoles] = useState<string[]>([]);
-	const [mySecurityRightsLoadingState, mySecurityRights] = useMySecurityRightsForSite({
-		onlyKeys: true,
-	});
 
 	useEffect(() => {
 		if (userUuid && siteId) {
@@ -73,20 +69,13 @@ const SiteUserDetailRolesUpdate: FC<RolesRouteProps> = () => {
 			userLoadingState !== LoadingState.Loading &&
 			userRolesLoadingState !== LoadingState.Loading &&
 			rolesLoadingState !== LoadingState.Loading &&
-			siteLoadingState !== LoadingState.Loading &&
-			mySecurityRightsLoadingState !== LoadingState.Loading
+			siteLoadingState !== LoadingState.Loading
 		) {
 			return setInitialLoading(LoadingState.Loaded);
 		}
 
 		setInitialLoading(LoadingState.Loading);
-	}, [
-		rolesLoadingState,
-		siteLoadingState,
-		userLoadingState,
-		userRolesLoadingState,
-		mySecurityRightsLoadingState,
-	]);
+	}, [rolesLoadingState, siteLoadingState, userLoadingState, userRolesLoadingState]);
 
 	useEffect(() => {
 		if (userRoles) {
@@ -129,41 +118,33 @@ const SiteUserDetailRolesUpdate: FC<RolesRouteProps> = () => {
 				<h3>Rollen</h3>
 				<div className="u-margin-top">
 					<FormViewUserRoles
-						readonly={
-							!mySecurityRights.includes(SecurityRightsSite.UsersUpdateSiteRoles)
-						}
 						formState={selectedRoles}
 						availableRoles={roles}
 						onSubmit={onFormChange}
 					/>
 				</div>
-				<SecurableRender
-					userSecurityRights={mySecurityRights}
-					requiredSecurityRights={[SecurityRightsSite.UsersUpdateSiteRoles]}
-				>
-					<ActionBar className="o-action-bar--fixed" isOpen>
-						<ActionBarContentSection>
-							<div className="u-wrapper row end-xs">
-								<Button onClick={onCancel} negative>
-									{t(CORE_TRANSLATIONS.BUTTON_CANCEL)}
-								</Button>
-								<Button
-									iconLeft={
-										isUpdating === LoadingState.Loading
-											? 'circle-o-notch fa-spin'
-											: null
-									}
-									disabled={isUpdating === LoadingState.Loading}
-									className="u-margin-left-xs"
-									onClick={handleSubmit}
-									type="success"
-								>
-									{t(CORE_TRANSLATIONS.BUTTON_SAVE)}
-								</Button>
-							</div>
-						</ActionBarContentSection>
-					</ActionBar>
-				</SecurableRender>
+				<ActionBar className="o-action-bar--fixed" isOpen>
+					<ActionBarContentSection>
+						<div className="u-wrapper row end-xs">
+							<Button onClick={onCancel} negative>
+								{t(CORE_TRANSLATIONS.BUTTON_CANCEL)}
+							</Button>
+							<Button
+								iconLeft={
+									isUpdating === LoadingState.Loading
+										? 'circle-o-notch fa-spin'
+										: null
+								}
+								disabled={isUpdating === LoadingState.Loading}
+								className="u-margin-left-xs"
+								onClick={handleSubmit}
+								type="success"
+							>
+								{t(CORE_TRANSLATIONS.BUTTON_SAVE)}
+							</Button>
+						</div>
+					</ActionBarContentSection>
+				</ActionBar>
 			</>
 		);
 	};

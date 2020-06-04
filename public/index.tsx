@@ -1,11 +1,12 @@
 // uncomment to enable akita devTools
 // import { akitaDevtools } from '@datorama/akita';
-import Core, { ModuleRouteConfig } from '@redactie/redactie-core';
-import React, { FC, ReactNode } from 'react';
+import Core from '@redactie/redactie-core';
+import React, { FC, useMemo } from 'react';
 import { Redirect } from 'react-router-dom';
 
 import { registerRolesAPI } from './lib/api';
 import { securityRightsSiteCanShown, securityRightsTenantCanShown } from './lib/canShowns';
+import { RenderChildRoutes } from './lib/components';
 import { registerRoutes } from './lib/connectors/sites';
 import { TenantContext } from './lib/context';
 import { securityRightsSiteGuard, securityRightsTenantGuard } from './lib/guards';
@@ -31,24 +32,19 @@ import {
 // uncomment to enable akita devTools
 // akitaDevtools();
 
-const renderRoutes = (routes: ModuleRouteConfig[] | undefined, tenantId: string): ReactNode => {
-	return Core.routes.render(
-		routes?.map(route => ({
-			...route,
-			guardOptions: {
-				...route.guardOptions,
-				meta: {
-					tenantId,
-				},
-			},
-		})),
-		{
-			routes: routes,
-		}
-	);
-};
-
 const SiteRolesComponent: FC<RolesModuleProps> = ({ route, location, tenantId }) => {
+	const guardsMeta = useMemo(
+		() => ({
+			tenantId,
+		}),
+		[tenantId]
+	);
+	const extraOptions = useMemo(
+		() => ({
+			routes: route.routes,
+		}),
+		[route.routes]
+	);
 	// if path is /users, redirect to /users/overzicht
 	if (
 		/\/\b[0-9a-f]{8}\b-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-\b[0-9a-f]{12}\b\/users$/.test(
@@ -60,12 +56,29 @@ const SiteRolesComponent: FC<RolesModuleProps> = ({ route, location, tenantId })
 
 	return (
 		<TenantContext.Provider value={{ tenantId }}>
-			{renderRoutes(route.routes, tenantId)}
+			<RenderChildRoutes
+				routes={route.routes}
+				guardsMeta={guardsMeta}
+				extraOptions={extraOptions}
+			/>
 		</TenantContext.Provider>
 	);
 };
 
 const TenantRolesComponent: FC<RolesModuleProps> = ({ route, location, tenantId }) => {
+	const guardsMeta = useMemo(
+		() => ({
+			tenantId,
+		}),
+		[tenantId]
+	);
+	const extraOptions = useMemo(
+		() => ({
+			routes: route.routes,
+		}),
+		[route.routes]
+	);
+
 	// if path is /users, redirect to /users/overzicht
 	if (/\/users$/.test(location.pathname)) {
 		return <Redirect to={`/${tenantId}/users/overzicht`} />;
@@ -73,7 +86,11 @@ const TenantRolesComponent: FC<RolesModuleProps> = ({ route, location, tenantId 
 
 	return (
 		<TenantContext.Provider value={{ tenantId }}>
-			{renderRoutes(route.routes, tenantId)}
+			<RenderChildRoutes
+				routes={route.routes}
+				guardsMeta={guardsMeta}
+				extraOptions={extraOptions}
+			/>
 		</TenantContext.Provider>
 	);
 };
@@ -88,10 +105,7 @@ registerRoutes({
 		canShown: [
 			securityRightsSiteCanShown(
 				urlSiteParam,
-				[
-					SecurityRightsSite.RolesRightsReadRolePermissions,
-					SecurityRightsSite.UsersReadAll,
-				],
+				[SecurityRightsSite.RolesRightsReadRolePermissions, SecurityRightsSite.UsersRead],
 				true
 			),
 		],
@@ -101,7 +115,11 @@ registerRoutes({
 			path: MODULE_PATHS.siteUserDetailRolesUpdate,
 			component: SiteUserDetailRolesUpdate,
 			guardOptions: {
-				guards: [securityRightsSiteGuard(urlSiteParam, [SecurityRightsSite.UsersReadOne])],
+				guards: [
+					securityRightsSiteGuard(urlSiteParam, [
+						SecurityRightsSite.UsersUpdateSiteRoles,
+					]),
+				],
 			},
 		},
 		{
@@ -129,14 +147,14 @@ registerRoutes({
 			path: MODULE_PATHS.users.overview,
 			component: SiteUsersOverview,
 			guardOptions: {
-				guards: [securityRightsSiteGuard(urlSiteParam, [SecurityRightsSite.UsersReadAll])],
+				guards: [securityRightsSiteGuard(urlSiteParam, [SecurityRightsSite.UsersRead])],
 			},
 			navigation: {
 				context: 'site',
 				label: 'Gebruikers',
 				parentPath: MODULE_PATHS.siteRoot,
 				canShown: [
-					securityRightsSiteCanShown(urlSiteParam, [SecurityRightsSite.UsersReadAll]),
+					securityRightsSiteCanShown(urlSiteParam, [SecurityRightsSite.UsersRead]),
 				],
 			},
 		},
@@ -147,11 +165,11 @@ Core.routes.register({
 	path: MODULE_PATHS.tenantRoot,
 	component: TenantRolesComponent,
 	guardOptions: {
-		guards: [securityRightsTenantGuard([SecurityRightsTenant.UsersReadAll])],
+		guards: [securityRightsTenantGuard([SecurityRightsTenant.UsersRead])],
 	},
 	navigation: {
 		label: 'Gebruikers',
-		canShown: [securityRightsTenantCanShown([SecurityRightsTenant.UsersReadAll])],
+		canShown: [securityRightsTenantCanShown([SecurityRightsTenant.UsersRead])],
 	},
 	exact: true,
 	routes: [
@@ -174,7 +192,7 @@ Core.routes.register({
 			path: MODULE_PATHS.tenantUserDetail,
 			component: UserUpdate,
 			guardOptions: {
-				guards: [securityRightsTenantGuard([SecurityRightsTenant.UsersReadOne])],
+				guards: [securityRightsTenantGuard([SecurityRightsTenant.UsersUpdateTenantRoles])],
 			},
 			routes: [
 				{
