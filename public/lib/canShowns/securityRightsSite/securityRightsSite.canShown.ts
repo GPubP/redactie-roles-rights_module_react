@@ -11,7 +11,6 @@ const securityRightsSiteCanShown: SecurityRightsSiteCanShownFunction = (
 	oneSecurityRight = false
 ) => async (props, next): Promise<void> => {
 	const siteUuid = props[urlSiteParam] as string;
-	console.log(siteUuid);
 
 	try {
 		await mySecurityRightsFacade.getMySiteSecurityRights(siteUuid);
