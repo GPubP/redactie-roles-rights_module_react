@@ -1,10 +1,16 @@
+import Core from '@redactie/redactie-core';
 import ky from 'ky';
 
 export type KyInstance = typeof ky;
 
+const CoreConfig = Core.config.getValue('core') || {};
+
 // Create ky instance with defaults
 const api: KyInstance = ky.create({
 	prefixUrl: '/v1/proxy/sites/v1',
+	headers: {
+		'x-tenant-id': CoreConfig.tenantId,
+	},
 });
 
 export default api;
