@@ -13,10 +13,10 @@ export const BREADCRUMB_OPTIONS = {
 		'/:tenantId/sites/:siteUuid/users/:userId',
 	],
 };
-export const urlSiteParam = ':siteId';
+export const urlSiteParam = 'siteId';
 
 const forbidden403 = '/403';
-const siteRoot = `/${urlSiteParam}/users`;
+const siteRoot = `/:${urlSiteParam}/users`;
 const tenantRoot = '/users';
 const tenantUsersOverview = `${tenantRoot}/overzicht`;
 
