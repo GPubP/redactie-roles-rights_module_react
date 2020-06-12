@@ -39,8 +39,7 @@ export class MySecurityRightsFacade {
 			this.store.setIsFetching(true);
 			return this.service
 				.getUserSecurityRightsForTenant({
-					// Remove this when the `me` call is ready
-					userUuid: 'b5ababdc-a1cb-4224-9f1e-d919eda9bdeb',
+					userUuid: 'me',
 				})
 				.then(response => {
 					this.store.setTenantRightsCache(true);
@@ -70,8 +69,7 @@ export class MySecurityRightsFacade {
 			this.store.setIsFetching(true);
 			return this.service
 				.getUserSecurityRightsForSite({
-					// Remove this when the `me` call is ready
-					userUuid: 'b5ababdc-a1cb-4224-9f1e-d919eda9bdeb',
+					userUuid: 'me',
 					siteUuid,
 				})
 				.then(response => {
