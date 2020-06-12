@@ -1,6 +1,6 @@
 {
   "name": "@redactie/roles-rights-module",
-  "version": "0.3.0-7",
+  "version": "0.3.1",
   "description": "redactie roles-rights module",
   "main": "dist/redactie-roles-rights-module.umd.js",
   "module": "dist/redactie-roles-rights-module.umd.js",
@@ -43,7 +43,7 @@
     "@datorama/akita": "^4.22.1",
     "@redactie/form-renderer-module": "^0.3.0",
     "@redactie/module-webpack-plugin": "2.0.0",
-    "@redactie/redactie-core": "^1.7.1",
+    "@redactie/redactie-core": "^1.9.0",
     "@redactie/sites-module": "^0.10.0",
     "@redactie/translations-module": "^0.3.0",
     "@redactie/utils": "0.0.1",
