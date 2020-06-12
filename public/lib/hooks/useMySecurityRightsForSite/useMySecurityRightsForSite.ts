@@ -7,19 +7,19 @@ import { MySecurityRightModel, mySecurityRightsFacade } from '../../store/mySecu
 function useMySecurityRightsForSite(options: {
 	module?: string;
 	onlyKeys: true;
-}): [LoadingState | null, string[] | undefined];
+}): [LoadingState | null, string[]];
 function useMySecurityRightsForSite(options: {
 	module?: string;
 	onlyKeys: false;
-}): [LoadingState | null, MySecurityRightModel[] | undefined];
+}): [LoadingState | null, MySecurityRightModel[]];
 function useMySecurityRightsForSite(options: {
 	module?: string;
 	onlyKeys: boolean;
-}): [LoadingState | null, MySecurityRightModel[] | string[] | undefined];
+}): [LoadingState | null, MySecurityRightModel[] | string[]];
 function useMySecurityRightsForSite(options: {
 	module?: string;
 	onlyKeys: boolean;
-}): [LoadingState | null, MySecurityRightModel[] | string[] | undefined] {
+}): [LoadingState | null, MySecurityRightModel[] | string[]] {
 	const [loading] = useObservable(mySecurityRightsFacade.isFetching$, null);
 	const [siteRights] = useObservable(
 		mySecurityRightsFacade.selectSiteRightsByModule(options.module).pipe(
@@ -29,7 +29,8 @@ function useMySecurityRightsForSite(options: {
 				}
 				return siteRights;
 			})
-		)
+		),
+		[]
 	);
 	const [error] = useObservable(mySecurityRightsFacade.error$, null);
 

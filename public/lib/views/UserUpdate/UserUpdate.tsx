@@ -10,6 +10,7 @@ import { generatePath, Redirect, useParams } from 'react-router-dom';
 
 import { DataLoader, NavList } from '../../components';
 import {
+	useMySecurityRightsForTenant,
 	useNavigate,
 	useRoutesBreadcrumbs,
 	useSites,
@@ -36,6 +37,7 @@ const UserUpdate: FC<RolesRouteProps<{ userUuid?: string }>> = ({ route, match }
 	const [userRolesLoadingState, userRoles] = useUserRolesForTenant(userUuid);
 	const [rolesLoadingState, roles] = useTenantRoles();
 	const [sitesLoadingState, sites] = useSites();
+	const [mySecurityRightsLoadingState, mySecurityRights] = useMySecurityRightsForTenant(true);
 	const { navigate } = useNavigate();
 
 	useEffect(() => {
@@ -53,13 +55,21 @@ const UserUpdate: FC<RolesRouteProps<{ userUuid?: string }>> = ({ route, match }
 			userLoadingState !== LoadingState.Loading &&
 			userRolesLoadingState !== LoadingState.Loading &&
 			rolesLoadingState !== LoadingState.Loading &&
-			sitesLoadingState !== LoadingState.Loading
+			sitesLoadingState !== LoadingState.Loading &&
+			mySecurityRightsLoadingState !== LoadingState.Loading
 		) {
 			return setInitialLoading(LoadingState.Loaded);
 		}
 
 		setInitialLoading(LoadingState.Loading);
-	}, [rolesLoadingState, sites, sitesLoadingState, userLoadingState, userRolesLoadingState]);
+	}, [
+		rolesLoadingState,
+		sites,
+		sitesLoadingState,
+		userLoadingState,
+		userRolesLoadingState,
+		mySecurityRightsLoadingState,
+	]);
 
 	/**
 	 * Functions
@@ -103,6 +113,7 @@ const UserUpdate: FC<RolesRouteProps<{ userUuid?: string }>> = ({ route, match }
 			userRoles,
 			roles,
 			sites,
+			mySecurityRights,
 			onCancel: handleCancel,
 			onSubmit: handleSubmit,
 		});

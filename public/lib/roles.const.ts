@@ -13,9 +13,10 @@ export const BREADCRUMB_OPTIONS = {
 		'/:tenantId/sites/:siteUuid/users/:userId',
 	],
 };
+export const urlSiteParam = 'siteId';
 
 const forbidden403 = '/403';
-const siteRoot = '/:siteId/users';
+const siteRoot = `/:${urlSiteParam}/users`;
 const tenantRoot = '/users';
 const tenantUsersOverview = `${tenantRoot}/overzicht`;
 
@@ -51,3 +52,17 @@ export const MODULE_PATHS = {
 	tenantRolesRoot,
 	siteUserDetailRolesUpdate,
 };
+
+export enum SecurityRightsSite {
+	UsersRead = 'roles-rights_read-users',
+	UsersUpdateSiteRoles = 'roles-rights_update-site-roles',
+	RolesRightsReadRolePermissions = 'roles-rights_read-role-permissions',
+	RolesRightsUpdateRolePermissions = 'roles-rights_update-role-permissions',
+}
+
+export enum SecurityRightsTenant {
+	UsersRead = 'roles-rights_read-users',
+	UsersUpdateTenantRoles = 'roles-rights_update-users-tenant-roles',
+	UsersGrantSiteAccess = 'roles-rights_grant-users-site-access',
+	UsersUpdateSiteRoles = 'roles-rights_update-users-site-roles',
+}

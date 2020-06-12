@@ -13,8 +13,9 @@ const RolesPermissionsList: FC<RolesPermissionsProps> = ({
 	roles,
 	permissions,
 	formState,
-	onChange,
+	readonly = false,
 	title,
+	onChange,
 }) => {
 	const renderSecurityRightsRows = (
 		securityRights: SecurityRightResponse[],
@@ -42,6 +43,7 @@ const RolesPermissionsList: FC<RolesPermissionsProps> = ({
 												values[securityRight.id] &&
 												values[securityRight.id].includes(role.role.id)
 											}
+											disabled={readonly}
 											id={`${securityRight.id}_${role.role.id}`}
 											name={`${securityRight.id}_${role.role.id}`}
 											onChange={(e: ChangeEvent<HTMLInputElement>) => {

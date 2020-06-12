@@ -5,6 +5,7 @@ import { RolesRightsModuleAPI } from '../roles.types';
 import { canShowns } from './canShowns';
 import { components } from './components';
 import { guards } from './guards';
+import { helpers } from './helpers';
 import { hooks } from './hooks';
 import { store } from './store';
 import { views } from './views';
@@ -17,6 +18,7 @@ export const registerRolesAPI = (): void => {
 		guards,
 		views,
 		canShowns,
+		helpers,
 	};
 
 	Core.modules.exposeModuleApi('roles-rights-module', api);

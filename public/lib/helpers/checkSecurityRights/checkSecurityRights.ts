@@ -1,9 +1,11 @@
 import { difference, intersection } from 'ramda';
 
-const checkSecurityRights = (
+import { CheckSecurityRightsFunction } from './checkSecurityRights.types';
+
+const checkSecurityRights: CheckSecurityRightsFunction = (
 	userSecurityRights: string[],
 	requiredSecurityRights: string[],
-	oneSecurityRight: boolean
+	oneSecurityRight = false
 ): boolean => {
 	if (oneSecurityRight) {
 		return intersection(userSecurityRights, requiredSecurityRights).length > 0;

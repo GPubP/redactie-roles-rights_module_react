@@ -9,11 +9,16 @@ import {
 import { CORE_TRANSLATIONS } from '@redactie/translations-module/public/lib/i18next/translations.const';
 import React, { FC, ReactElement, useEffect, useState } from 'react';
 
-import { DataLoader, ModulesList, RolesPermissionsList } from '../../components';
+import { DataLoader, ModulesList, RolesPermissionsList, SecurableRender } from '../../components';
 import { FormState } from '../../components/RolesPermissionsList/RolesPermissionsList.types';
 import { useCoreTranslation } from '../../connectors/translations';
-import { useRoutesBreadcrumbs, useSecurityRights, useSiteNavigate } from '../../hooks';
-import { MODULE_PATHS } from '../../roles.const';
+import {
+	useMySecurityRightsForSite,
+	useRoutesBreadcrumbs,
+	useSecurityRights,
+	useSiteNavigate,
+} from '../../hooks';
+import { MODULE_PATHS, SecurityRightsSite } from '../../roles.const';
 import { LoadingState, RolesRouteProps } from '../../roles.types';
 import { DEFAULT_ROLES_SEARCH_PARAMS } from '../../services/roles/roles.service.const';
 import { UpdateRolesMatrixPayload } from '../../services/securityRights';
@@ -40,16 +45,22 @@ const RolesOverview: FC<RolesRouteProps<{ siteId: string }>> = ({ match }) => {
 	const { navigate } = useSiteNavigate();
 	const { modules = [], securityRights = [], roles = [] } = securityRightMatrix || {};
 	const [matrixTitle, setMatrixTitle] = useState<string>('');
+	const [mySecurityRightsLoadingState, mySecurityRights] = useMySecurityRightsForSite({
+		onlyKeys: true,
+	});
 
 	useEffect(() => {
 		securityRightsMatrixFacade.getSecurityRightsBySite(rolesSearchParams, siteId);
 	}, [rolesSearchParams, siteId]);
 
 	useEffect(() => {
-		if (loadingState === LoadingState.Loaded || loadingState === LoadingState.Error) {
+		if (
+			loadingState !== LoadingState.Loading &&
+			mySecurityRightsLoadingState !== LoadingState.Loading
+		) {
 			setInitialLoading(LoadingState.Loaded);
 		}
-	}, [loadingState]);
+	}, [loadingState, mySecurityRightsLoadingState]);
 	/**
 	 * Methods
 	 */
@@ -154,6 +165,11 @@ const RolesOverview: FC<RolesRouteProps<{ siteId: string }>> = ({ match }) => {
 					</div>
 					<div className="col-xs-8 u-margin-left">
 						<RolesPermissionsList
+							readonly={
+								!mySecurityRights.includes(
+									SecurityRightsSite.RolesRightsUpdateRolePermissions
+								)
+							}
 							roles={roles}
 							permissions={securityRightsByModule(securityRights, modules)}
 							formState={createInitialFormState(securityRights, roles)}
@@ -162,22 +178,27 @@ const RolesOverview: FC<RolesRouteProps<{ siteId: string }>> = ({ match }) => {
 						/>
 					</div>
 				</div>
-				<ActionBar className="o-action-bar--fixed" isOpen>
-					<ActionBarContentSection>
-						<div className="u-wrapper row end-xs">
-							<Button onClick={onCancel} negative>
-								{t(CORE_TRANSLATIONS.BUTTON_CANCEL)}
-							</Button>
-							<Button
-								className="u-margin-left-xs"
-								onClick={onConfigSave}
-								type="success"
-							>
-								{t(CORE_TRANSLATIONS.BUTTON_SAVE)}
-							</Button>
-						</div>
-					</ActionBarContentSection>
-				</ActionBar>
+				<SecurableRender
+					userSecurityRights={mySecurityRights}
+					requiredSecurityRights={[SecurityRightsSite.RolesRightsUpdateRolePermissions]}
+				>
+					<ActionBar className="o-action-bar--fixed" isOpen>
+						<ActionBarContentSection>
+							<div className="u-wrapper row end-xs">
+								<Button onClick={onCancel} negative>
+									{t(CORE_TRANSLATIONS.BUTTON_CANCEL)}
+								</Button>
+								<Button
+									className="u-margin-left-xs"
+									onClick={onConfigSave}
+									type="success"
+								>
+									{t(CORE_TRANSLATIONS.BUTTON_SAVE)}
+								</Button>
+							</div>
+						</ActionBarContentSection>
+					</ActionBar>
+				</SecurableRender>
 			</>
 		);
 	};

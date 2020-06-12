@@ -2,6 +2,7 @@ import { RoleResponse } from '../../services/securityRights';
 import { RoleSecurityRight } from '../../views/RolesOverview/RolesOverview.types';
 
 export interface RolesPermissionsProps {
+	readonly: boolean;
 	roles: RoleResponse[];
 	permissions: RoleSecurityRight[];
 	formState: FormState;

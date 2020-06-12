@@ -1,14 +1,16 @@
 import { ModuleRouteConfig, RouteConfigComponentProps } from '@redactie/redactie-core';
 import { FC } from 'react';
 
-import { SecurityRightsTenantCanShownFunction } from './canShowns';
+import {
+	SecurityRightsSiteCanShownFunction,
+	SecurityRightsTenantCanShownFunction,
+} from './canShowns';
 import { SecurableRenderProps } from './components/SecurableRender/SecurableRender.types';
 import { SecurityRightsSiteGuardFunction, SecurityRightsTenantGuardFunction } from './guards';
-import {
-	MySecurityRightModel,
-	MySecurityRightsFacade,
-	MySecurityRightsQuery,
-} from './store/mySecurityRights';
+import { CheckSecurityRightsFunction } from './helpers';
+import { UseMySecurityRightsForSiteFunction } from './hooks/useMySecurityRightsForSite/useMySecurityRightsForSite.types';
+import { UseMySecurityRightsForTenantFunction } from './hooks/useMySecurityRightsForTenant/useMySecurityRightsForTenant.types';
+import { MySecurityRightsFacade, MySecurityRightsQuery } from './store/mySecurityRights';
 import { RolesFacade, RolesQuery } from './store/roles';
 import {
 	SecurityRightsMatrixFacade,
@@ -92,13 +94,8 @@ export interface RolesRightsModuleAPI {
 		};
 	};
 	hooks: {
-		useMySecurityRightsForSite: (options: {
-			module?: string;
-			onlyKeys: boolean;
-		}) => [LoadingState | null, MySecurityRightModel[] | string[] | undefined];
-		useMySecurityRightsForTenant: (
-			onlyKeys: boolean
-		) => [LoadingState | null, MySecurityRightModel[] | string[] | undefined];
+		useMySecurityRightsForSite: UseMySecurityRightsForSiteFunction;
+		useMySecurityRightsForTenant: UseMySecurityRightsForTenantFunction;
 	};
 	components: {
 		SecurableRender: FC<SecurableRenderProps>;
@@ -109,6 +106,10 @@ export interface RolesRightsModuleAPI {
 	};
 	canShowns: {
 		securityRightsTenantCanShown: SecurityRightsTenantCanShownFunction;
+		securityRightsSiteCanShown: SecurityRightsSiteCanShownFunction;
+	};
+	helpers: {
+		checkSecurityRights: CheckSecurityRightsFunction;
 	};
 	views: {
 		Forbidden403View: FC;

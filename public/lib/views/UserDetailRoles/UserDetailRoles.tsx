@@ -19,6 +19,7 @@ const UserDetailRoles: FC<UserDetailRolesProps> = ({
 	userRoles,
 	roles,
 	sites,
+	mySecurityRights,
 	onCancel,
 	onSubmit,
 }) => {
@@ -72,7 +73,7 @@ const UserDetailRoles: FC<UserDetailRolesProps> = ({
 		return (
 			<Table
 				className="u-margin-top"
-				columns={SITE_COLUMNS(t, isAddingUserToSite, giveAccesSiteId)}
+				columns={SITE_COLUMNS(t, mySecurityRights, isAddingUserToSite, giveAccesSiteId)}
 				rows={siteRows}
 				totalValues={sites.length}
 			/>

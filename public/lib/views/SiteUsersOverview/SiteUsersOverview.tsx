@@ -8,7 +8,12 @@ import React, { FC, ReactElement, useEffect, useState } from 'react';
 
 import { DataLoader, FilterForm, FilterFormState } from '../../components';
 import { useCoreTranslation } from '../../connectors/translations';
-import { useRoutesBreadcrumbs, useSiteNavigate, useUsers } from '../../hooks';
+import {
+	useMySecurityRightsForSite,
+	useRoutesBreadcrumbs,
+	useSiteNavigate,
+	useUsers,
+} from '../../hooks';
 import { MODULE_PATHS } from '../../roles.const';
 import { LoadingState, RolesRouteProps } from '../../roles.types';
 import { DEFAULT_USERS_SEARCH_PARAMS } from '../../services/users/users.service.const';
@@ -33,6 +38,9 @@ const SiteUsersOverview: FC<RolesRouteProps<{ siteId: string }>> = ({ match }) =
 	const [loadingState, users, usersMeta] = useUsers();
 	const [initialLoading, setInitialLoading] = useState(LoadingState.Loading);
 	const [activeSorting, setActiveSorting] = useState<OrderBy>();
+	const [mySecurityRightsLoadingState, mySecurityRights] = useMySecurityRightsForSite({
+		onlyKeys: true,
+	});
 	const [t] = useCoreTranslation();
 
 	useEffect(() => {
@@ -40,10 +48,13 @@ const SiteUsersOverview: FC<RolesRouteProps<{ siteId: string }>> = ({ match }) =
 	}, [siteId, usersSearchParams]);
 
 	useEffect(() => {
-		if (loadingState === LoadingState.Loaded || loadingState === LoadingState.Error) {
+		if (
+			loadingState !== LoadingState.Loading &&
+			mySecurityRightsLoadingState !== LoadingState.Loading
+		) {
 			setInitialLoading(LoadingState.Loaded);
 		}
-	}, [loadingState]);
+	}, [loadingState, mySecurityRightsLoadingState]);
 	/**
 	 * Methods
 	 */
@@ -149,7 +160,7 @@ const SiteUsersOverview: FC<RolesRouteProps<{ siteId: string }>> = ({ match }) =
 				</div>
 				<PaginatedTable
 					className="u-margin-top"
-					columns={USERS_OVERVIEW_COLUMNS(t)}
+					columns={USERS_OVERVIEW_COLUMNS(t, mySecurityRights)}
 					rows={usersRows}
 					currentPage={currentPage}
 					itemsPerPage={DEFAULT_USERS_SEARCH_PARAMS.limit}
