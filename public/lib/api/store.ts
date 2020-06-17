@@ -9,30 +9,38 @@ import { usersFacade, usersQuery } from '../store/users';
 export const store = {
 	users: {
 		service: {
-			getUsersBySite: usersFacade.getUsersBySite,
-			getUser: usersFacade.getUser,
-			getUsers: usersFacade.getUsers,
+			getUsersBySite: usersFacade.getUsersBySite.bind(usersFacade),
+			getUser: usersFacade.getUser.bind(usersFacade),
+			getUsers: usersFacade.getUsers.bind(usersFacade),
 		},
 		query: usersQuery,
 	},
 	roles: {
 		service: {
-			getSiteRoles: rolesFacade.getSiteRoles,
-			getTenantRoles: rolesFacade.getTenantRoles,
+			getSiteRoles: rolesFacade.getSiteRoles.bind(rolesFacade),
+			getTenantRoles: rolesFacade.getTenantRoles.bind(rolesFacade),
 		},
 		query: rolesQuery,
 	},
 	securityRights: {
 		service: {
-			getSecurityRightsBySite: securityRightsMatrixFacade.getSecurityRightsBySite,
+			getSecurityRightsBySite: securityRightsMatrixFacade.getSecurityRightsBySite.bind(
+				securityRightsMatrixFacade
+			),
 		},
 		query: securityRightsMatrixQuery,
 	},
 	mySecurityRights: {
 		service: {
-			getMyTenantSecurityRights: mySecurityRightsFacade.getMyTenantSecurityRights,
-			getMySiteSecurityRights: mySecurityRightsFacade.getMySiteSecurityRights,
-			getMySecurityRights: mySecurityRightsFacade.getMySecurityRights,
+			getMyTenantSecurityRights: mySecurityRightsFacade.getMyTenantSecurityRights.bind(
+				mySecurityRightsFacade
+			),
+			getMySiteSecurityRights: mySecurityRightsFacade.getMySiteSecurityRights.bind(
+				mySecurityRightsFacade
+			),
+			getMySecurityRights: mySecurityRightsFacade.getMySecurityRights.bind(
+				mySecurityRightsFacade
+			),
 		},
 		query: mySecurityRightsQuery,
 	},

@@ -10,6 +10,7 @@ import { SecurityRightsSiteGuardFunction, SecurityRightsTenantGuardFunction } fr
 import { CheckSecurityRightsFunction } from './helpers';
 import { UseMySecurityRightsForSiteFunction } from './hooks/useMySecurityRightsForSite/useMySecurityRightsForSite.types';
 import { UseMySecurityRightsForTenantFunction } from './hooks/useMySecurityRightsForTenant/useMySecurityRightsForTenant.types';
+import { UseUsersFunction } from './hooks/useUsers/useUsers.types';
 import { MySecurityRightsFacade, MySecurityRightsQuery } from './store/mySecurityRights';
 import { RolesFacade, RolesQuery } from './store/roles';
 import {
@@ -77,25 +78,29 @@ export interface EmbeddedResponse<T> {
 export interface RolesRightsModuleAPI {
 	store: {
 		users: {
-			service: Partial<UsersFacade>;
+			service: Pick<UsersFacade, 'getUsersBySite' | 'getUsers' | 'getUser'>;
 			query: UsersQuery;
 		};
 		roles: {
-			service: Partial<RolesFacade>;
+			service: Pick<RolesFacade, 'getSiteRoles' | 'getTenantRoles'>;
 			query: RolesQuery;
 		};
 		securityRights: {
-			service: Partial<SecurityRightsMatrixFacade>;
+			service: Pick<SecurityRightsMatrixFacade, 'getSecurityRightsBySite'>;
 			query: SecurityRightsMatrixQuery;
 		};
 		mySecurityRights: {
-			service: Partial<MySecurityRightsFacade>;
+			service: Pick<
+				MySecurityRightsFacade,
+				'getMyTenantSecurityRights' | 'getMySiteSecurityRights' | 'getMySecurityRights'
+			>;
 			query: MySecurityRightsQuery;
 		};
 	};
 	hooks: {
 		useMySecurityRightsForSite: UseMySecurityRightsForSiteFunction;
 		useMySecurityRightsForTenant: UseMySecurityRightsForTenantFunction;
+		useUsers: UseUsersFunction;
 	};
 	components: {
 		SecurableRender: FC<SecurableRenderProps>;
