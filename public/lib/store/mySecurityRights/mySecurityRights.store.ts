@@ -32,9 +32,15 @@ export class MySecurityRightsStore extends Store<MySecurityRightsState> {
 		}
 	}
 
-	public setIsFetching(isFetching = false): void {
+	public setIsFetchingTenantRights(isFetching = false): void {
 		this.update({
-			isFetching,
+			isFetchingTenantRights: isFetching,
+		});
+	}
+
+	public setIsFetchingSiteRights(isFetching = false): void {
+		this.update({
+			isFetchingSiteRights: isFetching,
 		});
 	}
 

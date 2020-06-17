@@ -18,7 +18,8 @@ export class MySecurityRightsFacade {
 	public readonly siteRights$ = this.query.siteRights$;
 
 	public readonly error$ = this.query.error$;
-	public readonly isFetching$ = this.query.isFetching$;
+	public readonly isFetchingTenantRights$ = this.query.isFetchingTenantRights$;
+	public readonly isFetchingSiteRights$ = this.query.isFetchingSiteRights$;
 
 	public selectSiteRightsByModule(module?: string): Observable<MySecurityRightModel[]> {
 		if (!module) {
@@ -32,11 +33,15 @@ export class MySecurityRightsFacade {
 			this.store.setTenantRightsCache(false);
 		}
 
+		if (this.query.getIsFetchingTenantRights()) {
+			return Promise.resolve();
+		}
+
 		// Almost every module needs tenant or site security rights
 		// We don't want to get the same information multiple times
 		// Therefore we are using a simple caching system
 		if (!this.query.getTenantRightsHasCache()) {
-			this.store.setIsFetching(true);
+			this.store.setIsFetchingTenantRights(true);
 			return this.service
 				.getUserSecurityRightsForTenant({
 					userUuid: 'me',
@@ -50,7 +55,7 @@ export class MySecurityRightsFacade {
 					this.store.setError(err);
 					throw new Error(err);
 				})
-				.finally(() => this.store.setIsFetching(false));
+				.finally(() => this.store.setIsFetchingTenantRights(false));
 		}
 
 		return Promise.resolve();
@@ -61,12 +66,16 @@ export class MySecurityRightsFacade {
 			this.store.setSiteRightsCache(false);
 		}
 
+		if (this.query.getIsFetchingSiteRights()) {
+			return Promise.resolve();
+		}
+
 		const alreadyInCache = this.query.getSiteRightsCacheSiteUuid() === siteUuid;
 		// Almost every module needs tenant or site security rights
 		// We don't want to get the same information multiple times
 		// Therefore we are using a simple caching system
 		if (!alreadyInCache || !this.query.getSiteRightsHasCache()) {
-			this.store.setIsFetching(true);
+			this.store.setIsFetchingSiteRights(true);
 			return this.service
 				.getUserSecurityRightsForSite({
 					userUuid: 'me',
@@ -81,7 +90,7 @@ export class MySecurityRightsFacade {
 					this.store.setError(err);
 					throw new Error(err);
 				})
-				.finally(() => this.store.setIsFetching(false));
+				.finally(() => this.store.setIsFetchingSiteRights(false));
 		}
 
 		return Promise.resolve();

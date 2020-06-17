@@ -20,7 +20,7 @@ function useMySecurityRightsForSite(options: {
 	module?: string;
 	onlyKeys: boolean;
 }): [LoadingState | null, MySecurityRightModel[] | string[]] {
-	const [loading] = useObservable(mySecurityRightsFacade.isFetching$, null);
+	const [loading] = useObservable(mySecurityRightsFacade.isFetchingSiteRights$, null);
 	const [siteRights] = useObservable(
 		mySecurityRightsFacade.selectSiteRightsByModule(options.module).pipe(
 			map(siteRights => {
