@@ -1,9 +1,11 @@
 import { useObservable } from '@mindspace-io/react';
 
 import { LoadingState } from '../../roles.types';
-import { UserModel, usersFacade, UsersMetaModel } from '../../store/users';
+import { usersFacade } from '../../store/users';
 
-const useUsers = (): [LoadingState | null, UserModel[], UsersMetaModel | null | undefined] => {
+import { UseUsersFunctionReturnType } from './useUsers.types';
+
+const useUsers = (): UseUsersFunctionReturnType => {
 	const [loading] = useObservable(usersFacade.isFetching$, null);
 	const [users] = useObservable(usersFacade.users$, []);
 	const [meta] = useObservable(usersFacade.meta$, null);

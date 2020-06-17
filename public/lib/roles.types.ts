@@ -10,6 +10,7 @@ import { SecurityRightsSiteGuardFunction, SecurityRightsTenantGuardFunction } fr
 import { CheckSecurityRightsFunction } from './helpers';
 import { UseMySecurityRightsForSiteFunction } from './hooks/useMySecurityRightsForSite/useMySecurityRightsForSite.types';
 import { UseMySecurityRightsForTenantFunction } from './hooks/useMySecurityRightsForTenant/useMySecurityRightsForTenant.types';
+import { UseUsersFunction } from './hooks/useUsers/useUsers.types';
 import { MySecurityRightsFacade, MySecurityRightsQuery } from './store/mySecurityRights';
 import { RolesFacade, RolesQuery } from './store/roles';
 import {
@@ -96,6 +97,7 @@ export interface RolesRightsModuleAPI {
 	hooks: {
 		useMySecurityRightsForSite: UseMySecurityRightsForSiteFunction;
 		useMySecurityRightsForTenant: UseMySecurityRightsForTenantFunction;
+		useUsers: UseUsersFunction;
 	};
 	components: {
 		SecurableRender: FC<SecurableRenderProps>;
