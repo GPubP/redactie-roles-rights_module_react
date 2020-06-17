@@ -35,9 +35,22 @@ export class MySecurityRightsQuery extends Query<MySecurityRightsState> {
 
 	// State
 	public error$ = this.selectError().pipe(filterNil, distinctUntilChanged());
-	public isFetching$ = this.select(state => state.isFetching).pipe(
+	public isFetchingTenantRights$ = this.select(state => state.isFetchingTenantRights).pipe(
 		map(this.convertBoolToLoadingState)
 	);
+	public isFetchingSiteRights$ = this.select(state => state.isFetchingSiteRights).pipe(
+		map(this.convertBoolToLoadingState)
+	);
+
+	public getIsFetchingTenantRights(): boolean {
+		const value = this.store.getValue();
+		return value ? value.isFetchingTenantRights : false;
+	}
+
+	public getIsFetchingSiteRights(): boolean {
+		const value = this.store.getValue();
+		return value ? value.isFetchingSiteRights : false;
+	}
 
 	public getTenantRightsHasCache(): boolean {
 		return this.store.tenantRightsCache.value;

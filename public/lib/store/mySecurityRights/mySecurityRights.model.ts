@@ -8,7 +8,8 @@ export interface MySecurityRightsState {
 		siteRights: MySecurityRightModel[] | null;
 	};
 	siteUuid?: string;
-	isFetching: boolean;
+	isFetchingTenantRights: boolean;
+	isFetchingSiteRights: boolean;
 }
 
 export const createInitialMySecurityRightsState = (): MySecurityRightsState => ({
@@ -16,5 +17,6 @@ export const createInitialMySecurityRightsState = (): MySecurityRightsState => (
 		tenantRights: null,
 		siteRights: null,
 	},
-	isFetching: false,
+	isFetchingTenantRights: false,
+	isFetchingSiteRights: false,
 });

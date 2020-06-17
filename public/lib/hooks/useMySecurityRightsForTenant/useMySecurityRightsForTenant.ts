@@ -14,7 +14,7 @@ function useMySecurityRightsForTenant(
 function useMySecurityRightsForTenant(
 	onlyKeys: boolean
 ): [LoadingState | null, MySecurityRightModel[] | string[]] {
-	const [loading] = useObservable(mySecurityRightsFacade.isFetching$, null);
+	const [loading] = useObservable(mySecurityRightsFacade.isFetchingTenantRights$, null);
 	const [tenantRights] = useObservable(
 		mySecurityRightsFacade.tenantRights$.pipe(
 			map(tenantRights => {
