@@ -150,14 +150,13 @@ export class UsersFacade {
 
 		this.service
 			.addUserToSite(payload)
-			.then(() => {
-				fn();
-				this.store.setIsAddingUserToSite(false);
-			})
 			.catch(err => {
 				this.store.setError(err);
 			})
-			.finally(() => this.store.setIsAddingUserToSite(false));
+			.finally(() => {
+				fn();
+				this.store.setIsAddingUserToSite(false);
+			});
 	}
 }
 

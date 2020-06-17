@@ -33,7 +33,7 @@ export const SITE_COLUMNS = (
 			}
 			return (
 				<span>
-					{roles.map((role: RoleModel) => role.attributes.displayName).join(',') || '/'}
+					{roles.map((role: RoleModel) => role.attributes.displayName).join(', ') || '/'}
 				</span>
 			);
 		},
