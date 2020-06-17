@@ -13,6 +13,7 @@ export interface SecurityRightAttributes {
 	module: string;
 	moduleVersion: string;
 	type: string;
+	displayName: string;
 }
 export interface SecurityRightResponse {
 	applicationDisplayName: string;
