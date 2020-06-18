@@ -25,7 +25,7 @@ const RolesPermissionsList: FC<RolesPermissionsProps> = ({
 		return securityRights.map((securityRight: SecurityRightResponse) => {
 			return (
 				<tr key={securityRight.id}>
-					<td className="a-table-header--side">{securityRight.name}</td>
+					<td className="a-table-header--side">{securityRight.attributes.displayName}</td>
 					<FieldArray
 						// Names are made out of dots, to avoid that formik creates a nested structure we have added this funky fieldname:
 						// https://github.com/italodeandra/formik/blob/patch-1/docs/guides/arrays.md
