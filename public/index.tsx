@@ -20,6 +20,7 @@ import { RolesModuleProps } from './lib/roles.types';
 import {
 	Forbidden403View,
 	RolesOverview,
+	RolesRightsOverview,
 	SiteUserDetailRolesUpdate,
 	SiteUsersOverview,
 	UserDetailGeneral,
@@ -123,6 +124,27 @@ registerRoutes({
 			},
 		},
 		{
+			path: MODULE_PATHS.rolesRights.overview,
+			component: RolesRightsOverview,
+			guardOptions: {
+				guards: [
+					securityRightsSiteGuard(urlSiteParam, [
+						SecurityRightsSite.RolesRightsReadRolePermissions,
+					]),
+				],
+			},
+			navigation: {
+				context: 'site',
+				label: 'Rollen en rechten',
+				parentPath: MODULE_PATHS.siteRoot,
+				canShown: [
+					securityRightsSiteCanShown(urlSiteParam, [
+						SecurityRightsSite.RolesRightsReadRolePermissions,
+					]),
+				],
+			},
+		},
+		{
 			path: MODULE_PATHS.roles.overview,
 			component: RolesOverview,
 			guardOptions: {
@@ -134,7 +156,7 @@ registerRoutes({
 			},
 			navigation: {
 				context: 'site',
-				label: 'Rollen en rechten',
+				label: 'Rollen',
 				parentPath: MODULE_PATHS.siteRoot,
 				canShown: [
 					securityRightsSiteCanShown(urlSiteParam, [
