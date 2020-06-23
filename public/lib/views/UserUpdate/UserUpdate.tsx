@@ -6,7 +6,7 @@ import {
 } from '@acpaas-ui/react-editorial-components';
 import Core, { ModuleRouteConfig } from '@redactie/redactie-core';
 import React, { FC, ReactElement, useEffect, useState } from 'react';
-import { generatePath, Redirect, useParams } from 'react-router-dom';
+import { generatePath, useParams } from 'react-router-dom';
 
 import { DataLoader, NavList } from '../../components';
 import {
@@ -26,7 +26,7 @@ import { UserModel, usersFacade } from '../../store/users';
 
 import { USER_UPDATE_NAV_LIST_ITEMS } from './UserUpdate.const';
 
-const UserUpdate: FC<RolesRouteProps<{ userUuid?: string }>> = ({ route, match }) => {
+const UserUpdate: FC<RolesRouteProps<{ userUuid?: string }>> = ({ route }) => {
 	/**
 	 * Hooks
 	 */
@@ -97,14 +97,6 @@ const UserUpdate: FC<RolesRouteProps<{ userUuid?: string }>> = ({ route, match }
 	const renderChildRoutes = (): ReactElement | null => {
 		if (!user) {
 			return null;
-		}
-
-		const uuidRegex =
-			'\\b[0-9a-f]{8}\\b-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-\\b[0-9a-f]{12}\\b';
-
-		// Redirect /users/:userUuid to /users/:userUuid/algemeen
-		if (new RegExp(`/users/${uuidRegex}$`).test(location.pathname)) {
-			return <Redirect to={`${match.url}/algemeen`} />;
 		}
 
 		return Core.routes.render(route.routes as ModuleRouteConfig[], {
