@@ -5,6 +5,10 @@ import { Link } from 'react-router-dom';
 
 import { RolesOverviewTableRow } from './RolesOverview.types';
 
+export const CONTENT_INITIAL_FILTER_STATE = {
+	name: '',
+};
+
 export const ROLES_OVERVIEW_COLUMNS = (): any[] => {
 	const defaultColumns = [
 		{

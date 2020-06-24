@@ -1,4 +1,5 @@
-import { RolesApiService, rolesApiService } from '../../services/roles';
+import { GetRolesPayload, rolesApiService, RolesApiService } from '../../services/roles';
+import { DEFAULT_ROLES_SEARCH_PARAMS } from '../../services/roles/roles.service.const';
 
 import { RoleEntityTypes } from './roles.model';
 import { rolesQuery, RolesQuery } from './roles.query';
@@ -41,10 +42,13 @@ export class RolesFacade {
 			.finally(() => this.store.setIsFetching(RoleEntityTypes.TENANT, false));
 	}
 
-	public getSiteRoles(siteUuid: string): void {
+	public getSiteRoles(
+		siteUuid: string,
+		payload: GetRolesPayload = DEFAULT_ROLES_SEARCH_PARAMS
+	): void {
 		this.store.setIsFetching(RoleEntityTypes.SITE, true);
 		this.service
-			.getSiteRoles(siteUuid)
+			.getSiteRoles(siteUuid, payload)
 			.then(response => {
 				const roles = response._embedded;
 				const meta = response._page;
