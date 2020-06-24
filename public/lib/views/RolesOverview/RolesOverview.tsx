@@ -8,14 +8,14 @@ import { OrderBy } from '@redactie/translations-module/public/lib/services/api';
 import React, { FC, ReactElement, useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 
-import { DataLoader, FilterForm, FilterFormState } from '../../components';
+import { DataLoader } from '../../components';
 import { useRoutesBreadcrumbs, useSiteRoles } from '../../hooks';
 import { LoadingState, RolesRouteProps } from '../../roles.types';
 import { DEFAULT_ROLES_SEARCH_PARAMS } from '../../services/roles/roles.service.const';
 import { rolesFacade } from '../../store/roles';
 
-import { CONTENT_INITIAL_FILTER_STATE, ROLES_OVERVIEW_COLUMNS } from './RolesOverview.const';
-import { FilterItemSchema, RolesOverviewTableRow } from './RolesOverview.types';
+import { ROLES_OVERVIEW_COLUMNS } from './RolesOverview.const';
+import { RolesOverviewTableRow } from './RolesOverview.types';
 
 const RolesOverview: FC<RolesRouteProps<{ siteId: string }>> = () => {
 	/**
@@ -26,10 +26,6 @@ const RolesOverview: FC<RolesRouteProps<{ siteId: string }>> = () => {
 	const [initialLoading, setInitialLoading] = useState(LoadingState.Loading);
 	const [currentPage, setCurrentPage] = useState(DEFAULT_ROLES_SEARCH_PARAMS.skip);
 	const [rolesSearchParams, setRolesSearchParams] = useState(DEFAULT_ROLES_SEARCH_PARAMS);
-	const [filterItems, setFilterItems] = useState<FilterItemSchema[]>([]);
-	const [filterFormState, setFilterFormState] = useState<FilterFormState>(
-		CONTENT_INITIAL_FILTER_STATE
-	);
 	const [activeSorting, setActiveSorting] = useState<OrderBy>();
 	const [rolesLoadingState, roles] = useSiteRoles();
 
@@ -48,58 +44,6 @@ const RolesOverview: FC<RolesRouteProps<{ siteId: string }>> = () => {
 	/**
 	 * Methods
 	 */
-	const createFilterItems = ({
-		name,
-	}: FilterFormState): {
-		filters: FilterItemSchema[];
-	} => {
-		const filters = [
-			{
-				filterKey: 'search',
-				valuePrefix: 'Zoekterm',
-				value: name,
-			},
-		];
-
-		return {
-			filters: [...filters].filter(item => !!item.value),
-		};
-	};
-
-	const onSubmit = (filterFormState: FilterFormState): void => {
-		//add item to filterItems for Taglist
-		setFilterFormState(filterFormState);
-		const filterItems = createFilterItems(filterFormState);
-		setFilterItems(filterItems.filters);
-		//add value to searchParams
-		setRolesSearchParams({
-			...rolesSearchParams,
-			search: filterFormState.name,
-			skip: 0,
-		});
-	};
-
-	const deleteAllFilters = (): void => {
-		//set empty array as Taglist
-		const emptyFilter: [] = [];
-		setFilterItems(emptyFilter);
-		//delete search param from api call
-		setRolesSearchParams(DEFAULT_ROLES_SEARCH_PARAMS);
-		setFilterFormState(CONTENT_INITIAL_FILTER_STATE);
-	};
-
-	const deleteFilter = (item: any): void => {
-		//delete item from filterItems
-		const setFilter = filterItems?.filter(el => el.value !== item.value);
-		setFilterItems(setFilter);
-		//set empty searchParams
-		setRolesSearchParams(DEFAULT_ROLES_SEARCH_PARAMS);
-		setFilterFormState({
-			...filterFormState,
-			[item.filterKey]: '',
-		});
-	};
-
 	const handlePageChange = (pageNumber: number): void => {
 		setCurrentPage(pageNumber);
 
@@ -112,7 +56,7 @@ const RolesOverview: FC<RolesRouteProps<{ siteId: string }>> = () => {
 	const handleOrderBy = (orderBy: OrderBy): void => {
 		setRolesSearchParams({
 			...rolesSearchParams,
-			sort: `data.${orderBy.key}`,
+			sort: `meta.${orderBy.key}`,
 			direction: orderBy.order === 'desc' ? 1 : -1,
 		});
 		setActiveSorting(orderBy);
@@ -136,15 +80,6 @@ const RolesOverview: FC<RolesRouteProps<{ siteId: string }>> = () => {
 
 		return (
 			<>
-				<div className="u-margin-top">
-					<FilterForm
-						initialState={filterFormState}
-						onCancel={deleteAllFilters}
-						onSubmit={onSubmit}
-						deleteActiveFilter={deleteFilter}
-						activeFilters={filterItems}
-					/>
-				</div>
 				<PaginatedTable
 					className="u-margin-top"
 					columns={ROLES_OVERVIEW_COLUMNS()}
