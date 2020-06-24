@@ -112,7 +112,7 @@ const RolesOverview: FC<RolesRouteProps<{ siteId: string }>> = () => {
 	const handleOrderBy = (orderBy: OrderBy): void => {
 		setRolesSearchParams({
 			...rolesSearchParams,
-			sort: `meta.${orderBy.key}`,
+			sort: `data.${orderBy.key}`,
 			direction: orderBy.order === 'desc' ? 1 : -1,
 		});
 		setActiveSorting(orderBy);

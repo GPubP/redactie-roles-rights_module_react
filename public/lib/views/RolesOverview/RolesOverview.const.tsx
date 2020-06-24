@@ -13,6 +13,7 @@ export const ROLES_OVERVIEW_COLUMNS = (): any[] => {
 	const defaultColumns = [
 		{
 			label: 'Rol',
+			value: 'description',
 			component(value: any, rowData: RolesOverviewTableRow) {
 				return (
 					<>
@@ -28,6 +29,7 @@ export const ROLES_OVERVIEW_COLUMNS = (): any[] => {
 		},
 		{
 			label: 'Admin',
+			value: 'admin',
 			disableSorting: true,
 			component(value: unknown, rowData: RolesOverviewTableRow) {
 				return prop('admin')(rowData) ? (
