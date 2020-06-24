@@ -4,6 +4,7 @@ import {
 	ContextHeaderTopSection,
 	PaginatedTable,
 } from '@acpaas-ui/react-editorial-components';
+import { OrderBy } from '@redactie/translations-module/public/lib/services/api';
 import React, { FC, ReactElement, useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 
@@ -23,11 +24,13 @@ const RolesOverview: FC<RolesRouteProps<{ siteId: string }>> = () => {
 	const { siteId } = useParams();
 	const breadcrumbs = useRoutesBreadcrumbs();
 	const [initialLoading, setInitialLoading] = useState(LoadingState.Loading);
+	const [currentPage, setCurrentPage] = useState(DEFAULT_ROLES_SEARCH_PARAMS.skip);
 	const [rolesSearchParams, setRolesSearchParams] = useState(DEFAULT_ROLES_SEARCH_PARAMS);
 	const [filterItems, setFilterItems] = useState<FilterItemSchema[]>([]);
 	const [filterFormState, setFilterFormState] = useState<FilterFormState>(
 		CONTENT_INITIAL_FILTER_STATE
 	);
+	const [activeSorting, setActiveSorting] = useState<OrderBy>();
 	const [rolesLoadingState, roles] = useSiteRoles();
 
 	useEffect(() => {
@@ -97,6 +100,24 @@ const RolesOverview: FC<RolesRouteProps<{ siteId: string }>> = () => {
 		});
 	};
 
+	const handlePageChange = (pageNumber: number): void => {
+		setCurrentPage(pageNumber);
+
+		setRolesSearchParams({
+			...rolesSearchParams,
+			skip: pageNumber,
+		});
+	};
+
+	const handleOrderBy = (orderBy: OrderBy): void => {
+		setRolesSearchParams({
+			...rolesSearchParams,
+			sort: `meta.${orderBy.key}`,
+			direction: orderBy.order === 'desc' ? 1 : -1,
+		});
+		setActiveSorting(orderBy);
+	};
+
 	/**
 	 * Render
 	 */
@@ -128,10 +149,11 @@ const RolesOverview: FC<RolesRouteProps<{ siteId: string }>> = () => {
 					className="u-margin-top"
 					columns={ROLES_OVERVIEW_COLUMNS()}
 					rows={rolesRows}
-					currentPage={1}
+					currentPage={currentPage}
 					itemsPerPage={DEFAULT_ROLES_SEARCH_PARAMS.limit}
-					onPageChange={() => console.log('change page')}
-					orderBy={() => console.log('order by')}
+					onPageChange={handlePageChange}
+					orderBy={handleOrderBy}
+					activeSorting={activeSorting}
 					totalValues={roles?.length}
 					loading={rolesLoadingState === LoadingState.Loading}
 				></PaginatedTable>

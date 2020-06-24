@@ -13,7 +13,6 @@ export const ROLES_OVERVIEW_COLUMNS = (): any[] => {
 	const defaultColumns = [
 		{
 			label: 'Rol',
-			disableSorting: true,
 			component(value: any, rowData: RolesOverviewTableRow) {
 				return (
 					<>
