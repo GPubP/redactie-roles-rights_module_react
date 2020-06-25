@@ -38,7 +38,7 @@ const RoleDetailForm: FC<RoleDetailFormProps> = ({
 						outline
 						iconLeft={isDeleting ? 'circle-o-notch fa-spin' : null}
 					>
-						{t(CORE_TRANSLATIONS.BUTTON_REMOVE)}
+						{t(CORE_TRANSLATIONS['BUTTON_REMOVE'])}
 					</Button>
 				</CardBody>
 			</Card>
@@ -79,7 +79,7 @@ const RoleDetailForm: FC<RoleDetailFormProps> = ({
 						<ActionBarContentSection>
 							<div className="u-wrapper row end-xs">
 								<Button onClick={onCancel} negative>
-									{t(CORE_TRANSLATIONS['BUTTON_REMOVE'])}
+									{t(CORE_TRANSLATIONS['BUTTON_CANCEL'])}
 								</Button>
 								<Button
 									iconLeft={isLoading ? 'circle-o-notch fa-spin' : null}

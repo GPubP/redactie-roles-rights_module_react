@@ -151,9 +151,7 @@ registerRoutes({
 			component: RolesOverview,
 			guardOptions: {
 				guards: [
-					securityRightsSiteGuard(urlSiteParam, [
-						SecurityRightsSite.RolesRightsReadRolePermissions,
-					]),
+					securityRightsSiteGuard(urlSiteParam, [SecurityRightsSite.RolesRightsReadRole]),
 				],
 			},
 			navigation: {
