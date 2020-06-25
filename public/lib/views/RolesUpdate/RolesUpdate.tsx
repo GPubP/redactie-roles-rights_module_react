@@ -7,8 +7,8 @@ import React, { FC, ReactElement, useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 
 import { DataLoader, RoleDetailForm } from '../../components';
-import { useRoutesBreadcrumbs, useSiteRole } from '../../hooks';
-import { LoadingState, RolesRouteProps } from '../../roles.types';
+import { useRolesLoadingStates, useRoutesBreadcrumbs, useSiteRole } from '../../hooks';
+import { LoadingState, RoleDetailFormState, RolesRouteProps } from '../../roles.types';
 import { rolesFacade } from '../../store/roles';
 
 const RolesUpdate: FC<RolesRouteProps> = () => {
@@ -19,6 +19,7 @@ const RolesUpdate: FC<RolesRouteProps> = () => {
 	const [initialLoading, setInitialLoading] = useState(LoadingState.Loading);
 	const [formState, setFormState] = useState<any | null>(null);
 	const breadcrumbs = useRoutesBreadcrumbs();
+	const rolesLoadingStates = useRolesLoadingStates();
 	const [roleLoadingState, role] = useSiteRole();
 
 	useEffect(() => {
@@ -36,7 +37,7 @@ const RolesUpdate: FC<RolesRouteProps> = () => {
 		}
 
 		setInitialLoading(LoadingState.Loading);
-	}, [roleLoadingState]);
+	}, [roleLoadingState, rolesLoadingStates.isUpdatingSiteRole]);
 
 	useEffect(() => {
 		if (siteId && roleId) {
@@ -48,6 +49,17 @@ const RolesUpdate: FC<RolesRouteProps> = () => {
 	/**
 	 * Methods
 	 */
+	const onSubmit = (request: RoleDetailFormState): void => {
+		if (siteId && roleId) {
+			rolesFacade
+				.updateSiteRole({
+					siteId,
+					roleId,
+					body: request,
+				})
+				.then(() => console.log('navigate to overview'));
+		}
+	};
 
 	/**
 	 * Render
@@ -60,9 +72,9 @@ const RolesUpdate: FC<RolesRouteProps> = () => {
 		return (
 			<RoleDetailForm
 				initialState={formState}
-				loading={roleLoadingState === LoadingState.Loading}
+				loading={rolesLoadingStates.isUpdatingSiteRole === LoadingState.Loading}
 				onCancel={() => console.log('cancel')}
-				onSubmit={() => console.log('submit')}
+				onSubmit={onSubmit}
 			/>
 		);
 	};

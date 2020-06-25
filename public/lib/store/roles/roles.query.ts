@@ -34,8 +34,20 @@ export class RolesQuery extends Query<RolesState> {
 	}
 
 	// State
+	public selectIsCreating(type: RoleEntityTypes): Observable<LoadingState> {
+		return this.select(state => state[type].isCreating).pipe(
+			map(this.convertBoolToLoadingState)
+		);
+	}
+
 	public selectIsFetching(type: RoleEntityTypes): Observable<LoadingState> {
 		return this.select(state => state[type].isFetching).pipe(
+			map(this.convertBoolToLoadingState)
+		);
+	}
+
+	public selectIsUpdating(type: RoleEntityTypes): Observable<LoadingState> {
+		return this.select(state => state[type].isUpdating).pipe(
 			map(this.convertBoolToLoadingState)
 		);
 	}

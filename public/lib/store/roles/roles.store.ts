@@ -24,6 +24,26 @@ export class RolesStore extends Store<RolesState> {
 		}));
 	}
 
+	public setIsUpdating(type: RoleEntityTypes, isUpdating = false): void {
+		this.update(state => ({
+			...state,
+			[type]: {
+				...state[type],
+				isUpdating,
+			},
+		}));
+	}
+
+	public setIsCreating(type: RoleEntityTypes, isCreating = false): void {
+		this.update(state => ({
+			...state,
+			[type]: {
+				...state[type],
+				isCreating,
+			},
+		}));
+	}
+
 	public setRoles(type: RoleEntityTypes, entityState: Partial<RoleEntityState>): void {
 		this.update(state => ({
 			...state,

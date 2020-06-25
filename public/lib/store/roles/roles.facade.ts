@@ -1,4 +1,9 @@
-import { GetRolesPayload, rolesApiService, RolesApiService } from '../../services/roles';
+import {
+	GetRolesPayload,
+	RolePayload,
+	RolesApiService,
+	rolesApiService,
+} from '../../services/roles';
 import { DEFAULT_ROLES_SEARCH_PARAMS } from '../../services/roles/roles.service.const';
 
 import { RoleEntityTypes } from './roles.model';
@@ -20,7 +25,9 @@ export class RolesFacade {
 	public readonly siteRoles$ = this.query.selectRoles(RoleEntityTypes.SITE);
 	public readonly siteRole$ = this.query.selectRoleDetail(RoleEntityTypes.SITE);
 	public readonly siteMeta$ = this.query.selectMeta(RoleEntityTypes.SITE);
+	public readonly isCreatingSiteRole$ = this.query.selectIsCreating(RoleEntityTypes.SITE);
 	public readonly isFetchingSiteRoles$ = this.query.selectIsFetching(RoleEntityTypes.SITE);
+	public readonly isUpdatingSiteRole$ = this.query.selectIsUpdating(RoleEntityTypes.SITE);
 
 	public readonly error$ = this.query.error$;
 
@@ -76,6 +83,36 @@ export class RolesFacade {
 				this.store.setError(err);
 			})
 			.finally(() => this.store.setIsFetching(RoleEntityTypes.SITE, false));
+	}
+
+	public createSiteRole(payload: RolePayload): Promise<boolean> {
+		this.store.setIsCreating(RoleEntityTypes.SITE, true);
+		return this.service
+			.createSiteRole(payload)
+			.then(() => {
+				return true;
+			})
+			.catch(err => {
+				this.store.setError(err);
+
+				return false;
+			})
+			.finally(() => this.store.setIsCreating(RoleEntityTypes.SITE, false));
+	}
+
+	public updateSiteRole(payload: RolePayload): Promise<boolean> {
+		this.store.setIsUpdating(RoleEntityTypes.SITE, true);
+		return this.service
+			.updateSiteRole(payload)
+			.then(() => {
+				return true;
+			})
+			.catch(err => {
+				this.store.setError(err);
+
+				return false;
+			})
+			.finally(() => this.store.setIsUpdating(RoleEntityTypes.SITE, false));
 	}
 }
 

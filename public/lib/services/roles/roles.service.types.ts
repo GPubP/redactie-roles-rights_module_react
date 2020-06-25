@@ -23,3 +23,14 @@ export interface RoleResponse {
 }
 
 export type RolesResponse = EmbeddedResponse<RoleResponse>;
+
+export interface RolePayloadBody {
+	name: string;
+	description: string;
+}
+
+export interface RolePayload {
+	siteId: string;
+	roleId?: string;
+	body: RolePayloadBody;
+}

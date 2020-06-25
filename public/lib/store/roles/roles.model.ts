@@ -14,6 +14,8 @@ export interface RoleEntityState {
 	roles: RoleModel[];
 	roleDetail?: RoleModel;
 	isFetching: boolean;
+	isUpdating: boolean;
+	isCreating: boolean;
 }
 
 export interface RolesState {
@@ -25,9 +27,13 @@ export const createInitialRolesState = (): RolesState => ({
 	tenant: {
 		roles: [],
 		isFetching: false,
+		isUpdating: false,
+		isCreating: false,
 	},
 	site: {
 		roles: [],
 		isFetching: false,
+		isUpdating: false,
+		isCreating: false,
 	},
 });

@@ -1,8 +1,8 @@
-//TODO: replace any with RoleDetailFormState
+import { RoleDetailFormState } from '../../../roles.types';
 
 export interface RoleDetailFormProps {
-	initialState: any;
+	initialState: RoleDetailFormState;
 	loading?: boolean;
 	onCancel: () => void;
-	onSubmit: (values: any) => void;
+	onSubmit: (values: RoleDetailFormState) => void;
 }

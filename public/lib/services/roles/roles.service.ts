@@ -1,6 +1,6 @@
 import api, { parseSearchParams } from '../api/api.service';
 
-import { GetRolesPayload, RoleResponse, RolesResponse } from './roles.service.types';
+import { GetRolesPayload, RolePayload, RoleResponse, RolesResponse } from './roles.service.types';
 
 export class RolesApiService {
 	public async getTenantRoles(): Promise<RolesResponse> {
@@ -20,6 +20,14 @@ export class RolesApiService {
 
 	public async getSiteRole(siteUuid: string, roleId: string): Promise<RoleResponse> {
 		return await api.get(`sites/${siteUuid}/roles/${roleId}`).json();
+	}
+
+	public async createSiteRole({ siteId, body }: RolePayload): Promise<RoleResponse> {
+		return await api.post(`sites/${siteId}/roles`, { json: body }).json();
+	}
+
+	public async updateSiteRole({ siteId, roleId, body }: RolePayload): Promise<RoleResponse> {
+		return await api.put(`sites/${siteId}/roles/${roleId}`, { json: body }).json();
 	}
 }
 
