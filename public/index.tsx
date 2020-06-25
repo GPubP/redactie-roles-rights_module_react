@@ -120,7 +120,7 @@ registerRoutes({
 			guardOptions: {
 				guards: [
 					securityRightsSiteGuard(urlSiteParam, [
-						SecurityRightsSite.UsersUpdateSiteRoles,
+						SecurityRightsSite.RolesRightsUpdateRolePermissions,
 					]),
 				],
 			},
@@ -162,7 +162,7 @@ registerRoutes({
 				parentPath: MODULE_PATHS.siteRoot,
 				canShown: [
 					securityRightsSiteCanShown(urlSiteParam, [
-						SecurityRightsSite.RolesRightsReadRolePermissions,
+						SecurityRightsSite.RolesRightsReadRole,
 					]),
 				],
 			},
@@ -173,7 +173,7 @@ registerRoutes({
 			guardOptions: {
 				guards: [
 					securityRightsSiteGuard(urlSiteParam, [
-						SecurityRightsSite.UsersUpdateSiteRoles,
+						SecurityRightsSite.RolesRightsCreateRole,
 					]),
 				],
 			},
@@ -184,7 +184,7 @@ registerRoutes({
 			guardOptions: {
 				guards: [
 					securityRightsSiteGuard(urlSiteParam, [
-						SecurityRightsSite.UsersUpdateSiteRoles,
+						SecurityRightsSite.RolesRightsUpdateRole,
 					]),
 				],
 			},

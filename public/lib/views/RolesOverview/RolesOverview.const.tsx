@@ -11,7 +11,7 @@ import { RolesOverviewTableRow } from './RolesOverview.types';
 export const ROLES_OVERVIEW_COLUMNS = (mySecurityRights: string[]): any[] => {
 	const canUpdate = checkSecurityRights(
 		mySecurityRights,
-		[SecurityRightsSite.UsersUpdateSiteRoles],
+		[SecurityRightsSite.RolesRightsUpdateRole],
 		false
 	);
 

@@ -79,7 +79,7 @@ const RoleDetailForm: FC<RoleDetailFormProps> = ({
 						<ActionBarContentSection>
 							<div className="u-wrapper row end-xs">
 								<Button onClick={onCancel} negative>
-									{t(CORE_TRANSLATIONS.BUTTON_CANCEL)}
+									{t(CORE_TRANSLATIONS['BUTTON_REMOVE'])}
 								</Button>
 								<Button
 									iconLeft={isLoading ? 'circle-o-notch fa-spin' : null}

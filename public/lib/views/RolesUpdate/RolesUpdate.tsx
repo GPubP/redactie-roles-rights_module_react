@@ -7,8 +7,15 @@ import React, { FC, ReactElement, useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 
 import { DataLoader, RoleDetailForm } from '../../components';
-import { useNavigate, useRolesLoadingStates, useRoutesBreadcrumbs, useSiteRole } from '../../hooks';
-import { MODULE_PATHS } from '../../roles.const';
+import { checkSecurityRights } from '../../helpers';
+import {
+	useMySecurityRightsForSite,
+	useNavigate,
+	useRolesLoadingStates,
+	useRoutesBreadcrumbs,
+	useSiteRole,
+} from '../../hooks';
+import { MODULE_PATHS, SecurityRightsSite } from '../../roles.const';
 import { LoadingState, RoleDetailFormState, RolesRouteProps } from '../../roles.types';
 import { rolesFacade } from '../../store/roles';
 
@@ -23,6 +30,9 @@ const RolesUpdate: FC<RolesRouteProps> = () => {
 	const breadcrumbs = useRoutesBreadcrumbs();
 	const rolesLoadingStates = useRolesLoadingStates();
 	const [roleLoadingState, role] = useSiteRole();
+	const [mySecurityRightsLoadingState, mySecurityRights] = useMySecurityRightsForSite({
+		onlyKeys: true,
+	});
 
 	useEffect(() => {
 		if (role) {
@@ -35,12 +45,15 @@ const RolesUpdate: FC<RolesRouteProps> = () => {
 	}, [role]);
 
 	useEffect(() => {
-		if (roleLoadingState !== LoadingState.Loading) {
+		if (
+			roleLoadingState !== LoadingState.Loading &&
+			mySecurityRightsLoadingState !== LoadingState.Loading
+		) {
 			return setInitialLoading(LoadingState.Loaded);
 		}
 
 		setInitialLoading(LoadingState.Loading);
-	}, [roleLoadingState, rolesLoadingStates.isUpdatingSiteRole]);
+	}, [mySecurityRightsLoadingState, roleLoadingState, rolesLoadingStates.isUpdatingSiteRole]);
 
 	useEffect(() => {
 		if (siteId && roleId) {
@@ -52,6 +65,12 @@ const RolesUpdate: FC<RolesRouteProps> = () => {
 	/**
 	 * Methods
 	 */
+	const canDelete = checkSecurityRights(
+		mySecurityRights,
+		[SecurityRightsSite.RolesRightsDeleteRole],
+		false
+	);
+
 	const navigateToOverview = (): void => {
 		navigate(`/sites${MODULE_PATHS.roles.overview}`, { siteId });
 	};
@@ -89,7 +108,7 @@ const RolesUpdate: FC<RolesRouteProps> = () => {
 				isDeleting={rolesLoadingStates.isDeletingSiteRole === LoadingState.Loading}
 				onCancel={navigateToOverview}
 				onSubmit={onSubmit}
-				onDelete={!formState.admin && onDelete}
+				onDelete={canDelete && !formState.admin && onDelete}
 			/>
 		);
 	};
