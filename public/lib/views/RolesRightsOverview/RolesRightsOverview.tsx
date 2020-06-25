@@ -166,9 +166,7 @@ const RolesRightsOverview: FC<RolesRouteProps<{ siteId: string }>> = ({ match })
 					<div className="col-xs-8 u-margin-left">
 						<RolesPermissionsList
 							readonly={
-								!mySecurityRights.includes(
-									SecurityRightsSite.RolesRightsUpdateRolePermissions
-								)
+								!mySecurityRights.includes(SecurityRightsSite.UsersUpdateSiteRoles)
 							}
 							roles={roles}
 							permissions={securityRightsByModule(securityRights, modules)}
@@ -180,7 +178,7 @@ const RolesRightsOverview: FC<RolesRouteProps<{ siteId: string }>> = ({ match })
 				</div>
 				<SecurableRender
 					userSecurityRights={mySecurityRights}
-					requiredSecurityRights={[SecurityRightsSite.RolesRightsUpdateRolePermissions]}
+					requiredSecurityRights={[SecurityRightsSite.UsersUpdateSiteRoles]}
 				>
 					<ActionBar className="o-action-bar--fixed" isOpen>
 						<ActionBarContentSection>

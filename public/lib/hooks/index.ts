@@ -8,6 +8,7 @@ export { default as useSites } from './useSites/useSites';
 export { default as useSite } from './useSite/useSite';
 export { default as useTenantRoles } from './useTenantRoles/useTenantRoles';
 export { default as useSiteRoles } from './useSiteRoles/useSiteRoles';
+export { default as useSiteRole } from './useSiteRole/useSiteRole';
 export { default as useUserRolesForTenant } from './useUserRolesForTenant/useUserRolesForTenant';
 export { default as useUserRolesForSite } from './useUserRolesForSite/useUserRolesForSite';
 export { default as useUsersLoadingStates } from './useUsersLoadingStates/useUsersLoadingStates';

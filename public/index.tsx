@@ -21,6 +21,7 @@ import {
 	Forbidden403View,
 	RolesOverview,
 	RolesRightsOverview,
+	RolesUpdate,
 	SiteUserDetailRolesUpdate,
 	SiteUsersOverview,
 	UserDetailGeneral,
@@ -161,6 +162,17 @@ registerRoutes({
 				canShown: [
 					securityRightsSiteCanShown(urlSiteParam, [
 						SecurityRightsSite.RolesRightsReadRolePermissions,
+					]),
+				],
+			},
+		},
+		{
+			path: MODULE_PATHS.roles.detail,
+			component: RolesUpdate,
+			guardOptions: {
+				guards: [
+					securityRightsSiteGuard(urlSiteParam, [
+						SecurityRightsSite.UsersUpdateSiteRoles,
 					]),
 				],
 			},

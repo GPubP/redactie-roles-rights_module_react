@@ -12,6 +12,7 @@ export type RolesMetaModel = Page;
 export interface RoleEntityState {
 	meta?: RolesMetaModel;
 	roles: RoleModel[];
+	roleDetail?: RoleModel;
 	isFetching: boolean;
 }
 

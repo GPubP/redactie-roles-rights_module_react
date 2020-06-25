@@ -29,6 +29,10 @@ export class RolesQuery extends Query<RolesState> {
 		return this.select(state => state[type].roles).pipe(filterNil, distinctUntilChanged());
 	}
 
+	public selectRoleDetail(type: RoleEntityTypes): Observable<RoleModel | undefined> {
+		return this.select(state => state[type].roleDetail);
+	}
+
 	// State
 	public selectIsFetching(type: RoleEntityTypes): Observable<LoadingState> {
 		return this.select(state => state[type].isFetching).pipe(

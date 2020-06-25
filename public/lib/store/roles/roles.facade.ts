@@ -18,6 +18,7 @@ export class RolesFacade {
 
 	// Site
 	public readonly siteRoles$ = this.query.selectRoles(RoleEntityTypes.SITE);
+	public readonly siteRole$ = this.query.selectRoleDetail(RoleEntityTypes.SITE);
 	public readonly siteMeta$ = this.query.selectMeta(RoleEntityTypes.SITE);
 	public readonly isFetchingSiteRoles$ = this.query.selectIsFetching(RoleEntityTypes.SITE);
 
@@ -57,6 +58,19 @@ export class RolesFacade {
 					roles,
 					meta,
 				});
+			})
+			.catch(err => {
+				this.store.setError(err);
+			})
+			.finally(() => this.store.setIsFetching(RoleEntityTypes.SITE, false));
+	}
+
+	public getSiteRole(siteUuid: string, roleId: string): void {
+		this.store.setIsFetching(RoleEntityTypes.SITE, true);
+		this.service
+			.getSiteRole(siteUuid, roleId)
+			.then(response => {
+				this.store.setRoleDetail(RoleEntityTypes.SITE, response);
 			})
 			.catch(err => {
 				this.store.setError(err);

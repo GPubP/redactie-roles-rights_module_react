@@ -4,6 +4,7 @@ import {
 	createInitialRolesState,
 	RoleEntityState,
 	RoleEntityTypes,
+	RoleModel,
 	RolesState,
 } from './roles.model';
 
@@ -29,6 +30,16 @@ export class RolesStore extends Store<RolesState> {
 			[type]: {
 				...state[type],
 				...entityState,
+			},
+		}));
+	}
+
+	public setRoleDetail(type: RoleEntityTypes, roleDetail: Partial<RoleModel>): void {
+		this.update(state => ({
+			...state,
+			[type]: {
+				...state[type],
+				roleDetail,
 			},
 		}));
 	}
