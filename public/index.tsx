@@ -150,18 +150,14 @@ registerRoutes({
 			path: MODULE_PATHS.roles.overview,
 			component: RolesOverview,
 			guardOptions: {
-				guards: [
-					securityRightsSiteGuard(urlSiteParam, [SecurityRightsSite.RolesRightsReadRole]),
-				],
+				guards: [securityRightsSiteGuard(urlSiteParam, [SecurityRightsSite.RolesRead])],
 			},
 			navigation: {
 				context: 'site',
 				label: 'Rollen',
 				parentPath: MODULE_PATHS.siteRoot,
 				canShown: [
-					securityRightsSiteCanShown(urlSiteParam, [
-						SecurityRightsSite.RolesRightsReadRole,
-					]),
+					securityRightsSiteCanShown(urlSiteParam, [SecurityRightsSite.RolesRead]),
 				],
 			},
 		},
@@ -169,22 +165,14 @@ registerRoutes({
 			path: MODULE_PATHS.roles.create,
 			component: RolesCreate,
 			guardOptions: {
-				guards: [
-					securityRightsSiteGuard(urlSiteParam, [
-						SecurityRightsSite.RolesRightsCreateRole,
-					]),
-				],
+				guards: [securityRightsSiteGuard(urlSiteParam, [SecurityRightsSite.RolesCreate])],
 			},
 		},
 		{
 			path: MODULE_PATHS.roles.detail,
 			component: RolesUpdate,
 			guardOptions: {
-				guards: [
-					securityRightsSiteGuard(urlSiteParam, [
-						SecurityRightsSite.RolesRightsUpdateRole,
-					]),
-				],
+				guards: [securityRightsSiteGuard(urlSiteParam, [SecurityRightsSite.RolesUpdate])],
 			},
 		},
 		{

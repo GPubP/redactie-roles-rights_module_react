@@ -122,7 +122,7 @@ const RolesOverview: FC<RolesRouteProps<{ siteId: string }>> = () => {
 				<ContextHeaderActionsSection>
 					<SecurableRender
 						userSecurityRights={mySecurityRights as string[]}
-						requiredSecurityRights={[SecurityRightsSite.RolesRightsCreateRole]}
+						requiredSecurityRights={[SecurityRightsSite.RolesCreate]}
 					>
 						<Button
 							iconLeft="plus"

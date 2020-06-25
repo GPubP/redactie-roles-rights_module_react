@@ -67,10 +67,10 @@ export enum SecurityRightsSite {
 	UsersUpdateSiteRoles = 'roles-rights_update-site-roles',
 	RolesRightsReadRolePermissions = 'roles-rights_read-role-permissions',
 	RolesRightsUpdateRolePermissions = 'roles-rights_update-role-permissions',
-	RolesRightsReadRole = 'roles-rights_read-role',
-	RolesRightsCreateRole = 'roles-rights_create-role',
-	RolesRightsUpdateRole = 'roles-rights_update-role',
-	RolesRightsDeleteRole = 'roles-rights_delete-role',
+	RolesRead = 'roles_read',
+	RolesCreate = 'roles_create',
+	RolesUpdate = 'roles_update',
+	RolesDelete = 'roles_delete',
 }
 
 export enum SecurityRightsTenant {

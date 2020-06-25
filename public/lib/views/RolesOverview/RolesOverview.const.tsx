@@ -11,7 +11,7 @@ import { RolesOverviewTableRow } from './RolesOverview.types';
 export const ROLES_OVERVIEW_COLUMNS = (mySecurityRights: string[]): any[] => {
 	const canUpdate = checkSecurityRights(
 		mySecurityRights,
-		[SecurityRightsSite.RolesRightsUpdateRole],
+		[SecurityRightsSite.RolesUpdate],
 		false
 	);
 
@@ -19,6 +19,7 @@ export const ROLES_OVERVIEW_COLUMNS = (mySecurityRights: string[]): any[] => {
 		{
 			label: 'Rol',
 			value: 'description',
+			disableSorting: true,
 			component(value: any, rowData: RolesOverviewTableRow) {
 				return (
 					<>

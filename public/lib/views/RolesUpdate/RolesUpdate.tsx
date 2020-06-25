@@ -67,7 +67,7 @@ const RolesUpdate: FC<RolesRouteProps> = () => {
 	 */
 	const canDelete = checkSecurityRights(
 		mySecurityRights,
-		[SecurityRightsSite.RolesRightsDeleteRole],
+		[SecurityRightsSite.RolesDelete],
 		false
 	);
 
