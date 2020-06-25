@@ -19,6 +19,7 @@ import {
 import { RolesModuleProps } from './lib/roles.types';
 import {
 	Forbidden403View,
+	RolesCreate,
 	RolesOverview,
 	RolesRightsOverview,
 	RolesUpdate,
@@ -162,6 +163,17 @@ registerRoutes({
 				canShown: [
 					securityRightsSiteCanShown(urlSiteParam, [
 						SecurityRightsSite.RolesRightsReadRolePermissions,
+					]),
+				],
+			},
+		},
+		{
+			path: MODULE_PATHS.roles.create,
+			component: RolesCreate,
+			guardOptions: {
+				guards: [
+					securityRightsSiteGuard(urlSiteParam, [
+						SecurityRightsSite.UsersUpdateSiteRoles,
 					]),
 				],
 			},

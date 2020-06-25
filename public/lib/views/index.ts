@@ -1,4 +1,5 @@
 export { default as RolesOverview } from './RolesOverview/RolesOverview';
+export { default as RolesCreate } from './RolesCreate/RolesCreate';
 export { default as RolesUpdate } from './RolesUpdate/RolesUpdate';
 export { default as RolesRightsOverview } from './RolesRightsOverview/RolesRightsOverview';
 export { default as UsersOverview } from './UsersOverview/UsersOverview';
