@@ -1,21 +1,25 @@
+import { Button } from '@acpaas-ui/react-components';
 import {
 	Container,
 	ContextHeader,
+	ContextHeaderActionsSection,
 	ContextHeaderTopSection,
 	PaginatedTable,
 } from '@acpaas-ui/react-editorial-components';
+import { CORE_TRANSLATIONS } from '@redactie/translations-module/public/lib/i18next/translations.const';
 import { OrderBy } from '@redactie/translations-module/public/lib/services/api';
 import React, { FC, ReactElement, useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 
-import { DataLoader } from '../../components';
+import { DataLoader, SecurableRender } from '../../components';
+import { useCoreTranslation } from '../../connectors/translations';
 import {
 	useMySecurityRightsForSite,
 	useNavigate,
 	useRoutesBreadcrumbs,
 	useSiteRoles,
 } from '../../hooks';
-import { MODULE_PATHS } from '../../roles.const';
+import { MODULE_PATHS, SecurityRightsSite } from '../../roles.const';
 import { LoadingState, RolesRouteProps } from '../../roles.types';
 import { DEFAULT_ROLES_SEARCH_PARAMS } from '../../services/roles/roles.service.const';
 import { rolesFacade } from '../../store/roles';
@@ -28,6 +32,7 @@ const RolesOverview: FC<RolesRouteProps<{ siteId: string }>> = () => {
 	 * Hooks
 	 */
 	const { siteId } = useParams();
+	const [t] = useCoreTranslation();
 	const breadcrumbs = useRoutesBreadcrumbs();
 	const { navigate } = useNavigate();
 	const [initialLoading, setInitialLoading] = useState(LoadingState.Loading);
@@ -114,6 +119,21 @@ const RolesOverview: FC<RolesRouteProps<{ siteId: string }>> = () => {
 		<>
 			<ContextHeader title="Rollen">
 				<ContextHeaderTopSection>{breadcrumbs}</ContextHeaderTopSection>
+				<ContextHeaderActionsSection>
+					<SecurableRender
+						userSecurityRights={mySecurityRights as string[]}
+						requiredSecurityRights={[SecurityRightsSite.UsersUpdateSiteRoles]}
+					>
+						<Button
+							iconLeft="plus"
+							onClick={() =>
+								navigate(`/sites${MODULE_PATHS.roles.create}`, { siteId })
+							}
+						>
+							{t(CORE_TRANSLATIONS['BUTTON_CREATE-NEW'])}
+						</Button>
+					</SecurableRender>
+				</ContextHeaderActionsSection>
 			</ContextHeader>
 			<Container>
 				<DataLoader loadingState={initialLoading} render={renderOverview} />

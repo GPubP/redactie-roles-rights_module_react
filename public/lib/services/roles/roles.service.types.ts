@@ -6,6 +6,7 @@ export type GetRolesPayload = SearchParams;
 export interface RoleAttributes {
 	displayName?: string;
 	level?: string;
+	admin?: boolean;
 	[key: string]: any;
 	CRUD: string | null;
 	DOMEIN: string | null;
@@ -32,5 +33,5 @@ export interface RolePayloadBody {
 export interface RolePayload {
 	siteId: string;
 	roleId?: string;
-	body: RolePayloadBody;
+	body?: RolePayloadBody;
 }

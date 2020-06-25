@@ -44,6 +44,16 @@ export class RolesStore extends Store<RolesState> {
 		}));
 	}
 
+	public setIsDeleting(type: RoleEntityTypes, isDeleting = false): void {
+		this.update(state => ({
+			...state,
+			[type]: {
+				...state[type],
+				isDeleting,
+			},
+		}));
+	}
+
 	public setRoles(type: RoleEntityTypes, entityState: Partial<RoleEntityState>): void {
 		this.update(state => ({
 			...state,

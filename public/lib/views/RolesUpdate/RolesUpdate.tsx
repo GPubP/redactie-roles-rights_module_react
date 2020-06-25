@@ -7,7 +7,8 @@ import React, { FC, ReactElement, useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 
 import { DataLoader, RoleDetailForm } from '../../components';
-import { useRolesLoadingStates, useRoutesBreadcrumbs, useSiteRole } from '../../hooks';
+import { useNavigate, useRolesLoadingStates, useRoutesBreadcrumbs, useSiteRole } from '../../hooks';
+import { MODULE_PATHS } from '../../roles.const';
 import { LoadingState, RoleDetailFormState, RolesRouteProps } from '../../roles.types';
 import { rolesFacade } from '../../store/roles';
 
@@ -16,6 +17,7 @@ const RolesUpdate: FC<RolesRouteProps> = () => {
 	 * Hooks
 	 */
 	const { siteId, roleId } = useParams();
+	const { navigate } = useNavigate();
 	const [initialLoading, setInitialLoading] = useState(LoadingState.Loading);
 	const [formState, setFormState] = useState<any | null>(null);
 	const breadcrumbs = useRoutesBreadcrumbs();
@@ -27,6 +29,7 @@ const RolesUpdate: FC<RolesRouteProps> = () => {
 			setFormState({
 				name: role.attributes.displayName,
 				description: role.description,
+				admin: role.attributes.admin,
 			});
 		}
 	}, [role]);
@@ -49,6 +52,10 @@ const RolesUpdate: FC<RolesRouteProps> = () => {
 	/**
 	 * Methods
 	 */
+	const navigateToOverview = (): void => {
+		navigate(`/sites${MODULE_PATHS.roles.overview}`, { siteId });
+	};
+
 	const onSubmit = (request: RoleDetailFormState): void => {
 		if (siteId && roleId) {
 			rolesFacade
@@ -57,7 +64,13 @@ const RolesUpdate: FC<RolesRouteProps> = () => {
 					roleId,
 					body: request,
 				})
-				.then(() => console.log('navigate to overview'));
+				.then(navigateToOverview);
+		}
+	};
+
+	const onDelete = (): void => {
+		if (siteId && roleId) {
+			rolesFacade.deleteSiteRole({ siteId, roleId }).then(navigateToOverview);
 		}
 	};
 
@@ -72,9 +85,11 @@ const RolesUpdate: FC<RolesRouteProps> = () => {
 		return (
 			<RoleDetailForm
 				initialState={formState}
-				loading={rolesLoadingStates.isUpdatingSiteRole === LoadingState.Loading}
-				onCancel={() => console.log('cancel')}
+				isLoading={rolesLoadingStates.isUpdatingSiteRole === LoadingState.Loading}
+				isDeleting={rolesLoadingStates.isDeletingSiteRole === LoadingState.Loading}
+				onCancel={navigateToOverview}
 				onSubmit={onSubmit}
+				onDelete={!formState.admin && onDelete}
 			/>
 		);
 	};

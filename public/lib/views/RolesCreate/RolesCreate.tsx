@@ -7,7 +7,8 @@ import React, { FC } from 'react';
 import { useParams } from 'react-router-dom';
 
 import { RoleDetailForm } from '../../components';
-import { useRolesLoadingStates, useRoutesBreadcrumbs } from '../../hooks';
+import { useNavigate, useRolesLoadingStates, useRoutesBreadcrumbs } from '../../hooks';
+import { MODULE_PATHS } from '../../roles.const';
 import { LoadingState, RoleDetailFormState, RolesRouteProps } from '../../roles.types';
 import { rolesFacade } from '../../store/roles';
 
@@ -16,6 +17,7 @@ const RolesCreate: FC<RolesRouteProps> = () => {
 	 * Hooks
 	 */
 	const { siteId } = useParams();
+	const { navigate } = useNavigate();
 	const breadcrumbs = useRoutesBreadcrumbs();
 	const rolesLoadingStates = useRolesLoadingStates();
 
@@ -27,6 +29,10 @@ const RolesCreate: FC<RolesRouteProps> = () => {
 		description: '',
 	});
 
+	const navigateToOverview = (): void => {
+		navigate(`/sites${MODULE_PATHS.roles.overview}`, { siteId });
+	};
+
 	const onSubmit = (request: RoleDetailFormState): void => {
 		if (siteId) {
 			rolesFacade
@@ -34,7 +40,7 @@ const RolesCreate: FC<RolesRouteProps> = () => {
 					siteId,
 					body: request,
 				})
-				.then(() => console.log('navigate to overview'));
+				.then(navigateToOverview);
 		}
 	};
 
@@ -49,8 +55,8 @@ const RolesCreate: FC<RolesRouteProps> = () => {
 			<Container>
 				<RoleDetailForm
 					initialState={generateRoleDetailFormState()}
-					loading={rolesLoadingStates.isCreatingSiteRole === LoadingState.Loading}
-					onCancel={() => console.log('cancel')}
+					isLoading={rolesLoadingStates.isCreatingSiteRole === LoadingState.Loading}
+					onCancel={navigateToOverview}
 					onSubmit={onSubmit}
 				/>
 			</Container>

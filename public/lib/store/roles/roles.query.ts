@@ -52,6 +52,12 @@ export class RolesQuery extends Query<RolesState> {
 		);
 	}
 
+	public selectIsDeleting(type: RoleEntityTypes): Observable<LoadingState> {
+		return this.select(state => state[type].isDeleting).pipe(
+			map(this.convertBoolToLoadingState)
+		);
+	}
+
 	public error$ = this.selectError().pipe(filterNil, distinctUntilChanged());
 }
 

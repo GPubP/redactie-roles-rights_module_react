@@ -28,6 +28,7 @@ export class RolesFacade {
 	public readonly isCreatingSiteRole$ = this.query.selectIsCreating(RoleEntityTypes.SITE);
 	public readonly isFetchingSiteRoles$ = this.query.selectIsFetching(RoleEntityTypes.SITE);
 	public readonly isUpdatingSiteRole$ = this.query.selectIsUpdating(RoleEntityTypes.SITE);
+	public readonly isDeletingSiteRole$ = this.query.selectIsDeleting(RoleEntityTypes.SITE);
 
 	public readonly error$ = this.query.error$;
 
@@ -113,6 +114,21 @@ export class RolesFacade {
 				return false;
 			})
 			.finally(() => this.store.setIsUpdating(RoleEntityTypes.SITE, false));
+	}
+
+	public deleteSiteRole(payload: RolePayload): Promise<boolean> {
+		this.store.setIsDeleting(RoleEntityTypes.SITE, true);
+		return this.service
+			.deleteSiteRole(payload)
+			.then(() => {
+				return true;
+			})
+			.catch(err => {
+				this.store.setError(err);
+
+				return false;
+			})
+			.finally(() => this.store.setIsDeleting(RoleEntityTypes.SITE, false));
 	}
 }
 

@@ -29,6 +29,10 @@ export class RolesApiService {
 	public async updateSiteRole({ siteId, roleId, body }: RolePayload): Promise<RoleResponse> {
 		return await api.put(`sites/${siteId}/roles/${roleId}`, { json: body }).json();
 	}
+
+	public async deleteSiteRole({ siteId, roleId }: RolePayload): Promise<RoleResponse> {
+		return await api.delete(`sites/${siteId}/roles/${roleId}`).json();
+	}
 }
 
 export const rolesApiService = new RolesApiService();

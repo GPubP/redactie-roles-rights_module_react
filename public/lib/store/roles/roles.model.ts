@@ -16,6 +16,7 @@ export interface RoleEntityState {
 	isFetching: boolean;
 	isUpdating: boolean;
 	isCreating: boolean;
+	isDeleting: boolean;
 }
 
 export interface RolesState {
@@ -29,11 +30,13 @@ export const createInitialRolesState = (): RolesState => ({
 		isFetching: false,
 		isUpdating: false,
 		isCreating: false,
+		isDeleting: false,
 	},
 	site: {
 		roles: [],
 		isFetching: false,
 		isUpdating: false,
 		isCreating: false,
+		isDeleting: false,
 	},
 });
