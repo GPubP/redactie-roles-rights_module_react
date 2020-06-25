@@ -6,7 +6,7 @@ import {
 import React, { FC, ReactElement, useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 
-import { DataLoader } from '../../components';
+import { DataLoader, RoleDetailForm } from '../../components';
 import { useRoutesBreadcrumbs, useSiteRole } from '../../hooks';
 import { LoadingState, RolesRouteProps } from '../../roles.types';
 import { rolesFacade } from '../../store/roles';
@@ -24,7 +24,8 @@ const RolesUpdate: FC<RolesRouteProps> = () => {
 	useEffect(() => {
 		if (role) {
 			setFormState({
-				name: role.name,
+				name: role.attributes.displayName,
+				description: role.description,
 			});
 		}
 	}, [role]);
@@ -56,7 +57,14 @@ const RolesUpdate: FC<RolesRouteProps> = () => {
 			return null;
 		}
 
-		return <div>form</div>;
+		return (
+			<RoleDetailForm
+				initialState={formState}
+				loading={roleLoadingState === LoadingState.Loading}
+				onCancel={() => console.log('cancel')}
+				onSubmit={() => console.log('submit')}
+			/>
+		);
 	};
 
 	return (
