@@ -25,6 +25,8 @@ const siteRolesRightsRoot = `${siteRoot}/rolesrights`;
 const siteUsersRoot = `${siteRoot}`;
 
 const siteRolesOverview = `${siteRolesRoot}/overzicht`;
+const siteRolesCreate = `${siteRolesRoot}/aanmaken`;
+const siteRolesDetail = `${siteRolesRoot}/:roleId`;
 const siteRolesRightsOverview = `${siteRolesRightsRoot}/overzicht`;
 const siteUsersOverview = `${siteUsersRoot}/overzicht`;
 const tenantUserDetail = `${tenantRoot}/:userUuid`;
@@ -46,6 +48,8 @@ export const MODULE_PATHS = {
 	},
 	roles: {
 		overview: siteRolesOverview,
+		create: siteRolesCreate,
+		detail: siteRolesDetail,
 	},
 	rolesRights: {
 		overview: siteRolesRightsOverview,
@@ -63,6 +67,10 @@ export enum SecurityRightsSite {
 	UsersUpdateSiteRoles = 'roles-rights_update-site-roles',
 	RolesRightsReadRolePermissions = 'roles-rights_read-role-permissions',
 	RolesRightsUpdateRolePermissions = 'roles-rights_update-role-permissions',
+	RolesRead = 'roles_read',
+	RolesCreate = 'roles_create',
+	RolesUpdate = 'roles_update',
+	RolesDelete = 'roles_delete',
 }
 
 export enum SecurityRightsTenant {

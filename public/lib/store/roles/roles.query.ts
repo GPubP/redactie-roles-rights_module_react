@@ -29,9 +29,31 @@ export class RolesQuery extends Query<RolesState> {
 		return this.select(state => state[type].roles).pipe(filterNil, distinctUntilChanged());
 	}
 
+	public selectRoleDetail(type: RoleEntityTypes): Observable<RoleModel | undefined> {
+		return this.select(state => state[type].roleDetail);
+	}
+
 	// State
+	public selectIsCreating(type: RoleEntityTypes): Observable<LoadingState> {
+		return this.select(state => state[type].isCreating).pipe(
+			map(this.convertBoolToLoadingState)
+		);
+	}
+
 	public selectIsFetching(type: RoleEntityTypes): Observable<LoadingState> {
 		return this.select(state => state[type].isFetching).pipe(
+			map(this.convertBoolToLoadingState)
+		);
+	}
+
+	public selectIsUpdating(type: RoleEntityTypes): Observable<LoadingState> {
+		return this.select(state => state[type].isUpdating).pipe(
+			map(this.convertBoolToLoadingState)
+		);
+	}
+
+	public selectIsDeleting(type: RoleEntityTypes): Observable<LoadingState> {
+		return this.select(state => state[type].isDeleting).pipe(
 			map(this.convertBoolToLoadingState)
 		);
 	}

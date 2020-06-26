@@ -18,8 +18,10 @@ import {
 import { RolesModuleProps } from './lib/roles.types';
 import {
 	Forbidden403View,
+	RolesCreate,
 	RolesOverview,
 	RolesRightsOverview,
+	RolesUpdate,
 	SiteUserDetailRolesUpdate,
 	SiteUsersOverview,
 	UserDetailGeneral,
@@ -79,7 +81,7 @@ registerRoutes({
 			guardOptions: {
 				guards: [
 					securityRightsSiteGuard(urlSiteParam, [
-						SecurityRightsSite.UsersUpdateSiteRoles,
+						SecurityRightsSite.RolesRightsUpdateRolePermissions,
 					]),
 				],
 			},
@@ -109,21 +111,29 @@ registerRoutes({
 			path: MODULE_PATHS.roles.overview,
 			component: RolesOverview,
 			guardOptions: {
-				guards: [
-					securityRightsSiteGuard(urlSiteParam, [
-						SecurityRightsSite.RolesRightsReadRolePermissions,
-					]),
-				],
+				guards: [securityRightsSiteGuard(urlSiteParam, [SecurityRightsSite.RolesRead])],
 			},
 			navigation: {
 				context: 'site',
 				label: 'Rollen',
 				parentPath: MODULE_PATHS.siteRoot,
 				canShown: [
-					securityRightsSiteCanShown(urlSiteParam, [
-						SecurityRightsSite.RolesRightsReadRolePermissions,
-					]),
+					securityRightsSiteCanShown(urlSiteParam, [SecurityRightsSite.RolesRead]),
 				],
+			},
+		},
+		{
+			path: MODULE_PATHS.roles.create,
+			component: RolesCreate,
+			guardOptions: {
+				guards: [securityRightsSiteGuard(urlSiteParam, [SecurityRightsSite.RolesCreate])],
+			},
+		},
+		{
+			path: MODULE_PATHS.roles.detail,
+			component: RolesUpdate,
+			guardOptions: {
+				guards: [securityRightsSiteGuard(urlSiteParam, [SecurityRightsSite.RolesUpdate])],
 			},
 		},
 		{

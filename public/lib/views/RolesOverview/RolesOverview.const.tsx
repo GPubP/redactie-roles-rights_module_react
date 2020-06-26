@@ -1,15 +1,25 @@
-import { Link as AUILink } from '@acpaas-ui/react-components';
+import { Link as AUILink, Button } from '@acpaas-ui/react-components';
 import { prop } from 'ramda';
 import React from 'react';
 import { Link } from 'react-router-dom';
 
+import { checkSecurityRights } from '../../helpers';
+import { SecurityRightsSite } from '../../roles.const';
+
 import { RolesOverviewTableRow } from './RolesOverview.types';
 
-export const ROLES_OVERVIEW_COLUMNS = (): any[] => {
+export const ROLES_OVERVIEW_COLUMNS = (mySecurityRights: string[]): any[] => {
+	const canUpdate = checkSecurityRights(
+		mySecurityRights,
+		[SecurityRightsSite.RolesUpdate],
+		false
+	);
+
 	const defaultColumns = [
 		{
 			label: 'Rol',
 			value: 'description',
+			disableSorting: true,
 			component(value: any, rowData: RolesOverviewTableRow) {
 				return (
 					<>
@@ -37,5 +47,29 @@ export const ROLES_OVERVIEW_COLUMNS = (): any[] => {
 		},
 	];
 
-	return [...defaultColumns];
+	if (!canUpdate) {
+		return defaultColumns;
+	}
+
+	return [
+		...defaultColumns,
+		{
+			label: '',
+			classList: ['u-text-right'],
+			disableSorting: true,
+			component(value: unknown, rowData: RolesOverviewTableRow) {
+				const { uuid, navigate } = rowData;
+
+				return (
+					<Button
+						ariaLabel="Edit"
+						icon="edit"
+						onClick={() => navigate(uuid)}
+						type="primary"
+						transparent
+					></Button>
+				);
+			},
+		},
+	];
 };

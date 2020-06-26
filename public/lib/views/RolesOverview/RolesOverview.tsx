@@ -1,15 +1,25 @@
+import { Button } from '@acpaas-ui/react-components';
 import {
 	Container,
 	ContextHeader,
+	ContextHeaderActionsSection,
 	ContextHeaderTopSection,
 	PaginatedTable,
 } from '@acpaas-ui/react-editorial-components';
+import { CORE_TRANSLATIONS } from '@redactie/translations-module/public/lib/i18next/translations.const';
 import { OrderBy } from '@redactie/translations-module/public/lib/services/api';
 import React, { FC, ReactElement, useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 
-import { DataLoader } from '../../components';
-import { useRoutesBreadcrumbs, useSiteRoles } from '../../hooks';
+import { DataLoader, SecurableRender } from '../../components';
+import { useCoreTranslation } from '../../connectors/translations';
+import {
+	useMySecurityRightsForSite,
+	useRoutesBreadcrumbs,
+	useSiteNavigate,
+	useSiteRoles,
+} from '../../hooks';
+import { MODULE_PATHS, SecurityRightsSite } from '../../roles.const';
 import { LoadingState, RolesRouteProps } from '../../roles.types';
 import { DEFAULT_ROLES_SEARCH_PARAMS } from '../../services/roles/roles.service.const';
 import { rolesFacade } from '../../store/roles';
@@ -22,11 +32,16 @@ const RolesOverview: FC<RolesRouteProps<{ siteId: string }>> = () => {
 	 * Hooks
 	 */
 	const { siteId } = useParams();
+	const [t] = useCoreTranslation();
 	const breadcrumbs = useRoutesBreadcrumbs();
+	const { navigate } = useSiteNavigate();
 	const [initialLoading, setInitialLoading] = useState(LoadingState.Loading);
 	const [currentPage, setCurrentPage] = useState(DEFAULT_ROLES_SEARCH_PARAMS.skip);
 	const [rolesSearchParams, setRolesSearchParams] = useState(DEFAULT_ROLES_SEARCH_PARAMS);
 	const [activeSorting, setActiveSorting] = useState<OrderBy>();
+	const [mySecurityRightsLoadingState, mySecurityRights] = useMySecurityRightsForSite({
+		onlyKeys: true,
+	});
 	const [rolesLoadingState, roles] = useSiteRoles();
 
 	useEffect(() => {
@@ -36,10 +51,13 @@ const RolesOverview: FC<RolesRouteProps<{ siteId: string }>> = () => {
 	}, [rolesSearchParams, siteId]);
 
 	useEffect(() => {
-		if (rolesLoadingState !== LoadingState.Loading) {
+		if (
+			rolesLoadingState !== LoadingState.Loading &&
+			mySecurityRightsLoadingState !== LoadingState.Loading
+		) {
 			setInitialLoading(LoadingState.Loaded);
 		}
-	}, [roles, rolesLoadingState]);
+	}, [mySecurityRightsLoadingState, roles, rolesLoadingState]);
 
 	/**
 	 * Methods
@@ -75,14 +93,14 @@ const RolesOverview: FC<RolesRouteProps<{ siteId: string }>> = () => {
 			name: role.attributes.displayName || '',
 			description: role.description || '',
 			admin: role.attributes.admin || false,
-			navigate: (roleId: string) => console.log('role', roleId),
+			navigate: (roleId: string) => navigate(MODULE_PATHS.roles.detail, { siteId, roleId }),
 		}));
 
 		return (
 			<>
 				<PaginatedTable
 					className="u-margin-top"
-					columns={ROLES_OVERVIEW_COLUMNS()}
+					columns={ROLES_OVERVIEW_COLUMNS(mySecurityRights)}
 					rows={rolesRows}
 					currentPage={currentPage}
 					itemsPerPage={DEFAULT_ROLES_SEARCH_PARAMS.limit}
@@ -100,6 +118,19 @@ const RolesOverview: FC<RolesRouteProps<{ siteId: string }>> = () => {
 		<>
 			<ContextHeader title="Rollen">
 				<ContextHeaderTopSection>{breadcrumbs}</ContextHeaderTopSection>
+				<ContextHeaderActionsSection>
+					<SecurableRender
+						userSecurityRights={mySecurityRights}
+						requiredSecurityRights={[SecurityRightsSite.RolesCreate]}
+					>
+						<Button
+							iconLeft="plus"
+							onClick={() => navigate(MODULE_PATHS.roles.create, { siteId })}
+						>
+							{t(CORE_TRANSLATIONS['BUTTON_CREATE-NEW'])}
+						</Button>
+					</SecurableRender>
+				</ContextHeaderActionsSection>
 			</ContextHeader>
 			<Container>
 				<DataLoader loadingState={initialLoading} render={renderOverview} />

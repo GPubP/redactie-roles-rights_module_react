@@ -120,3 +120,8 @@ export interface RolesRightsModuleAPI {
 		Forbidden403View: FC;
 	};
 }
+
+export interface RoleDetailFormState {
+	name: string;
+	description: string;
+}

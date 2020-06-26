@@ -12,7 +12,11 @@ export type RolesMetaModel = Page;
 export interface RoleEntityState {
 	meta?: RolesMetaModel;
 	roles: RoleModel[];
+	roleDetail?: RoleModel;
 	isFetching: boolean;
+	isUpdating: boolean;
+	isCreating: boolean;
+	isDeleting: boolean;
 }
 
 export interface RolesState {
@@ -24,9 +28,15 @@ export const createInitialRolesState = (): RolesState => ({
 	tenant: {
 		roles: [],
 		isFetching: false,
+		isUpdating: false,
+		isCreating: false,
+		isDeleting: false,
 	},
 	site: {
 		roles: [],
 		isFetching: false,
+		isUpdating: false,
+		isCreating: false,
+		isDeleting: false,
 	},
 });
