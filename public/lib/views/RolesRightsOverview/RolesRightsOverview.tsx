@@ -52,6 +52,7 @@ const RolesRightsOverview: FC<RolesRouteProps<{ siteId: string }>> = ({ match })
 	});
 
 	useEffect(() => {
+		setInitialLoading(LoadingState.Loading);
 		securityRightsMatrixFacade.getSecurityRightsBySite(rolesSearchParams, siteId);
 	}, [rolesSearchParams, siteId]);
 
@@ -67,23 +68,28 @@ const RolesRightsOverview: FC<RolesRouteProps<{ siteId: string }>> = ({ match })
 	}, [initialFormstate, fetchLoadingState, mySecurityRightsLoadingState, securityRightsByModule]);
 
 	useEffect(() => {
+		const categoryResult: ModuleResponse[] = modules
+			.map(mod => ({ ...mod, type: 'module' } as ModuleResponse))
+			.concat(contentTypes.map(ct => ({ ...ct, type: 'content-type' })));
+
+		setCategories(categoryResult);
+
 		const securityRightsByModuleResult = securityRights.reduce((acc, right) => {
-			const allCategories = modules.concat(contentTypes);
+			const newAcc = [...acc];
 			const moduleIndex =
 				right.attributes.type !== 'content-type'
 					? modules.findIndex(mod => mod.id === right.attributes.module)
 					: modules.length +
 					  contentTypes.findIndex(mod => mod.id === right.attributes.subModule);
-			const newAcc = [...acc];
 
 			newAcc[moduleIndex] = {
-				...allCategories[moduleIndex],
+				...categoryResult[moduleIndex],
 				type: right.attributes.type,
 				securityRights: (acc[moduleIndex]?.securityRights || []).concat([right]),
 			};
 
 			return newAcc;
-		}, modules as RoleSecurityRight[]);
+		}, categoryResult as RoleSecurityRight[]);
 
 		setSecurityRightsByModule(securityRightsByModuleResult);
 
@@ -100,23 +106,19 @@ const RolesRightsOverview: FC<RolesRouteProps<{ siteId: string }>> = ({ match })
 		}, {} as FormState);
 
 		setInitialFormstate(initialStateResult);
-
-		const categoryResult: ModuleResponse[] = modules
-			.map(mod => ({ ...mod, type: 'module' } as ModuleResponse))
-			.concat(contentTypes.map(ct => ({ ...ct, type: 'content-type' })));
-
-		setCategories(categoryResult);
 	}, [securityRightMatrix]); // eslint-disable-line react-hooks/exhaustive-deps
 
 	/**
 	 * Methods
 	 */
-	const handleClick = (module: string): any => {
+	const handleClick = (value: string, type: 'content-type' | 'module' | ''): any => {
 		setRolesSearchParams({
 			...rolesSearchParams,
-			module: module,
+			module: type === 'module' ? value : '',
+			'content-type': type === 'content-type' ? value : '',
 		});
-		setMatrixTitle(module);
+
+		setMatrixTitle(value);
 	};
 
 	const onCancel = (): void => {
