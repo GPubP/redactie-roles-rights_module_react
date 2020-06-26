@@ -1,6 +1,6 @@
 {
   "name": "@redactie/roles-rights-module",
-  "version": "0.4.4",
+  "version": "0.5.0",
   "description": "redactie roles-rights module",
   "main": "dist/redactie-roles-rights-module.umd.js",
   "module": "dist/redactie-roles-rights-module.umd.js",
