@@ -21,29 +21,31 @@ import {
 import { MODULE_PATHS, SecurityRightsSite } from '../../roles.const';
 import { LoadingState, RolesRouteProps } from '../../roles.types';
 import { DEFAULT_ROLES_SEARCH_PARAMS } from '../../services/roles/roles.service.const';
-import { UpdateRolesMatrixPayload } from '../../services/securityRights';
-import {
-	ModuleModel,
-	RoleModel,
-	SecurityRightModel,
-	securityRightsMatrixFacade,
-} from '../../store/securityRightsMatrix';
+import { ModuleResponse, UpdateRolesMatrixPayload } from '../../services/securityRights';
+import { securityRightsMatrixFacade } from '../../store/securityRightsMatrix';
 
 import { RoleSecurityRight } from './RolesRightsOverview.types';
 
 const RolesRightsOverview: FC<RolesRouteProps<{ siteId: string }>> = ({ match }) => {
 	const { siteId } = match.params;
 	const [t] = useCoreTranslation();
+
 	/**
 	 * Hooks
 	 */
 	const breadcrumbs = useRoutesBreadcrumbs();
 	const [rolesSearchParams, setRolesSearchParams] = useState(DEFAULT_ROLES_SEARCH_PARAMS);
-	const [loadingState, securityRightMatrix] = useSecurityRights();
+	const [fetchLoadingState, updateLoadingState, securityRightMatrix] = useSecurityRights();
 	const [initialLoading, setInitialLoading] = useState(LoadingState.Loading);
+	const [securityRightsByModule, setSecurityRightsByModule] = useState<
+		RoleSecurityRight[] | null
+	>(null);
+	const [initialFormstate, setInitialFormstate] = useState<FormState | null>(null);
 	const [formValues, setFormValues] = useState<UpdateRolesMatrixPayload | null>(null);
+	const [categories, setCategories] = useState<ModuleResponse[] | null>(null);
 	const { navigate } = useSiteNavigate();
-	const { modules = [], securityRights = [], roles = [] } = securityRightMatrix || {};
+	const { modules = [], securityRights = [], roles = [], contentTypes = [] } =
+		securityRightMatrix || {};
 	const [matrixTitle, setMatrixTitle] = useState<string>('');
 	const [mySecurityRightsLoadingState, mySecurityRights] = useMySecurityRightsForSite({
 		onlyKeys: true,
@@ -55,12 +57,57 @@ const RolesRightsOverview: FC<RolesRouteProps<{ siteId: string }>> = ({ match })
 
 	useEffect(() => {
 		if (
-			loadingState !== LoadingState.Loading &&
-			mySecurityRightsLoadingState !== LoadingState.Loading
+			fetchLoadingState !== LoadingState.Loading &&
+			mySecurityRightsLoadingState !== LoadingState.Loading &&
+			securityRightsByModule &&
+			initialFormstate
 		) {
 			setInitialLoading(LoadingState.Loaded);
 		}
-	}, [loadingState, mySecurityRightsLoadingState]);
+	}, [initialFormstate, fetchLoadingState, mySecurityRightsLoadingState, securityRightsByModule]);
+
+	useEffect(() => {
+		const securityRightsByModuleResult = securityRights.reduce((acc, right) => {
+			const allCategories = modules.concat(contentTypes);
+			const moduleIndex =
+				right.attributes.type !== 'content-type'
+					? modules.findIndex(mod => mod.id === right.attributes.module)
+					: modules.length +
+					  contentTypes.findIndex(mod => mod.id === right.attributes.subModule);
+			const newAcc = [...acc];
+
+			newAcc[moduleIndex] = {
+				...allCategories[moduleIndex],
+				type: right.attributes.type,
+				securityRights: (acc[moduleIndex]?.securityRights || []).concat([right]),
+			};
+
+			return newAcc;
+		}, modules as RoleSecurityRight[]);
+
+		setSecurityRightsByModule(securityRightsByModuleResult);
+
+		const initialStateResult = securityRights.reduce((acc, right) => {
+			acc[right.id] = roles.reduce((roleIds, role) => {
+				const hasSecurityRight = role.securityRights.find(rightId => rightId === right.id);
+				if (hasSecurityRight) {
+					roleIds.push(role.role.id);
+				}
+				return roleIds;
+			}, [] as string[]);
+
+			return acc;
+		}, {} as FormState);
+
+		setInitialFormstate(initialStateResult);
+
+		const categoryResult: ModuleResponse[] = modules
+			.map(mod => ({ ...mod, type: 'module' } as ModuleResponse))
+			.concat(contentTypes.map(ct => ({ ...ct, type: 'content-type' })));
+
+		setCategories(categoryResult);
+	}, [securityRightMatrix]); // eslint-disable-line react-hooks/exhaustive-deps
+
 	/**
 	 * Methods
 	 */
@@ -75,36 +122,6 @@ const RolesRightsOverview: FC<RolesRouteProps<{ siteId: string }>> = ({ match })
 	const onCancel = (): void => {
 		navigate(MODULE_PATHS.roles.overview, { siteId });
 	};
-
-	const securityRightsByModule = (
-		securityRights: SecurityRightModel[],
-		modules: ModuleModel[]
-	): RoleSecurityRight[] =>
-		securityRights.reduce((acc, right) => {
-			const moduleIndex = modules.findIndex(mod => mod.id === right.attributes.module);
-			const newAcc = [...acc];
-			newAcc[moduleIndex] = {
-				...modules[moduleIndex],
-				securityRights: (acc[moduleIndex]?.securityRights || []).concat([right]),
-			};
-			return newAcc;
-		}, modules as RoleSecurityRight[]);
-
-	const createInitialFormState = (
-		securityRights: SecurityRightModel[],
-		roles: RoleModel[]
-	): FormState =>
-		securityRights.reduce((acc, right) => {
-			acc[right.id] = roles.reduce((roleIds, role) => {
-				const hasSecurityRight = role.securityRights.find(rightId => rightId === right.id);
-				if (hasSecurityRight) {
-					roleIds.push(role.role.id);
-				}
-				return roleIds;
-			}, [] as string[]);
-
-			return acc;
-		}, {} as FormState);
 
 	const parseFormResult = (formState: FormState): UpdateRolesMatrixPayload =>
 		Object.keys(formState).reduce((roles, securityRightId) => {
@@ -153,7 +170,7 @@ const RolesRightsOverview: FC<RolesRouteProps<{ siteId: string }>> = ({ match })
 	 * Render
 	 */
 	const renderOverview = (): ReactElement | null => {
-		if (!securityRightMatrix) {
+		if (!securityRightsByModule || !initialFormstate) {
 			return null;
 		}
 
@@ -161,16 +178,18 @@ const RolesRightsOverview: FC<RolesRouteProps<{ siteId: string }>> = ({ match })
 			<>
 				<div className="row">
 					<div className="col-xs-3">
-						<ModulesList modules={modules} onClick={handleClick} />
+						<ModulesList modules={categories} onClick={handleClick} />
 					</div>
 					<div className="col-xs-8 u-margin-left">
 						<RolesPermissionsList
 							readonly={
-								!mySecurityRights.includes(SecurityRightsSite.UsersUpdateSiteRoles)
+								!mySecurityRights.includes(
+									SecurityRightsSite.RolesRightsUpdateRolePermissions
+								)
 							}
 							roles={roles}
-							permissions={securityRightsByModule(securityRights, modules)}
-							formState={createInitialFormState(securityRights, roles)}
+							permissions={securityRightsByModule}
+							formState={initialFormstate}
 							onChange={onFormChange}
 							title={matrixTitle}
 						/>
@@ -178,7 +197,7 @@ const RolesRightsOverview: FC<RolesRouteProps<{ siteId: string }>> = ({ match })
 				</div>
 				<SecurableRender
 					userSecurityRights={mySecurityRights}
-					requiredSecurityRights={[SecurityRightsSite.UsersUpdateSiteRoles]}
+					requiredSecurityRights={[SecurityRightsSite.RolesRightsUpdateRolePermissions]}
 				>
 					<ActionBar className="o-action-bar--fixed" isOpen>
 						<ActionBarContentSection>
@@ -187,6 +206,12 @@ const RolesRightsOverview: FC<RolesRouteProps<{ siteId: string }>> = ({ match })
 									{t(CORE_TRANSLATIONS.BUTTON_CANCEL)}
 								</Button>
 								<Button
+									iconLeft={
+										updateLoadingState === LoadingState.Loading
+											? 'circle-o-notch fa-spin'
+											: null
+									}
+									disabled={updateLoadingState === LoadingState.Loading}
 									className="u-margin-left-xs"
 									onClick={onConfigSave}
 									type="success"

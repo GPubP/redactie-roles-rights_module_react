@@ -43,7 +43,7 @@ const RolesPermissionsList: FC<RolesPermissionsProps> = ({
 												values[securityRight.id] &&
 												values[securityRight.id].includes(role.role.id)
 											}
-											disabled={readonly}
+											disabled={readonly || role.role.attributes.admin}
 											id={`${securityRight.id}_${role.role.id}`}
 											name={`${securityRight.id}_${role.role.id}`}
 											onChange={(e: ChangeEvent<HTMLInputElement>) => {
@@ -77,8 +77,8 @@ const RolesPermissionsList: FC<RolesPermissionsProps> = ({
 		return modules.map((module: RoleSecurityRight) =>
 			module.securityRights ? (
 				<>
-					<tr key={module.id}>
-						<th>{module.name}</th>
+					<tr key={module.id} className="a-table-category">
+						<th colSpan={roles.length + 2}>{module.name} <span className="u-text-light">({module.type})</span></th>
 					</tr>
 					{renderSecurityRightsRows(module.securityRights, submitForm, values)}
 				</>

@@ -48,6 +48,10 @@
 		background-color: #f3f3f3;
 	}
 
+	tr.a-table-category {
+		background-color: unset;
+	}
+
 	th {
 		padding-left: $spacer / 2;
 	}
