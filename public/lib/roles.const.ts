@@ -21,9 +21,11 @@ const tenantRoot = '/users';
 const tenantUsersOverview = `${tenantRoot}/overzicht`;
 
 const siteRolesRoot = `${siteRoot}/roles`;
+const siteRolesRightsRoot = `${siteRoot}/rolesrights`;
 const siteUsersRoot = `${siteRoot}`;
 
 const siteRolesOverview = `${siteRolesRoot}/overzicht`;
+const siteRolesRightsOverview = `${siteRolesRightsRoot}/overzicht`;
 const siteUsersOverview = `${siteUsersRoot}/overzicht`;
 const tenantUserDetail = `${tenantRoot}/:userUuid`;
 const tenantUserDetailGeneral = `${tenantUserDetail}/algemeen`;
@@ -44,6 +46,9 @@ export const MODULE_PATHS = {
 	},
 	roles: {
 		overview: siteRolesOverview,
+	},
+	rolesRights: {
+		overview: siteRolesRightsOverview,
 	},
 	tenantUserDetail,
 	tenantUserDetailGeneral,

@@ -1,4 +1,7 @@
 import { EmbeddedResponse } from '../../roles.types';
+import { SearchParams } from '../api';
+
+export type GetRolesPayload = SearchParams;
 
 export interface RoleAttributes {
 	displayName?: string;

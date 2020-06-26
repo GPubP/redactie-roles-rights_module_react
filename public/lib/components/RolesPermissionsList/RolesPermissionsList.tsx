@@ -5,7 +5,7 @@ import React, { ChangeEvent, FC, ReactNode } from 'react';
 
 import './RolesPermissionsList.scss';
 import { RoleResponse, SecurityRightResponse } from '../../services/securityRights';
-import { RoleSecurityRight } from '../../views/RolesOverview/RolesOverview.types';
+import { RoleSecurityRight } from '../../views/RolesRightsOverview/RolesRightsOverview.types';
 
 import { RolesPermissionsProps } from './RolesPermissionsList.types';
 

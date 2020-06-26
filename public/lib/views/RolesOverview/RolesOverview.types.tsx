@@ -1,11 +1,12 @@
-import { SecurityRightResponse } from '../../services/securityRights';
-
-export interface RoleSecurityRight {
-	id: string;
+export interface RolesOverviewTableRow {
+	uuid: string;
 	name: string;
-	securityRights: SecurityRightResponse[];
+	description: string;
+	admin: boolean;
+	navigate: (userUuid: string) => void;
 }
 
-export interface MatrixTitle {
-	id: string;
+export interface OrderBy {
+	key: string;
+	order: string;
 }

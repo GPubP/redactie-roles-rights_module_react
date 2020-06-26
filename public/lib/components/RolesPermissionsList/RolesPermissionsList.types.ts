@@ -1,5 +1,5 @@
 import { RoleResponse } from '../../services/securityRights';
-import { RoleSecurityRight } from '../../views/RolesOverview/RolesOverview.types';
+import { RoleSecurityRight } from '../../views/RolesRightsOverview/RolesRightsOverview.types';
 
 export interface RolesPermissionsProps {
 	readonly: boolean;
