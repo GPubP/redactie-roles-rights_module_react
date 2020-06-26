@@ -15,8 +15,8 @@ import { DataLoader, SecurableRender } from '../../components';
 import { useCoreTranslation } from '../../connectors/translations';
 import {
 	useMySecurityRightsForSite,
-	useNavigate,
 	useRoutesBreadcrumbs,
+	useSiteNavigate,
 	useSiteRoles,
 } from '../../hooks';
 import { MODULE_PATHS, SecurityRightsSite } from '../../roles.const';
@@ -34,7 +34,7 @@ const RolesOverview: FC<RolesRouteProps<{ siteId: string }>> = () => {
 	const { siteId } = useParams();
 	const [t] = useCoreTranslation();
 	const breadcrumbs = useRoutesBreadcrumbs();
-	const { navigate } = useNavigate();
+	const { navigate } = useSiteNavigate();
 	const [initialLoading, setInitialLoading] = useState(LoadingState.Loading);
 	const [currentPage, setCurrentPage] = useState(DEFAULT_ROLES_SEARCH_PARAMS.skip);
 	const [rolesSearchParams, setRolesSearchParams] = useState(DEFAULT_ROLES_SEARCH_PARAMS);
@@ -93,8 +93,7 @@ const RolesOverview: FC<RolesRouteProps<{ siteId: string }>> = () => {
 			name: role.attributes.displayName || '',
 			description: role.description || '',
 			admin: role.attributes.admin || false,
-			navigate: (roleId: string) =>
-				navigate(`/sites${MODULE_PATHS.roles.detail}`, { siteId, roleId }),
+			navigate: (roleId: string) => navigate(MODULE_PATHS.roles.detail, { siteId, roleId }),
 		}));
 
 		return (
@@ -121,14 +120,12 @@ const RolesOverview: FC<RolesRouteProps<{ siteId: string }>> = () => {
 				<ContextHeaderTopSection>{breadcrumbs}</ContextHeaderTopSection>
 				<ContextHeaderActionsSection>
 					<SecurableRender
-						userSecurityRights={mySecurityRights as string[]}
+						userSecurityRights={mySecurityRights}
 						requiredSecurityRights={[SecurityRightsSite.RolesCreate]}
 					>
 						<Button
 							iconLeft="plus"
-							onClick={() =>
-								navigate(`/sites${MODULE_PATHS.roles.create}`, { siteId })
-							}
+							onClick={() => navigate(MODULE_PATHS.roles.create, { siteId })}
 						>
 							{t(CORE_TRANSLATIONS['BUTTON_CREATE-NEW'])}
 						</Button>

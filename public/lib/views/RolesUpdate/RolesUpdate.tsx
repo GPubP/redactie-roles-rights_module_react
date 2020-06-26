@@ -10,9 +10,9 @@ import { DataLoader, RoleDetailForm } from '../../components';
 import { checkSecurityRights } from '../../helpers';
 import {
 	useMySecurityRightsForSite,
-	useNavigate,
 	useRolesLoadingStates,
 	useRoutesBreadcrumbs,
+	useSiteNavigate,
 	useSiteRole,
 } from '../../hooks';
 import { MODULE_PATHS, SecurityRightsSite } from '../../roles.const';
@@ -24,7 +24,7 @@ const RolesUpdate: FC<RolesRouteProps> = () => {
 	 * Hooks
 	 */
 	const { siteId, roleId } = useParams();
-	const { navigate } = useNavigate();
+	const { navigate } = useSiteNavigate();
 	const [initialLoading, setInitialLoading] = useState(LoadingState.Loading);
 	const [formState, setFormState] = useState<any | null>(null);
 	const breadcrumbs = useRoutesBreadcrumbs();
@@ -72,18 +72,16 @@ const RolesUpdate: FC<RolesRouteProps> = () => {
 	);
 
 	const navigateToOverview = (): void => {
-		navigate(`/sites${MODULE_PATHS.roles.overview}`, { siteId });
+		navigate(MODULE_PATHS.roles.overview, { siteId });
 	};
 
 	const onSubmit = (request: RoleDetailFormState): void => {
 		if (siteId && roleId) {
-			rolesFacade
-				.updateSiteRole({
-					siteId,
-					roleId,
-					body: request,
-				})
-				.then(navigateToOverview);
+			rolesFacade.updateSiteRole({
+				siteId,
+				roleId,
+				body: request,
+			});
 		}
 	};
 
