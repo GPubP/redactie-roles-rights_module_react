@@ -39,14 +39,16 @@ export class SecurityRightsMatrixFacade {
 	public updateSecurityRightsForSite(
 		payload: UpdateRolesMatrixPayload,
 		siteId: string
-	): Promise<void> {
+	): Promise<boolean> {
 		this.store.setIsUpdating(true);
+
 		return this.service
 			.updateSecurityRightsForSite(siteId, payload)
-			.then(response => {
-				console.log('update user site roles success', response);
+			.then(() => true)
+			.catch(err => {
+				this.store.setError(err);
+				return false;
 			})
-			.catch(err => this.store.setError(err))
 			.finally(() => this.store.setIsUpdating(false));
 	}
 }

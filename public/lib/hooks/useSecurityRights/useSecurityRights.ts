@@ -6,14 +6,17 @@ import {
 	securityRightsMatrixFacade,
 } from '../../store/securityRightsMatrix';
 
-const useSecurityRights = (): [LoadingState | null, SecurityRightMatrixModel | null] => {
-	const [loading] = useObservable(securityRightsMatrixFacade.isFetching$, null);
+const useSecurityRights = (): [
+	LoadingState | null,
+	LoadingState | null,
+	SecurityRightMatrixModel | null
+] => {
+	const [isFetching] = useObservable(securityRightsMatrixFacade.isFetching$, null);
+	const [isUpdating] = useObservable(securityRightsMatrixFacade.isUpdating$, null);
 	const [securityRightMatrix] = useObservable(securityRightsMatrixFacade.data$, null);
 	const [error] = useObservable(securityRightsMatrixFacade.error$, null);
 
-	const loadingState = error ? LoadingState.Error : loading;
-
-	return [loadingState, securityRightMatrix];
+	return [error ? LoadingState.Error : isFetching, isUpdating, securityRightMatrix];
 };
 
 export default useSecurityRights;

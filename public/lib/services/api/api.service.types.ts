@@ -5,4 +5,5 @@ export interface SearchParams {
 	sort?: string;
 	direction?: number;
 	module?: string;
+	'content-type'?: string;
 }

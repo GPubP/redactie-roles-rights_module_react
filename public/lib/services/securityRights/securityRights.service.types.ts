@@ -4,6 +4,7 @@ export interface SecurityRightMatrixResponse {
 	modules: ModuleResponse[];
 	securityRights: SecurityRightResponse[];
 	roles: RoleResponse[];
+	contentTypes: ModuleResponse[];
 }
 
 export interface SecurityRightAttributes {
@@ -11,8 +12,9 @@ export interface SecurityRightAttributes {
 	key: string;
 	level: string;
 	module: string;
+	subModule: string;
 	moduleVersion: string;
-	type: string;
+	type: 'module' | 'content-type';
 	displayName: string;
 }
 export interface SecurityRightResponse {
@@ -30,16 +32,14 @@ export interface SecurityRightResponse {
 export interface ModuleResponse {
 	id: string;
 	name: string;
+	type?: 'module' | 'content-type';
 }
 
 export interface RoleAttributes {
 	displayName?: string;
 	level?: string;
+	admin?: boolean;
 	[key: string]: any;
-	CRUD: string | null;
-	DOMEIN: string | null;
-	LOCATIE: string | null;
-	STADSBEDRIJF: string | null;
 }
 
 export interface Role {
