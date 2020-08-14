@@ -27,6 +27,14 @@ const UserDetailGeneral: FC<UserDetailGeneralProps> = ({ user }) => {
 						</p>
 					</div>
 				</div>
+				<div className="row u-margin-top">
+					<div className="col-xs-12 ">
+						<span>Email</span>
+						<p className="u-margin-top-xs">
+							<span className="u-text-light u-margin-right-xs">{user.email}</span>
+						</p>
+					</div>
+				</div>
 			</div>
 		</Card>
 	);
