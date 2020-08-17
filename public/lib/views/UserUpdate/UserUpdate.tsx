@@ -26,13 +26,18 @@ import { UserModel, usersFacade } from '../../store/users';
 
 import { USER_UPDATE_NAV_LIST_ITEMS } from './UserUpdate.const';
 
-const UserUpdate: FC<RolesRouteProps<{ userUuid?: string }>> = ({ route }) => {
+const UserUpdate: FC<RolesRouteProps<{ userUuid?: string }>> = ({ route, tenantId }) => {
 	/**
 	 * Hooks
 	 */
 	const [initialLoading, setInitialLoading] = useState(LoadingState.Loading);
-	const breadcrumbs = useRoutesBreadcrumbs();
 	const { userUuid } = useParams();
+	const breadcrumbs = useRoutesBreadcrumbs([
+		{
+			name: 'Gebruikers',
+			target: generatePath(`/${tenantId}${MODULE_PATHS.tenantUsersOverview}`),
+		},
+	]);
 	const [userLoadingState, user] = useUser(userUuid);
 	const [userRolesLoadingState, userRoles] = useUserRolesForTenant(userUuid);
 	const [rolesLoadingState, roles] = useTenantRoles();

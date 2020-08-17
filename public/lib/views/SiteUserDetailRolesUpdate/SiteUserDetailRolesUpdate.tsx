@@ -8,7 +8,7 @@ import {
 } from '@acpaas-ui/react-editorial-components';
 import { CORE_TRANSLATIONS } from '@redactie/translations-module/public/lib/i18next/translations.const';
 import React, { FC, ReactElement, useEffect, useMemo, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { generatePath, useParams } from 'react-router-dom';
 
 import { DataLoader, FormViewUserRoles } from '../../components';
 import { useCoreTranslation } from '../../connectors/translations';
@@ -28,7 +28,7 @@ import { rolesFacade } from '../../store/roles';
 import { sitesFacade } from '../../store/sites';
 import { usersFacade } from '../../store/users';
 
-const SiteUserDetailRolesUpdate: FC<RolesRouteProps> = () => {
+const SiteUserDetailRolesUpdate: FC<RolesRouteProps> = ({ tenantId }) => {
 	/**
 	 * Hooks
 	 */
@@ -44,10 +44,12 @@ const SiteUserDetailRolesUpdate: FC<RolesRouteProps> = () => {
 		return [
 			{
 				name: site ? site.data.name : '...',
-				target: '',
+				target: generatePath(`/${tenantId}/sites${MODULE_PATHS.siteRoot}`, {
+					siteId,
+				}),
 			},
 		];
-	}, [site]);
+	}, [site, siteId, tenantId]);
 	const breadcrumbs = useRoutesBreadcrumbs(extraBreadcrumbs);
 	const [userRolesLoadingState, userRoles] = useUserRolesForSite();
 	const [selectedRoles, updateSelectedRoles] = useState<string[]>([]);

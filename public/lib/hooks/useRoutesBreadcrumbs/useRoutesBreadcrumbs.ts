@@ -15,10 +15,6 @@ const useRoutesBreadcrumbs = (extraBreadcrumbs: Breadcrumb[] = []): ReactNode =>
 				name: 'Home',
 				target: generatePath(MODULE_PATHS.dashboard),
 			},
-			{
-				name: 'Gebruikers',
-				target: '',
-			},
 			...extraBreadcrumbs,
 		],
 	});
