@@ -44,8 +44,9 @@ const RolesRootComponent: FC<RolesModuleProps> = ({ route, tenantId }) => {
 	const extraOptions = useMemo(
 		() => ({
 			routes: route.routes,
+			tenantId,
 		}),
-		[route.routes]
+		[route.routes, tenantId]
 	);
 	return (
 		<TenantContext.Provider value={{ tenantId }}>

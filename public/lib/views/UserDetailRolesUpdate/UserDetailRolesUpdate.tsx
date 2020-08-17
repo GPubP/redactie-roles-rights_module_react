@@ -166,7 +166,7 @@ const UserDetailRolesUpdate: FC<RolesRouteProps<{ userUuid?: string; siteUuid?: 
 
 	return (
 		<>
-			<ContextHeader title={site ? site.data.name : ''}>
+			<ContextHeader title={site ? `${site.data.name} toegang` : ''}>
 				<ContextHeaderTopSection>{breadcrumbs}</ContextHeaderTopSection>
 			</ContextHeader>
 			<Container>
