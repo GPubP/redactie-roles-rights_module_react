@@ -3,12 +3,13 @@ import {
 	Container,
 	ContextHeader,
 	ContextHeaderTopSection,
+	NavList,
 } from '@acpaas-ui/react-editorial-components';
 import Core, { ModuleRouteConfig } from '@redactie/redactie-core';
 import React, { FC, ReactElement, useEffect, useState } from 'react';
-import { generatePath, useParams } from 'react-router-dom';
+import { generatePath, NavLink, useParams } from 'react-router-dom';
 
-import { DataLoader, NavList } from '../../components';
+import { DataLoader } from '../../components';
 import {
 	useMySecurityRightsForTenant,
 	useNavigate,
@@ -128,10 +129,12 @@ const UserUpdate: FC<RolesRouteProps<{ userUuid?: string }>> = ({ route, tenantI
 							<NavList
 								items={USER_UPDATE_NAV_LIST_ITEMS.map(listItem => ({
 									...listItem,
+									activeClassName: 'is-active',
 									to: generatePath(`${route.path}/${listItem.to}`, {
 										userUuid,
 									}),
 								}))}
+								linkComponent={NavLink}
 							/>
 						</Card>
 					</div>
