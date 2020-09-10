@@ -1,14 +1,20 @@
-import { Card } from '@acpaas-ui/react-components';
+import { Button, Card } from '@acpaas-ui/react-components';
 import {
+	ActionBar,
+	ActionBarContentSection,
 	Container,
 	ContextHeader,
 	ContextHeaderTopSection,
+	NavList,
 } from '@acpaas-ui/react-editorial-components';
 import Core, { ModuleRouteConfig } from '@redactie/redactie-core';
+import { CORE_TRANSLATIONS } from '@redactie/translations-module/public/lib/i18next/translations.const';
 import React, { FC, ReactElement, useEffect, useState } from 'react';
-import { generatePath, useParams } from 'react-router-dom';
+import { generatePath, NavLink, useParams } from 'react-router-dom';
 
-import { DataLoader, NavList } from '../../components';
+import { DataLoader } from '../../components';
+import { useCoreTranslation } from '../../connectors/translations';
+import { mapUserRoles } from '../../helpers';
 import {
 	useMySecurityRightsForTenant,
 	useNavigate,
@@ -17,12 +23,13 @@ import {
 	useTenantRoles,
 	useUser,
 	useUserRolesForTenant,
+	useUsersLoadingStates,
 } from '../../hooks';
 import { MODULE_PATHS } from '../../roles.const';
-import { ContentType, LoadingState, RolesRouteProps } from '../../roles.types';
+import { LoadingState, RolesRouteProps } from '../../roles.types';
 import { rolesFacade } from '../../store/roles';
 import { sitesFacade } from '../../store/sites';
-import { UserModel, usersFacade } from '../../store/users';
+import { usersFacade } from '../../store/users';
 
 import { USER_UPDATE_NAV_LIST_ITEMS } from './UserUpdate.const';
 
@@ -39,11 +46,14 @@ const UserUpdate: FC<RolesRouteProps<{ userUuid?: string }>> = ({ route, tenantI
 		},
 	]);
 	const [userLoadingState, user] = useUser(userUuid);
+	const { isUpdating } = useUsersLoadingStates();
 	const [userRolesLoadingState, userRoles] = useUserRolesForTenant(userUuid);
+	const [selectedRoles] = useState(mapUserRoles(userRoles));
 	const [rolesLoadingState, roles] = useTenantRoles();
 	const [sitesLoadingState, sites] = useSites();
 	const [mySecurityRightsLoadingState, mySecurityRights] = useMySecurityRightsForTenant(true);
 	const { navigate } = useNavigate();
+	const [t] = useCoreTranslation();
 
 	useEffect(() => {
 		if (userUuid) {
@@ -79,20 +89,16 @@ const UserUpdate: FC<RolesRouteProps<{ userUuid?: string }>> = ({ route, tenantI
 	/**
 	 * Functions
 	 */
-	const handleSubmit = (user: UserModel, content: any, contentType: ContentType): void => {
-		switch (contentType) {
-			case ContentType.UserRoles:
-				usersFacade.updateUserRolesForTenant({
-					userUuid: user.id,
-					roles: content,
-				});
-				break;
-			default:
-				break;
+	const onSubmit = (): void => {
+		if (user && mapUserRoles(userRoles) !== selectedRoles) {
+			usersFacade.updateUserRolesForTenant({
+				userUuid: user.id,
+				roles: selectedRoles,
+			});
 		}
 	};
 
-	const handleCancel = (): void => {
+	const onCancel = (): void => {
 		navigate(MODULE_PATHS.tenantUsersOverview);
 	};
 
@@ -111,8 +117,6 @@ const UserUpdate: FC<RolesRouteProps<{ userUuid?: string }>> = ({ route, tenantI
 			roles,
 			sites,
 			mySecurityRights,
-			onCancel: handleCancel,
-			onSubmit: handleSubmit,
 		});
 	};
 
@@ -128,10 +132,12 @@ const UserUpdate: FC<RolesRouteProps<{ userUuid?: string }>> = ({ route, tenantI
 							<NavList
 								items={USER_UPDATE_NAV_LIST_ITEMS.map(listItem => ({
 									...listItem,
+									activeClassName: 'is-active',
 									to: generatePath(`${route.path}/${listItem.to}`, {
 										userUuid,
 									}),
 								}))}
+								linkComponent={NavLink}
 							/>
 						</Card>
 					</div>
@@ -140,6 +146,28 @@ const UserUpdate: FC<RolesRouteProps<{ userUuid?: string }>> = ({ route, tenantI
 					</div>
 				</div>
 			</Container>
+			<ActionBar className="o-action-bar--fixed" isOpen>
+				<ActionBarContentSection>
+					<div className="u-wrapper row end-xs">
+						<Button onClick={onCancel} negative>
+							{t(CORE_TRANSLATIONS.BUTTON_CANCEL)}
+						</Button>
+						<Button
+							iconLeft={
+								isUpdating === LoadingState.Loading
+									? 'circle-o-notch fa-spin'
+									: null
+							}
+							disabled={isUpdating === LoadingState.Loading}
+							className="u-margin-left-xs"
+							onClick={onSubmit}
+							type="success"
+						>
+							{t(CORE_TRANSLATIONS.BUTTON_SAVE)}
+						</Button>
+					</div>
+				</ActionBarContentSection>
+			</ActionBar>
 		</>
 	);
 };
