@@ -129,7 +129,7 @@ const UserDetailRolesUpdate: FC<RolesRouteProps<{ userUuid?: string; siteUuid?: 
 		}
 
 		return (
-			<>
+			<div className="u-margin-bottom-lg">
 				<h3>Rollen</h3>
 				<div className="u-margin-top">
 					<FormViewUserRoles
@@ -160,7 +160,7 @@ const UserDetailRolesUpdate: FC<RolesRouteProps<{ userUuid?: string; siteUuid?: 
 						</div>
 					</ActionBarContentSection>
 				</ActionBar>
-			</>
+			</div>
 		);
 	};
 

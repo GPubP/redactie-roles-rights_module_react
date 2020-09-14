@@ -127,7 +127,7 @@ const UserUpdate: FC<RolesRouteProps<{ userUuid?: string }>> = ({ route, tenantI
 			</ContextHeader>
 			<Container>
 				<div className="row between-xs top-xs u-margin-bottom-lg">
-					<div className="col-xs-3 u-margin-bottom">
+					<div className="col-xs-12 col-sm-3 u-margin-bottom">
 						<Card>
 							<NavList
 								items={USER_UPDATE_NAV_LIST_ITEMS.map(listItem => ({
@@ -141,7 +141,7 @@ const UserUpdate: FC<RolesRouteProps<{ userUuid?: string }>> = ({ route, tenantI
 							/>
 						</Card>
 					</div>
-					<div className="col-xs-9">
+					<div className="col-xs-12 col-sm-9">
 						<DataLoader loadingState={initialLoading} render={renderChildRoutes} />
 					</div>
 				</div>

@@ -116,7 +116,7 @@ const SiteUserDetailRolesUpdate: FC<RolesRouteProps> = ({ tenantId }) => {
 			return null;
 		}
 		return (
-			<>
+			<div className="u-margin-bottom-lg">
 				<h3>Rollen</h3>
 				<div className="u-margin-top">
 					<FormViewUserRoles
@@ -147,7 +147,7 @@ const SiteUserDetailRolesUpdate: FC<RolesRouteProps> = ({ tenantId }) => {
 						</div>
 					</ActionBarContentSection>
 				</ActionBar>
-			</>
+			</div>
 		);
 	};
 
