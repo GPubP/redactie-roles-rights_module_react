@@ -28,7 +28,6 @@ const FormViewUserRoles: FC<FormViewUserRolesProps> = ({ formState, availableRol
 								key={role.id}
 								as={Checkbox}
 								checked={values.roleIds && values.roleIds.includes(role.id)}
-								disabled={role.attributes.admin}
 								id={role.id}
 								name={role.name}
 								label={role.attributes.displayName}
