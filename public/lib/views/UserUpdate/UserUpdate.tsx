@@ -38,7 +38,7 @@ const UserUpdate: FC<RolesRouteProps<{ userUuid?: string }>> = ({ route, tenantI
 	 * Hooks
 	 */
 	const [initialLoading, setInitialLoading] = useState(LoadingState.Loading);
-	const { userUuid } = useParams();
+	const { userUuid } = useParams<{ userUuid: string }>();
 	const breadcrumbs = useRoutesBreadcrumbs([
 		{
 			name: 'Gebruikers',

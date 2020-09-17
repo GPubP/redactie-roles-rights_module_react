@@ -23,7 +23,7 @@ const RolesUpdate: FC<RolesRouteProps> = () => {
 	/**
 	 * Hooks
 	 */
-	const { siteId, roleId } = useParams();
+	const { siteId, roleId } = useParams<{ siteId: string; roleId: string }>();
 	const { navigate } = useSiteNavigate();
 	const [initialLoading, setInitialLoading] = useState(LoadingState.Loading);
 	const [formState, setFormState] = useState<any | null>(null);

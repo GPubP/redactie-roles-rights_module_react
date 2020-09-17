@@ -32,7 +32,7 @@ const SiteUserDetailRolesUpdate: FC<RolesRouteProps> = ({ tenantId }) => {
 	/**
 	 * Hooks
 	 */
-	const { userUuid, siteId } = useParams();
+	const { userUuid, siteId } = useParams<{ userUuid: string; siteId: string }>();
 	const [initialLoading, setInitialLoading] = useState(LoadingState.Loading);
 	const [t] = useCoreTranslation();
 	const { navigate } = useNavigate();
