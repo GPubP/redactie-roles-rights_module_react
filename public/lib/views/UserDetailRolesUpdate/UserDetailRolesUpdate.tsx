@@ -28,11 +28,11 @@ import { rolesFacade } from '../../store/roles';
 import { sitesFacade } from '../../store/sites';
 import { usersFacade } from '../../store/users';
 
-const UserDetailRolesUpdate: FC<RolesRouteProps<{ userUuid?: string; siteUuid?: string }>> = () => {
+const UserDetailRolesUpdate: FC<RolesRouteProps<{ userUuid: string; siteUuid: string }>> = () => {
 	/**
 	 * Hooks
 	 */
-	const { userUuid, siteUuid } = useParams();
+	const { userUuid, siteUuid } = useParams<{ userUuid: string; siteUuid: string }>();
 	const [initialLoading, setInitialLoading] = useState(LoadingState.Loading);
 	const [t] = useCoreTranslation();
 	const [userLoadingState, user] = useUser(userUuid);

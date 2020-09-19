@@ -16,7 +16,7 @@ const RolesCreate: FC<RolesRouteProps> = () => {
 	/**
 	 * Hooks
 	 */
-	const { siteId } = useParams();
+	const { siteId } = useParams<{ siteId: string }>();
 	const { navigate } = useNavigate();
 	const breadcrumbs = useRoutesBreadcrumbs();
 	const rolesLoadingStates = useRolesLoadingStates();

@@ -6,7 +6,12 @@ import { RoleModel } from '../../../store/roles';
 
 import { FormViewUserRolesProps, RoleIds } from './FormViewUserRoles.types';
 
-const FormViewUserRoles: FC<FormViewUserRolesProps> = ({ formState, availableRoles, onSubmit }) => {
+const FormViewUserRoles: FC<FormViewUserRolesProps> = ({
+	checkAdmin = false,
+	formState,
+	availableRoles,
+	onSubmit,
+}) => {
 	const handleFormSubmit = (object: RoleIds): void => {
 		onSubmit(object.roleIds);
 	};
@@ -16,6 +21,7 @@ const FormViewUserRoles: FC<FormViewUserRolesProps> = ({ formState, availableRol
 			roleIds: formState,
 		};
 	}, [formState]);
+
 	return (
 		<Formik initialValues={initialValues} onSubmit={handleFormSubmit}>
 			{({ values, submitForm }) => (
@@ -28,6 +34,7 @@ const FormViewUserRoles: FC<FormViewUserRolesProps> = ({ formState, availableRol
 								key={role.id}
 								as={Checkbox}
 								checked={values.roleIds && values.roleIds.includes(role.id)}
+								disabled={checkAdmin && role.attributes.admin}
 								id={role.id}
 								name={role.name}
 								label={role.attributes.displayName}

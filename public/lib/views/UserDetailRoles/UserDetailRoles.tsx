@@ -65,6 +65,7 @@ const UserDetailRoles: FC<UserDetailRolesProps> = ({
 			<div className="u-margin">
 				<h5 className="u-margin-bottom">Rollen</h5>
 				<FormViewUserRoles
+					checkAdmin
 					formState={selectedRoles}
 					availableRoles={roles}
 					onSubmit={onConfigChange}

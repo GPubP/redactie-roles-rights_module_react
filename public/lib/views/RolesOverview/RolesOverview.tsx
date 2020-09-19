@@ -31,7 +31,7 @@ const RolesOverview: FC<RolesRouteProps<{ siteId: string }>> = () => {
 	/**
 	 * Hooks
 	 */
-	const { siteId } = useParams();
+	const { siteId } = useParams<{ siteId: string }>();
 	const [t] = useCoreTranslation();
 	const breadcrumbs = useRoutesBreadcrumbs();
 	const { navigate } = useSiteNavigate();
