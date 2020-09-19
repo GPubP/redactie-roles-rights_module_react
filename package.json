@@ -1,6 +1,6 @@
 {
   "name": "@redactie/roles-rights-module",
-  "version": "0.6.4",
+  "version": "0.6.5",
   "description": "redactie roles-rights module",
   "main": "dist/redactie-roles-rights-module.umd.js",
   "module": "dist/redactie-roles-rights-module.umd.js",
@@ -47,7 +47,7 @@
     "@redactie/redactie-core": "^1.10.5",
     "@redactie/sites-module": "^0.10.0",
     "@redactie/translations-module": "^0.3.0",
-    "@redactie/utils": "0.3.0",
+    "@redactie/utils": "0.6.0",
     "@testing-library/jest-dom": "5.0.2",
     "@testing-library/react": "9.4.0",
     "@types/jest": "24.9.1",
