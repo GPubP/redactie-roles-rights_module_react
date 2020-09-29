@@ -1,56 +1,90 @@
-import { Checkbox } from '@acpaas-ui/react-components';
+import { Button, Checkbox } from '@acpaas-ui/react-components';
+import { ActionBar, ActionBarContentSection } from '@acpaas-ui/react-editorial-components';
+import { CORE_TRANSLATIONS } from '@redactie/translations-module/public/lib/i18next/translations.const';
+import { FormikOnChangeHandler } from '@redactie/utils';
 import { Field, FieldArray, Formik } from 'formik';
-import React, { ChangeEvent, FC, useMemo } from 'react';
+import React, { ChangeEvent, FC } from 'react';
 
+import { useCoreTranslation } from '../../../connectors/translations';
 import { RoleModel } from '../../../store/roles';
 
-import { FormViewUserRolesProps, RoleIds } from './FormViewUserRoles.types';
+import { FormViewUserRolesProps, UserRolesFormState } from './FormViewUserRoles.types';
 
 const FormViewUserRoles: FC<FormViewUserRolesProps> = ({
-	checkAdmin = false,
-	formState,
+	initialState,
 	availableRoles,
-	onSubmit,
+	showActionBar = true,
+	checkAdmin = false,
+	isLoading = false,
+	isChanged = false,
+	onCancel = () => null,
+	onChange = () => null,
+	onSubmit = () => null,
 }) => {
-	const handleFormSubmit = (object: RoleIds): void => {
-		onSubmit(object.roleIds);
-	};
+	/**
+	 * Hooks
+	 */
+	const [t] = useCoreTranslation();
 
-	const initialValues = useMemo(() => {
-		return {
-			roleIds: formState,
-		};
-	}, [formState]);
-
+	/**
+	 * Render
+	 */
 	return (
-		<Formik initialValues={initialValues} onSubmit={handleFormSubmit}>
-			{({ values, submitForm }) => (
-				<FieldArray
-					name="roleIds"
-					render={arrayHelpers =>
-						availableRoles &&
-						availableRoles.map((role: RoleModel) => (
-							<Field
-								key={role.id}
-								as={Checkbox}
-								checked={values.roleIds && values.roleIds.includes(role.id)}
-								disabled={checkAdmin && role.attributes.admin}
-								id={role.id}
-								name={role.name}
-								label={role.attributes.displayName}
-								onChange={(e: ChangeEvent<HTMLInputElement>) => {
-									if (e.target.checked) arrayHelpers.push(role.id);
-									else {
-										const idx = values.roleIds.indexOf(role.id);
-										arrayHelpers.remove(idx);
-									}
-									submitForm();
-								}}
-							/>
-						))
-					}
-				/>
-			)}
+		<Formik enableReinitialize initialValues={initialState} onSubmit={onSubmit}>
+			{({ values, submitForm, resetForm }) => {
+				console.log(values, 'values');
+				return (
+					<>
+						<FormikOnChangeHandler
+							onChange={values => onChange(values as UserRolesFormState)}
+						/>
+						<FieldArray
+							name="roleIds"
+							render={arrayHelpers =>
+								availableRoles &&
+								availableRoles.map((role: RoleModel) => (
+									<Field
+										key={role.id}
+										as={Checkbox}
+										checked={values.roleIds && values.roleIds.includes(role.id)}
+										disabled={checkAdmin && role.attributes.admin}
+										id={role.id}
+										name={role.name}
+										label={role.attributes.displayName}
+										onChange={(e: ChangeEvent<HTMLInputElement>) => {
+											if (e.target.checked) arrayHelpers.push(role.id);
+											else {
+												const idx = values.roleIds.indexOf(role.id);
+												arrayHelpers.remove(idx);
+											}
+										}}
+									/>
+								))
+							}
+						/>
+						{showActionBar && (
+							<ActionBar className="o-action-bar--fixed" isOpen>
+								<ActionBarContentSection>
+									<div className="u-wrapper row end-xs">
+										<Button onClick={() => onCancel(resetForm)} negative>
+											{t(CORE_TRANSLATIONS['BUTTON_CANCEL'])}
+										</Button>
+										<Button
+											iconLeft={isLoading ? 'circle-o-notch fa-spin' : null}
+											disabled={isLoading || !isChanged}
+											className="u-margin-left-xs"
+											onClick={submitForm}
+											type="success"
+										>
+											{t(CORE_TRANSLATIONS['BUTTON_SAVE'])}
+										</Button>
+									</div>
+								</ActionBarContentSection>
+							</ActionBar>
+						)}
+					</>
+				);
+			}}
 		</Formik>
 	);
 };

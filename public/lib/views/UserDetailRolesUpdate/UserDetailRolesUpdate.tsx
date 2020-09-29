@@ -1,17 +1,14 @@
-import { Button } from '@acpaas-ui/react-components';
 import {
-	ActionBar,
-	ActionBarContentSection,
 	Container,
 	ContextHeader,
 	ContextHeaderTopSection,
 } from '@acpaas-ui/react-editorial-components';
-import { CORE_TRANSLATIONS } from '@redactie/translations-module/public/lib/i18next/translations.const';
+import { FormikProps } from 'formik';
+import { equals } from 'ramda';
 import React, { FC, ReactElement, useEffect, useMemo, useState } from 'react';
 import { useParams } from 'react-router-dom';
 
-import { DataLoader, FormViewUserRoles } from '../../components';
-import { useCoreTranslation } from '../../connectors/translations';
+import { DataLoader, FormViewUserRoles, UserRolesFormState } from '../../components';
 import { mapUserRoles } from '../../helpers';
 import {
 	useNavigate,
@@ -34,9 +31,8 @@ const UserDetailRolesUpdate: FC<RolesRouteProps<{ userUuid: string; siteUuid: st
 	 */
 	const { userUuid, siteUuid } = useParams<{ userUuid: string; siteUuid: string }>();
 	const [initialLoading, setInitialLoading] = useState(LoadingState.Loading);
-	const [t] = useCoreTranslation();
 	const [userLoadingState, user] = useUser(userUuid);
-	const { navigate, generatePath } = useNavigate();
+	const { generatePath } = useNavigate();
 	const extraBreadcrumbs = useMemo(() => {
 		return [
 			{
@@ -58,7 +54,15 @@ const UserDetailRolesUpdate: FC<RolesRouteProps<{ userUuid: string; siteUuid: st
 	const [rolesLoadingState, roles] = useSiteRoles();
 	const [siteLoadingState, site] = useSite();
 	const [userRolesLoadingState, userRoles] = useUserRolesForSite();
-	const [selectedRoles, updateSelectedRoles] = useState<string[] | null>(null);
+
+	const [initialFormState, setInitialFormState] = useState<UserRolesFormState | null>(null);
+	const [formState, setFormState] = useState<UserRolesFormState | null>(initialFormState);
+	const isChanged = useMemo(() => {
+		if (formState === null) {
+			return false;
+		}
+		return !equals(initialFormState, formState);
+	}, [formState, initialFormState]);
 
 	useEffect(() => {
 		if (userUuid && siteUuid) {
@@ -87,44 +91,32 @@ const UserDetailRolesUpdate: FC<RolesRouteProps<{ userUuid: string; siteUuid: st
 
 	useEffect(() => {
 		if (userRoles) {
-			updateSelectedRoles(mapUserRoles(userRoles));
+			setInitialFormState({
+				roleIds: mapUserRoles(userRoles),
+			});
 		}
 	}, [userRoles]);
 
 	/**
 	 * Methods
 	 */
-	const handleSubmit = (): void => {
-		if (selectedRoles && userRoles && mapUserRoles(userRoles) !== selectedRoles) {
-			usersFacade
-				.updateUserRolesForSite({
-					userUuid,
-					siteUuid,
-					roles: selectedRoles,
-				})
-				.then(() =>
-					navigate(MODULE_PATHS.tenantUserDetailRoles, {
-						userUuid,
-					})
-				);
-		}
-	};
-
-	const onFormChange = (updatesRoles: string[]): void => {
-		updateSelectedRoles(updatesRoles);
-	};
-
-	const onCancel = (): void => {
-		navigate(MODULE_PATHS.tenantUserDetailRoles, {
+	const handleSubmit = (values: UserRolesFormState): void => {
+		usersFacade.updateUserRolesForSite({
 			userUuid,
+			siteUuid,
+			roles: values.roleIds,
 		});
+	};
+
+	const onCancel = (resetForm: FormikProps<UserRolesFormState>['resetForm']): void => {
+		resetForm();
 	};
 
 	/**
 	 * Render
 	 */
 	const renderSiteRolesForm = (): ReactElement | null => {
-		if (!roles || !selectedRoles) {
+		if (!roles || !initialFormState) {
 			return null;
 		}
 
@@ -133,33 +125,15 @@ const UserDetailRolesUpdate: FC<RolesRouteProps<{ userUuid: string; siteUuid: st
 				<h3>Rollen</h3>
 				<div className="u-margin-top">
 					<FormViewUserRoles
-						formState={selectedRoles}
+						initialState={initialFormState}
 						availableRoles={roles}
-						onSubmit={onFormChange}
+						isChanged={isChanged}
+						isLoading={isUpdating === LoadingState.Loading}
+						onChange={setFormState}
+						onSubmit={handleSubmit}
+						onCancel={onCancel}
 					/>
 				</div>
-				<ActionBar className="o-action-bar--fixed" isOpen>
-					<ActionBarContentSection>
-						<div className="u-wrapper row end-xs">
-							<Button onClick={onCancel} negative>
-								{t(CORE_TRANSLATIONS.BUTTON_CANCEL)}
-							</Button>
-							<Button
-								iconLeft={
-									isUpdating === LoadingState.Loading
-										? 'circle-o-notch fa-spin'
-										: null
-								}
-								disabled={isUpdating === LoadingState.Loading}
-								className="u-margin-left-xs"
-								onClick={handleSubmit}
-								type="success"
-							>
-								{t(CORE_TRANSLATIONS.BUTTON_SAVE)}
-							</Button>
-						</div>
-					</ActionBarContentSection>
-				</ActionBar>
 			</div>
 		);
 	};

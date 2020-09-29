@@ -1,12 +1,19 @@
+import { FormikProps } from 'formik';
+
 import { RoleModel } from '../../../store/roles';
 
 export interface FormViewUserRolesProps {
 	checkAdmin?: boolean;
-	formState: Array<string>;
+	initialState: UserRolesFormState;
 	availableRoles: RoleModel[];
-	onSubmit: (formValues: Array<string>) => void;
+	isLoading?: boolean;
+	isChanged?: boolean;
+	showActionBar?: boolean;
+	onCancel?: (resetForm: FormikProps<UserRolesFormState>['resetForm']) => void;
+	onSubmit?: (values: UserRolesFormState) => void;
+	onChange?: (values: UserRolesFormState) => void;
 }
 
-export interface RoleIds {
-	roleIds: Array<string>;
+export interface UserRolesFormState {
+	roleIds: string[];
 }

@@ -8,9 +8,9 @@ import {
 } from '@acpaas-ui/react-components';
 import { ActionBar, ActionBarContentSection } from '@acpaas-ui/react-editorial-components';
 import { CORE_TRANSLATIONS } from '@redactie/translations-module/public/lib/i18next/translations.const';
-import { useDetectValueChanges } from '@redactie/utils';
+import { ErrorMessage, FormikOnChangeHandler } from '@redactie/utils';
 import { Field, Formik } from 'formik';
-import React, { FC, ReactElement, useState } from 'react';
+import React, { FC, ReactElement } from 'react';
 
 import { useCoreTranslation } from '../../../connectors/translations';
 import { RoleDetailFormState } from '../../../roles.types';
@@ -20,15 +20,15 @@ import { RoleDetailFormProps } from './RoleDetailForm.types';
 
 const RoleDetailForm: FC<RoleDetailFormProps> = ({
 	initialState,
-	onCancel,
-	onSubmit,
-	isLoading,
-	isDeleting,
+	isLoading = false,
+	isDeleting = false,
+	onCancel = () => null,
+	onSubmit = () => null,
+	onChange = () => null,
+	isChanged = false,
 	onDelete,
 }) => {
 	const [t] = useCoreTranslation();
-	const [formValue, setFormValue] = useState<RoleDetailFormState | null>(null);
-	const [isChanged] = useDetectValueChanges(!isLoading, formValue);
 
 	const renderDelete = (): ReactElement => {
 		return (
@@ -51,21 +51,27 @@ const RoleDetailForm: FC<RoleDetailFormProps> = ({
 
 	return (
 		<Formik
+			enableReinitialize
 			initialValues={initialState}
 			onSubmit={onSubmit}
 			validationSchema={ROLE_DETAIL_VALIDATION_SCHEMA}
 		>
-			{({ submitForm, values }) => {
-				setFormValue(values);
-
+			{({ submitForm, resetForm }) => {
 				return (
 					<>
+						<FormikOnChangeHandler
+							onChange={values => onChange(values as RoleDetailFormState)}
+						/>
 						<div className="row">
 							<div className="col-xs-12 col-md-6">
-								<Field as={TextField} id="name" label="Naam" name="name" />
-								<div className="u-text-light u-margin-top-xs">
-									Geef de rol een korte en duidelijke naam.
-								</div>
+								<Field
+									description="Geef de rol een korte en duidelijke naam."
+									as={TextField}
+									id="name"
+									label="Naam"
+									name="name"
+								/>
+								<ErrorMessage name="name" />
 							</div>
 						</div>
 						<div className="row u-margin-top">
@@ -76,16 +82,17 @@ const RoleDetailForm: FC<RoleDetailFormProps> = ({
 									label="Beschrijving"
 									name="description"
 								/>
-								<div className="u-text-light u-margin-top-xs">
+								<small>
 									Geef de rol een duidelijke beschrijving voor in het overzicht
-								</div>
+								</small>
+								<ErrorMessage name="description" />
 							</div>
 						</div>
 						{onDelete ? renderDelete() : null}
 						<ActionBar className="o-action-bar--fixed" isOpen>
 							<ActionBarContentSection>
 								<div className="u-wrapper row end-xs">
-									<Button onClick={onCancel} negative>
+									<Button onClick={() => onCancel(resetForm)} negative>
 										{t(CORE_TRANSLATIONS['BUTTON_CANCEL'])}
 									</Button>
 									<Button

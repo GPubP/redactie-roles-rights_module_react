@@ -105,7 +105,8 @@ export class RolesFacade {
 		this.store.setIsUpdating(RoleEntityTypes.SITE, true);
 		return this.service
 			.updateSiteRole(payload)
-			.then(() => {
+			.then(response => {
+				this.store.setRoleDetail(RoleEntityTypes.SITE, response);
 				return true;
 			})
 			.catch(err => {

@@ -1,24 +1,21 @@
-import { Button } from '@acpaas-ui/react-components';
 import {
-	ActionBar,
-	ActionBarContentSection,
 	Container,
 	ContextHeader,
 	ContextHeaderTopSection,
 } from '@acpaas-ui/react-editorial-components';
-import { CORE_TRANSLATIONS } from '@redactie/translations-module/public/lib/i18next/translations.const';
-import React, { FC, ReactElement, useEffect, useState } from 'react';
+import { FormikProps } from 'formik';
+import { equals } from 'ramda';
+import React, { FC, ReactElement, useEffect, useMemo, useState } from 'react';
 
-import { DataLoader, ModulesList, RolesPermissionsList, SecurableRender } from '../../components';
-import { FormState } from '../../components/RolesPermissionsList/RolesPermissionsList.types';
-import { useCoreTranslation } from '../../connectors/translations';
 import {
-	useMySecurityRightsForSite,
-	useRoutesBreadcrumbs,
-	useSecurityRights,
-	useSiteNavigate,
-} from '../../hooks';
-import { MODULE_PATHS, SecurityRightsSite } from '../../roles.const';
+	DataLoader,
+	ModulesList,
+	RolesPermissionsForm,
+	RolesPermissionsFormState,
+} from '../../components';
+import { FormState } from '../../components/RolesPermissionsList/RolesPermissionsList.types';
+import { useMySecurityRightsForSite, useRoutesBreadcrumbs, useSecurityRights } from '../../hooks';
+import { SecurityRightsSite } from '../../roles.const';
 import { LoadingState, RolesRouteProps } from '../../roles.types';
 import { DEFAULT_ROLES_SEARCH_PARAMS } from '../../services/roles/roles.service.const';
 import { ModuleResponse, UpdateRolesMatrixPayload } from '../../services/securityRights';
@@ -28,7 +25,6 @@ import { RoleSecurityRight } from './RolesRightsOverview.types';
 
 const RolesRightsOverview: FC<RolesRouteProps<{ siteId: string }>> = ({ match }) => {
 	const { siteId } = match.params;
-	const [t] = useCoreTranslation();
 
 	/**
 	 * Hooks
@@ -40,16 +36,23 @@ const RolesRightsOverview: FC<RolesRouteProps<{ siteId: string }>> = ({ match })
 	const [securityRightsByModule, setSecurityRightsByModule] = useState<
 		RoleSecurityRight[] | null
 	>(null);
-	const [initialFormstate, setInitialFormstate] = useState<FormState | null>(null);
-	const [formValues, setFormValues] = useState<UpdateRolesMatrixPayload | null>(null);
+	const [initialFormState, setInitialFormState] = useState<RolesPermissionsFormState | null>(
+		null
+	);
+	const [formState, setFormState] = useState<RolesPermissionsFormState | null>(null);
 	const [categories, setCategories] = useState<ModuleResponse[] | null>(null);
-	const { navigate } = useSiteNavigate();
 	const { modules = [], securityRights = [], roles = [], contentTypes = [] } =
 		securityRightMatrix || {};
 	const [matrixTitle, setMatrixTitle] = useState<string>('');
 	const [mySecurityRightsLoadingState, mySecurityRights] = useMySecurityRightsForSite({
 		onlyKeys: true,
 	});
+	const isChanged = useMemo(() => {
+		if (formState === null) {
+			return false;
+		}
+		return !equals(initialFormState, formState);
+	}, [formState, initialFormState]);
 
 	useEffect(() => {
 		setInitialLoading(LoadingState.Loading);
@@ -61,11 +64,11 @@ const RolesRightsOverview: FC<RolesRouteProps<{ siteId: string }>> = ({ match })
 			fetchLoadingState !== LoadingState.Loading &&
 			mySecurityRightsLoadingState !== LoadingState.Loading &&
 			securityRightsByModule &&
-			initialFormstate
+			initialFormState
 		) {
 			setInitialLoading(LoadingState.Loaded);
 		}
-	}, [initialFormstate, fetchLoadingState, mySecurityRightsLoadingState, securityRightsByModule]);
+	}, [initialFormState, fetchLoadingState, mySecurityRightsLoadingState, securityRightsByModule]);
 
 	useEffect(() => {
 		const categoryResult: ModuleResponse[] = modules
@@ -105,7 +108,7 @@ const RolesRightsOverview: FC<RolesRouteProps<{ siteId: string }>> = ({ match })
 			return acc;
 		}, {} as FormState);
 
-		setInitialFormstate(initialStateResult);
+		setInitialFormState(initialStateResult);
 	}, [securityRightMatrix]); // eslint-disable-line react-hooks/exhaustive-deps
 
 	/**
@@ -121,8 +124,8 @@ const RolesRightsOverview: FC<RolesRouteProps<{ siteId: string }>> = ({ match })
 		setMatrixTitle(value);
 	};
 
-	const onCancel = (): void => {
-		navigate(MODULE_PATHS.roles.overview, { siteId });
+	const onCancel = (resetForm: FormikProps<RolesPermissionsFormState>['resetForm']): void => {
+		resetForm();
 	};
 
 	const parseFormResult = (formState: FormState): UpdateRolesMatrixPayload =>
@@ -147,15 +150,8 @@ const RolesRightsOverview: FC<RolesRouteProps<{ siteId: string }>> = ({ match })
 			return roles;
 		}, [] as UpdateRolesMatrixPayload);
 
-	const onConfigSave = (): void => {
-		if (formValues) {
-			securityRightsMatrixFacade.updateSecurityRightsForSite(formValues, siteId);
-		}
-	};
-
-	const onFormChange = (value: FormState): void => {
-		const results = parseFormResult(value);
-
+	const onSave = (values: RolesPermissionsFormState): void => {
+		const results = parseFormResult(values);
 		const updateRolesMatrixData = securityRightMatrix?.roles.map(role => {
 			const resultRoleId = results.find(r => r.roleId === role.role.id);
 			if (resultRoleId) {
@@ -163,8 +159,9 @@ const RolesRightsOverview: FC<RolesRouteProps<{ siteId: string }>> = ({ match })
 			}
 			return { roleId: role.role.id, securityRights: [] };
 		});
+
 		if (updateRolesMatrixData) {
-			setFormValues(updateRolesMatrixData);
+			securityRightsMatrixFacade.updateSecurityRightsForSite(updateRolesMatrixData, siteId);
 		}
 	};
 
@@ -172,7 +169,7 @@ const RolesRightsOverview: FC<RolesRouteProps<{ siteId: string }>> = ({ match })
 	 * Render
 	 */
 	const renderOverview = (): ReactElement | null => {
-		if (!securityRightsByModule || !initialFormstate) {
+		if (!securityRightsByModule || !initialFormState) {
 			return null;
 		}
 
@@ -183,47 +180,25 @@ const RolesRightsOverview: FC<RolesRouteProps<{ siteId: string }>> = ({ match })
 						<ModulesList modules={categories} onClick={handleClick} />
 					</div>
 					<div className="col-xs-8 u-margin-left">
-						<RolesPermissionsList
+						<RolesPermissionsForm
+							title={matrixTitle}
+							initialFormState={initialFormState}
 							readonly={
 								!mySecurityRights.includes(
 									SecurityRightsSite.RolesRightsUpdateRolePermissions
 								)
 							}
 							roles={roles}
+							isLoading={updateLoadingState === LoadingState.Loading}
+							isChanged={isChanged}
 							permissions={securityRightsByModule}
-							formState={initialFormstate}
-							onChange={onFormChange}
-							title={matrixTitle}
+							mySecurityRights={mySecurityRights}
+							onChange={setFormState}
+							onSubmit={onSave}
+							onCancel={onCancel}
 						/>
 					</div>
 				</div>
-				<SecurableRender
-					userSecurityRights={mySecurityRights}
-					requiredSecurityRights={[SecurityRightsSite.RolesRightsUpdateRolePermissions]}
-				>
-					<ActionBar className="o-action-bar--fixed" isOpen>
-						<ActionBarContentSection>
-							<div className="u-wrapper row end-xs">
-								<Button onClick={onCancel} negative>
-									{t(CORE_TRANSLATIONS.BUTTON_CANCEL)}
-								</Button>
-								<Button
-									iconLeft={
-										updateLoadingState === LoadingState.Loading
-											? 'circle-o-notch fa-spin'
-											: null
-									}
-									disabled={updateLoadingState === LoadingState.Loading}
-									className="u-margin-left-xs"
-									onClick={onConfigSave}
-									type="success"
-								>
-									{t(CORE_TRANSLATIONS.BUTTON_SAVE)}
-								</Button>
-							</div>
-						</ActionBarContentSection>
-					</ActionBar>
-				</SecurableRender>
 			</>
 		);
 	};

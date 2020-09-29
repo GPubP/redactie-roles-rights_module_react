@@ -124,4 +124,5 @@ export interface RolesRightsModuleAPI {
 export interface RoleDetailFormState {
 	name: string;
 	description: string;
+	admin?: boolean;
 }

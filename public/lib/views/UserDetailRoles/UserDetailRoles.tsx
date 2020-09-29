@@ -1,8 +1,8 @@
 import { Card } from '@acpaas-ui/react-components';
 import { Table } from '@acpaas-ui/react-editorial-components';
-import React, { FC, useState } from 'react';
+import React, { FC, useMemo, useState } from 'react';
 
-import { FormViewUserRoles } from '../../components';
+import { FormViewUserRoles, UserRolesFormState } from '../../components';
 import { useCoreTranslation } from '../../connectors/translations';
 import { mapUserRoles } from '../../helpers';
 import { useNavigate, useUsersLoadingStates } from '../../hooks';
@@ -20,7 +20,6 @@ const UserDetailRoles: FC<UserDetailRolesProps> = ({
 	mySecurityRights,
 }) => {
 	const [t] = useCoreTranslation();
-	const [selectedRoles, updateSelectedRoles] = useState(mapUserRoles(userRoles));
 	const { isAddingUserToSite } = useUsersLoadingStates();
 	const [giveAccesSiteId, setGiveAccessSiteId] = useState<string | null>(null);
 	const { navigate } = useNavigate();
@@ -28,9 +27,12 @@ const UserDetailRoles: FC<UserDetailRolesProps> = ({
 	/**
 	 * Methods
 	 */
-	const onConfigChange = (updatedRoles: any): void => {
-		updateSelectedRoles(updatedRoles);
-	};
+	const initialFormState = useMemo(
+		() => ({
+			roleIds: mapUserRoles(userRoles),
+		}),
+		[userRoles]
+	);
 
 	const redirectToSitesRolesDetail = (userId: string, siteId: string): void => {
 		navigate(MODULE_PATHS.tenantUserDetailRolesUpdate, {
@@ -60,15 +62,19 @@ const UserDetailRoles: FC<UserDetailRolesProps> = ({
 	/**
 	 * Render
 	 */
+
+	if (!initialFormState) {
+		return null;
+	}
 	return (
 		<Card>
 			<div className="u-margin">
 				<h5 className="u-margin-bottom">Rollen</h5>
 				<FormViewUserRoles
 					checkAdmin
-					formState={selectedRoles}
+					showActionBar={false}
+					initialState={initialFormState}
 					availableRoles={roles}
-					onSubmit={onConfigChange}
 				/>
 				<h5 className="u-margin-bottom u-margin-top">Rol(len) per site</h5>
 				<Table

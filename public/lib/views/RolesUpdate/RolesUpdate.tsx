@@ -3,7 +3,9 @@ import {
 	ContextHeader,
 	ContextHeaderTopSection,
 } from '@acpaas-ui/react-editorial-components';
-import React, { FC, ReactElement, useEffect, useState } from 'react';
+import { FormikProps } from 'formik';
+import { equals } from 'ramda';
+import React, { FC, ReactElement, useEffect, useState, useMemo } from 'react';
 import { useParams } from 'react-router-dom';
 
 import { DataLoader, RoleDetailForm } from '../../components';
@@ -26,21 +28,29 @@ const RolesUpdate: FC<RolesRouteProps> = () => {
 	const { siteId, roleId } = useParams<{ siteId: string; roleId: string }>();
 	const { navigate } = useSiteNavigate();
 	const [initialLoading, setInitialLoading] = useState(LoadingState.Loading);
-	const [formState, setFormState] = useState<any | null>(null);
+	const [initialFormState, setInitialFormState] = useState<RoleDetailFormState | null>(null);
+	const [formState, setFormState] = useState<RoleDetailFormState | null>(initialFormState);
 	const breadcrumbs = useRoutesBreadcrumbs();
 	const rolesLoadingStates = useRolesLoadingStates();
 	const [roleLoadingState, role] = useSiteRole();
+	const isChanged = useMemo(() => {
+		if (formState === null) {
+			return false;
+		}
+		return !equals(initialFormState, formState);
+	}, [formState, initialFormState]);
 	const [mySecurityRightsLoadingState, mySecurityRights] = useMySecurityRightsForSite({
 		onlyKeys: true,
 	});
 
 	useEffect(() => {
 		if (role) {
-			setFormState({
+			const state = {
 				name: role.attributes.displayName,
 				description: role.description,
 				admin: role.attributes.admin,
-			});
+			};
+			setInitialFormState(state);
 		}
 	}, [role]);
 
@@ -91,22 +101,28 @@ const RolesUpdate: FC<RolesRouteProps> = () => {
 		}
 	};
 
+	const onCancel = (resetForm: FormikProps<RoleDetailFormState>['resetForm']): void => {
+		resetForm();
+	};
+
 	/**
 	 * Render
 	 */
 	const renderRoleUpdate = (): ReactElement | null => {
-		if (!formState) {
+		if (!initialFormState) {
 			return null;
 		}
 
 		return (
 			<RoleDetailForm
-				initialState={formState}
+				initialState={initialFormState}
 				isLoading={rolesLoadingStates.isUpdatingSiteRole === LoadingState.Loading}
 				isDeleting={rolesLoadingStates.isDeletingSiteRole === LoadingState.Loading}
-				onCancel={navigateToOverview}
+				isChanged={isChanged}
+				onCancel={onCancel}
 				onSubmit={onSubmit}
-				onDelete={canDelete && !formState.admin && onDelete}
+				onChange={setFormState}
+				onDelete={canDelete && !initialFormState?.admin && onDelete}
 			/>
 		);
 	};
