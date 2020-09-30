@@ -13,7 +13,6 @@ import {
 	RolesPermissionsForm,
 	RolesPermissionsFormState,
 } from '../../components';
-import { FormState } from '../../components/RolesPermissionsList/RolesPermissionsList.types';
 import { useMySecurityRightsForSite, useRoutesBreadcrumbs, useSecurityRights } from '../../hooks';
 import { SecurityRightsSite } from '../../roles.const';
 import { LoadingState, RolesRouteProps } from '../../roles.types';
@@ -106,7 +105,7 @@ const RolesRightsOverview: FC<RolesRouteProps<{ siteId: string }>> = ({ match })
 			}, [] as string[]);
 
 			return acc;
-		}, {} as FormState);
+		}, {} as RolesPermissionsFormState);
 
 		setInitialFormState(initialStateResult);
 	}, [securityRightMatrix]); // eslint-disable-line react-hooks/exhaustive-deps
@@ -128,7 +127,7 @@ const RolesRightsOverview: FC<RolesRouteProps<{ siteId: string }>> = ({ match })
 		resetForm();
 	};
 
-	const parseFormResult = (formState: FormState): UpdateRolesMatrixPayload =>
+	const parseFormResult = (formState: RolesPermissionsFormState): UpdateRolesMatrixPayload =>
 		Object.keys(formState).reduce((roles, securityRightId) => {
 			const roleIds = formState[securityRightId];
 			roleIds.forEach(roleId => {
@@ -189,10 +188,10 @@ const RolesRightsOverview: FC<RolesRouteProps<{ siteId: string }>> = ({ match })
 								)
 							}
 							roles={roles}
-							isLoading={updateLoadingState === LoadingState.Loading}
-							isChanged={isChanged}
 							permissions={securityRightsByModule}
 							mySecurityRights={mySecurityRights}
+							isLoading={updateLoadingState === LoadingState.Loading}
+							isChanged={isChanged}
 							onChange={setFormState}
 							onSubmit={onSave}
 							onCancel={onCancel}
