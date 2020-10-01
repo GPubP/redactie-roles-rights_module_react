@@ -1,7 +1,7 @@
 import { Button, Checkbox } from '@acpaas-ui/react-components';
 import { ActionBar, ActionBarContentSection } from '@acpaas-ui/react-editorial-components';
 import { CORE_TRANSLATIONS } from '@redactie/translations-module/public/lib/i18next/translations.const';
-import { FormikOnChangeHandler } from '@redactie/utils';
+import { FormikOnChangeHandler, LeavePrompt } from '@redactie/utils';
 import { Field, FieldArray, Formik } from 'formik';
 import React, { ChangeEvent, FC } from 'react';
 
@@ -63,24 +63,29 @@ const FormViewUserRoles: FC<FormViewUserRolesProps> = ({
 							}
 						/>
 						{showActionBar && (
-							<ActionBar className="o-action-bar--fixed" isOpen>
-								<ActionBarContentSection>
-									<div className="u-wrapper row end-xs">
-										<Button onClick={() => onCancel(resetForm)} negative>
-											{t(CORE_TRANSLATIONS['BUTTON_CANCEL'])}
-										</Button>
-										<Button
-											iconLeft={isLoading ? 'circle-o-notch fa-spin' : null}
-											disabled={isLoading || !isChanged}
-											className="u-margin-left-xs"
-											onClick={submitForm}
-											type="success"
-										>
-											{t(CORE_TRANSLATIONS['BUTTON_SAVE'])}
-										</Button>
-									</div>
-								</ActionBarContentSection>
-							</ActionBar>
+							<>
+								<ActionBar className="o-action-bar--fixed" isOpen>
+									<ActionBarContentSection>
+										<div className="u-wrapper row end-xs">
+											<Button onClick={() => onCancel(resetForm)} negative>
+												{t(CORE_TRANSLATIONS['BUTTON_CANCEL'])}
+											</Button>
+											<Button
+												iconLeft={
+													isLoading ? 'circle-o-notch fa-spin' : null
+												}
+												disabled={isLoading || !isChanged}
+												className="u-margin-left-xs"
+												onClick={submitForm}
+												type="success"
+											>
+												{t(CORE_TRANSLATIONS['BUTTON_SAVE'])}
+											</Button>
+										</div>
+									</ActionBarContentSection>
+								</ActionBar>
+								<LeavePrompt when={isChanged} onConfirm={submitForm} />
+							</>
 						)}
 					</>
 				);
