@@ -1,5 +1,6 @@
 import { RouteConfigComponentProps } from '@redactie/redactie-core';
 
+import { UserRolesFormState } from '../../components';
 import { RoleModel } from '../../store/roles';
 import { SiteModel } from '../../store/sites';
 import { UserModel } from '../../store/users';
@@ -10,6 +11,7 @@ export interface UserDetailRolesProps extends RouteConfigComponentProps {
 	roles: RoleModel[];
 	sites: SiteModel[];
 	mySecurityRights: string[];
+	onChange: (value: UserRolesFormState) => void;
 }
 
 export interface SiteRow {

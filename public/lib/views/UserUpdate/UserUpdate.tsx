@@ -9,10 +9,12 @@ import {
 } from '@acpaas-ui/react-editorial-components';
 import Core, { ModuleRouteConfig } from '@redactie/redactie-core';
 import { CORE_TRANSLATIONS } from '@redactie/translations-module/public/lib/i18next/translations.const';
-import React, { FC, ReactElement, useEffect, useState } from 'react';
+import { LeavePrompt } from '@redactie/utils';
+import { equals } from 'ramda';
+import React, { FC, ReactElement, useEffect, useMemo, useState } from 'react';
 import { generatePath, NavLink, useParams } from 'react-router-dom';
 
-import { DataLoader } from '../../components';
+import { DataLoader, UserRolesFormState } from '../../components';
 import { useCoreTranslation } from '../../connectors/translations';
 import { mapUserRoles } from '../../helpers';
 import {
@@ -48,12 +50,15 @@ const UserUpdate: FC<RolesRouteProps<{ userUuid?: string }>> = ({ route, tenantI
 	const [userLoadingState, user] = useUser(userUuid);
 	const { isUpdating } = useUsersLoadingStates();
 	const [userRolesLoadingState, userRoles] = useUserRolesForTenant(userUuid);
-	const [selectedRoles] = useState(mapUserRoles(userRoles));
+	const [selectedRoles, setSelectedRoles] = useState(mapUserRoles(userRoles));
 	const [rolesLoadingState, roles] = useTenantRoles();
 	const [sitesLoadingState, sites] = useSites();
 	const [mySecurityRightsLoadingState, mySecurityRights] = useMySecurityRightsForTenant(true);
 	const { navigate } = useNavigate();
 	const [t] = useCoreTranslation();
+	const userRolesHasChanges = useMemo(() => {
+		return !equals(mapUserRoles(userRoles), selectedRoles);
+	}, [selectedRoles, userRoles]);
 
 	useEffect(() => {
 		if (userUuid) {
@@ -90,7 +95,7 @@ const UserUpdate: FC<RolesRouteProps<{ userUuid?: string }>> = ({ route, tenantI
 	 * Functions
 	 */
 	const onSubmit = (): void => {
-		if (user && mapUserRoles(userRoles) !== selectedRoles) {
+		if (user && userRolesHasChanges) {
 			usersFacade.updateUserRolesForTenant({
 				userUuid: user.id,
 				roles: selectedRoles,
@@ -117,6 +122,9 @@ const UserUpdate: FC<RolesRouteProps<{ userUuid?: string }>> = ({ route, tenantI
 			roles,
 			sites,
 			mySecurityRights,
+			onChange: (values: UserRolesFormState) => {
+				setSelectedRoles(values.roleIds);
+			},
 		});
 	};
 
@@ -168,6 +176,7 @@ const UserUpdate: FC<RolesRouteProps<{ userUuid?: string }>> = ({ route, tenantI
 					</div>
 				</ActionBarContentSection>
 			</ActionBar>
+			<LeavePrompt when={userRolesHasChanges} onConfirm={onSubmit} />
 		</>
 	);
 };

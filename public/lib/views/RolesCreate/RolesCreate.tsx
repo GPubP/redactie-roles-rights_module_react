@@ -4,7 +4,7 @@ import {
 	ContextHeaderTopSection,
 } from '@acpaas-ui/react-editorial-components';
 import { equals } from 'ramda';
-import React, { FC, useState, useMemo } from 'react';
+import React, { FC, useMemo, useState } from 'react';
 import { useParams } from 'react-router-dom';
 
 import { RoleDetailForm } from '../../components';
