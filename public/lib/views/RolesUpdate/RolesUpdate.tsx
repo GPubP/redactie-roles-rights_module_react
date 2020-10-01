@@ -5,7 +5,7 @@ import {
 } from '@acpaas-ui/react-editorial-components';
 import { FormikProps } from 'formik';
 import { equals } from 'ramda';
-import React, { FC, ReactElement, useEffect, useState, useMemo } from 'react';
+import React, { FC, ReactElement, useEffect, useMemo, useState } from 'react';
 import { useParams } from 'react-router-dom';
 
 import { DataLoader, RoleDetailForm } from '../../components';

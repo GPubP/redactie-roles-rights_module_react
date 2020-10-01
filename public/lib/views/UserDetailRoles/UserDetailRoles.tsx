@@ -2,7 +2,7 @@ import { Card } from '@acpaas-ui/react-components';
 import { Table } from '@acpaas-ui/react-editorial-components';
 import React, { FC, useMemo, useState } from 'react';
 
-import { FormViewUserRoles, UserRolesFormState } from '../../components';
+import { FormViewUserRoles } from '../../components';
 import { useCoreTranslation } from '../../connectors/translations';
 import { mapUserRoles } from '../../helpers';
 import { useNavigate, useUsersLoadingStates } from '../../hooks';
