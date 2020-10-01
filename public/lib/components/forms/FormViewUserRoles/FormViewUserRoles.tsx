@@ -32,7 +32,6 @@ const FormViewUserRoles: FC<FormViewUserRolesProps> = ({
 	return (
 		<Formik enableReinitialize initialValues={initialState} onSubmit={onSubmit}>
 			{({ values, submitForm, resetForm }) => {
-				console.log(values, 'values');
 				return (
 					<>
 						<FormikOnChangeHandler

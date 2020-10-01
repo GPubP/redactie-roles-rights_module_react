@@ -18,6 +18,7 @@ const UserDetailRoles: FC<UserDetailRolesProps> = ({
 	roles,
 	sites,
 	mySecurityRights,
+	onChange,
 }) => {
 	const [t] = useCoreTranslation();
 	const { isAddingUserToSite } = useUsersLoadingStates();
@@ -75,6 +76,7 @@ const UserDetailRoles: FC<UserDetailRolesProps> = ({
 					showActionBar={false}
 					initialState={initialFormState}
 					availableRoles={roles}
+					onChange={onChange}
 				/>
 				<h5 className="u-margin-bottom u-margin-top">Rol(len) per site</h5>
 				<Table
