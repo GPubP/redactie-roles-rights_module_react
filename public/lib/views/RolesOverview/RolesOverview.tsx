@@ -34,7 +34,7 @@ const RolesOverview: FC<RolesRouteProps<{ siteId: string }>> = () => {
 	const { siteId } = useParams<{ siteId: string }>();
 	const [t] = useCoreTranslation();
 	const breadcrumbs = useRoutesBreadcrumbs();
-	const { navigate } = useSiteNavigate();
+	const { navigate, generatePath } = useSiteNavigate();
 	const [initialLoading, setInitialLoading] = useState(LoadingState.Loading);
 	const [currentPage, setCurrentPage] = useState(DEFAULT_ROLES_SEARCH_PARAMS.skip);
 	const [rolesSearchParams, setRolesSearchParams] = useState(DEFAULT_ROLES_SEARCH_PARAMS);
@@ -93,7 +93,7 @@ const RolesOverview: FC<RolesRouteProps<{ siteId: string }>> = () => {
 			name: role.attributes.displayName || '',
 			description: role.description || '',
 			admin: role.attributes.admin || false,
-			navigate: (roleId: string) => navigate(MODULE_PATHS.roles.detail, { siteId, roleId }),
+			target: generatePath(MODULE_PATHS.roles.detail, { siteId, roleId: role.id }),
 		}));
 
 		return (

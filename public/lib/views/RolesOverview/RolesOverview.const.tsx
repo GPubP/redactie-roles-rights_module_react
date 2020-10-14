@@ -1,5 +1,5 @@
-import { Link as AUILink, Button } from '@acpaas-ui/react-components';
-import { prop } from 'ramda';
+import { Link as AUILink, Icon } from '@acpaas-ui/react-components';
+import { prop, propOr } from 'ramda';
 import React from 'react';
 import { Link } from 'react-router-dom';
 
@@ -23,7 +23,7 @@ export const ROLES_OVERVIEW_COLUMNS = (mySecurityRights: string[]): any[] => {
 			component(value: any, rowData: RolesOverviewTableRow) {
 				return (
 					<>
-						<AUILink to={'#'} component={Link}>
+						<AUILink to={propOr('#', 'target')(rowData)} component={Link}>
 							{prop('name')(rowData)}
 						</AUILink>
 						<p className="u-text-light u-margin-top-xs">
@@ -58,16 +58,15 @@ export const ROLES_OVERVIEW_COLUMNS = (mySecurityRights: string[]): any[] => {
 			classList: ['u-text-right'],
 			disableSorting: true,
 			component(value: unknown, rowData: RolesOverviewTableRow) {
-				const { uuid, navigate } = rowData;
-
 				return (
-					<Button
+					<AUILink
+						to={propOr('#', 'target')(rowData)}
+						component={Link}
 						ariaLabel="Edit"
-						icon="edit"
-						onClick={() => navigate(uuid)}
-						type="primary"
-						transparent
-					></Button>
+						className="a-button a-button--transparent has-icon"
+					>
+						<Icon name="edit"></Icon>
+					</AUILink>
 				);
 			},
 		},
