@@ -3,7 +3,7 @@ export interface RolesOverviewTableRow {
 	name: string;
 	description: string;
 	admin: boolean;
-	navigate: (userUuid: string) => void;
+	target: string;
 }
 
 export interface OrderBy {
