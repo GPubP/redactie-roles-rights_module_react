@@ -1,11 +1,10 @@
 import { Button, Checkbox } from '@acpaas-ui/react-components';
 import { ActionBar, ActionBarContentSection } from '@acpaas-ui/react-editorial-components';
-import { CORE_TRANSLATIONS } from '@redactie/translations-module/public/lib/i18next/translations.const';
 import { FormikOnChangeHandler, LeavePrompt } from '@redactie/utils';
 import { Field, FieldArray, Formik } from 'formik';
 import React, { ChangeEvent, FC } from 'react';
 
-import { useCoreTranslation } from '../../../connectors/translations';
+import { CORE_TRANSLATIONS, useCoreTranslation } from '../../../connectors/translations';
 import { RoleModel } from '../../../store/roles';
 
 import { FormViewUserRolesProps, UserRolesFormState } from './FormViewUserRoles.types';
@@ -17,6 +16,7 @@ const FormViewUserRoles: FC<FormViewUserRolesProps> = ({
 	checkAdmin = false,
 	isLoading = false,
 	isChanged = false,
+	formikRef = () => null,
 	onCancel = () => null,
 	onChange = () => null,
 	onSubmit = () => null,
@@ -30,7 +30,12 @@ const FormViewUserRoles: FC<FormViewUserRolesProps> = ({
 	 * Render
 	 */
 	return (
-		<Formik enableReinitialize initialValues={initialState} onSubmit={onSubmit}>
+		<Formik
+			innerRef={formikRef}
+			enableReinitialize
+			initialValues={initialState}
+			onSubmit={onSubmit}
+		>
 			{({ values, submitForm, resetForm }) => {
 				return (
 					<>
@@ -51,7 +56,7 @@ const FormViewUserRoles: FC<FormViewUserRolesProps> = ({
 										name={role.name}
 										label={role.attributes.displayName}
 										onChange={(e: ChangeEvent<HTMLInputElement>) => {
-											if (e.target.checked) arrayHelpers.push(role.id);
+											if (e.target.checked) arrayHelpers.unshift(role.id);
 											else {
 												const idx = values.roleIds.indexOf(role.id);
 												arrayHelpers.remove(idx);

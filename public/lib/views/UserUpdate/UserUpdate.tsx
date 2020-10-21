@@ -8,18 +8,16 @@ import {
 	NavList,
 } from '@acpaas-ui/react-editorial-components';
 import Core, { ModuleRouteConfig } from '@redactie/redactie-core';
-import { CORE_TRANSLATIONS } from '@redactie/translations-module/public/lib/i18next/translations.const';
-import { LeavePrompt } from '@redactie/utils';
+import { LeavePrompt, useDetectValueChanges } from '@redactie/utils';
+import { FormikProps, FormikValues } from 'formik';
 import { equals } from 'ramda';
-import React, { FC, ReactElement, useEffect, useMemo, useState } from 'react';
+import React, { FC, ReactElement, useEffect, useRef, useState } from 'react';
 import { generatePath, NavLink, useParams } from 'react-router-dom';
 
 import { DataLoader, UserRolesFormState } from '../../components';
-import { useCoreTranslation } from '../../connectors/translations';
-import { mapUserRoles } from '../../helpers';
+import { CORE_TRANSLATIONS, useCoreTranslation } from '../../connectors/translations';
 import {
 	useMySecurityRightsForTenant,
-	useNavigate,
 	useRoutesBreadcrumbs,
 	useSites,
 	useTenantRoles,
@@ -33,13 +31,14 @@ import { rolesFacade } from '../../store/roles';
 import { sitesFacade } from '../../store/sites';
 import { usersFacade } from '../../store/users';
 
-import { USER_UPDATE_NAV_LIST_ITEMS } from './UserUpdate.const';
+import { USER_UPDATE_ALLOWED_PATHS, USER_UPDATE_NAV_LIST_ITEMS } from './UserUpdate.const';
 
 const UserUpdate: FC<RolesRouteProps<{ userUuid?: string }>> = ({ route, tenantId }) => {
 	/**
 	 * Hooks
 	 */
 	const [initialLoading, setInitialLoading] = useState(LoadingState.Loading);
+	const activeCompartmentFormikRef = useRef<FormikProps<FormikValues>>();
 	const { userUuid } = useParams<{ userUuid: string }>();
 	const breadcrumbs = useRoutesBreadcrumbs([
 		{
@@ -50,15 +49,15 @@ const UserUpdate: FC<RolesRouteProps<{ userUuid?: string }>> = ({ route, tenantI
 	const [userLoadingState, user] = useUser(userUuid);
 	const { isUpdating } = useUsersLoadingStates();
 	const [userRolesLoadingState, userRoles] = useUserRolesForTenant(userUuid);
-	const [selectedRoles, setSelectedRoles] = useState(mapUserRoles(userRoles));
+	const [selectedRoles, setSelectedRoles] = useState<string[] | null>(null);
 	const [rolesLoadingState, roles] = useTenantRoles();
 	const [sitesLoadingState, sites] = useSites();
 	const [mySecurityRightsLoadingState, mySecurityRights] = useMySecurityRightsForTenant(true);
-	const { navigate } = useNavigate();
 	const [t] = useCoreTranslation();
-	const userRolesHasChanges = useMemo(() => {
-		return !equals(mapUserRoles(userRoles), selectedRoles);
-	}, [selectedRoles, userRoles]);
+	const [userRolesHasChanges, resetDetectValueChanges] = useDetectValueChanges(
+		initialLoading !== LoadingState.Loading && isUpdating !== LoadingState.Loading,
+		selectedRoles ?? userRoles
+	);
 
 	useEffect(() => {
 		if (userUuid) {
@@ -95,23 +94,27 @@ const UserUpdate: FC<RolesRouteProps<{ userUuid?: string }>> = ({ route, tenantI
 	 * Functions
 	 */
 	const onSubmit = (): void => {
-		if (user && userRolesHasChanges) {
+		if (user && userRolesHasChanges && selectedRoles) {
 			usersFacade.updateUserRolesForTenant({
 				userUuid: user.id,
 				roles: selectedRoles,
 			});
 		}
+		resetDetectValueChanges();
 	};
 
 	const onCancel = (): void => {
-		navigate(MODULE_PATHS.tenantUsersOverview);
+		if (activeCompartmentFormikRef.current) {
+			activeCompartmentFormikRef.current.resetForm();
+			resetDetectValueChanges();
+		}
 	};
 
 	/**
 	 * Render
 	 */
 	const renderChildRoutes = (): ReactElement | null => {
-		if (!user) {
+		if (!user || !userRoles) {
 			return null;
 		}
 
@@ -122,8 +125,15 @@ const UserUpdate: FC<RolesRouteProps<{ userUuid?: string }>> = ({ route, tenantI
 			roles,
 			sites,
 			mySecurityRights,
+			formikRef: (instance: any) => {
+				if (!equals(activeCompartmentFormikRef.current, instance)) {
+					activeCompartmentFormikRef.current = instance;
+				}
+			},
 			onChange: (values: UserRolesFormState) => {
-				setSelectedRoles(values.roleIds);
+				if (!equals(values.roleIds, selectedRoles)) {
+					setSelectedRoles(values.roleIds);
+				}
 			},
 		});
 	};
@@ -166,7 +176,7 @@ const UserUpdate: FC<RolesRouteProps<{ userUuid?: string }>> = ({ route, tenantI
 									? 'circle-o-notch fa-spin'
 									: null
 							}
-							disabled={isUpdating === LoadingState.Loading}
+							disabled={isUpdating === LoadingState.Loading || !userRolesHasChanges}
 							className="u-margin-left-xs"
 							onClick={onSubmit}
 							type="success"
@@ -176,7 +186,12 @@ const UserUpdate: FC<RolesRouteProps<{ userUuid?: string }>> = ({ route, tenantI
 					</div>
 				</ActionBarContentSection>
 			</ActionBar>
-			<LeavePrompt when={userRolesHasChanges} onConfirm={onSubmit} />
+			<LeavePrompt
+				allowedPaths={USER_UPDATE_ALLOWED_PATHS}
+				shouldBlockNavigationOnConfirm
+				when={userRolesHasChanges}
+				onConfirm={onSubmit}
+			/>
 		</>
 	);
 };

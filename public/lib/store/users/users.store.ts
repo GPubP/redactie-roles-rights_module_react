@@ -14,6 +14,18 @@ export class UsersStore extends EntityStore<UsersState, UserModel> {
 		});
 	}
 
+	public setIsFetchingOne(isFetchingOne = false): void {
+		this.update({
+			isFetchingOne,
+		});
+	}
+
+	public setIsFetchingUserRolesForTenant(isFetchingUserRolesForTenant = false): void {
+		this.update({
+			isFetchingUserRolesForTenant,
+		});
+	}
+
 	public setIsUpdating(isUpdating = false): void {
 		this.update({
 			isUpdating,

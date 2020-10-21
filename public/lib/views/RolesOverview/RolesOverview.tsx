@@ -6,13 +6,12 @@ import {
 	ContextHeaderTopSection,
 	PaginatedTable,
 } from '@acpaas-ui/react-editorial-components';
-import { CORE_TRANSLATIONS } from '@redactie/translations-module/public/lib/i18next/translations.const';
 import { OrderBy } from '@redactie/translations-module/public/lib/services/api';
 import React, { FC, ReactElement, useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 
 import { DataLoader, SecurableRender } from '../../components';
-import { useCoreTranslation } from '../../connectors/translations';
+import { CORE_TRANSLATIONS, useCoreTranslation } from '../../connectors/translations';
 import {
 	useMySecurityRightsForSite,
 	useRoutesBreadcrumbs,

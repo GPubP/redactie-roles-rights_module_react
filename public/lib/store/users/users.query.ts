@@ -36,6 +36,13 @@ export class UsersQuery extends QueryEntity<UsersState> {
 	public isFetching$ = this.select(state => state.isFetching).pipe(
 		map(this.convertBoolToLoadingState)
 	);
+	public isFetchingOne$ = this.select(state => state.isFetchingOne).pipe(
+		map(this.convertBoolToLoadingState)
+	);
+	public isFetchingUserRolesForTenant$ = this.select(
+		state => state.isFetchingUserRolesForTenant
+	).pipe(map(this.convertBoolToLoadingState));
+
 	public isUpdating$ = this.select(state => state.isUpdating).pipe(
 		map(this.convertBoolToLoadingState)
 	);

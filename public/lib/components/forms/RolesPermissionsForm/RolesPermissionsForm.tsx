@@ -1,13 +1,12 @@
 /* eslint-disable prettier/prettier */
 import { Button, Card, CardBody, CardTitle, Checkbox } from '@acpaas-ui/react-components';
 import { ActionBar, ActionBarContentSection } from '@acpaas-ui/react-editorial-components';
-import { CORE_TRANSLATIONS } from '@redactie/translations-module/public/lib/i18next/translations.const';
 import { FormikOnChangeHandler, LeavePrompt } from '@redactie/utils';
 import { Field, FieldArray, Formik } from 'formik';
 import React, { ChangeEvent, FC, ReactNode } from 'react';
 
 import './RolesPermissionsForm.scss';
-import { useCoreTranslation } from '../../../connectors/translations';
+import { CORE_TRANSLATIONS, useCoreTranslation } from '../../../connectors/translations';
 import { SecurityRightsSite } from '../../../roles.const';
 import { RoleResponse, SecurityRightResponse } from '../../../services/securityRights';
 import { RoleSecurityRight } from '../../../views/RolesRightsOverview/RolesRightsOverview.types';

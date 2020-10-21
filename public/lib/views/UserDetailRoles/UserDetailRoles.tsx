@@ -18,6 +18,7 @@ const UserDetailRoles: FC<UserDetailRolesProps> = ({
 	roles,
 	sites,
 	mySecurityRights,
+	formikRef = () => null,
 	onChange,
 }) => {
 	const [t] = useCoreTranslation();
@@ -77,6 +78,7 @@ const UserDetailRoles: FC<UserDetailRolesProps> = ({
 					initialState={initialFormState}
 					availableRoles={roles}
 					onChange={onChange}
+					formikRef={formikRef}
 				/>
 				<h5 className="u-margin-bottom u-margin-top">Rol(len) per site</h5>
 				<Table

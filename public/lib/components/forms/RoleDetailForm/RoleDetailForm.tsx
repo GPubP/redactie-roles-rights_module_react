@@ -7,12 +7,11 @@ import {
 	TextField,
 } from '@acpaas-ui/react-components';
 import { ActionBar, ActionBarContentSection } from '@acpaas-ui/react-editorial-components';
-import { CORE_TRANSLATIONS } from '@redactie/translations-module/public/lib/i18next/translations.const';
 import { ErrorMessage, FormikOnChangeHandler, LeavePrompt } from '@redactie/utils';
 import { Field, Formik } from 'formik';
 import React, { FC, ReactElement } from 'react';
 
-import { useCoreTranslation } from '../../../connectors/translations';
+import { CORE_TRANSLATIONS, useCoreTranslation } from '../../../connectors/translations';
 import { RoleDetailFormState } from '../../../roles.types';
 
 import { ROLE_DETAIL_VALIDATION_SCHEMA } from './RoleDetailForm.const';

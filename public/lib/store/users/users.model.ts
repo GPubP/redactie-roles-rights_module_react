@@ -15,12 +15,16 @@ export interface UsersState extends EntityState<UserModel, string> {
 	meta?: UsersMetaModel;
 	userDetail?: UserDetailModel;
 	isFetching: boolean;
+	isFetchingOne: boolean;
+	isFetchingUserRolesForTenant: boolean;
 	isUpdating: boolean;
 	isAddingUserToSite: boolean;
 }
 
 export const createInitialUsersState = (): UsersState => ({
 	isFetching: false,
+	isFetchingOne: false,
 	isUpdating: false,
+	isFetchingUserRolesForTenant: false,
 	isAddingUserToSite: false,
 });

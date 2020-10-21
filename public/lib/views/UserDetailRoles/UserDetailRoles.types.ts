@@ -11,6 +11,7 @@ export interface UserDetailRolesProps extends RouteConfigComponentProps {
 	roles: RoleModel[];
 	sites: SiteModel[];
 	mySecurityRights: string[];
+	formikRef?: (ref: any) => void;
 	onChange: (value: UserRolesFormState) => void;
 }
 

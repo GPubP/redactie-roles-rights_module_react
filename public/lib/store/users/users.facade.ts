@@ -27,10 +27,20 @@ export class UsersFacade {
 	public readonly user$ = this.query.user$;
 	public readonly userRolesForTenant$ = this.query.userRolesForTenant$;
 	public readonly userRolesForSite$ = this.query.userRolesForSite$;
+
+	// Loading states
 	public readonly isFetching$ = this.query.isFetching$;
+	public readonly isFetchingOne$ = this.query.isFetching$;
+	public readonly isFetchingUserRolesForTenant$ = this.query.isFetchingUserRolesForTenant$;
 	public readonly isUpdating$ = this.query.isUpdating$;
 	public readonly isAddingUserToSite$ = this.query.isAddingUserToSite$;
+
+	// Error state
 	public readonly error$ = this.query.error$;
+
+	/**
+	 * Get calls
+	 */
 
 	public getUsers(payload: GetUsersPayload): void {
 		this.store.setIsFetching(true);
@@ -73,7 +83,7 @@ export class UsersFacade {
 	}
 
 	public getUser(payload: GetUserPayload): void {
-		this.store.setIsFetching(true);
+		this.store.setIsFetchingOne(true);
 		this.service
 			.getUser(payload)
 			.then(response => {
@@ -84,11 +94,11 @@ export class UsersFacade {
 			.catch(err => {
 				this.store.setError(err);
 			})
-			.finally(() => this.store.setIsFetching(false));
+			.finally(() => this.store.setIsFetchingOne(false));
 	}
 
 	public getUserRolesForTenant(payload: GetUserRolesForTenantPayload): void {
-		this.store.setIsFetching(true);
+		this.store.setIsFetchingUserRolesForTenant(true);
 		this.service
 			.getUserRolesForTenant(payload)
 			.then(response => {
@@ -99,8 +109,25 @@ export class UsersFacade {
 			.catch(err => {
 				this.store.setError(err);
 			})
+			.finally(() => this.store.setIsFetchingUserRolesForTenant(false));
+	}
+
+	public getUserRolesForSite(payload: GetUserRolesForSitePayload): void {
+		this.store.setIsFetching(true);
+		this.service
+			.getUserRolesForSite(payload)
+			.then(response => {
+				this.store.setUserDetail({
+					siteRoles: response._embedded,
+				});
+			})
+			.catch(err => this.store.setError(err))
 			.finally(() => this.store.setIsFetching(false));
 	}
+
+	/**
+	 * Update calls
+	 */
 
 	public updateUserRolesForTenant(payload: UpdateUserRolesForTenantPayload): void {
 		this.store.setIsUpdating(true);
@@ -118,19 +145,6 @@ export class UsersFacade {
 			.finally(() => this.store.setIsUpdating(false));
 	}
 
-	public getUserRolesForSite(payload: GetUserRolesForSitePayload): void {
-		this.store.setIsFetching(true);
-		this.service
-			.getUserRolesForSite(payload)
-			.then(response => {
-				this.store.setUserDetail({
-					siteRoles: response._embedded,
-				});
-			})
-			.catch(err => this.store.setError(err))
-			.finally(() => this.store.setIsFetching(false));
-	}
-
 	public updateUserRolesForSite(payload: UpdateUserRolesForSitePayload): Promise<void> {
 		this.store.setIsUpdating(true);
 		return this.service
@@ -144,6 +158,10 @@ export class UsersFacade {
 			.catch(err => this.store.setError(err))
 			.finally(() => this.store.setIsUpdating(false));
 	}
+
+	/**
+	 * Create calls
+	 */
 
 	public addUserToSite(payload: AddUserToSitePayload, fn: () => void): void {
 		this.store.setIsAddingUserToSite(true);

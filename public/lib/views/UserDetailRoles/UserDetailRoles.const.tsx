@@ -1,9 +1,9 @@
 import { Button } from '@acpaas-ui/react-components';
-import { CORE_TRANSLATIONS } from '@redactie/translations-module/public/lib/i18next/translations.const';
 import { TranslateFunc } from '@redactie/translations-module/public/lib/i18next/useTranslation';
 import React from 'react';
 
 import { SecurableRender } from '../../components';
+import { CORE_TRANSLATIONS } from '../../connectors/translations';
 import { SecurityRightsTenant } from '../../roles.const';
 import { LoadingState } from '../../roles.types';
 import { RoleModel } from '../../store/roles';

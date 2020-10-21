@@ -13,6 +13,7 @@ export const BREADCRUMB_OPTIONS = {
 		'/:tenantId/sites/:siteUuid/users/:userId',
 	],
 };
+export const TENANT_ROOT = '/:tenantId';
 export const urlSiteParam = 'siteId';
 
 const forbidden403 = '/403';
