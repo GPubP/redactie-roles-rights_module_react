@@ -3,13 +3,13 @@ import {
 	ContextHeader,
 	ContextHeaderTopSection,
 } from '@acpaas-ui/react-editorial-components';
-import { equals } from 'ramda';
-import React, { FC, useMemo, useState } from 'react';
+import { LeavePrompt, useDetectValueChanges } from '@redactie/utils';
+import React, { FC, useState } from 'react';
 import { useParams } from 'react-router-dom';
 
 import { RoleDetailForm } from '../../components';
 import { useNavigate, useRolesLoadingStates, useRoutesBreadcrumbs } from '../../hooks';
-import { MODULE_PATHS } from '../../roles.const';
+import { MODULE_PATHS, TENANT_ROOT } from '../../roles.const';
 import { LoadingState, RoleDetailFormState, RolesRouteProps } from '../../roles.types';
 import { rolesFacade } from '../../store/roles';
 
@@ -24,7 +24,8 @@ const RolesCreate: FC<RolesRouteProps> = () => {
 	const breadcrumbs = useRoutesBreadcrumbs();
 	const rolesLoadingStates = useRolesLoadingStates();
 	const [formValue, setFormValue] = useState<RoleDetailFormState>(INITIAL_FORM_STATE);
-	const isChanged = useMemo(() => !equals(INITIAL_FORM_STATE, formValue), [formValue]);
+	const [hasChanges] = useDetectValueChanges(true, formValue);
+	const [allowedPaths, setAllowedPaths] = useState<string[]>([]);
 
 	/**
 	 * Methods
@@ -36,12 +37,14 @@ const RolesCreate: FC<RolesRouteProps> = () => {
 
 	const onSubmit = (request: RoleDetailFormState): void => {
 		if (siteId) {
+			setAllowedPaths([`${TENANT_ROOT}/sites${MODULE_PATHS.roles.overview}`]);
 			rolesFacade
 				.createSiteRole({
 					siteId,
 					body: request,
 				})
-				.then(navigateToOverview);
+				.then(navigateToOverview)
+				.finally(() => setAllowedPaths([]));
 		}
 	};
 
@@ -57,11 +60,20 @@ const RolesCreate: FC<RolesRouteProps> = () => {
 				<RoleDetailForm
 					initialState={INITIAL_FORM_STATE}
 					isLoading={rolesLoadingStates.isCreatingSiteRole === LoadingState.Loading}
-					isChanged={isChanged}
+					hasChanges={hasChanges}
 					onCancel={navigateToOverview}
 					onSubmit={onSubmit}
 					onChange={setFormValue}
-				/>
+				>
+					{({ submitForm }) => (
+						<LeavePrompt
+							allowedPaths={allowedPaths}
+							shouldBlockNavigationOnConfirm
+							when={hasChanges}
+							onConfirm={submitForm}
+						/>
+					)}
+				</RoleDetailForm>
 			</Container>
 		</>
 	);

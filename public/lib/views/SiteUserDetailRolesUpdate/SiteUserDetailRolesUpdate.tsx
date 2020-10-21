@@ -3,12 +3,17 @@ import {
 	ContextHeader,
 	ContextHeaderTopSection,
 } from '@acpaas-ui/react-editorial-components';
+import { LeavePrompt, useDetectValueChanges } from '@redactie/utils';
 import { FormikProps } from 'formik';
-import { equals } from 'ramda';
 import React, { FC, ReactElement, useEffect, useMemo, useState } from 'react';
 import { generatePath, useParams } from 'react-router-dom';
 
-import { DataLoader, FormViewUserRoles, UserRolesFormState } from '../../components';
+import {
+	DataLoader,
+	DefaultFormActions,
+	FormViewUserRoles,
+	UserRolesFormState,
+} from '../../components';
 import { mapUserRoles } from '../../helpers';
 import {
 	useRoutesBreadcrumbs,
@@ -48,13 +53,11 @@ const SiteUserDetailRolesUpdate: FC<RolesRouteProps> = ({ tenantId }) => {
 	const [userRolesLoadingState, userRoles] = useUserRolesForSite();
 	const [initialFormState, setInitialFormState] = useState<UserRolesFormState | null>(null);
 	const [formState, setFormState] = useState<UserRolesFormState | null>(initialFormState);
-	console.log(initialFormState, formState);
-	const isChanged = useMemo(() => {
-		if (formState === null) {
-			return false;
-		}
-		return !equals(initialFormState, formState);
-	}, [formState, initialFormState]);
+
+	const [hasChanges, resetDetectValueChanges] = useDetectValueChanges(
+		initialLoading !== LoadingState.Loading && isUpdating !== LoadingState.Loading,
+		formState ?? initialFormState
+	);
 
 	useEffect(() => {
 		if (userUuid && siteId) {
@@ -98,6 +101,7 @@ const SiteUserDetailRolesUpdate: FC<RolesRouteProps> = ({ tenantId }) => {
 			siteUuid: siteId,
 			roles: values.roleIds,
 		});
+		resetDetectValueChanges();
 	};
 
 	const onCancel = (resetForm: FormikProps<UserRolesFormState>['resetForm']): void => {
@@ -118,12 +122,28 @@ const SiteUserDetailRolesUpdate: FC<RolesRouteProps> = ({ tenantId }) => {
 					<FormViewUserRoles
 						initialState={initialFormState}
 						availableRoles={roles}
-						isChanged={isChanged}
-						isLoading={isUpdating === LoadingState.Loading}
-						onChange={setFormState}
-						onCancel={onCancel}
+						onChange={value => {
+							setFormState({
+								roleIds: value.roleIds.sort(),
+							});
+						}}
 						onSubmit={onSubmit}
-					/>
+					>
+						{({ submitForm }) => (
+							<>
+								<DefaultFormActions
+									isLoading={isUpdating === LoadingState.Loading}
+									onCancel={onCancel}
+									hasChanges={hasChanges}
+								/>
+								<LeavePrompt
+									shouldBlockNavigationOnConfirm
+									when={hasChanges}
+									onConfirm={submitForm}
+								/>
+							</>
+						)}
+					</FormViewUserRoles>
 				</div>
 			</div>
 		);

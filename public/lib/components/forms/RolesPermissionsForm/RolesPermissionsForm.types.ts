@@ -10,7 +10,7 @@ export interface RolesPermissionsFormProps {
 	title: string;
 	initialFormState: RolesPermissionsFormState;
 	readonly: boolean;
-	isChanged?: boolean;
+	hasChanges?: boolean;
 	isLoading?: boolean;
 	onChange?: (values: RolesPermissionsFormState) => void;
 	onSubmit?: (values: RolesPermissionsFormState) => void;

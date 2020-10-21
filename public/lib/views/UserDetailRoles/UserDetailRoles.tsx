@@ -74,7 +74,6 @@ const UserDetailRoles: FC<UserDetailRolesProps> = ({
 				<h5 className="u-margin-bottom">Rollen</h5>
 				<FormViewUserRoles
 					checkAdmin
-					showActionBar={false}
 					initialState={initialFormState}
 					availableRoles={roles}
 					onChange={onChange}

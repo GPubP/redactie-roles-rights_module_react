@@ -1,15 +1,14 @@
 /* eslint-disable prettier/prettier */
-import { Button, Card, CardBody, CardTitle, Checkbox } from '@acpaas-ui/react-components';
-import { ActionBar, ActionBarContentSection } from '@acpaas-ui/react-editorial-components';
+import { Card, CardBody, CardTitle, Checkbox } from '@acpaas-ui/react-components';
 import { FormikOnChangeHandler, LeavePrompt } from '@redactie/utils';
 import { Field, FieldArray, Formik } from 'formik';
 import React, { ChangeEvent, FC, ReactNode } from 'react';
 
 import './RolesPermissionsForm.scss';
-import { CORE_TRANSLATIONS, useCoreTranslation } from '../../../connectors/translations';
 import { SecurityRightsSite } from '../../../roles.const';
 import { RoleResponse, SecurityRightResponse } from '../../../services/securityRights';
 import { RoleSecurityRight } from '../../../views/RolesRightsOverview/RolesRightsOverview.types';
+import DefaultFormActions from '../../DefaultFormActions/DefaultFormActions';
 import SecurableRender from '../../SecurableRender/SecurableRender';
 
 import { RolesPermissionsFormProps } from './RolesPermissionsForm.types';
@@ -22,13 +21,11 @@ const RolesPermissionsForm: FC<RolesPermissionsFormProps> = ({
 	mySecurityRights,
 	readonly = false,
 	isLoading = false,
-	isChanged = false,
+	hasChanges = false,
 	onChange = () => null,
 	onCancel = () => null,
 	onSubmit = () => null,
 }) => {
-	const [t] = useCoreTranslation();
-
 	/**
 	 * Function
 	 */
@@ -117,7 +114,7 @@ const RolesPermissionsForm: FC<RolesPermissionsFormProps> = ({
 
 	return (
 		<Formik enableReinitialize initialValues={initialFormState} onSubmit={onSubmit}>
-			{({ values, submitForm, resetForm }) => (
+			{({ values, submitForm }) => (
 				<>
 					<FormikOnChangeHandler delay={0} onChange={values => onChange(values)} />
 					<Card>
@@ -147,25 +144,16 @@ const RolesPermissionsForm: FC<RolesPermissionsFormProps> = ({
 							SecurityRightsSite.RolesRightsUpdateRolePermissions,
 						]}
 					>
-						<ActionBar className="o-action-bar--fixed" isOpen>
-							<ActionBarContentSection>
-								<div className="u-wrapper row end-xs">
-									<Button onClick={() => onCancel(resetForm)} negative>
-										{t(CORE_TRANSLATIONS.BUTTON_CANCEL)}
-									</Button>
-									<Button
-										iconLeft={isLoading ? 'circle-o-notch fa-spin' : null}
-										disabled={isLoading || !isChanged}
-										className="u-margin-left-xs"
-										onClick={submitForm}
-										type="success"
-									>
-										{t(CORE_TRANSLATIONS.BUTTON_SAVE)}
-									</Button>
-								</div>
-							</ActionBarContentSection>
-						</ActionBar>
-						<LeavePrompt when={isChanged} onConfirm={submitForm} />
+						<DefaultFormActions
+							hasChanges={hasChanges}
+							isLoading={isLoading}
+							onCancel={onCancel}
+						/>
+						<LeavePrompt
+							shouldBlockNavigationOnConfirm
+							when={hasChanges}
+							onConfirm={submitForm}
+						/>
 					</SecurableRender>
 				</>
 			)}

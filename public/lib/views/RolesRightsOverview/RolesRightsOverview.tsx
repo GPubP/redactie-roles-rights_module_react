@@ -3,6 +3,7 @@ import {
 	ContextHeader,
 	ContextHeaderTopSection,
 } from '@acpaas-ui/react-editorial-components';
+import { useDetectValueChanges } from '@redactie/utils';
 import { FormikProps } from 'formik';
 import { equals } from 'ramda';
 import React, { FC, ReactElement, useEffect, useMemo, useState } from 'react';
@@ -46,12 +47,10 @@ const RolesRightsOverview: FC<RolesRouteProps<{ siteId: string }>> = ({ match })
 	const [mySecurityRightsLoadingState, mySecurityRights] = useMySecurityRightsForSite({
 		onlyKeys: true,
 	});
-	const isChanged = useMemo(() => {
-		if (formState === null) {
-			return false;
-		}
-		return !equals(initialFormState, formState);
-	}, [formState, initialFormState]);
+	const [hasChanges, resetDetectValueChanges] = useDetectValueChanges(
+		initialLoading !== LoadingState.Loading && updateLoadingState !== LoadingState.Loading,
+		formState ?? initialFormState
+	);
 
 	useEffect(() => {
 		setInitialLoading(LoadingState.Loading);
@@ -160,7 +159,9 @@ const RolesRightsOverview: FC<RolesRouteProps<{ siteId: string }>> = ({ match })
 		});
 
 		if (updateRolesMatrixData) {
-			securityRightsMatrixFacade.updateSecurityRightsForSite(updateRolesMatrixData, siteId);
+			securityRightsMatrixFacade
+				.updateSecurityRightsForSite(updateRolesMatrixData, siteId)
+				.then(() => resetDetectValueChanges());
 		}
 	};
 
@@ -191,7 +192,7 @@ const RolesRightsOverview: FC<RolesRouteProps<{ siteId: string }>> = ({ match })
 							permissions={securityRightsByModule}
 							mySecurityRights={mySecurityRights}
 							isLoading={updateLoadingState === LoadingState.Loading}
-							isChanged={isChanged}
+							hasChanges={hasChanges}
 							onChange={setFormState}
 							onSubmit={onSave}
 							onCancel={onCancel}

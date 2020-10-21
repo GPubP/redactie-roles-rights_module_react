@@ -16,6 +16,7 @@ import { generatePath, NavLink, useParams } from 'react-router-dom';
 
 import { DataLoader, UserRolesFormState } from '../../components';
 import { CORE_TRANSLATIONS, useCoreTranslation } from '../../connectors/translations';
+import { mapUserRoles } from '../../helpers';
 import {
 	useMySecurityRightsForTenant,
 	useRoutesBreadcrumbs,
@@ -56,7 +57,7 @@ const UserUpdate: FC<RolesRouteProps<{ userUuid?: string }>> = ({ route, tenantI
 	const [t] = useCoreTranslation();
 	const [userRolesHasChanges, resetDetectValueChanges] = useDetectValueChanges(
 		initialLoading !== LoadingState.Loading && isUpdating !== LoadingState.Loading,
-		selectedRoles ?? userRoles
+		selectedRoles ?? mapUserRoles(userRoles)
 	);
 
 	useEffect(() => {
@@ -132,7 +133,7 @@ const UserUpdate: FC<RolesRouteProps<{ userUuid?: string }>> = ({ route, tenantI
 			},
 			onChange: (values: UserRolesFormState) => {
 				if (!equals(values.roleIds, selectedRoles)) {
-					setSelectedRoles(values.roleIds);
+					setSelectedRoles(values.roleIds.sort());
 				}
 			},
 		});

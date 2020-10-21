@@ -6,13 +6,13 @@ import {
 	Textarea,
 	TextField,
 } from '@acpaas-ui/react-components';
-import { ActionBar, ActionBarContentSection } from '@acpaas-ui/react-editorial-components';
-import { ErrorMessage, FormikOnChangeHandler, LeavePrompt } from '@redactie/utils';
+import { ErrorMessage, FormikOnChangeHandler } from '@redactie/utils';
 import { Field, Formik } from 'formik';
 import React, { FC, ReactElement } from 'react';
 
 import { CORE_TRANSLATIONS, useCoreTranslation } from '../../../connectors/translations';
 import { RoleDetailFormState } from '../../../roles.types';
+import DefaultFormActions from '../../DefaultFormActions/DefaultFormActions';
 
 import { ROLE_DETAIL_VALIDATION_SCHEMA } from './RoleDetailForm.const';
 import { RoleDetailFormProps } from './RoleDetailForm.types';
@@ -21,11 +21,12 @@ const RoleDetailForm: FC<RoleDetailFormProps> = ({
 	initialState,
 	isLoading = false,
 	isDeleting = false,
+	hasChanges = false,
+	onDelete,
+	children,
 	onCancel = () => null,
 	onSubmit = () => null,
 	onChange = () => null,
-	isChanged = false,
-	onDelete,
 }) => {
 	const [t] = useCoreTranslation();
 
@@ -55,7 +56,7 @@ const RoleDetailForm: FC<RoleDetailFormProps> = ({
 			onSubmit={onSubmit}
 			validationSchema={ROLE_DETAIL_VALIDATION_SCHEMA}
 		>
-			{({ submitForm, resetForm }) => {
+			{props => {
 				return (
 					<>
 						<FormikOnChangeHandler
@@ -66,6 +67,7 @@ const RoleDetailForm: FC<RoleDetailFormProps> = ({
 								<Field
 									description="Geef de rol een korte en duidelijke naam."
 									as={TextField}
+									required
 									id="name"
 									label="Naam"
 									name="name"
@@ -78,6 +80,7 @@ const RoleDetailForm: FC<RoleDetailFormProps> = ({
 								<Field
 									as={Textarea}
 									id="description"
+									required
 									label="Beschrijving"
 									name="description"
 								/>
@@ -88,25 +91,13 @@ const RoleDetailForm: FC<RoleDetailFormProps> = ({
 							</div>
 						</div>
 						{onDelete ? renderDelete() : null}
-						<ActionBar className="o-action-bar--fixed" isOpen>
-							<ActionBarContentSection>
-								<div className="u-wrapper row end-xs">
-									<Button onClick={() => onCancel(resetForm)} negative>
-										{t(CORE_TRANSLATIONS['BUTTON_CANCEL'])}
-									</Button>
-									<Button
-										iconLeft={isLoading ? 'circle-o-notch fa-spin' : null}
-										disabled={isLoading || isDeleting || !isChanged}
-										className="u-margin-left-xs"
-										onClick={submitForm}
-										type="success"
-									>
-										{t(CORE_TRANSLATIONS['BUTTON_SAVE'])}
-									</Button>
-								</div>
-							</ActionBarContentSection>
-						</ActionBar>
-						<LeavePrompt when={isChanged} onConfirm={submitForm} />
+						<DefaultFormActions
+							isLoading={isLoading}
+							saveBtnDisabled={isDeleting}
+							hasChanges={hasChanges}
+							onCancel={onCancel}
+						/>
+						{children && children(props)}
 					</>
 				);
 			}}

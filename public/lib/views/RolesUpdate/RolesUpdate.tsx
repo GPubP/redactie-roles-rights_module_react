@@ -3,9 +3,9 @@ import {
 	ContextHeader,
 	ContextHeaderTopSection,
 } from '@acpaas-ui/react-editorial-components';
+import { LeavePrompt, useDetectValueChanges } from '@redactie/utils';
 import { FormikProps } from 'formik';
-import { equals } from 'ramda';
-import React, { FC, ReactElement, useEffect, useMemo, useState } from 'react';
+import React, { FC, ReactElement, useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 
 import { DataLoader, RoleDetailForm } from '../../components';
@@ -17,7 +17,7 @@ import {
 	useSiteNavigate,
 	useSiteRole,
 } from '../../hooks';
-import { MODULE_PATHS, SecurityRightsSite } from '../../roles.const';
+import { MODULE_PATHS, SecurityRightsSite, TENANT_ROOT } from '../../roles.const';
 import { LoadingState, RoleDetailFormState, RolesRouteProps } from '../../roles.types';
 import { rolesFacade } from '../../store/roles';
 
@@ -33,12 +33,14 @@ const RolesUpdate: FC<RolesRouteProps> = () => {
 	const breadcrumbs = useRoutesBreadcrumbs();
 	const rolesLoadingStates = useRolesLoadingStates();
 	const [roleLoadingState, role] = useSiteRole();
-	const isChanged = useMemo(() => {
-		if (formState === null) {
-			return false;
-		}
-		return !equals(initialFormState, formState);
-	}, [formState, initialFormState]);
+	const [allowedPaths, setAllowedPaths] = useState<string[]>([]);
+
+	const [hasChanges, resetDetectValueChanges] = useDetectValueChanges(
+		initialLoading !== LoadingState.Loading &&
+			rolesLoadingStates.isUpdatingSiteRole !== LoadingState.Loading,
+		formState ?? initialFormState
+	);
+
 	const [mySecurityRightsLoadingState, mySecurityRights] = useMySecurityRightsForSite({
 		onlyKeys: true,
 	});
@@ -93,11 +95,16 @@ const RolesUpdate: FC<RolesRouteProps> = () => {
 				body: request,
 			});
 		}
+		resetDetectValueChanges();
 	};
 
 	const onDelete = (): void => {
 		if (siteId && roleId) {
-			rolesFacade.deleteSiteRole({ siteId, roleId }).then(navigateToOverview);
+			setAllowedPaths([`${TENANT_ROOT}/sites${MODULE_PATHS.roles.overview}`]);
+			rolesFacade
+				.deleteSiteRole({ siteId, roleId })
+				.then(navigateToOverview)
+				.finally(() => setAllowedPaths([]));
 		}
 	};
 
@@ -118,12 +125,21 @@ const RolesUpdate: FC<RolesRouteProps> = () => {
 				initialState={initialFormState}
 				isLoading={rolesLoadingStates.isUpdatingSiteRole === LoadingState.Loading}
 				isDeleting={rolesLoadingStates.isDeletingSiteRole === LoadingState.Loading}
-				isChanged={isChanged}
+				hasChanges={hasChanges}
 				onCancel={onCancel}
 				onSubmit={onSubmit}
 				onChange={setFormState}
 				onDelete={canDelete && !initialFormState?.admin && onDelete}
-			/>
+			>
+				{({ submitForm }) => (
+					<LeavePrompt
+						allowedPaths={allowedPaths}
+						shouldBlockNavigationOnConfirm
+						when={hasChanges}
+						onConfirm={submitForm}
+					/>
+				)}
+			</RoleDetailForm>
 		);
 	};
 
