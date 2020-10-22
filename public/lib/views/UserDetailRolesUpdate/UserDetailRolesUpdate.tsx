@@ -9,6 +9,7 @@ import {
 	LeavePrompt,
 	LoadingState,
 	useDetectValueChanges,
+	useNavigate,
 } from '@redactie/utils';
 import { FormikProps } from 'formik';
 import React, { FC, ReactElement, useEffect, useMemo, useState } from 'react';
@@ -17,7 +18,6 @@ import { useParams } from 'react-router-dom';
 import { DefaultFormActions, FormViewUserRoles, UserRolesFormState } from '../../components';
 import { mapUserRoles } from '../../helpers';
 import {
-	useNavigate,
 	useRoutesBreadcrumbs,
 	useSite,
 	useSiteRoles,

@@ -3,12 +3,12 @@ import {
 	ContextHeader,
 	ContextHeaderTopSection,
 } from '@acpaas-ui/react-editorial-components';
-import { LeavePrompt, LoadingState, useDetectValueChanges } from '@redactie/utils';
+import { LeavePrompt, LoadingState, useDetectValueChanges, useNavigate } from '@redactie/utils';
 import React, { FC, useState } from 'react';
 import { useParams } from 'react-router-dom';
 
 import { RoleDetailForm } from '../../components';
-import { useNavigate, useRolesLoadingStates, useRoutesBreadcrumbs } from '../../hooks';
+import { useRolesLoadingStates, useRoutesBreadcrumbs } from '../../hooks';
 import { MODULE_PATHS, TENANT_ROOT } from '../../roles.const';
 import { RoleDetailFormState, RolesRouteProps } from '../../roles.types';
 import { rolesFacade } from '../../store/roles';

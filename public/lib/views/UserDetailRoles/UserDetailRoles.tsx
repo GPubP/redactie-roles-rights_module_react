@@ -1,11 +1,12 @@
 import { Card } from '@acpaas-ui/react-components';
 import { Table } from '@acpaas-ui/react-editorial-components';
+import { useNavigate } from '@redactie/utils';
 import React, { FC, useMemo, useState } from 'react';
 
 import { FormViewUserRoles } from '../../components';
 import { useCoreTranslation } from '../../connectors/translations';
 import { mapUserRoles } from '../../helpers';
-import { useNavigate, useUsersLoadingStates } from '../../hooks';
+import { useUsersLoadingStates } from '../../hooks';
 import { MODULE_PATHS } from '../../roles.const';
 import { usersFacade } from '../../store/users';
 

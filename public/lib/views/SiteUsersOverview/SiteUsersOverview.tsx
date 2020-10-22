@@ -4,18 +4,13 @@ import {
 	ContextHeaderTopSection,
 	PaginatedTable,
 } from '@acpaas-ui/react-editorial-components';
-import { DataLoader, LoadingState } from '@redactie/utils';
+import { DataLoader, LoadingState, useNavigate } from '@redactie/utils';
 import React, { FC, ReactElement, useEffect, useState } from 'react';
 
 import { FilterForm, FilterFormState } from '../../components';
 import { useCoreTranslation } from '../../connectors/translations';
-import {
-	useMySecurityRightsForSite,
-	useRoutesBreadcrumbs,
-	useSiteNavigate,
-	useUsers,
-} from '../../hooks';
-import { MODULE_PATHS } from '../../roles.const';
+import { useMySecurityRightsForSite, useRoutesBreadcrumbs, useUsers } from '../../hooks';
+import { MODULE_PATHS, SITES_ROOT } from '../../roles.const';
 import { RolesRouteProps } from '../../roles.types';
 import { DEFAULT_USERS_SEARCH_PARAMS } from '../../services/users/users.service.const';
 import { usersFacade } from '../../store/users';
@@ -33,7 +28,7 @@ const SiteUsersOverview: FC<RolesRouteProps<{ siteId: string }>> = ({ match }) =
 	const [filterFormState, setFilterFormState] = useState<FilterFormState>(
 		CONTENT_INITIAL_FILTER_STATE
 	);
-	const { navigate } = useSiteNavigate();
+	const { navigate } = useNavigate(SITES_ROOT);
 	const breadcrumbs = useRoutesBreadcrumbs();
 	const [usersSearchParams, setUsersSearchParams] = useState(DEFAULT_USERS_SEARCH_PARAMS);
 	const [loadingState, users, usersMeta] = useUsers();

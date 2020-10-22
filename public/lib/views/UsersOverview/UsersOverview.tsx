@@ -4,17 +4,12 @@ import {
 	ContextHeaderTopSection,
 	PaginatedTable,
 } from '@acpaas-ui/react-editorial-components';
-import { DataLoader, LoadingState } from '@redactie/utils';
+import { DataLoader, LoadingState, useNavigate } from '@redactie/utils';
 import React, { FC, ReactElement, useEffect, useState } from 'react';
 
 import { FilterForm, FilterFormState } from '../../components';
 import { useCoreTranslation } from '../../connectors/translations';
-import {
-	useMySecurityRightsForTenant,
-	useNavigate,
-	useRoutesBreadcrumbs,
-	useUsers,
-} from '../../hooks';
+import { useMySecurityRightsForTenant, useRoutesBreadcrumbs, useUsers } from '../../hooks';
 import { MODULE_PATHS } from '../../roles.const';
 import { RolesRouteProps } from '../../roles.types';
 import { DEFAULT_USERS_SEARCH_PARAMS } from '../../services/users/users.service.const';

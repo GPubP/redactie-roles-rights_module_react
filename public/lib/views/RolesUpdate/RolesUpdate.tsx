@@ -3,7 +3,13 @@ import {
 	ContextHeader,
 	ContextHeaderTopSection,
 } from '@acpaas-ui/react-editorial-components';
-import { DataLoader, LeavePrompt, LoadingState, useDetectValueChanges } from '@redactie/utils';
+import {
+	DataLoader,
+	LeavePrompt,
+	LoadingState,
+	useDetectValueChanges,
+	useNavigate,
+} from '@redactie/utils';
 import { FormikProps } from 'formik';
 import React, { FC, ReactElement, useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
@@ -14,10 +20,9 @@ import {
 	useMySecurityRightsForSite,
 	useRolesLoadingStates,
 	useRoutesBreadcrumbs,
-	useSiteNavigate,
 	useSiteRole,
 } from '../../hooks';
-import { MODULE_PATHS, SecurityRightsSite, TENANT_ROOT } from '../../roles.const';
+import { MODULE_PATHS, SecurityRightsSite, SITES_ROOT, TENANT_ROOT } from '../../roles.const';
 import { RoleDetailFormState, RolesRouteProps } from '../../roles.types';
 import { rolesFacade } from '../../store/roles';
 
@@ -26,7 +31,7 @@ const RolesUpdate: FC<RolesRouteProps> = () => {
 	 * Hooks
 	 */
 	const { siteId, roleId } = useParams<{ siteId: string; roleId: string }>();
-	const { navigate } = useSiteNavigate();
+	const { navigate } = useNavigate(SITES_ROOT);
 	const [initialLoading, setInitialLoading] = useState(LoadingState.Loading);
 	const [initialFormState, setInitialFormState] = useState<RoleDetailFormState | null>(null);
 	const [formState, setFormState] = useState<RoleDetailFormState | null>(initialFormState);

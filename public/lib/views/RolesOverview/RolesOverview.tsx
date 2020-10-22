@@ -7,19 +7,14 @@ import {
 	PaginatedTable,
 } from '@acpaas-ui/react-editorial-components';
 import { OrderBy } from '@redactie/translations-module/public/lib/services/api';
-import { DataLoader, LoadingState } from '@redactie/utils';
+import { DataLoader, LoadingState, useNavigate } from '@redactie/utils';
 import React, { FC, ReactElement, useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 
 import { SecurableRender } from '../../components';
 import { CORE_TRANSLATIONS, useCoreTranslation } from '../../connectors/translations';
-import {
-	useMySecurityRightsForSite,
-	useRoutesBreadcrumbs,
-	useSiteNavigate,
-	useSiteRoles,
-} from '../../hooks';
-import { MODULE_PATHS, SecurityRightsSite } from '../../roles.const';
+import { useMySecurityRightsForSite, useRoutesBreadcrumbs, useSiteRoles } from '../../hooks';
+import { MODULE_PATHS, SecurityRightsSite, SITES_ROOT } from '../../roles.const';
 import { RolesRouteProps } from '../../roles.types';
 import { DEFAULT_ROLES_SEARCH_PARAMS } from '../../services/roles/roles.service.const';
 import { rolesFacade } from '../../store/roles';
@@ -34,7 +29,7 @@ const RolesOverview: FC<RolesRouteProps<{ siteId: string }>> = () => {
 	const { siteId } = useParams<{ siteId: string }>();
 	const [t] = useCoreTranslation();
 	const breadcrumbs = useRoutesBreadcrumbs();
-	const { navigate, generatePath } = useSiteNavigate();
+	const { navigate, generatePath } = useNavigate(SITES_ROOT);
 	const [initialLoading, setInitialLoading] = useState(LoadingState.Loading);
 	const [currentPage, setCurrentPage] = useState(DEFAULT_ROLES_SEARCH_PARAMS.skip);
 	const [rolesSearchParams, setRolesSearchParams] = useState(DEFAULT_ROLES_SEARCH_PARAMS);

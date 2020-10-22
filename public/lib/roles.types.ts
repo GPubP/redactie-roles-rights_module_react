@@ -19,7 +19,11 @@ import {
 } from './store/securityRightsMatrix';
 import { UsersFacade, UsersQuery } from './store/users';
 
-export interface RolesModuleProps extends RouteConfigComponentProps {
+export interface RolesModuleProps<
+	Params extends {
+		[K in keyof Params]?: string;
+	} = {}
+> extends RouteConfigComponentProps<Params> {
 	routes: ModuleRouteConfig[];
 	tenantId: string;
 }

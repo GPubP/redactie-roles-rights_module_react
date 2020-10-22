@@ -1,7 +1,7 @@
 import { Breadcrumb, ModuleRouteConfig, useBreadcrumbs } from '@redactie/redactie-core';
+import { useNavigate } from '@redactie/utils';
 import { ReactNode } from 'react';
 
-import { useNavigate } from '../../hooks';
 import { BREADCRUMB_OPTIONS, MODULE_PATHS } from '../../roles.const';
 import useRoutes from '../useRoutes/useRoutes';
 
