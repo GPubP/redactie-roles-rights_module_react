@@ -1,4 +1,5 @@
-import { LoadingState } from '../../roles.types';
+import { LoadingState } from '@redactie/utils';
+
 import { UserModel, UsersMetaModel } from '../../store/users';
 
 export type UseUsersFunctionReturnType = [

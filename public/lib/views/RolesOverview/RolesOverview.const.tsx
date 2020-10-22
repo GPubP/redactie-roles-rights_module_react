@@ -62,7 +62,7 @@ export const ROLES_OVERVIEW_COLUMNS = (mySecurityRights: string[]): any[] => {
 					<AUILink
 						to={propOr('#', 'target')(rowData)}
 						component={Link}
-						ariaLabel="Edit"
+						aria-label="Edit"
 						className="a-button a-button--transparent has-icon"
 					>
 						<Icon name="edit"></Icon>

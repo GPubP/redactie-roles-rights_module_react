@@ -3,7 +3,7 @@ import {
 	ContextHeader,
 	ContextHeaderTopSection,
 } from '@acpaas-ui/react-editorial-components';
-import { LeavePrompt, useDetectValueChanges } from '@redactie/utils';
+import { AlertContainer, LeavePrompt, useDetectValueChanges } from '@redactie/utils';
 import { FormikProps } from 'formik';
 import React, { FC, ReactElement, useEffect, useMemo, useState } from 'react';
 import { useParams } from 'react-router-dom';
@@ -24,7 +24,7 @@ import {
 	useUserRolesForSite,
 	useUsersLoadingStates,
 } from '../../hooks';
-import { MODULE_PATHS } from '../../roles.const';
+import { ALERT_CONTAINER_IDS, MODULE_PATHS } from '../../roles.const';
 import { LoadingState, RolesRouteProps } from '../../roles.types';
 import { rolesFacade } from '../../store/roles';
 import { sitesFacade } from '../../store/sites';
@@ -105,11 +105,14 @@ const UserDetailRolesUpdate: FC<RolesRouteProps<{ userUuid: string; siteUuid: st
 	 * Methods
 	 */
 	const handleSubmit = (values: UserRolesFormState): void => {
-		usersFacade.updateUserRolesForSite({
-			userUuid,
-			siteUuid,
-			roles: values.roleIds,
-		});
+		usersFacade.updateUserRolesForSite(
+			{
+				userUuid,
+				siteUuid,
+				roles: values.roleIds,
+			},
+			ALERT_CONTAINER_IDS.UPDATE_USER_ROLES_SITE_ON_TENANT
+		);
 		resetDetectValueChanges();
 	};
 
@@ -165,6 +168,11 @@ const UserDetailRolesUpdate: FC<RolesRouteProps<{ userUuid: string; siteUuid: st
 				<ContextHeaderTopSection>{breadcrumbs}</ContextHeaderTopSection>
 			</ContextHeader>
 			<Container>
+				<div className="u-margin-bottom">
+					<AlertContainer
+						containerId={ALERT_CONTAINER_IDS.UPDATE_USER_ROLES_SITE_ON_TENANT}
+					/>
+				</div>
 				<DataLoader loadingState={initialLoading} render={renderSiteRolesForm}></DataLoader>
 			</Container>
 		</>

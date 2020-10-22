@@ -5,8 +5,7 @@ import {
 } from '@acpaas-ui/react-editorial-components';
 import { useDetectValueChanges } from '@redactie/utils';
 import { FormikProps } from 'formik';
-import { equals } from 'ramda';
-import React, { FC, ReactElement, useEffect, useMemo, useState } from 'react';
+import React, { FC, ReactElement, useEffect, useState } from 'react';
 
 import {
 	DataLoader,

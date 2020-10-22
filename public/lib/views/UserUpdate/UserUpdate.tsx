@@ -8,7 +8,7 @@ import {
 	NavList,
 } from '@acpaas-ui/react-editorial-components';
 import Core, { ModuleRouteConfig } from '@redactie/redactie-core';
-import { LeavePrompt, useDetectValueChanges } from '@redactie/utils';
+import { AlertContainer, LeavePrompt, useDetectValueChanges } from '@redactie/utils';
 import { FormikProps, FormikValues } from 'formik';
 import { equals } from 'ramda';
 import React, { FC, ReactElement, useEffect, useRef, useState } from 'react';
@@ -26,7 +26,7 @@ import {
 	useUserRolesForTenant,
 	useUsersLoadingStates,
 } from '../../hooks';
-import { MODULE_PATHS } from '../../roles.const';
+import { ALERT_CONTAINER_IDS, MODULE_PATHS } from '../../roles.const';
 import { LoadingState, RolesRouteProps } from '../../roles.types';
 import { rolesFacade } from '../../store/roles';
 import { sitesFacade } from '../../store/sites';
@@ -145,6 +145,9 @@ const UserUpdate: FC<RolesRouteProps<{ userUuid?: string }>> = ({ route, tenantI
 				<ContextHeaderTopSection>{breadcrumbs}</ContextHeaderTopSection>
 			</ContextHeader>
 			<Container>
+				<div className="u-margin-bottom">
+					<AlertContainer containerId={ALERT_CONTAINER_IDS.UPDATE_USER_ROLES_TENANT} />
+				</div>
 				<div className="row between-xs top-xs u-margin-bottom-lg">
 					<div className="col-xs-12 col-sm-3 u-margin-bottom">
 						<Card>

@@ -1,34 +1,17 @@
-import { EntityStore, StoreConfig } from '@datorama/akita';
+import { StoreConfig } from '@datorama/akita';
+import { BaseEntityStore } from '@redactie/utils';
 
-import { createInitialUsersState, UserDetailModel, UserModel, UsersState } from './users.model';
+import { UserDetailModel, UserModel, UsersState } from './users.model';
 
 @StoreConfig({ name: 'users', idKey: 'id' })
-export class UsersStore extends EntityStore<UsersState, UserModel> {
-	constructor() {
-		super(createInitialUsersState());
-	}
-
-	public setIsFetching(isFetching = false): void {
-		this.update({
-			isFetching,
-		});
-	}
-
-	public setIsFetchingOne(isFetchingOne = false): void {
-		this.update({
-			isFetchingOne,
-		});
+export class UsersStore extends BaseEntityStore<UsersState, UserModel> {
+	constructor(initialState: Partial<UsersState>) {
+		super(initialState);
 	}
 
 	public setIsFetchingUserRolesForTenant(isFetchingUserRolesForTenant = false): void {
 		this.update({
 			isFetchingUserRolesForTenant,
-		});
-	}
-
-	public setIsUpdating(isUpdating = false): void {
-		this.update({
-			isUpdating,
 		});
 	}
 
@@ -49,4 +32,7 @@ export class UsersStore extends EntityStore<UsersState, UserModel> {
 	}
 }
 
-export const usersStore = new UsersStore();
+export const usersStore = new UsersStore({
+	isFetchingUserRolesForTenant: false,
+	isAddingUserToSite: false,
+});

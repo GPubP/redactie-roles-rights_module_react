@@ -1,3 +1,8 @@
+import { BaseEntityFacade } from '@redactie/utils';
+import { invertObj } from 'ramda';
+
+import { alertService } from '../../helpers';
+import { ALERT_CONTAINER_IDS } from '../../roles.const';
 import {
 	AddUserToSitePayload,
 	GetUserPayload,
@@ -11,16 +16,19 @@ import {
 } from '../../services/users';
 import { MySecurityRightsStore, mySecurityRightsStore } from '../mySecurityRights';
 
+import { getAlertMessages } from './users.alertMessages';
 import { UsersQuery, usersQuery } from './users.query';
 import { UsersStore, usersStore } from './users.store';
 
-export class UsersFacade {
+export class UsersFacade extends BaseEntityFacade<UsersStore, UsersApiService, UsersQuery> {
 	constructor(
-		private store: UsersStore,
+		protected store: UsersStore,
 		private mySecurityRightsStore: MySecurityRightsStore,
-		private service: UsersApiService,
-		private query: UsersQuery
-	) {}
+		protected service: UsersApiService,
+		protected query: UsersQuery
+	) {
+		super(store, service, query);
+	}
 
 	public readonly meta$ = this.query.meta$;
 	public readonly users$ = this.query.users$;
@@ -29,14 +37,8 @@ export class UsersFacade {
 	public readonly userRolesForSite$ = this.query.userRolesForSite$;
 
 	// Loading states
-	public readonly isFetching$ = this.query.isFetching$;
-	public readonly isFetchingOne$ = this.query.isFetching$;
 	public readonly isFetchingUserRolesForTenant$ = this.query.isFetchingUserRolesForTenant$;
-	public readonly isUpdating$ = this.query.isUpdating$;
 	public readonly isAddingUserToSite$ = this.query.isAddingUserToSite$;
-
-	// Error state
-	public readonly error$ = this.query.error$;
 
 	/**
 	 * Get calls
@@ -130,6 +132,10 @@ export class UsersFacade {
 	 */
 
 	public updateUserRolesForTenant(payload: UpdateUserRolesForTenantPayload): void {
+		const state = this.store.getValue();
+		const alertMessages = getAlertMessages(
+			`${state.userDetail?.firstname} ${state.userDetail?.lastname}` || ''
+		);
 		this.store.setIsUpdating(true);
 		this.service
 			.updateUserRolesForTenant(payload)
@@ -138,14 +144,32 @@ export class UsersFacade {
 				this.store.setUserDetail({
 					tenantRoles: response._embedded,
 				});
+
+				alertService(
+					alertMessages.update.success,
+					ALERT_CONTAINER_IDS.UPDATE_USER_ROLES_TENANT,
+					'success'
+				);
 			})
 			.catch(err => {
 				this.store.setError(err);
+				alertService(
+					alertMessages.update.error,
+					ALERT_CONTAINER_IDS.UPDATE_USER_ROLES_TENANT,
+					'error'
+				);
 			})
 			.finally(() => this.store.setIsUpdating(false));
 	}
 
-	public updateUserRolesForSite(payload: UpdateUserRolesForSitePayload): Promise<void> {
+	public updateUserRolesForSite(
+		payload: UpdateUserRolesForSitePayload,
+		containerId: string
+	): Promise<void> {
+		const state = this.store.getValue();
+		const alertMessages = getAlertMessages(
+			`${state.userDetail?.firstname} ${state.userDetail?.lastname}` || ''
+		);
 		this.store.setIsUpdating(true);
 		return this.service
 			.updateUserRolesForSite(payload)
@@ -154,8 +178,12 @@ export class UsersFacade {
 				this.store.setUserDetail({
 					siteRoles: response._embedded,
 				});
+				alertService(alertMessages.update.success, containerId, 'success');
 			})
-			.catch(err => this.store.setError(err))
+			.catch(err => {
+				this.store.setError(err);
+				alertService(alertMessages.update.error, containerId, 'error');
+			})
 			.finally(() => this.store.setIsUpdating(false));
 	}
 

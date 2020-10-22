@@ -1,4 +1,4 @@
-import { EntityState } from '@datorama/akita';
+import { BaseEntityState } from '@redactie/utils';
 
 import { Page } from '../../roles.types';
 import { UserResponse } from '../../services/users';
@@ -11,20 +11,9 @@ export interface UserDetailModel extends UserModel {
 }
 export type UsersMetaModel = Page;
 
-export interface UsersState extends EntityState<UserModel, string> {
+export interface UsersState extends BaseEntityState<UserModel, string> {
 	meta?: UsersMetaModel;
 	userDetail?: UserDetailModel;
-	isFetching: boolean;
-	isFetchingOne: boolean;
 	isFetchingUserRolesForTenant: boolean;
-	isUpdating: boolean;
 	isAddingUserToSite: boolean;
 }
-
-export const createInitialUsersState = (): UsersState => ({
-	isFetching: false,
-	isFetchingOne: false,
-	isUpdating: false,
-	isFetchingUserRolesForTenant: false,
-	isAddingUserToSite: false,
-});
