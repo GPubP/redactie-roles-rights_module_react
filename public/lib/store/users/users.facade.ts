@@ -1,5 +1,4 @@
 import { BaseEntityFacade } from '@redactie/utils';
-import { invertObj } from 'ramda';
 
 import { alertService } from '../../helpers';
 import { ALERT_CONTAINER_IDS } from '../../roles.const';

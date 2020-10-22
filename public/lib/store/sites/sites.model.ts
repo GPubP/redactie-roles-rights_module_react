@@ -1,4 +1,4 @@
-import { EntityState } from '@datorama/akita';
+import { BaseEntityState } from '@redactie/utils';
 
 import { Page } from '../../roles.types';
 import { RoleResponse } from '../../services/roles';
@@ -11,12 +11,7 @@ export interface SiteModel extends SiteResponse {
 export type SiteDetail = SiteResponse;
 export type SitesMetaModel = Page;
 
-export interface SitesState extends EntityState<SiteModel, string> {
+export interface SitesState extends BaseEntityState<SiteModel, string> {
 	meta?: SitesMetaModel;
 	site?: SiteDetail;
-	isFetching: boolean;
 }
-
-export const createInitialSitesState = (): SitesState => ({
-	isFetching: false,
-});

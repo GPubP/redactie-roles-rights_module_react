@@ -1,3 +1,5 @@
+import { BaseEntityFacade } from '@redactie/utils';
+
 import {
 	GetSitePayload,
 	GetSitesPayload,
@@ -10,18 +12,18 @@ import { SiteModel } from './sites.model';
 import { SitesQuery, sitesQuery } from './sites.query';
 import { SitesStore, sitesStore } from './sites.store';
 
-export class SitesFacade {
+export class SitesFacade extends BaseEntityFacade<SitesStore, SitesApiService, SitesQuery> {
 	constructor(
-		private store: SitesStore,
-		private service: SitesApiService,
+		protected store: SitesStore,
+		protected service: SitesApiService,
 		private userService: UsersApiService,
-		private query: SitesQuery
-	) {}
+		protected query: SitesQuery
+	) {
+		super(store, service, query);
+	}
 
 	public readonly sites$ = this.query.sites$;
 	public readonly site$ = this.query.site$;
-	public readonly error$ = this.query.error$;
-	public readonly isFetching$ = this.query.isFetching$;
 
 	public getSites(payload: GetSitesPayload): void {
 		this.store.setIsFetching(true);
