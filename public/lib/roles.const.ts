@@ -68,6 +68,7 @@ export const ALERT_CONTAINER_IDS = {
 	UPDATE_USER_ROLES_SITE_ON_TENANT: 'update-user-roles-site-on-tenant',
 	UPDATE_USER_ROLES_SITE_ON_SITE: 'update-user-roles-site-on-tenant',
 	UPDATE_USER_ROLES_TENANT: 'update-user-roles-tenant',
+	UPDATE_ROLE_ON_SITE: 'update-role-on-site',
 };
 
 export enum SecurityRightsSite {

@@ -4,6 +4,7 @@ import {
 	ContextHeaderTopSection,
 } from '@acpaas-ui/react-editorial-components';
 import {
+	AlertContainer,
 	DataLoader,
 	LeavePrompt,
 	LoadingState,
@@ -22,7 +23,13 @@ import {
 	useRoutesBreadcrumbs,
 	useSiteRole,
 } from '../../hooks';
-import { MODULE_PATHS, SecurityRightsSite, SITES_ROOT, TENANT_ROOT } from '../../roles.const';
+import {
+	ALERT_CONTAINER_IDS,
+	MODULE_PATHS,
+	SecurityRightsSite,
+	SITES_ROOT,
+	TENANT_ROOT,
+} from '../../roles.const';
 import { RoleDetailFormState, RolesRouteProps } from '../../roles.types';
 import { rolesFacade } from '../../store/roles';
 
@@ -154,6 +161,9 @@ const RolesUpdate: FC<RolesRouteProps> = () => {
 				<ContextHeaderTopSection>{breadcrumbs}</ContextHeaderTopSection>
 			</ContextHeader>
 			<Container>
+				<div className="u-margin-bottom">
+					<AlertContainer containerId={ALERT_CONTAINER_IDS.UPDATE_ROLE_ON_SITE} />
+				</div>
 				<DataLoader loadingState={initialLoading} render={renderRoleUpdate} />
 			</Container>
 		</>

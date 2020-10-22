@@ -1,3 +1,5 @@
+import { alertService } from '../../helpers';
+import { ALERT_CONTAINER_IDS } from '../../roles.const';
 import {
 	GetRolesPayload,
 	RolePayload,
@@ -6,6 +8,7 @@ import {
 } from '../../services/roles';
 import { DEFAULT_ROLES_SEARCH_PARAMS } from '../../services/roles/roles.service.const';
 
+import { getAlertMessages } from './roles.alertMessages';
 import { RoleEntityTypes } from './roles.model';
 import { rolesQuery, RolesQuery } from './roles.query';
 import { rolesStore, RolesStore } from './roles.store';
@@ -95,23 +98,32 @@ export class RolesFacade {
 			})
 			.catch(err => {
 				this.store.setError(err);
-
 				return false;
 			})
 			.finally(() => this.store.setIsCreating(RoleEntityTypes.SITE, false));
 	}
 
 	public updateSiteRole(payload: RolePayload): Promise<boolean> {
+		const alertMessages = getAlertMessages(payload.body?.name || '');
 		this.store.setIsUpdating(RoleEntityTypes.SITE, true);
 		return this.service
 			.updateSiteRole(payload)
 			.then(response => {
 				this.store.setRoleDetail(RoleEntityTypes.SITE, response);
+				alertService(
+					alertMessages.update.success,
+					ALERT_CONTAINER_IDS.UPDATE_ROLE_ON_SITE,
+					'success'
+				);
 				return true;
 			})
 			.catch(err => {
 				this.store.setError(err);
-
+				alertService(
+					alertMessages.update.error,
+					ALERT_CONTAINER_IDS.UPDATE_ROLE_ON_SITE,
+					'error'
+				);
 				return false;
 			})
 			.finally(() => this.store.setIsUpdating(RoleEntityTypes.SITE, false));
