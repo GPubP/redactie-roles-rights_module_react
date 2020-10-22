@@ -1,12 +1,11 @@
 // uncomment to enable akita devTools
 // import { akitaDevtools } from '@datorama/akita';
 import Core from '@redactie/redactie-core';
-import { SiteContext, TenantContext } from '@redactie/utils';
+import { RenderChildRoutes, SiteContext, TenantContext } from '@redactie/utils';
 import React, { FC, useMemo } from 'react';
 
 import { registerRolesAPI } from './lib/api';
 import { securityRightsSiteCanShown, securityRightsTenantCanShown } from './lib/canShowns';
-import { RenderChildRoutes } from './lib/components';
 import { registerRoutes } from './lib/connectors/sites';
 import { securityRightsSiteGuard, securityRightsTenantGuard } from './lib/guards';
 import {

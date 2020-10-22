@@ -7,17 +7,17 @@ import {
 	ContextHeaderTopSection,
 	NavList,
 } from '@acpaas-ui/react-editorial-components';
-import Core, { ModuleRouteConfig } from '@redactie/redactie-core';
 import {
 	AlertContainer,
 	DataLoader,
 	LeavePrompt,
 	LoadingState,
+	RenderChildRoutes,
 	useDetectValueChanges,
 } from '@redactie/utils';
 import { FormikProps, FormikValues } from 'formik';
 import { equals } from 'ramda';
-import React, { FC, ReactElement, useEffect, useRef, useState } from 'react';
+import React, { FC, ReactElement, useEffect, useMemo, useRef, useState } from 'react';
 import { generatePath, NavLink, useParams } from 'react-router-dom';
 
 import { UserRolesFormState } from '../../components';
@@ -64,6 +64,12 @@ const UserUpdate: FC<RolesRouteProps<{ userUuid?: string }>> = ({ route, tenantI
 	const [userRolesHasChanges, resetDetectValueChanges] = useDetectValueChanges(
 		initialLoading !== LoadingState.Loading && isUpdating !== LoadingState.Loading,
 		selectedRoles ?? mapUserRoles(userRoles)
+	);
+	const guardsMeta = useMemo(
+		() => ({
+			tenantId,
+		}),
+		[tenantId]
 	);
 
 	useEffect(() => {
@@ -125,8 +131,7 @@ const UserUpdate: FC<RolesRouteProps<{ userUuid?: string }>> = ({ route, tenantI
 			return null;
 		}
 
-		return Core.routes.render(route.routes as ModuleRouteConfig[], {
-			routes: route.routes,
+		const extraOptions = {
 			user,
 			userRoles,
 			roles,
@@ -142,7 +147,15 @@ const UserUpdate: FC<RolesRouteProps<{ userUuid?: string }>> = ({ route, tenantI
 					setSelectedRoles(values.roleIds.sort());
 				}
 			},
-		});
+		};
+
+		return (
+			<RenderChildRoutes
+				routes={route.routes}
+				guardsMeta={guardsMeta}
+				extraOptions={extraOptions}
+			/>
+		);
 	};
 
 	return (
