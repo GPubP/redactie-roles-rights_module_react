@@ -33,12 +33,6 @@ export interface RolesRouteProps<
 	tenantId: string;
 }
 
-export enum LoadingState {
-	Loading = 'loading',
-	Loaded = 'loaded',
-	Error = 'error',
-}
-
 export enum ContentType {
 	UserRoles = 'UserRoles',
 	SiteRoles = 'SiteRoles',

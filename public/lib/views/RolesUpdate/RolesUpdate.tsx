@@ -3,12 +3,12 @@ import {
 	ContextHeader,
 	ContextHeaderTopSection,
 } from '@acpaas-ui/react-editorial-components';
-import { LeavePrompt, useDetectValueChanges } from '@redactie/utils';
+import { DataLoader, LeavePrompt, LoadingState, useDetectValueChanges } from '@redactie/utils';
 import { FormikProps } from 'formik';
 import React, { FC, ReactElement, useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 
-import { DataLoader, RoleDetailForm } from '../../components';
+import { RoleDetailForm } from '../../components';
 import { checkSecurityRights } from '../../helpers';
 import {
 	useMySecurityRightsForSite,
@@ -18,7 +18,7 @@ import {
 	useSiteRole,
 } from '../../hooks';
 import { MODULE_PATHS, SecurityRightsSite, TENANT_ROOT } from '../../roles.const';
-import { LoadingState, RoleDetailFormState, RolesRouteProps } from '../../roles.types';
+import { RoleDetailFormState, RolesRouteProps } from '../../roles.types';
 import { rolesFacade } from '../../store/roles';
 
 const RolesUpdate: FC<RolesRouteProps> = () => {

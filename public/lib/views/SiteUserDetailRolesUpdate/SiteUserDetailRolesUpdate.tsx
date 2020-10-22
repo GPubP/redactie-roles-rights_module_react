@@ -3,17 +3,18 @@ import {
 	ContextHeader,
 	ContextHeaderTopSection,
 } from '@acpaas-ui/react-editorial-components';
-import { AlertContainer, LeavePrompt, useDetectValueChanges } from '@redactie/utils';
+import {
+	AlertContainer,
+	DataLoader,
+	LeavePrompt,
+	LoadingState,
+	useDetectValueChanges,
+} from '@redactie/utils';
 import { FormikProps } from 'formik';
 import React, { FC, ReactElement, useEffect, useMemo, useState } from 'react';
 import { generatePath, useParams } from 'react-router-dom';
 
-import {
-	DataLoader,
-	DefaultFormActions,
-	FormViewUserRoles,
-	UserRolesFormState,
-} from '../../components';
+import { DefaultFormActions, FormViewUserRoles, UserRolesFormState } from '../../components';
 import { mapUserRoles } from '../../helpers';
 import {
 	useRoutesBreadcrumbs,
@@ -24,7 +25,7 @@ import {
 	useUsersLoadingStates,
 } from '../../hooks';
 import { ALERT_CONTAINER_IDS, MODULE_PATHS } from '../../roles.const';
-import { LoadingState, RolesRouteProps } from '../../roles.types';
+import { RolesRouteProps } from '../../roles.types';
 import { rolesFacade } from '../../store/roles';
 import { sitesFacade } from '../../store/sites';
 import { usersFacade } from '../../store/users';

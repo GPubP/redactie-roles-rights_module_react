@@ -3,19 +3,14 @@ import {
 	ContextHeader,
 	ContextHeaderTopSection,
 } from '@acpaas-ui/react-editorial-components';
-import { useDetectValueChanges } from '@redactie/utils';
+import { DataLoader, LoadingState, useDetectValueChanges } from '@redactie/utils';
 import { FormikProps } from 'formik';
 import React, { FC, ReactElement, useEffect, useState } from 'react';
 
-import {
-	DataLoader,
-	ModulesList,
-	RolesPermissionsForm,
-	RolesPermissionsFormState,
-} from '../../components';
+import { ModulesList, RolesPermissionsForm, RolesPermissionsFormState } from '../../components';
 import { useMySecurityRightsForSite, useRoutesBreadcrumbs, useSecurityRights } from '../../hooks';
 import { SecurityRightsSite } from '../../roles.const';
-import { LoadingState, RolesRouteProps } from '../../roles.types';
+import { RolesRouteProps } from '../../roles.types';
 import { DEFAULT_ROLES_SEARCH_PARAMS } from '../../services/roles/roles.service.const';
 import { ModuleResponse, UpdateRolesMatrixPayload } from '../../services/securityRights';
 import { securityRightsMatrixFacade } from '../../store/securityRightsMatrix';

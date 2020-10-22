@@ -8,13 +8,19 @@ import {
 	NavList,
 } from '@acpaas-ui/react-editorial-components';
 import Core, { ModuleRouteConfig } from '@redactie/redactie-core';
-import { AlertContainer, LeavePrompt, useDetectValueChanges } from '@redactie/utils';
+import {
+	AlertContainer,
+	DataLoader,
+	LeavePrompt,
+	LoadingState,
+	useDetectValueChanges,
+} from '@redactie/utils';
 import { FormikProps, FormikValues } from 'formik';
 import { equals } from 'ramda';
 import React, { FC, ReactElement, useEffect, useRef, useState } from 'react';
 import { generatePath, NavLink, useParams } from 'react-router-dom';
 
-import { DataLoader, UserRolesFormState } from '../../components';
+import { UserRolesFormState } from '../../components';
 import { CORE_TRANSLATIONS, useCoreTranslation } from '../../connectors/translations';
 import { mapUserRoles } from '../../helpers';
 import {
@@ -27,7 +33,7 @@ import {
 	useUsersLoadingStates,
 } from '../../hooks';
 import { ALERT_CONTAINER_IDS, MODULE_PATHS } from '../../roles.const';
-import { LoadingState, RolesRouteProps } from '../../roles.types';
+import { RolesRouteProps } from '../../roles.types';
 import { rolesFacade } from '../../store/roles';
 import { sitesFacade } from '../../store/sites';
 import { usersFacade } from '../../store/users';

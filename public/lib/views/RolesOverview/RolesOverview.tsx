@@ -7,10 +7,11 @@ import {
 	PaginatedTable,
 } from '@acpaas-ui/react-editorial-components';
 import { OrderBy } from '@redactie/translations-module/public/lib/services/api';
+import { DataLoader, LoadingState } from '@redactie/utils';
 import React, { FC, ReactElement, useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 
-import { DataLoader, SecurableRender } from '../../components';
+import { SecurableRender } from '../../components';
 import { CORE_TRANSLATIONS, useCoreTranslation } from '../../connectors/translations';
 import {
 	useMySecurityRightsForSite,
@@ -19,7 +20,7 @@ import {
 	useSiteRoles,
 } from '../../hooks';
 import { MODULE_PATHS, SecurityRightsSite } from '../../roles.const';
-import { LoadingState, RolesRouteProps } from '../../roles.types';
+import { RolesRouteProps } from '../../roles.types';
 import { DEFAULT_ROLES_SEARCH_PARAMS } from '../../services/roles/roles.service.const';
 import { rolesFacade } from '../../store/roles';
 

@@ -1,8 +1,7 @@
 import { filterNil, Query } from '@datorama/akita';
+import { LoadingState } from '@redactie/utils';
 import { Observable } from 'rxjs';
 import { distinctUntilChanged, map } from 'rxjs/operators';
-
-import { LoadingState } from '../../roles.types';
 
 import { MySecurityRightModel, MySecurityRightsState } from './mySecurityRights.model';
 import { MySecurityRightsStore, mySecurityRightsStore } from './mySecurityRights.store';
