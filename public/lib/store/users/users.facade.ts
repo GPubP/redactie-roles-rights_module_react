@@ -133,7 +133,7 @@ export class UsersFacade extends BaseEntityFacade<UsersStore, UsersApiService, U
 	public updateUserRolesForTenant(payload: UpdateUserRolesForTenantPayload): void {
 		const state = this.store.getValue();
 		const alertMessages = getAlertMessages(
-			`${state.userDetail?.firstname} ${state.userDetail?.lastname}` || ''
+			`${state.userDetail?.firstname} ${state.userDetail?.lastname}`
 		);
 		this.store.setIsUpdating(true);
 		this.service
@@ -167,7 +167,7 @@ export class UsersFacade extends BaseEntityFacade<UsersStore, UsersApiService, U
 	): Promise<void> {
 		const state = this.store.getValue();
 		const alertMessages = getAlertMessages(
-			`${state.userDetail?.firstname} ${state.userDetail?.lastname}` || ''
+			`${state.userDetail?.firstname} ${state.userDetail?.lastname}`
 		);
 		this.store.setIsUpdating(true);
 		return this.service
