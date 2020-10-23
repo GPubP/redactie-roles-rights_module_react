@@ -1,6 +1,6 @@
 import { useObservable } from '@mindspace-io/react';
+import { LoadingState } from '@redactie/utils';
 
-import { LoadingState } from '../../roles.types';
 import { SiteDetail, sitesFacade } from '../../store/sites';
 
 const useSite = (): [LoadingState | null, SiteDetail | null | undefined] => {

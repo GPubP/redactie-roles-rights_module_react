@@ -1,13 +1,12 @@
 // uncomment to enable akita devTools
 // import { akitaDevtools } from '@datorama/akita';
 import Core from '@redactie/redactie-core';
+import { RenderChildRoutes, SiteContext, TenantContext } from '@redactie/utils';
 import React, { FC, useMemo } from 'react';
 
 import { registerRolesAPI } from './lib/api';
 import { securityRightsSiteCanShown, securityRightsTenantCanShown } from './lib/canShowns';
-import { RenderChildRoutes } from './lib/components';
 import { registerRoutes } from './lib/connectors/sites';
-import { TenantContext } from './lib/context';
 import { securityRightsSiteGuard, securityRightsTenantGuard } from './lib/guards';
 import {
 	MODULE_PATHS,
@@ -34,7 +33,12 @@ import {
 // uncomment to enable akita devTools
 // akitaDevtools();
 
-const RolesRootComponent: FC<RolesModuleProps> = ({ route, tenantId }) => {
+const RolesRootComponent: FC<RolesModuleProps<{ siteId: string }>> = ({
+	route,
+	tenantId,
+	match,
+}) => {
+	const { siteId } = match.params;
 	const guardsMeta = useMemo(
 		() => ({
 			tenantId,
@@ -50,11 +54,13 @@ const RolesRootComponent: FC<RolesModuleProps> = ({ route, tenantId }) => {
 	);
 	return (
 		<TenantContext.Provider value={{ tenantId }}>
-			<RenderChildRoutes
-				routes={route.routes}
-				guardsMeta={guardsMeta}
-				extraOptions={extraOptions}
-			/>
+			<SiteContext.Provider value={{ siteId }}>
+				<RenderChildRoutes
+					routes={route.routes}
+					guardsMeta={guardsMeta}
+					extraOptions={extraOptions}
+				/>
+			</SiteContext.Provider>
 		</TenantContext.Provider>
 	);
 };

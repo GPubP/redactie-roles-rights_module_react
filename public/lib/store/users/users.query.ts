@@ -1,24 +1,11 @@
-import { filterNil, QueryEntity } from '@datorama/akita';
+import { filterNil } from '@datorama/akita';
+import { BaseEntityQuery } from '@redactie/utils';
 import { distinctUntilChanged, map } from 'rxjs/operators';
 
-import { LoadingState } from '../../roles.types';
-
 import { UsersState } from './users.model';
-import { UsersStore, usersStore } from './users.store';
+import { usersStore } from './users.store';
 
-export class UsersQuery extends QueryEntity<UsersState> {
-	constructor(protected store: UsersStore) {
-		super(store);
-	}
-
-	private convertBoolToLoadingState(bool: boolean): LoadingState {
-		if (bool) {
-			return LoadingState.Loading;
-		}
-
-		return LoadingState.Loaded;
-	}
-
+export class UsersQuery extends BaseEntityQuery<UsersState> {
 	public meta$ = this.select(state => state.meta).pipe(filterNil, distinctUntilChanged());
 	public users$ = this.selectAll();
 	public user$ = this.select(state => state.userDetail).pipe(filterNil, distinctUntilChanged());
@@ -31,14 +18,10 @@ export class UsersQuery extends QueryEntity<UsersState> {
 		distinctUntilChanged()
 	);
 
-	// State
-	public error$ = this.selectError().pipe(filterNil, distinctUntilChanged());
-	public isFetching$ = this.select(state => state.isFetching).pipe(
-		map(this.convertBoolToLoadingState)
-	);
-	public isUpdating$ = this.select(state => state.isUpdating).pipe(
-		map(this.convertBoolToLoadingState)
-	);
+	public isFetchingUserRolesForTenant$ = this.select(
+		state => state.isFetchingUserRolesForTenant
+	).pipe(map(this.convertBoolToLoadingState));
+
 	public isAddingUserToSite$ = this.select(state => state.isAddingUserToSite).pipe(
 		map(this.convertBoolToLoadingState)
 	);

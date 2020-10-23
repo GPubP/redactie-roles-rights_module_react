@@ -1,4 +1,5 @@
-import { LoadingState } from '../../roles.types';
+import { LoadingState } from '@redactie/utils';
+
 import { MySecurityRightModel } from '../../store/mySecurityRights';
 
 export interface UseMySecurityRightsForSiteFunction {

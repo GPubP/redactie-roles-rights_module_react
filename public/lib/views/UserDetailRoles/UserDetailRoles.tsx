@@ -1,11 +1,12 @@
 import { Card } from '@acpaas-ui/react-components';
 import { Table } from '@acpaas-ui/react-editorial-components';
-import React, { FC, useState } from 'react';
+import { useNavigate } from '@redactie/utils';
+import React, { FC, useMemo, useState } from 'react';
 
 import { FormViewUserRoles } from '../../components';
 import { useCoreTranslation } from '../../connectors/translations';
 import { mapUserRoles } from '../../helpers';
-import { useNavigate, useUsersLoadingStates } from '../../hooks';
+import { useUsersLoadingStates } from '../../hooks';
 import { MODULE_PATHS } from '../../roles.const';
 import { usersFacade } from '../../store/users';
 
@@ -18,9 +19,10 @@ const UserDetailRoles: FC<UserDetailRolesProps> = ({
 	roles,
 	sites,
 	mySecurityRights,
+	formikRef = () => null,
+	onChange,
 }) => {
 	const [t] = useCoreTranslation();
-	const [selectedRoles, updateSelectedRoles] = useState(mapUserRoles(userRoles));
 	const { isAddingUserToSite } = useUsersLoadingStates();
 	const [giveAccesSiteId, setGiveAccessSiteId] = useState<string | null>(null);
 	const { navigate } = useNavigate();
@@ -28,9 +30,12 @@ const UserDetailRoles: FC<UserDetailRolesProps> = ({
 	/**
 	 * Methods
 	 */
-	const onConfigChange = (updatedRoles: any): void => {
-		updateSelectedRoles(updatedRoles);
-	};
+	const initialFormState = useMemo(
+		() => ({
+			roleIds: mapUserRoles(userRoles),
+		}),
+		[userRoles]
+	);
 
 	const redirectToSitesRolesDetail = (userId: string, siteId: string): void => {
 		navigate(MODULE_PATHS.tenantUserDetailRolesUpdate, {
@@ -60,15 +65,20 @@ const UserDetailRoles: FC<UserDetailRolesProps> = ({
 	/**
 	 * Render
 	 */
+
+	if (!initialFormState) {
+		return null;
+	}
 	return (
 		<Card>
 			<div className="u-margin">
 				<h5 className="u-margin-bottom">Rollen</h5>
 				<FormViewUserRoles
 					checkAdmin
-					formState={selectedRoles}
+					initialState={initialFormState}
 					availableRoles={roles}
-					onSubmit={onConfigChange}
+					onChange={onChange}
+					formikRef={formikRef}
 				/>
 				<h5 className="u-margin-bottom u-margin-top">Rol(len) per site</h5>
 				<Table

@@ -19,7 +19,11 @@ import {
 } from './store/securityRightsMatrix';
 import { UsersFacade, UsersQuery } from './store/users';
 
-export interface RolesModuleProps extends RouteConfigComponentProps {
+export interface RolesModuleProps<
+	Params extends {
+		[K in keyof Params]?: string;
+	} = {}
+> extends RouteConfigComponentProps<Params> {
 	routes: ModuleRouteConfig[];
 	tenantId: string;
 }
@@ -31,12 +35,6 @@ export interface RolesRouteProps<
 > extends RouteConfigComponentProps<Params> {
 	routes: ModuleRouteConfig[];
 	tenantId: string;
-}
-
-export enum LoadingState {
-	Loading = 'loading',
-	Loaded = 'loaded',
-	Error = 'error',
 }
 
 export enum ContentType {
@@ -124,4 +122,5 @@ export interface RolesRightsModuleAPI {
 export interface RoleDetailFormState {
 	name: string;
 	description: string;
+	admin?: boolean;
 }

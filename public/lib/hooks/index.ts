@@ -1,8 +1,6 @@
 export { default as useRoutesBreadcrumbs } from './useRoutesBreadcrumbs/useRoutesBreadcrumbs';
-export { default as useNavigate } from './useNavigate/useNavigate';
 export { default as useUsers } from './useUsers/useUsers';
 export { default as useSecurityRights } from './useSecurityRights/useSecurityRights';
-export { default as useSiteNavigate } from './useSiteNavigate/useSiteNavigate';
 export { default as useUser } from './useUser/useUser';
 export { default as useSites } from './useSites/useSites';
 export { default as useSite } from './useSite/useSite';

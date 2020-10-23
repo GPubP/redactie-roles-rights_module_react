@@ -3,20 +3,34 @@ import {
 	ContextHeader,
 	ContextHeaderTopSection,
 } from '@acpaas-ui/react-editorial-components';
+import {
+	AlertContainer,
+	DataLoader,
+	LeavePrompt,
+	LoadingState,
+	useDetectValueChanges,
+	useNavigate,
+} from '@redactie/utils';
+import { FormikProps } from 'formik';
 import React, { FC, ReactElement, useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 
-import { DataLoader, RoleDetailForm } from '../../components';
+import { RoleDetailForm } from '../../components';
 import { checkSecurityRights } from '../../helpers';
 import {
 	useMySecurityRightsForSite,
 	useRolesLoadingStates,
 	useRoutesBreadcrumbs,
-	useSiteNavigate,
 	useSiteRole,
 } from '../../hooks';
-import { MODULE_PATHS, SecurityRightsSite } from '../../roles.const';
-import { LoadingState, RoleDetailFormState, RolesRouteProps } from '../../roles.types';
+import {
+	ALERT_CONTAINER_IDS,
+	MODULE_PATHS,
+	SecurityRightsSite,
+	SITES_ROOT,
+	TENANT_ROOT,
+} from '../../roles.const';
+import { RoleDetailFormState, RolesRouteProps } from '../../roles.types';
 import { rolesFacade } from '../../store/roles';
 
 const RolesUpdate: FC<RolesRouteProps> = () => {
@@ -24,23 +38,33 @@ const RolesUpdate: FC<RolesRouteProps> = () => {
 	 * Hooks
 	 */
 	const { siteId, roleId } = useParams<{ siteId: string; roleId: string }>();
-	const { navigate } = useSiteNavigate();
+	const { navigate } = useNavigate(SITES_ROOT);
 	const [initialLoading, setInitialLoading] = useState(LoadingState.Loading);
-	const [formState, setFormState] = useState<any | null>(null);
+	const [initialFormState, setInitialFormState] = useState<RoleDetailFormState | null>(null);
+	const [formState, setFormState] = useState<RoleDetailFormState | null>(initialFormState);
 	const breadcrumbs = useRoutesBreadcrumbs();
 	const rolesLoadingStates = useRolesLoadingStates();
 	const [roleLoadingState, role] = useSiteRole();
+	const [allowedPaths, setAllowedPaths] = useState<string[]>([]);
+
+	const [hasChanges, resetDetectValueChanges] = useDetectValueChanges(
+		initialLoading !== LoadingState.Loading &&
+			rolesLoadingStates.isUpdatingSiteRole !== LoadingState.Loading,
+		formState ?? initialFormState
+	);
+
 	const [mySecurityRightsLoadingState, mySecurityRights] = useMySecurityRightsForSite({
 		onlyKeys: true,
 	});
 
 	useEffect(() => {
 		if (role) {
-			setFormState({
+			const state = {
 				name: role.attributes.displayName,
 				description: role.description,
 				admin: role.attributes.admin,
-			});
+			};
+			setInitialFormState(state);
 		}
 	}, [role]);
 
@@ -83,31 +107,51 @@ const RolesUpdate: FC<RolesRouteProps> = () => {
 				body: request,
 			});
 		}
+		resetDetectValueChanges();
 	};
 
 	const onDelete = (): void => {
 		if (siteId && roleId) {
-			rolesFacade.deleteSiteRole({ siteId, roleId }).then(navigateToOverview);
+			setAllowedPaths([`${TENANT_ROOT}/sites${MODULE_PATHS.roles.overview}`]);
+			rolesFacade
+				.deleteSiteRole({ siteId, roleId })
+				.then(navigateToOverview)
+				.finally(() => setAllowedPaths([]));
 		}
+	};
+
+	const onCancel = (resetForm: FormikProps<RoleDetailFormState>['resetForm']): void => {
+		resetForm();
 	};
 
 	/**
 	 * Render
 	 */
 	const renderRoleUpdate = (): ReactElement | null => {
-		if (!formState) {
+		if (!initialFormState) {
 			return null;
 		}
 
 		return (
 			<RoleDetailForm
-				initialState={formState}
+				initialState={initialFormState}
 				isLoading={rolesLoadingStates.isUpdatingSiteRole === LoadingState.Loading}
 				isDeleting={rolesLoadingStates.isDeletingSiteRole === LoadingState.Loading}
-				onCancel={navigateToOverview}
+				hasChanges={hasChanges}
+				onCancel={onCancel}
 				onSubmit={onSubmit}
-				onDelete={canDelete && !formState.admin && onDelete}
-			/>
+				onChange={setFormState}
+				onDelete={canDelete && !initialFormState?.admin && onDelete}
+			>
+				{({ submitForm }) => (
+					<LeavePrompt
+						allowedPaths={allowedPaths}
+						shouldBlockNavigationOnConfirm
+						when={hasChanges}
+						onConfirm={submitForm}
+					/>
+				)}
+			</RoleDetailForm>
 		);
 	};
 
@@ -117,6 +161,9 @@ const RolesUpdate: FC<RolesRouteProps> = () => {
 				<ContextHeaderTopSection>{breadcrumbs}</ContextHeaderTopSection>
 			</ContextHeader>
 			<Container>
+				<div className="u-margin-bottom">
+					<AlertContainer containerId={ALERT_CONTAINER_IDS.UPDATE_ROLE_ON_SITE} />
+				</div>
 				<DataLoader loadingState={initialLoading} render={renderRoleUpdate} />
 			</Container>
 		</>

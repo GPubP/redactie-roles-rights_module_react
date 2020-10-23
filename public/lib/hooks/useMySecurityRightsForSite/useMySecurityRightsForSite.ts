@@ -1,7 +1,7 @@
 import { useObservable } from '@mindspace-io/react';
+import { LoadingState } from '@redactie/utils';
 import { map } from 'rxjs/operators';
 
-import { LoadingState } from '../../roles.types';
 import { MySecurityRightModel, mySecurityRightsFacade } from '../../store/mySecurityRights';
 
 function useMySecurityRightsForSite(options: {

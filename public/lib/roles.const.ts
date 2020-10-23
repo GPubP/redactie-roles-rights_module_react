@@ -13,6 +13,8 @@ export const BREADCRUMB_OPTIONS = {
 		'/:tenantId/sites/:siteUuid/users/:userId',
 	],
 };
+export const SITES_ROOT = 'sites';
+export const TENANT_ROOT = '/:tenantId';
 export const urlSiteParam = 'siteId';
 
 const forbidden403 = '/403';
@@ -60,6 +62,13 @@ export const MODULE_PATHS = {
 	tenantUserDetailRolesUpdate,
 	tenantRolesRoot,
 	siteUserDetailRolesUpdate,
+};
+
+export const ALERT_CONTAINER_IDS = {
+	UPDATE_USER_ROLES_SITE_ON_TENANT: 'update-user-roles-site-on-tenant',
+	UPDATE_USER_ROLES_SITE_ON_SITE: 'update-user-roles-site-on-tenant',
+	UPDATE_USER_ROLES_TENANT: 'update-user-roles-tenant',
+	UPDATE_ROLE_ON_SITE: 'update-role-on-site',
 };
 
 export enum SecurityRightsSite {

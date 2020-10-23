@@ -1,6 +1,6 @@
 import { useObservable } from '@mindspace-io/react';
+import { LoadingState } from '@redactie/utils';
 
-import { LoadingState } from '../../roles.types';
 import { RoleModel } from '../../store/roles';
 import { usersFacade } from '../../store/users';
 

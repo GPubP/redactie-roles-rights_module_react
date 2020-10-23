@@ -1,4 +1,4 @@
-import { LoadingState } from '../../roles.types';
+import { LoadingState } from '@redactie/utils';
 
 export interface RolesLoadingStates {
 	isCreatingSiteRole: LoadingState | null;

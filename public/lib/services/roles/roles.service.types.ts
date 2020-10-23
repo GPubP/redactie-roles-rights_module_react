@@ -4,7 +4,7 @@ import { SearchParams } from '../api';
 export type GetRolesPayload = SearchParams;
 
 export interface RoleAttributes {
-	displayName?: string;
+	displayName: string;
 	level?: string;
 	admin?: boolean;
 	[key: string]: any;

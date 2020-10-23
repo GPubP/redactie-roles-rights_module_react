@@ -44,7 +44,12 @@ export class SecurityRightsMatrixFacade {
 
 		return this.service
 			.updateSecurityRightsForSite(siteId, payload)
-			.then(() => true)
+			.then(response => {
+				this.store.update({
+					data: response,
+				});
+				return true;
+			})
 			.catch(err => {
 				this.store.setError(err);
 				return false;

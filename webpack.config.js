@@ -19,7 +19,7 @@ module.exports = env => {
 				{
 					test: /\.ts(x)?$/,
 					use: 'ts-loader',
-					include: [/public/, /node_modules\/@redactie\/translations-module/],
+					include: [/public/],
 				},
 				{
 					test: /\.s[ac]ss$/i,
@@ -60,6 +60,7 @@ module.exports = env => {
 			'@datorama/akita': '@datorama/akita',
 			'react-dom': 'react-dom',
 			'react-router-dom': 'react-router-dom',
+			'@redactie/translations-module': '@redactie/translations-module',
 			'@redactie/react-router-guards': '@redactie/react-router-guards',
 			'@redactie/redactie-core': '@redactie/redactie-core',
 			'@redactie/utils': '@redactie/utils',
