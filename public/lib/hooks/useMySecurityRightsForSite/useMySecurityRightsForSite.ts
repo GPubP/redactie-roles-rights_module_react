@@ -5,24 +5,28 @@ import { map } from 'rxjs/operators';
 import { MySecurityRightModel, mySecurityRightsFacade } from '../../store/mySecurityRights';
 
 function useMySecurityRightsForSite(options: {
+	siteUuid: string;
 	module?: string;
 	onlyKeys: true;
 }): [LoadingState | null, string[]];
 function useMySecurityRightsForSite(options: {
+	siteUuid: string;
 	module?: string;
 	onlyKeys: false;
 }): [LoadingState | null, MySecurityRightModel[]];
 function useMySecurityRightsForSite(options: {
+	siteUuid: string;
 	module?: string;
 	onlyKeys: boolean;
 }): [LoadingState | null, MySecurityRightModel[] | string[]];
 function useMySecurityRightsForSite(options: {
+	siteUuid: string;
 	module?: string;
 	onlyKeys: boolean;
 }): [LoadingState | null, MySecurityRightModel[] | string[]] {
 	const [loading] = useObservable(mySecurityRightsFacade.isFetchingSiteRights$, null);
 	const [siteRights] = useObservable(
-		mySecurityRightsFacade.selectSiteRightsByModule(options.module).pipe(
+		mySecurityRightsFacade.selectSiteRightsByModule(options.siteUuid, options.module).pipe(
 			map(siteRights => {
 				if (options.onlyKeys) {
 					return siteRights.map(tenantRight => tenantRight.attributes.key);
@@ -30,7 +34,7 @@ function useMySecurityRightsForSite(options: {
 				return siteRights;
 			})
 		),
-		[]
+		[options.siteUuid]
 	);
 	const [error] = useObservable(mySecurityRightsFacade.error$, null);
 

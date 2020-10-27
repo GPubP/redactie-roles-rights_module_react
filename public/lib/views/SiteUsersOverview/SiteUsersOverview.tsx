@@ -35,6 +35,7 @@ const SiteUsersOverview: FC<RolesRouteProps<{ siteId: string }>> = ({ match }) =
 	const [initialLoading, setInitialLoading] = useState(LoadingState.Loading);
 	const [activeSorting, setActiveSorting] = useState<OrderBy>();
 	const [mySecurityRightsLoadingState, mySecurityRights] = useMySecurityRightsForSite({
+		siteUuid: siteId,
 		onlyKeys: true,
 	});
 	const [t] = useCoreTranslation();

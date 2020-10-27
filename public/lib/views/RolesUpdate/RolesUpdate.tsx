@@ -54,6 +54,7 @@ const RolesUpdate: FC<RolesRouteProps> = () => {
 	);
 
 	const [mySecurityRightsLoadingState, mySecurityRights] = useMySecurityRightsForSite({
+		siteUuid: siteId,
 		onlyKeys: true,
 	});
 

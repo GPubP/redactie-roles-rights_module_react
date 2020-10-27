@@ -1,7 +1,9 @@
 import { filterNil, Query } from '@datorama/akita';
 import { LoadingState } from '@redactie/utils';
 import { Observable } from 'rxjs';
-import { distinctUntilChanged, map } from 'rxjs/operators';
+import { distinctUntilChanged, filter, map } from 'rxjs/operators';
+
+import { SecurityRightResponse } from '../../services/securityRights/securityRights.service.types';
 
 import { MySecurityRightModel, MySecurityRightsState } from './mySecurityRights.model';
 import { MySecurityRightsStore, mySecurityRightsStore } from './mySecurityRights.store';
@@ -26,11 +28,15 @@ export class MySecurityRightsQuery extends Query<MySecurityRightsState> {
 		filterNil,
 		distinctUntilChanged()
 	);
-	public siteRights$ = this.data$.pipe(
-		map(data => data.siteRights),
-		filterNil,
-		distinctUntilChanged()
-	);
+	public siteRights$ = (siteUuid: string): Observable<SecurityRightResponse[]> =>
+		this.select(state => ({
+			siteRights: state.data.siteRights,
+		})).pipe(
+			filter(() => this.store.siteRightsCache.siteUuid === siteUuid),
+			map(data => data.siteRights),
+			filterNil,
+			distinctUntilChanged()
+		);
 
 	// State
 	public error$ = this.selectError().pipe(filterNil, distinctUntilChanged());
@@ -63,8 +69,11 @@ export class MySecurityRightsQuery extends Query<MySecurityRightsState> {
 		return this.store.siteRightsCache.siteUuid;
 	}
 
-	public selectSiteRightsByModule(module: string): Observable<MySecurityRightModel[]> {
-		return this.siteRights$.pipe(
+	public selectSiteRightsByModule(
+		siteUuid: string,
+		module: string
+	): Observable<MySecurityRightModel[]> {
+		return this.siteRights$(siteUuid).pipe(
 			map(siteRights =>
 				siteRights.filter(siteRight => siteRight.attributes.module === module)
 			)

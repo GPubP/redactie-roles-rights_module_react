@@ -14,7 +14,10 @@ const securityRightsSiteCanShown: SecurityRightsSiteCanShownFunction = (
 
 	try {
 		await mySecurityRightsFacade.getMySiteSecurityRights(siteUuid);
-		const result = await mySecurityRightsQuery.siteRights$.pipe(take(1)).toPromise();
+		const result = await mySecurityRightsQuery
+			.siteRights$(siteUuid)
+			.pipe(take(1))
+			.toPromise();
 		const mySecurityRights = result.map(right => right.attributes.key);
 
 		if (requiredSecurityRights.length === 0) {
