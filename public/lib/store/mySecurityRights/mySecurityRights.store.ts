@@ -26,10 +26,8 @@ export class MySecurityRightsStore extends Store<MySecurityRightsState> {
 	}
 
 	public setSiteRightsCache(hasCache: boolean, siteUuid?: string): void {
-		if (hasCache !== this.siteRightsCache.active.value) {
-			this.siteRightsCache.active.next(hasCache);
-			this.siteRightsCache.siteUuid = siteUuid;
-		}
+		this.siteRightsCache.active.next(hasCache);
+		this.siteRightsCache.siteUuid = siteUuid;
 	}
 
 	public setIsFetchingTenantRights(isFetching = false): void {
@@ -54,9 +52,10 @@ export class MySecurityRightsStore extends Store<MySecurityRightsState> {
 		}));
 	}
 
-	public setSiteRights(siteRights: MySecurityRightModel[]): void {
+	public setSiteRights(siteUuid: string, siteRights: MySecurityRightModel[]): void {
 		this.update(state => ({
 			...state,
+			siteUuid,
 			data: {
 				...state.data,
 				siteRights,

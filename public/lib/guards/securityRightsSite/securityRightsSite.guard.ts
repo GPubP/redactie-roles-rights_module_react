@@ -17,20 +17,25 @@ const securityRightsSiteGuard: SecurityRightsSiteGuardFunction = (
 
 	try {
 		await mySecurityRightsFacade.getMySiteSecurityRights(siteUuid);
-		mySecurityRightsQuery.siteRights$.pipe(take(1)).subscribe(result => {
-			const mySecurityRights = result.map(right => right.attributes.key);
+		mySecurityRightsQuery
+			.siteRights$(siteUuid)
+			.pipe(take(1))
+			.subscribe(result => {
+				const mySecurityRights = result.map(right => right.attributes.key);
 
-			if (requiredSecurityRights.length === 0) {
-				// no thing to check here
-				next();
-			}
+				if (requiredSecurityRights.length === 0) {
+					// Nothing to check here
+					return next();
+				}
 
-			if (checkSecurityRights(mySecurityRights, requiredSecurityRights, oneSecurityRight)) {
-				next();
-			} else {
+				if (
+					checkSecurityRights(mySecurityRights, requiredSecurityRights, oneSecurityRight)
+				) {
+					return next();
+				}
+
 				next.redirect(generatePath(`/${tenantId}${MODULE_PATHS.forbidden403}`));
-			}
-		});
+			});
 	} catch {
 		throw new Error(`Site ${siteUuid} does not exist`);
 	}

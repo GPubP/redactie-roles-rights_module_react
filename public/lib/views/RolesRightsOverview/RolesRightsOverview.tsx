@@ -39,6 +39,7 @@ const RolesRightsOverview: FC<RolesRouteProps<{ siteId: string }>> = ({ match })
 		securityRightMatrix || {};
 	const [matrixTitle, setMatrixTitle] = useState<string>('');
 	const [mySecurityRightsLoadingState, mySecurityRights] = useMySecurityRightsForSite({
+		siteUuid: siteId,
 		onlyKeys: true,
 	});
 	const [hasChanges, resetDetectValueChanges] = useDetectValueChanges(

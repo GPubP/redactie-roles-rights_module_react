@@ -21,11 +21,14 @@ export class MySecurityRightsFacade {
 	public readonly isFetchingTenantRights$ = this.query.isFetchingTenantRights$;
 	public readonly isFetchingSiteRights$ = this.query.isFetchingSiteRights$;
 
-	public selectSiteRightsByModule(module?: string): Observable<MySecurityRightModel[]> {
+	public selectSiteRightsByModule(
+		siteUuid: string,
+		module?: string
+	): Observable<MySecurityRightModel[]> {
 		if (!module) {
-			return this.siteRights$;
+			return this.siteRights$(siteUuid);
 		}
-		return this.query.selectSiteRightsByModule(module);
+		return this.query.selectSiteRightsByModule(siteUuid, module);
 	}
 
 	public getMyTenantSecurityRights(clearCache = false): Promise<void> {
@@ -76,6 +79,7 @@ export class MySecurityRightsFacade {
 		// Therefore we are using a simple caching system
 		if (!alreadyInCache || !this.query.getSiteRightsHasCache()) {
 			this.store.setIsFetchingSiteRights(true);
+
 			return this.service
 				.getUserSecurityRightsForSite({
 					userUuid: 'me',
@@ -84,7 +88,7 @@ export class MySecurityRightsFacade {
 				.then(response => {
 					this.store.setSiteRightsCache(true, siteUuid);
 					this.store.setHasCache(true);
-					this.store.setSiteRights(response._embedded);
+					this.store.setSiteRights(siteUuid, response._embedded);
 				})
 				.catch(err => {
 					this.store.setError(err);

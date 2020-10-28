@@ -35,6 +35,7 @@ const RolesOverview: FC<RolesRouteProps<{ siteId: string }>> = () => {
 	const [rolesSearchParams, setRolesSearchParams] = useState(DEFAULT_ROLES_SEARCH_PARAMS);
 	const [activeSorting, setActiveSorting] = useState<OrderBy>();
 	const [mySecurityRightsLoadingState, mySecurityRights] = useMySecurityRightsForSite({
+		siteUuid: siteId,
 		onlyKeys: true,
 	});
 	const [rolesLoadingState, roles] = useSiteRoles();
