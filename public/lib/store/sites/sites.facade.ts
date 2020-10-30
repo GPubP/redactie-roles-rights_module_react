@@ -8,7 +8,6 @@ import {
 } from '../../services/sites';
 import { UsersApiService, usersApiService } from '../../services/users';
 
-import { SiteModel } from './sites.model';
 import { SitesQuery, sitesQuery } from './sites.query';
 import { SitesStore, sitesStore } from './sites.store';
 
@@ -25,57 +24,50 @@ export class SitesFacade extends BaseEntityFacade<SitesStore, SitesApiService, S
 	public readonly sites$ = this.query.sites$;
 	public readonly site$ = this.query.site$;
 
-	public getSites(payload: GetSitesPayload): void {
+	public async getSites(payload: GetSitesPayload): Promise<void> {
 		this.store.setIsFetching(true);
-		this.service
-			.getSites()
-			.then(sitesResponse => {
-				const sites = sitesResponse._embedded;
 
-				const populatedSites = sites.map(
-					(site): Promise<SiteModel> =>
-						new Promise(resolve => {
-							this.userService
-								.getUserRolesForSite({ userUuid: payload.id, siteUuid: site.uuid })
-								.then(rolesResponse => {
-									return resolve({
-										...site,
-										roles: rolesResponse._embedded,
-										hasAccess: true,
-									});
-								})
-								.catch(() => {
-									// don't crash when the server response
-									return resolve({
-										...site,
-										roles: [],
-										hasAccess: false,
-									});
-								});
-						})
+		try {
+			const sitesResponse = await this.service.getSites();
+			const sites = sitesResponse._embedded;
+			const siteRolesMap = await this.userService.searchUserRolesForSite({
+				userUuid: payload.id,
+				siteUuids: sites.map(site => site.uuid),
+			});
+			const result = sites.map(site => {
+				const siteMap = siteRolesMap._embedded.find(
+					siteRoleMap => siteRoleMap.team.attributes.site === site.uuid
 				);
 
-				Promise.all(populatedSites)
-					.then(result => {
-						const meta = sitesResponse._page;
+				if (!siteMap) {
+					return {
+						...site,
+						roles: [],
+						hasAccess: false,
+					};
+				}
 
-						this.store.set(result);
-
-						this.store.update({
-							meta,
-						});
-
-						this.store.setIsFetching(false);
-					})
-					.catch(err => {
-						this.store.setIsFetching(false);
-						this.store.setError(err);
-					});
-			})
-			.catch(err => {
-				this.store.setIsFetching(false);
-				this.store.setError(err);
+				return {
+					...site,
+					roles: siteMap.roles,
+					hasAccess: true,
+				};
 			});
+
+			const meta = sitesResponse._page;
+
+			this.store.set(result);
+
+			this.store.update({
+				meta,
+			});
+
+			this.store.setIsFetching(false);
+		} catch (error) {
+			console.log(error);
+			this.store.setIsFetching(false);
+			this.store.setError(error);
+		}
 	}
 
 	public getSite(payload: GetSitePayload): void {

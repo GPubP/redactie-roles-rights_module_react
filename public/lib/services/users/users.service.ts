@@ -1,5 +1,5 @@
 import api, { parseSearchParams } from '../api/api.service';
-import { RolesResponse } from '../roles';
+import { RoleMapsResponses, RolesResponse } from '../roles';
 
 import { DEFAULT_USERS_SEARCH_PARAMS } from './users.service.const';
 import {
@@ -10,6 +10,7 @@ import {
 	GetUserSecurityRightsForSitePayload,
 	GetUserSecurityRightsForTenantPayload,
 	GetUsersPayload,
+	SearchUserRolesForSitePayload,
 	UpdateUserRolesForSitePayload,
 	UpdateUserRolesForTenantPayload,
 	UserResponse,
@@ -66,6 +67,20 @@ export class UsersApiService {
 		siteUuid,
 	}: GetUserRolesForSitePayload): Promise<RolesResponse> {
 		return await api.get(`sites/${siteUuid}/users/${userUuid}/roles`).json();
+	}
+
+	public async searchUserRolesForSite({
+		userUuid,
+		siteUuids,
+	}: SearchUserRolesForSitePayload): Promise<RoleMapsResponses> {
+		return await api
+			.post(`users/${userUuid}/roles/search`, {
+				json: {
+					level: 'site',
+					levelIds: siteUuids,
+				},
+			})
+			.json();
 	}
 
 	public async updateUserRolesForSite({
