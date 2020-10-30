@@ -25,6 +25,18 @@ export interface RoleResponse {
 
 export type RolesResponse = EmbeddedResponse<RoleResponse>;
 
+export interface RoleMapResponse {
+	team: {
+		id: string;
+		attributes: {
+			site: string;
+		};
+	};
+	roles: RoleResponse[];
+}
+
+export type RoleMapsResponses = EmbeddedResponse<RoleMapResponse>;
+
 export interface RolePayloadBody {
 	name: string;
 	description: string;

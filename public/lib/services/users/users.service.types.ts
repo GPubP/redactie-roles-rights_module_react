@@ -35,6 +35,10 @@ export interface GetUserRolesForSitePayload extends UsersBasePayload {
 	siteUuid: string;
 }
 
+export interface SearchUserRolesForSitePayload extends UsersBasePayload {
+	siteUuids: string[];
+}
+
 export interface UpdateUserRolesForSitePayload extends UsersBasePayload {
 	siteUuid: string;
 	roles: Array<string>;
