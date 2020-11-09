@@ -6,7 +6,6 @@ import {
 } from '@acpaas-ui/react-editorial-components';
 import { DataLoader, LoadingState, useNavigate } from '@redactie/utils';
 import React, { FC, ReactElement, useEffect, useState } from 'react';
-import { generatePath } from 'react-router-dom';
 
 import { FilterForm, FilterFormState } from '../../components';
 import { useCoreTranslation } from '../../connectors/translations';
@@ -28,7 +27,7 @@ const UsersOverview: FC<RolesRouteProps> = () => {
 	const [filterFormState, setFilterFormState] = useState<FilterFormState>(
 		CONTENT_INITIAL_FILTER_STATE
 	);
-	const { navigate } = useNavigate();
+	const { navigate, generatePath } = useNavigate();
 	const breadcrumbs = useRoutesBreadcrumbs([
 		{
 			name: 'Home',
