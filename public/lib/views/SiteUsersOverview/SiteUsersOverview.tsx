@@ -29,7 +29,16 @@ const SiteUsersOverview: FC<RolesRouteProps<{ siteId: string }>> = ({ match }) =
 		CONTENT_INITIAL_FILTER_STATE
 	);
 	const { navigate } = useNavigate(SITES_ROOT);
-	const breadcrumbs = useRoutesBreadcrumbs();
+	const breadcrumbs = useRoutesBreadcrumbs([
+		{
+			name: 'Gebruikers',
+			target: '',
+		},
+		{
+			name: 'Gebruikers',
+			target: '',
+		},
+	]);
 	const [usersSearchParams, setUsersSearchParams] = useState(DEFAULT_USERS_SEARCH_PARAMS);
 	const [loadingState, users, usersMeta] = useUsers();
 	const [initialLoading, setInitialLoading] = useState(LoadingState.Loading);

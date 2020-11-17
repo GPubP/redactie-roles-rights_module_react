@@ -27,8 +27,13 @@ const UsersOverview: FC<RolesRouteProps> = () => {
 	const [filterFormState, setFilterFormState] = useState<FilterFormState>(
 		CONTENT_INITIAL_FILTER_STATE
 	);
-	const { navigate } = useNavigate();
-	const breadcrumbs = useRoutesBreadcrumbs();
+	const { navigate, generatePath } = useNavigate();
+	const breadcrumbs = useRoutesBreadcrumbs([
+		{
+			name: 'Home',
+			target: generatePath(MODULE_PATHS.dashboard),
+		},
+	]);
 	const [usersSearchParams, setUsersSearchParams] = useState(DEFAULT_USERS_SEARCH_PARAMS);
 	const [loadingState, users, usersMeta] = useUsers();
 	const [initialLoading, setInitialLoading] = useState(LoadingState.Loading);
