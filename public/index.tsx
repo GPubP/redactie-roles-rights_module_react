@@ -73,6 +73,7 @@ registerRoutes({
 		renderContext: 'site',
 		context: 'site',
 		label: 'Gebruikers',
+		order: 3,
 		canShown: [
 			securityRightsSiteCanShown(
 				urlSiteParam,
@@ -106,6 +107,7 @@ registerRoutes({
 			navigation: {
 				context: 'site',
 				label: 'Rollen en rechten',
+				order: 0,
 				parentPath: MODULE_PATHS.siteRoot,
 				canShown: [
 					securityRightsSiteCanShown(urlSiteParam, [
@@ -122,6 +124,7 @@ registerRoutes({
 			},
 			navigation: {
 				context: 'site',
+				order: 1,
 				label: 'Rollen',
 				parentPath: MODULE_PATHS.siteRoot,
 				canShown: [
@@ -152,6 +155,7 @@ registerRoutes({
 			navigation: {
 				context: 'site',
 				label: 'Gebruikers',
+				order: 2,
 				parentPath: MODULE_PATHS.siteRoot,
 				canShown: [
 					securityRightsSiteCanShown(urlSiteParam, [SecurityRightsSite.UsersRead]),
@@ -170,6 +174,7 @@ Core.routes.register({
 	},
 	navigation: {
 		label: 'Gebruikers',
+		order: 2,
 		canShown: [securityRightsTenantCanShown([SecurityRightsTenant.UsersRead])],
 	},
 	exact: true,
