@@ -26,7 +26,6 @@ import { mapUserRoles } from '../../helpers';
 import {
 	useMySecurityRightsForTenant,
 	useRoutesBreadcrumbs,
-	useSites,
 	useTenantRoles,
 	useUser,
 	useUserRolesForTenant,
@@ -35,7 +34,6 @@ import {
 import { ALERT_CONTAINER_IDS, MODULE_PATHS } from '../../roles.const';
 import { RolesRouteProps } from '../../roles.types';
 import { rolesFacade } from '../../store/roles';
-import { sitesFacade } from '../../store/sites';
 import { usersFacade } from '../../store/users';
 
 import { USER_UPDATE_ALLOWED_PATHS, USER_UPDATE_NAV_LIST_ITEMS } from './UserUpdate.const';
@@ -58,7 +56,6 @@ const UserUpdate: FC<RolesRouteProps<{ userUuid?: string }>> = ({ route, tenantI
 	const [userRolesLoadingState, userRoles] = useUserRolesForTenant(userUuid);
 	const [selectedRoles, setSelectedRoles] = useState<string[] | null>(null);
 	const [rolesLoadingState, roles] = useTenantRoles();
-	const [sitesLoadingState, sites] = useSites();
 	const [mySecurityRightsLoadingState, mySecurityRights] = useMySecurityRightsForTenant(true);
 	const [t] = useCoreTranslation();
 	const [userRolesHasChanges, resetDetectValueChanges] = useDetectValueChanges(
@@ -77,7 +74,6 @@ const UserUpdate: FC<RolesRouteProps<{ userUuid?: string }>> = ({ route, tenantI
 			usersFacade.getUser({ userUuid });
 			usersFacade.getUserRolesForTenant({ userUuid });
 			rolesFacade.getTenantRoles();
-			sitesFacade.getSites({ id: userUuid });
 			return;
 		}
 	}, [userUuid]);
@@ -87,7 +83,6 @@ const UserUpdate: FC<RolesRouteProps<{ userUuid?: string }>> = ({ route, tenantI
 			userLoadingState !== LoadingState.Loading &&
 			userRolesLoadingState !== LoadingState.Loading &&
 			rolesLoadingState !== LoadingState.Loading &&
-			sitesLoadingState !== LoadingState.Loading &&
 			mySecurityRightsLoadingState !== LoadingState.Loading
 		) {
 			return setInitialLoading(LoadingState.Loaded);
@@ -96,8 +91,6 @@ const UserUpdate: FC<RolesRouteProps<{ userUuid?: string }>> = ({ route, tenantI
 		setInitialLoading(LoadingState.Loading);
 	}, [
 		rolesLoadingState,
-		sites,
-		sitesLoadingState,
 		userLoadingState,
 		userRolesLoadingState,
 		mySecurityRightsLoadingState,
@@ -135,7 +128,6 @@ const UserUpdate: FC<RolesRouteProps<{ userUuid?: string }>> = ({ route, tenantI
 			user,
 			userRoles,
 			roles,
-			sites,
 			mySecurityRights,
 			formikRef: (instance: any) => {
 				if (!equals(activeCompartmentFormikRef.current, instance)) {

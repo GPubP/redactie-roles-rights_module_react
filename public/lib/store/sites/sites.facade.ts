@@ -1,3 +1,5 @@
+import { PaginationResponse, PaginatorPlugin } from '@datorama/akita';
+import { from, Observable } from 'rxjs';
 import { BaseEntityFacade } from '@redactie/utils';
 
 import {
@@ -5,18 +7,22 @@ import {
 	GetSitesPayload,
 	sitesApiService,
 	SitesApiService,
+	SitesData,
 } from '../../services/sites';
 import { UsersApiService, usersApiService } from '../../services/users';
+import { SiteModel, SitesState } from './sites.model';
 
 import { SitesQuery, sitesQuery } from './sites.query';
 import { SitesStore, sitesStore } from './sites.store';
+import { sitesPaginator } from './sites.paginator';
 
 export class SitesFacade extends BaseEntityFacade<SitesStore, SitesApiService, SitesQuery> {
 	constructor(
 		protected store: SitesStore,
 		protected service: SitesApiService,
+		protected query: SitesQuery,
 		private userService: UsersApiService,
-		protected query: SitesQuery
+		private paginator: PaginatorPlugin<SitesState>
 	) {
 		super(store, service, query);
 	}
@@ -24,50 +30,70 @@ export class SitesFacade extends BaseEntityFacade<SitesStore, SitesApiService, S
 	public readonly sites$ = this.query.sites$;
 	public readonly site$ = this.query.site$;
 
-	public async getSites(payload: GetSitesPayload): Promise<void> {
+	public getSitesPaginated(
+		payload: GetSitesPayload,
+		clearCache = false
+	): Observable<PaginationResponse<SiteModel>> {
+		if (clearCache) {
+			this.paginator.clearCache();
+		}
+
 		this.store.setIsFetching(true);
 
-		try {
-			const sitesResponse = await this.service.getSites();
-			const sites = sitesResponse._embedded;
-			const siteRolesMap = await this.userService.searchUserRolesForSite({
-				userUuid: payload.id,
-				siteUuids: sites.map(site => site.uuid),
-			});
-			const result = sites.map(site => {
-				const siteMap = siteRolesMap._embedded.find(
-					siteRoleMap => siteRoleMap.team.attributes.site === site.uuid
-				);
+		return from(
+			this.service
+				.getSites(payload)
+				.then(async (response: SitesData | null) => {
+					if (!response) {
+						return;
+					}
 
-				if (!siteMap) {
+					const siteRolesMap = await this.userService.searchUserRolesForSite({
+						userUuid: payload.userUuid,
+						siteUuids: response.data.map(site => site.uuid),
+					});
+
+					const result = response.data.map(site => {
+						const siteMap = siteRolesMap._embedded.find(
+							siteRoleMap => siteRoleMap.team.attributes.site === site.uuid
+						);
+
+						if (!siteMap) {
+							return {
+								...site,
+								roles: [],
+								hasAccess: false,
+							};
+						}
+
+						return {
+							...site,
+							roles: siteMap.roles,
+							hasAccess: true,
+						};
+					});
+
+					this.store.update({
+						meta: response.meta,
+						isFetching: false,
+					});
+
 					return {
-						...site,
-						roles: [],
-						hasAccess: false,
+						perPage: parseInt(response.meta.size, 10),
+						currentPage: parseInt(response.meta.number, 10),
+						lastPage: response.meta.totalPages,
+						total: response.meta.totalElements,
+						data: result,
 					};
-				}
-
-				return {
-					...site,
-					roles: siteMap.roles,
-					hasAccess: true,
-				};
-			});
-
-			const meta = sitesResponse._page;
-
-			this.store.set(result);
-
-			this.store.update({
-				meta,
-			});
-
-			this.store.setIsFetching(false);
-		} catch (error) {
-			console.log(error);
-			this.store.setIsFetching(false);
-			this.store.setError(error);
-		}
+				})
+				.catch(error => {
+					this.store.update({
+						error,
+						isFetching: false,
+					});
+					return error;
+				})
+		);
 	}
 
 	public getSite(payload: GetSitePayload): void {
@@ -89,6 +115,7 @@ export class SitesFacade extends BaseEntityFacade<SitesStore, SitesApiService, S
 export const sitesFacade = new SitesFacade(
 	sitesStore,
 	sitesApiService,
+	sitesQuery,
 	usersApiService,
-	sitesQuery
+	sitesPaginator,
 );

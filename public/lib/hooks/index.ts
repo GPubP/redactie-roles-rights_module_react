@@ -13,3 +13,5 @@ export { default as useUsersLoadingStates } from './useUsersLoadingStates/useUse
 export { default as useMySecurityRightsForTenant } from './useMySecurityRightsForTenant/useMySecurityRightsForTenant';
 export { default as useMySecurityRightsForSite } from './useMySecurityRightsForSite/useMySecurityRightsForSite';
 export { default as useRolesLoadingStates } from './useRolesLoadingStates/useRolesLoadingStates';
+export { default as useSitesPagination } from './useSitesPagination/useSitesPagination';
+export { default as useSitesLoadingStates } from './useSitesLoadingStates/useSitesLoadingStates';
