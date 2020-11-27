@@ -6,7 +6,7 @@ import React, { FC, useMemo } from 'react';
 
 import { registerRolesAPI } from './lib/api';
 import { securityRightsSiteCanShown, securityRightsTenantCanShown } from './lib/canShowns';
-import { registerRoutes } from './lib/connectors/sites';
+import { sitesConnector } from './lib/connectors';
 import { securityRightsSiteGuard, securityRightsTenantGuard } from './lib/guards';
 import {
 	MODULE_PATHS,
@@ -65,7 +65,7 @@ const RolesRootComponent: FC<RolesModuleProps<{ siteId: string }>> = ({
 	);
 };
 
-registerRoutes({
+sitesConnector.registerRoutes({
 	path: MODULE_PATHS.siteRoot,
 	component: RolesRootComponent,
 	redirect: MODULE_PATHS.users.overview,

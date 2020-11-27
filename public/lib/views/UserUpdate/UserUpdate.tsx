@@ -89,12 +89,7 @@ const UserUpdate: FC<RolesRouteProps<{ userUuid?: string }>> = ({ route, tenantI
 		}
 
 		setInitialLoading(LoadingState.Loading);
-	}, [
-		rolesLoadingState,
-		userLoadingState,
-		userRolesLoadingState,
-		mySecurityRightsLoadingState,
-	]);
+	}, [rolesLoadingState, userLoadingState, userRolesLoadingState, mySecurityRightsLoadingState]);
 
 	/**
 	 * Functions

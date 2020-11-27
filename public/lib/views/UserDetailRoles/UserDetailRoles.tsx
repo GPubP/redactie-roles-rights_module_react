@@ -4,9 +4,9 @@ import { DataLoader, LoadingState, useAPIQueryParams, useNavigate } from '@redac
 import React, { FC, useEffect, useMemo, useState } from 'react';
 
 import { FormViewUserRoles } from '../../components';
-import { useCoreTranslation } from '../../connectors/translations';
+import { sitesConnector, useCoreTranslation } from '../../connectors';
 import { mapUserRoles } from '../../helpers';
-import { useUsersLoadingStates, useSitesPagination, useSitesLoadingStates } from '../../hooks';
+import { useSitesPagination, useUsersLoadingStates } from '../../hooks';
 import { MODULE_PATHS } from '../../roles.const';
 import { SearchParams } from '../../services/api';
 import { usersFacade } from '../../store/users';
@@ -22,30 +22,20 @@ const UserDetailRoles: FC<UserDetailRolesProps> = ({
 	formikRef = () => null,
 	onChange,
 }) => {
-	const [initialLoading, setInitialLoading] = useState(LoadingState.Loading);
 	const [t] = useCoreTranslation();
 	const { isAddingUserToSite } = useUsersLoadingStates();
 	const [giveAccesSiteId, setGiveAccessSiteId] = useState<string | null>(null);
 	const { navigate } = useNavigate();
 	const [query, setQuery] = useAPIQueryParams();
-	const sitesPagination = useSitesPagination(query as SearchParams, user.id);
-	const sitesLoadingStates = useSitesLoadingStates();
+	const [sitesPagination, isFetchingUserRolesForSite] = useSitesPagination(
+		query as SearchParams,
+		user.id
+	);
+	const sitesLoadingStates = sitesConnector.hooks.useSitesLoadingStates();
 
 	/**
 	 * Hooks
 	 */
-	useEffect(() => {
-		if (initialLoading === LoadingState.Loaded) {
-			return;
-		}
-
-		if ((sitesLoadingStates.isFetching === LoadingState.Loaded ||
-			sitesLoadingStates.isFetching === LoadingState.Error)) {
-			return setInitialLoading(LoadingState.Loaded);
-		}
-
-		setInitialLoading(LoadingState.Loading);
-	}, [sitesLoadingStates.isFetching]);
 
 	/**
 	 * Methods
@@ -71,11 +61,7 @@ const UserDetailRoles: FC<UserDetailRolesProps> = ({
 	};
 
 	const SitesTable = (): React.ReactElement | null => {
-		if (!sitesPagination) {
-			return null;
-		}
-
-		const siteRows: SiteRow[] = sitesPagination.data.map(site => ({
+		const siteRows: SiteRow[] | undefined = sitesPagination?.data.map(site => ({
 			name: site.data.name,
 			roles: site.roles,
 			siteUuid: site.uuid,
@@ -101,10 +87,13 @@ const UserDetailRoles: FC<UserDetailRolesProps> = ({
 				currentPage={sitesPagination?.currentPage}
 				itemsPerPage={query.pagesize}
 				onPageChange={handlePageChange}
-				noDataMessage="Er zijn geen resultaten voor de ingestelde filters"
+				noDataMessage="Er zijn geen resultaten"
 				loadDataMessage="Sites ophalen"
 				totalValues={sitesPagination?.total}
-				loading={sitesLoadingStates.isFetching === LoadingState.Loading}
+				loading={
+					sitesLoadingStates.isFetching === LoadingState.Loading ||
+					isFetchingUserRolesForSite
+				}
 			></PaginatedTable>
 		);
 	};
@@ -128,7 +117,7 @@ const UserDetailRoles: FC<UserDetailRolesProps> = ({
 					formikRef={formikRef}
 				/>
 				<h5 className="u-margin-bottom u-margin-top">Rol(len) per site</h5>
-				<DataLoader loadingState={initialLoading} render={SitesTable} />
+				{SitesTable()}
 			</div>
 		</Card>
 	);
