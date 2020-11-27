@@ -6,4 +6,6 @@ export interface SearchParams {
 	direction?: number;
 	module?: string;
 	'content-type'?: string;
+	page?: number;
+	pagesize?: number;
 }

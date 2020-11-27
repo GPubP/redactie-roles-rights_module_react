@@ -43,10 +43,10 @@ export enum ContentType {
 }
 
 export interface Page {
-	size: number;
+	size: string;
 	totalElements: number;
 	totalPages: number;
-	number: number;
+	number: string;
 }
 
 export interface Links {

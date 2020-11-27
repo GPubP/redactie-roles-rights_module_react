@@ -15,10 +15,10 @@ import React, { FC, ReactElement, useEffect, useMemo, useState } from 'react';
 import { generatePath, useParams } from 'react-router-dom';
 
 import { DefaultFormActions, FormViewUserRoles, UserRolesFormState } from '../../components';
+import { sitesConnector } from '../../connectors';
 import { mapUserRoles } from '../../helpers';
 import {
 	useRoutesBreadcrumbs,
-	useSite,
 	useSiteRoles,
 	useUser,
 	useUserRolesForSite,
@@ -27,7 +27,6 @@ import {
 import { ALERT_CONTAINER_IDS, MODULE_PATHS } from '../../roles.const';
 import { RolesRouteProps } from '../../roles.types';
 import { rolesFacade } from '../../store/roles';
-import { sitesFacade } from '../../store/sites';
 import { usersFacade } from '../../store/users';
 
 const SiteUserDetailRolesUpdate: FC<RolesRouteProps> = ({ tenantId }) => {
@@ -39,7 +38,7 @@ const SiteUserDetailRolesUpdate: FC<RolesRouteProps> = ({ tenantId }) => {
 	const { isUpdating } = useUsersLoadingStates();
 	const [userLoadingState, user] = useUser(userUuid);
 	const [rolesLoadingState, roles] = useSiteRoles();
-	const [siteLoadingState, site] = useSite();
+	const [siteLoadingState, site] = sitesConnector.hooks.useSite(siteId);
 	const extraBreadcrumbs = useMemo(() => {
 		return [
 			{
@@ -68,7 +67,6 @@ const SiteUserDetailRolesUpdate: FC<RolesRouteProps> = ({ tenantId }) => {
 			});
 			usersFacade.getUser({ userUuid });
 			rolesFacade.getSiteRoles(siteId);
-			sitesFacade.getSite({ id: siteId });
 		}
 	}, [siteId, userUuid]);
 

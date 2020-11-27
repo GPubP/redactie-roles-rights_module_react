@@ -16,10 +16,10 @@ import React, { FC, ReactElement, useEffect, useMemo, useState } from 'react';
 import { useParams } from 'react-router-dom';
 
 import { DefaultFormActions, FormViewUserRoles, UserRolesFormState } from '../../components';
+import { sitesConnector } from '../../connectors';
 import { mapUserRoles } from '../../helpers';
 import {
 	useRoutesBreadcrumbs,
-	useSite,
 	useSiteRoles,
 	useUser,
 	useUserRolesForSite,
@@ -28,7 +28,6 @@ import {
 import { ALERT_CONTAINER_IDS, MODULE_PATHS } from '../../roles.const';
 import { RolesRouteProps } from '../../roles.types';
 import { rolesFacade } from '../../store/roles';
-import { sitesFacade } from '../../store/sites';
 import { usersFacade } from '../../store/users';
 
 const UserDetailRolesUpdate: FC<RolesRouteProps<{ userUuid: string; siteUuid: string }>> = () => {
@@ -58,7 +57,7 @@ const UserDetailRolesUpdate: FC<RolesRouteProps<{ userUuid: string; siteUuid: st
 	const breadcrumbs = useRoutesBreadcrumbs(extraBreadcrumbs);
 	const { isUpdating } = useUsersLoadingStates();
 	const [rolesLoadingState, roles] = useSiteRoles();
-	const [siteLoadingState, site] = useSite();
+	const [siteLoadingState, site] = sitesConnector.hooks.useSite(siteUuid);
 	const [userRolesLoadingState, userRoles] = useUserRolesForSite();
 
 	const [initialFormState, setInitialFormState] = useState<UserRolesFormState | null>(null);
@@ -77,7 +76,6 @@ const UserDetailRolesUpdate: FC<RolesRouteProps<{ userUuid: string; siteUuid: st
 			});
 			usersFacade.getUser({ userUuid });
 			rolesFacade.getSiteRoles(siteUuid);
-			sitesFacade.getSite({ id: siteUuid });
 		}
 	}, [userUuid, siteUuid]);
 

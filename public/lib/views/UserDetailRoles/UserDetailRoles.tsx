@@ -1,13 +1,14 @@
 import { Card } from '@acpaas-ui/react-components';
-import { Table } from '@acpaas-ui/react-editorial-components';
-import { useNavigate } from '@redactie/utils';
-import React, { FC, useMemo, useState } from 'react';
+import { PaginatedTable } from '@acpaas-ui/react-editorial-components';
+import { DataLoader, LoadingState, useAPIQueryParams, useNavigate } from '@redactie/utils';
+import React, { FC, useEffect, useMemo, useState } from 'react';
 
 import { FormViewUserRoles } from '../../components';
-import { useCoreTranslation } from '../../connectors/translations';
+import { sitesConnector, useCoreTranslation } from '../../connectors';
 import { mapUserRoles } from '../../helpers';
-import { useUsersLoadingStates } from '../../hooks';
+import { useSitesPagination, useUsersLoadingStates } from '../../hooks';
 import { MODULE_PATHS } from '../../roles.const';
+import { SearchParams } from '../../services/api';
 import { usersFacade } from '../../store/users';
 
 import { SITE_COLUMNS } from './UserDetailRoles.const';
@@ -17,7 +18,6 @@ const UserDetailRoles: FC<UserDetailRolesProps> = ({
 	user,
 	userRoles,
 	roles,
-	sites,
 	mySecurityRights,
 	formikRef = () => null,
 	onChange,
@@ -26,6 +26,16 @@ const UserDetailRoles: FC<UserDetailRolesProps> = ({
 	const { isAddingUserToSite } = useUsersLoadingStates();
 	const [giveAccesSiteId, setGiveAccessSiteId] = useState<string | null>(null);
 	const { navigate } = useNavigate();
+	const [query, setQuery] = useAPIQueryParams();
+	const [sitesPagination, isFetchingUserRolesForSite] = useSitesPagination(
+		query as SearchParams,
+		user.id
+	);
+	const sitesLoadingStates = sitesConnector.hooks.useSitesLoadingStates();
+
+	/**
+	 * Hooks
+	 */
 
 	/**
 	 * Methods
@@ -44,23 +54,49 @@ const UserDetailRoles: FC<UserDetailRolesProps> = ({
 		});
 	};
 
-	const siteRows: SiteRow[] = sites.map(site => ({
-		name: site.data.name,
-		roles: site.roles,
-		siteUuid: site.uuid,
-		editAccess: () => redirectToSitesRolesDetail(user.id, site.uuid),
-		giveAccess: () => {
-			setGiveAccessSiteId(site.uuid);
-			usersFacade.addUserToSite(
-				{
-					siteUuid: site.uuid,
-					userUuid: user.id,
-				},
-				() => redirectToSitesRolesDetail(user.id, site.uuid)
-			);
-		},
-		hasAccess: site?.hasAccess,
-	}));
+	const handlePageChange = (pageNumber: number): void => {
+		setQuery({
+			page: pageNumber,
+		});
+	};
+
+	const SitesTable = (): React.ReactElement | null => {
+		const siteRows: SiteRow[] | undefined = sitesPagination?.data.map(site => ({
+			name: site.data.name,
+			roles: site.roles,
+			siteUuid: site.uuid,
+			editAccess: () => redirectToSitesRolesDetail(user.id, site.uuid),
+			giveAccess: () => {
+				setGiveAccessSiteId(site.uuid);
+				usersFacade.addUserToSite(
+					{
+						siteUuid: site.uuid,
+						userUuid: user.id,
+					},
+					() => redirectToSitesRolesDetail(user.id, site.uuid)
+				);
+			},
+			hasAccess: site?.hasAccess,
+		}));
+
+		return (
+			<PaginatedTable
+				className="u-margin-top"
+				columns={SITE_COLUMNS(t, mySecurityRights, isAddingUserToSite, giveAccesSiteId)}
+				rows={siteRows}
+				currentPage={sitesPagination?.currentPage}
+				itemsPerPage={query.pagesize}
+				onPageChange={handlePageChange}
+				noDataMessage="Er zijn geen resultaten"
+				loadDataMessage="Sites ophalen"
+				totalValues={sitesPagination?.total}
+				loading={
+					sitesLoadingStates.isFetching === LoadingState.Loading ||
+					isFetchingUserRolesForSite
+				}
+			></PaginatedTable>
+		);
+	};
 
 	/**
 	 * Render
@@ -81,12 +117,7 @@ const UserDetailRoles: FC<UserDetailRolesProps> = ({
 					formikRef={formikRef}
 				/>
 				<h5 className="u-margin-bottom u-margin-top">Rol(len) per site</h5>
-				<Table
-					className="u-margin-top"
-					columns={SITE_COLUMNS(t, mySecurityRights, isAddingUserToSite, giveAccesSiteId)}
-					rows={siteRows}
-					totalValues={sites.length}
-				/>
+				{SitesTable()}
 			</div>
 		</Card>
 	);

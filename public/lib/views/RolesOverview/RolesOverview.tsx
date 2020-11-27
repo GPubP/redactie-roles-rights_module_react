@@ -28,14 +28,12 @@ const RolesOverview: FC<RolesRouteProps<{ siteId: string }>> = () => {
 	 */
 	const { siteId } = useParams<{ siteId: string }>();
 	const [t] = useCoreTranslation();
-	const breadcrumbs = useRoutesBreadcrumbs(
-		[
-			{
-				name: 'Gebruikers',
-				target: '',
-			},
-		]
-	);
+	const breadcrumbs = useRoutesBreadcrumbs([
+		{
+			name: 'Gebruikers',
+			target: '',
+		},
+	]);
 	const { navigate, generatePath } = useNavigate(SITES_ROOT);
 	const [initialLoading, setInitialLoading] = useState(LoadingState.Loading);
 	const [currentPage, setCurrentPage] = useState(DEFAULT_ROLES_SEARCH_PARAMS.skip);
