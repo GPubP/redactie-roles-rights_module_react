@@ -4,7 +4,7 @@
   "description": "redactie roles-rights module",
   "main": "dist/redactie-roles-rights-module.umd.js",
   "module": "dist/redactie-roles-rights-module.umd.js",
-  "types": "dist/public/index.d.ts",
+  "types": "dist/index.d.ts",
   "jsnext:main": "dist/redactie-roles-rights-module.umd.js",
   "scripts": {
     "prepublish": "npm run test && npm run build",
