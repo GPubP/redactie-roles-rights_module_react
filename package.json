@@ -6,6 +6,10 @@
   "module": "dist/redactie-roles-rights-module.umd.js",
   "types": "dist/index.d.ts",
   "jsnext:main": "dist/redactie-roles-rights-module.umd.js",
+  "files": [
+    "dist",
+    "public"
+  ],
   "scripts": {
     "prepublish": "npm run test && npm run build",
     "build:types": "tsc --emitDeclarationOnly",
