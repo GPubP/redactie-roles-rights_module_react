@@ -4,14 +4,18 @@
   "description": "redactie roles-rights module",
   "main": "dist/redactie-roles-rights-module.umd.js",
   "module": "dist/redactie-roles-rights-module.umd.js",
-  "types": "dist/public/index.d.ts",
+  "types": "dist/index.d.ts",
   "jsnext:main": "dist/redactie-roles-rights-module.umd.js",
+  "files": [
+    "dist",
+    "public"
+  ],
   "scripts": {
     "prepublish": "npm run test && npm run build",
     "build:types": "tsc --emitDeclarationOnly",
-    "build": "npm run build:types && webpack --env.prod",
-    "build:w": "npm run build:types && webpack -w --env.prod",
-    "build:analyse": "npm run build:types && webpack --env.analyse",
+    "build": "webpack --env.prod && npm run build:types",
+    "build:w": "webpack -w --env.prod && npm run build:types",
+    "build:analyse": "webpack --env.analyse && npm run build:types",
     "start": "concurrently --kill-others \"npm run build:w\" \"cd demo && npm run start\"",
     "lint:scss": "stylelint public/**/*.scss --allow-empty-input",
     "lint:ts": "eslint --cache --cache-location .eslintcache --ext .ts,.tsx public",
@@ -31,6 +35,8 @@
     "Roles and Rights",
     "Module"
   ],
+  "author": "Maxim De Geyter",
+  "license": "ISC",
   "devDependencies": {
     "@acpaas-ui/react-components": "^4.7.0",
     "@acpaas-ui/react-editorial-components": "0.0.2-7",
@@ -47,7 +53,7 @@
     "@redactie/redactie-core": "1.10.5",
     "@redactie/sites-module": "^0.19.3",
     "@redactie/translations-module": "^0.6.0",
-    "@redactie/utils": "^0.10.2",
+    "@redactie/utils": "^0.17.0",
     "@testing-library/jest-dom": "5.0.2",
     "@testing-library/react": "9.4.0",
     "@types/jest": "24.9.1",
@@ -72,12 +78,10 @@
     "eslint-plugin-react-hooks": "2.3.0",
     "formik": "2.1.4",
     "husky": "3.1.0",
-    "install": "0.13.0",
     "jest": "25.1.0",
     "ky": "0.17.0",
     "lodash.debounce": "4.0.8",
     "node-sass": "4.13.1",
-    "npm": "6.13.7",
     "postcss-loader": "3.0.0",
     "postcss-preset-env": "6.7.0",
     "prettier": "1.19.1",
@@ -102,7 +106,5 @@
     "@mindspace-io/react": "1.1.5",
     "lodash.kebabcase": "4.1.1",
     "query-string": "6.12.1"
-  },
-  "author": "Maxim De Geyter",
-  "license": "ISC"
+  }
 }
