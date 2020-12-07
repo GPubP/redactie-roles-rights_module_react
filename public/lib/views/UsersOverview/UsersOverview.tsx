@@ -139,7 +139,7 @@ const UsersOverview: FC<RolesRouteProps> = () => {
 			uuid: user.id,
 			name: `${user.firstname} ${user.lastname}`,
 			type: user.type,
-			navigate: (userUuid: string) => navigate(MODULE_PATHS.tenantUserDetail, { userUuid }),
+			navigate: (userUuid: string) => navigate(MODULE_PATHS.tenantUserDetailRoles, { userUuid }),
 		}));
 
 		return (

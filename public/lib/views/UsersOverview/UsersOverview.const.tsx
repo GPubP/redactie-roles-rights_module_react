@@ -1,6 +1,7 @@
-import { Button } from '@acpaas-ui/react-components';
+import { Link as AUILink, Button } from '@acpaas-ui/react-components';
 import { TranslateFunc } from '@redactie/translations-module/public/lib/i18next/useTranslation';
 import React from 'react';
+import { Link } from 'react-router-dom';
 
 import { CORE_TRANSLATIONS } from '../../connectors/translations';
 import { checkSecurityRights } from '../../helpers';
@@ -23,6 +24,15 @@ export const USERS_OVERVIEW_COLUMNS = (t: TranslateFunc, mySecurityRights: strin
 			label: t(CORE_TRANSLATIONS.TABLE_NAME),
 			disableSorting: true,
 			value: 'name',
+			component(value: any, rowData: UsersOverviewTableRow) {
+				return (
+					<>
+						<AUILink to={`${rowData?.uuid}/algemeen`} component={Link}>
+							{value}
+						</AUILink>
+					</>
+				);
+			},
 		},
 		{
 			label: t(CORE_TRANSLATIONS.TABLE_TYPE),
