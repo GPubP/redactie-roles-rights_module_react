@@ -41,6 +41,7 @@ export const SITE_COLUMNS = (
 	{
 		label: '',
 		disableSorting: true,
+		classList: ['u-text-right'],
 		component(value: string, rowData: any) {
 			const { editAccess, giveAccess, hasAccess } = rowData;
 			const isGivingAccess =
