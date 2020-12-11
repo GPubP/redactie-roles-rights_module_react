@@ -42,7 +42,17 @@ const RolesUpdate: FC<RolesRouteProps> = () => {
 	const [initialLoading, setInitialLoading] = useState(LoadingState.Loading);
 	const [initialFormState, setInitialFormState] = useState<RoleDetailFormState | null>(null);
 	const [formState, setFormState] = useState<RoleDetailFormState | null>(initialFormState);
-	const breadcrumbs = useRoutesBreadcrumbs();
+	const { generatePath } = useNavigate();
+	const breadcrumbs = useRoutesBreadcrumbs([
+		{
+			name: 'Gebruikers',
+			target: '',
+		},
+		{
+			name: 'Rollen',
+			target: generatePath(`/sites${MODULE_PATHS.roles.overview}`, { siteId }),
+		},
+	]);
 	const rolesLoadingStates = useRolesLoadingStates();
 	const [roleLoadingState, role] = useSiteRole();
 	const [allowedPaths, setAllowedPaths] = useState<string[]>([]);
