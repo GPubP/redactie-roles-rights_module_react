@@ -42,7 +42,11 @@ const SiteUserDetailRolesUpdate: FC<RolesRouteProps> = ({ tenantId }) => {
 	const extraBreadcrumbs = useMemo(() => {
 		return [
 			{
-				name: site ? site.data.name : '...',
+				name: 'Gebruikers',
+				target: '',
+			},
+			{
+				name: 'Gebruikers',
 				target: generatePath(`/${tenantId}/sites${MODULE_PATHS.siteRoot}`, {
 					siteId,
 				}),
