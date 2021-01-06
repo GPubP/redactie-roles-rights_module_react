@@ -120,9 +120,9 @@ const RolesRightsOverview: FC<RolesRouteProps<{ siteId: string }>> = ({ match })
 			'content-type': type === 'content-type' ? value : '',
 		});
 
-		resetDetectValueChanges();
 		setSelectedCompartment({ type, id: value });
 		setMatrixTitle(value);
+		resetDetectValueChanges();
 	};
 
 	const onCancel = (resetForm: FormikProps<RolesPermissionsFormState>['resetForm']): void => {
