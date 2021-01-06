@@ -51,6 +51,7 @@ const RolesRightsOverview: FC<RolesRouteProps<{ siteId: string }>> = ({ match })
 		initialLoading !== LoadingState.Loading && updateLoadingState !== LoadingState.Loading,
 		formState ?? initialFormState
 	);
+	const [selectedCompartment, setSelectedCompartment] = useState<{ type: string; id: string }>();
 
 	useEffect(() => {
 		setInitialLoading(LoadingState.Loading);
@@ -119,6 +120,8 @@ const RolesRightsOverview: FC<RolesRouteProps<{ siteId: string }>> = ({ match })
 			'content-type': type === 'content-type' ? value : '',
 		});
 
+		resetDetectValueChanges();
+		setSelectedCompartment({ type, id: value });
 		setMatrixTitle(value);
 	};
 
@@ -158,11 +161,25 @@ const RolesRightsOverview: FC<RolesRouteProps<{ siteId: string }>> = ({ match })
 			return { roleId: role.role.id, securityRights: [] };
 		});
 
-		if (updateRolesMatrixData) {
+		if (!updateRolesMatrixData) {
+			return;
+		}
+
+		if (!selectedCompartment) {
 			securityRightsMatrixFacade
 				.updateSecurityRightsForSite(updateRolesMatrixData, siteId)
 				.then(() => resetDetectValueChanges());
+			return;
 		}
+
+		securityRightsMatrixFacade
+			.updateSecurityRightsForSiteByCompartment(
+				updateRolesMatrixData,
+				siteId,
+				selectedCompartment.type,
+				selectedCompartment.id
+			)
+			.then(() => resetDetectValueChanges());
 	};
 
 	/**

@@ -56,6 +56,29 @@ export class SecurityRightsMatrixFacade {
 			})
 			.finally(() => this.store.setIsUpdating(false));
 	}
+
+	public updateSecurityRightsForSiteByCompartment(
+		payload: UpdateRolesMatrixPayload,
+		siteId: string,
+		type: string,
+		id: string
+	): Promise<boolean> {
+		this.store.setIsUpdating(true);
+
+		return this.service
+			.updateSecurityRightsForSiteByCompartment(siteId, payload, type, id)
+			.then(response => {
+				this.store.update({
+					data: response,
+				});
+				return true;
+			})
+			.catch(err => {
+				this.store.setError(err);
+				return false;
+			})
+			.finally(() => this.store.setIsUpdating(false));
+	}
 }
 
 export const securityRightsMatrixFacade = new SecurityRightsMatrixFacade(
