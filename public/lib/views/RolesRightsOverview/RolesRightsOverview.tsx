@@ -108,6 +108,7 @@ const RolesRightsOverview: FC<RolesRouteProps<{ siteId: string }>> = ({ match })
 		}, {} as RolesPermissionsFormState);
 
 		setInitialFormState(initialStateResult);
+		resetDetectValueChanges();
 	}, [securityRightMatrix]); // eslint-disable-line react-hooks/exhaustive-deps
 
 	/**
@@ -122,7 +123,6 @@ const RolesRightsOverview: FC<RolesRouteProps<{ siteId: string }>> = ({ match })
 
 		setSelectedCompartment({ type, id: value });
 		setMatrixTitle(value);
-		resetDetectValueChanges();
 	};
 
 	const onCancel = (resetForm: FormikProps<RolesPermissionsFormState>['resetForm']): void => {
