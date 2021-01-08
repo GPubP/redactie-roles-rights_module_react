@@ -29,6 +29,7 @@ export class SecurityRightsMatrixFacade {
 				this.store.update({
 					data: response,
 				});
+				this.store.setError(false);
 			})
 			.catch(err => {
 				this.store.setError(err);
@@ -48,6 +49,7 @@ export class SecurityRightsMatrixFacade {
 				this.store.update({
 					data: response,
 				});
+				this.store.setError(false);
 				return true;
 			})
 			.catch(err => {
