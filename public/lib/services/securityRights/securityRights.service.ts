@@ -31,6 +31,21 @@ export class SecurityRightsApiService {
 			})
 			.json();
 	}
+
+	public async updateSecurityRightsForSiteByCompartment(
+		siteId: string,
+		roles: UpdateRolesMatrixPayload,
+		type: string,
+		id: string
+	): Promise<SecurityRightMatrixResponse> {
+		return await api
+			.put(`sites/${siteId}/roles-security-rights-matrix/${type}/${id}`, {
+				json: {
+					roles,
+				},
+			})
+			.json();
+	}
 }
 
 export const securityRightsApiService = new SecurityRightsApiService();
