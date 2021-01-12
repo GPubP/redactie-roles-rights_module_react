@@ -52,7 +52,7 @@ const SiteUserDetailRolesUpdate: FC<RolesRouteProps> = ({ tenantId }) => {
 				}),
 			},
 		];
-	}, [site, siteId, tenantId]);
+	}, [siteId, tenantId]);
 	const breadcrumbs = useRoutesBreadcrumbs(extraBreadcrumbs);
 	const [userRolesLoadingState, userRoles] = useUserRolesForSite();
 	const [initialFormState, setInitialFormState] = useState<UserRolesFormState | null>(null);
@@ -157,7 +157,7 @@ const SiteUserDetailRolesUpdate: FC<RolesRouteProps> = ({ tenantId }) => {
 
 	return (
 		<>
-			<ContextHeader title={user ? `${user?.firstname} ${user?.lastname}` : ''}>
+			<ContextHeader title={user ? `${user?.firstname} ${user?.lastname} bewerken` : ''}>
 				<ContextHeaderTopSection>{breadcrumbs}</ContextHeaderTopSection>
 			</ContextHeader>
 			<Container>

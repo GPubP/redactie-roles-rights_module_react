@@ -168,7 +168,7 @@ const RolesUpdate: FC<RolesRouteProps> = () => {
 
 	return (
 		<>
-			<ContextHeader title="Rol bewerken">
+			<ContextHeader title={role ? `${role.attributes?.displayName || 'Rol'} bewerken` : ''}>
 				<ContextHeaderTopSection>{breadcrumbs}</ContextHeaderTopSection>
 			</ContextHeader>
 			<Container>
