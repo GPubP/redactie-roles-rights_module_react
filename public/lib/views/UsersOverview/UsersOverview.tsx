@@ -27,13 +27,8 @@ const UsersOverview: FC<RolesRouteProps> = () => {
 	const [filterFormState, setFilterFormState] = useState<FilterFormState>(
 		CONTENT_INITIAL_FILTER_STATE
 	);
-	const { navigate, generatePath } = useNavigate();
-	const breadcrumbs = useRoutesBreadcrumbs([
-		{
-			name: 'Home',
-			target: generatePath(MODULE_PATHS.dashboard),
-		},
-	]);
+	const { navigate } = useNavigate();
+	const breadcrumbs = useRoutesBreadcrumbs();
 	const [usersSearchParams, setUsersSearchParams] = useState(DEFAULT_USERS_SEARCH_PARAMS);
 	const [loadingState, users, usersMeta] = useUsers();
 	const [initialLoading, setInitialLoading] = useState(LoadingState.Loading);
@@ -139,7 +134,8 @@ const UsersOverview: FC<RolesRouteProps> = () => {
 			uuid: user.id,
 			name: `${user.firstname} ${user.lastname}`,
 			type: user.type,
-			navigate: (userUuid: string) => navigate(MODULE_PATHS.tenantUserDetailRoles, { userUuid }),
+			navigate: (userUuid: string) =>
+				navigate(MODULE_PATHS.tenantUserDetailRoles, { userUuid }),
 		}));
 
 		return (
@@ -162,7 +158,7 @@ const UsersOverview: FC<RolesRouteProps> = () => {
 					onPageChange={handlePageChange}
 					orderBy={handleOrderBy}
 					activeSorting={activeSorting}
-					totalValues={usersMeta?.totalElements}
+					totalValues={usersMeta?.totalElements || 0}
 					loading={loadingState === LoadingState.Loading}
 				></PaginatedTable>
 			</>

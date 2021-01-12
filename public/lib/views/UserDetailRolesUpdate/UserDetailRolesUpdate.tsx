@@ -30,7 +30,9 @@ import { RolesRouteProps } from '../../roles.types';
 import { rolesFacade } from '../../store/roles';
 import { usersFacade } from '../../store/users';
 
-const UserDetailRolesUpdate: FC<RolesRouteProps<{ userUuid: string; siteUuid: string }>> = () => {
+const UserDetailRolesUpdate: FC<RolesRouteProps<{ userUuid: string; siteUuid: string }>> = ({
+	tenantId,
+}) => {
 	/**
 	 * Hooks
 	 */
@@ -41,19 +43,17 @@ const UserDetailRolesUpdate: FC<RolesRouteProps<{ userUuid: string; siteUuid: st
 	const extraBreadcrumbs = useMemo(() => {
 		return [
 			{
+				name: 'Gebruikers',
+				target: generatePath(`/${tenantId}${MODULE_PATHS.tenantUsersOverview}`),
+			},
+			{
 				name: user ? `${user.firstname} ${user.lastname}` : '...',
 				target: generatePath(MODULE_PATHS.tenantUserDetail, {
 					userUuid,
 				}),
 			},
-			// The last breadcrumb will be removed so we need to set a dummy
-			// breadcrumb to make sure that the user breadcrumb is visible
-			{
-				name: 'last',
-				target: '',
-			},
 		];
-	}, [user, generatePath, userUuid]);
+	}, [generatePath, tenantId, user, userUuid]);
 	const breadcrumbs = useRoutesBreadcrumbs(extraBreadcrumbs);
 	const { isUpdating } = useUsersLoadingStates();
 	const [rolesLoadingState, roles] = useSiteRoles();
