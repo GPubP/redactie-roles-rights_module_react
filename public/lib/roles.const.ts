@@ -2,15 +2,13 @@ export const BREADCRUMB_OPTIONS = {
 	excludePaths: [
 		'/',
 		'/:tenantId',
-		'/:tenantId/users',
-		'/:tenantId/users/overzicht',
-		'/:tenantId/users/:userId',
 		'/:tenantId/users/:userId/sites',
-		'/:tenantId/users/:userId/sites/:siteUuid',
-		'/:tenantId/users/:userId/sites/:siteUuid/rollen',
+		'/:tenantId/users/:userId/sites/:siteUuid([0-9a-fA-F]{8}\\-[0-9a-fA-F]{4}\\-[0-9a-fA-F]{4}\\-[0-9a-fA-F]{4}\\-[0-9a-fA-F]{12})',
 		'/:tenantId/sites',
-		'/:tenantId/sites/:siteUuid/users',
-		'/:tenantId/sites/:siteUuid/users/:userId',
+		'/:tenantId/sites/:siteUuid',
+		'/:tenantId/sites/:siteUuid/users/rolesrights',
+		'/:tenantId/sites/:siteUuid/users/roles',
+		'/:tenantId/sites/:siteUuid/users/:userId([0-9a-fA-F]{8}\\-[0-9a-fA-F]{4}\\-[0-9a-fA-F]{4}\\-[0-9a-fA-F]{4}\\-[0-9a-fA-F]{12})',
 	],
 };
 export const SITES_ROOT = 'sites';
@@ -70,6 +68,13 @@ export const ALERT_CONTAINER_IDS = {
 	UPDATE_USER_ROLES_TENANT: 'update-user-roles-tenant',
 	UPDATE_ROLE_ON_SITE: 'update-role-on-site',
 };
+
+export const SITE_CONTEXT_DEFAULT_BREADCRUMBS = [
+	{
+		name: 'Gebruikers',
+		target: '',
+	},
+];
 
 export enum SecurityRightsSite {
 	UsersRead = 'roles-rights_read-users',

@@ -67,6 +67,7 @@ const RolesRootComponent: FC<RolesModuleProps<{ siteId: string }>> = ({
 
 sitesConnector.registerRoutes({
 	path: MODULE_PATHS.siteRoot,
+	breadcrumb: false,
 	component: RolesRootComponent,
 	redirect: MODULE_PATHS.users.overview,
 	navigation: {
@@ -85,6 +86,7 @@ sitesConnector.registerRoutes({
 	routes: [
 		{
 			path: MODULE_PATHS.siteUserDetailRolesUpdate,
+			breadcrumb: false,
 			component: SiteUserDetailRolesUpdate,
 			guardOptions: {
 				guards: [
@@ -96,6 +98,7 @@ sitesConnector.registerRoutes({
 		},
 		{
 			path: MODULE_PATHS.rolesRights.overview,
+			breadcrumb: false,
 			component: RolesRightsOverview,
 			guardOptions: {
 				guards: [
@@ -118,6 +121,7 @@ sitesConnector.registerRoutes({
 		},
 		{
 			path: MODULE_PATHS.roles.overview,
+			breadcrumb: false,
 			component: RolesOverview,
 			guardOptions: {
 				guards: [securityRightsSiteGuard(urlSiteParam, [SecurityRightsSite.RolesRead])],
@@ -134,6 +138,7 @@ sitesConnector.registerRoutes({
 		},
 		{
 			path: MODULE_PATHS.roles.create,
+			breadcrumb: false,
 			component: RolesCreate,
 			guardOptions: {
 				guards: [securityRightsSiteGuard(urlSiteParam, [SecurityRightsSite.RolesCreate])],
@@ -141,6 +146,7 @@ sitesConnector.registerRoutes({
 		},
 		{
 			path: MODULE_PATHS.roles.detail,
+			breadcrumb: false,
 			component: RolesUpdate,
 			guardOptions: {
 				guards: [securityRightsSiteGuard(urlSiteParam, [SecurityRightsSite.RolesUpdate])],
@@ -148,6 +154,7 @@ sitesConnector.registerRoutes({
 		},
 		{
 			path: MODULE_PATHS.users.overview,
+			breadcrumb: false,
 			component: SiteUsersOverview,
 			guardOptions: {
 				guards: [securityRightsSiteGuard(urlSiteParam, [SecurityRightsSite.UsersRead])],
@@ -167,6 +174,7 @@ sitesConnector.registerRoutes({
 
 Core.routes.register({
 	path: MODULE_PATHS.tenantRoot,
+	breadcrumb: false,
 	component: RolesRootComponent,
 	redirect: MODULE_PATHS.tenantUsersOverview,
 	guardOptions: {
@@ -181,10 +189,12 @@ Core.routes.register({
 	routes: [
 		{
 			path: MODULE_PATHS.tenantUsersOverview,
+			breadcrumb: false,
 			component: UsersOverview,
 		},
 		{
 			path: MODULE_PATHS.tenantUserDetailRolesUpdate,
+			breadcrumb: false,
 			component: UserDetailRolesUpdate,
 			guardOptions: {
 				guards: [securityRightsTenantGuard([SecurityRightsTenant.UsersUpdateSiteRoles])],
@@ -192,6 +202,7 @@ Core.routes.register({
 		},
 		{
 			path: MODULE_PATHS.tenantUserDetail,
+			breadcrumb: false,
 			component: UserUpdate,
 			redirect: MODULE_PATHS.tenantUserDetailGeneral,
 			guardOptions: {
@@ -200,10 +211,12 @@ Core.routes.register({
 			routes: [
 				{
 					path: MODULE_PATHS.tenantUserDetailGeneral,
+					breadcrumb: false,
 					component: UserDetailGeneral,
 				},
 				{
 					path: MODULE_PATHS.tenantUserDetailRoles,
+					breadcrumb: false,
 					component: UserDetailRoles,
 				},
 			],

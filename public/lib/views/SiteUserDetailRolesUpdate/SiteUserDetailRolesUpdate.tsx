@@ -15,7 +15,6 @@ import React, { FC, ReactElement, useEffect, useMemo, useState } from 'react';
 import { generatePath, useParams } from 'react-router-dom';
 
 import { DefaultFormActions, FormViewUserRoles, UserRolesFormState } from '../../components';
-import { sitesConnector } from '../../connectors';
 import { mapUserRoles } from '../../helpers';
 import {
 	useRoutesBreadcrumbs,
@@ -24,7 +23,11 @@ import {
 	useUserRolesForSite,
 	useUsersLoadingStates,
 } from '../../hooks';
-import { ALERT_CONTAINER_IDS, MODULE_PATHS } from '../../roles.const';
+import {
+	ALERT_CONTAINER_IDS,
+	MODULE_PATHS,
+	SITE_CONTEXT_DEFAULT_BREADCRUMBS,
+} from '../../roles.const';
 import { RolesRouteProps } from '../../roles.types';
 import { rolesFacade } from '../../store/roles';
 import { usersFacade } from '../../store/users';
@@ -38,21 +41,17 @@ const SiteUserDetailRolesUpdate: FC<RolesRouteProps> = ({ tenantId }) => {
 	const { isUpdating } = useUsersLoadingStates();
 	const [userLoadingState, user] = useUser(userUuid);
 	const [rolesLoadingState, roles] = useSiteRoles();
-	const [siteLoadingState, site] = sitesConnector.hooks.useSite(siteId);
 	const extraBreadcrumbs = useMemo(() => {
 		return [
+			...SITE_CONTEXT_DEFAULT_BREADCRUMBS,
 			{
-				name: 'Gebruikers',
-				target: '',
-			},
-			{
-				name: 'Gebruikers',
+				name: 'Gebruikerslijst',
 				target: generatePath(`/${tenantId}/sites${MODULE_PATHS.siteRoot}`, {
 					siteId,
 				}),
 			},
 		];
-	}, [site, siteId, tenantId]);
+	}, [siteId, tenantId]);
 	const breadcrumbs = useRoutesBreadcrumbs(extraBreadcrumbs);
 	const [userRolesLoadingState, userRoles] = useUserRolesForSite();
 	const [initialFormState, setInitialFormState] = useState<UserRolesFormState | null>(null);
@@ -78,14 +77,13 @@ const SiteUserDetailRolesUpdate: FC<RolesRouteProps> = ({ tenantId }) => {
 		if (
 			userLoadingState !== LoadingState.Loading &&
 			userRolesLoadingState !== LoadingState.Loading &&
-			rolesLoadingState !== LoadingState.Loading &&
-			siteLoadingState !== LoadingState.Loading
+			rolesLoadingState !== LoadingState.Loading
 		) {
 			return setInitialLoading(LoadingState.Loaded);
 		}
 
 		setInitialLoading(LoadingState.Loading);
-	}, [rolesLoadingState, siteLoadingState, userLoadingState, userRolesLoadingState]);
+	}, [rolesLoadingState, userLoadingState, userRolesLoadingState]);
 
 	useEffect(() => {
 		if (userRoles) {
@@ -157,7 +155,7 @@ const SiteUserDetailRolesUpdate: FC<RolesRouteProps> = ({ tenantId }) => {
 
 	return (
 		<>
-			<ContextHeader title={user ? `${user?.firstname} ${user?.lastname}` : ''}>
+			<ContextHeader title={user ? `${user?.firstname} ${user?.lastname} bewerken` : ''}>
 				<ContextHeaderTopSection>{breadcrumbs}</ContextHeaderTopSection>
 			</ContextHeader>
 			<Container>

@@ -14,7 +14,12 @@ import { useParams } from 'react-router-dom';
 import { SecurableRender } from '../../components';
 import { CORE_TRANSLATIONS, useCoreTranslation } from '../../connectors/translations';
 import { useMySecurityRightsForSite, useRoutesBreadcrumbs, useSiteRoles } from '../../hooks';
-import { MODULE_PATHS, SecurityRightsSite, SITES_ROOT } from '../../roles.const';
+import {
+	MODULE_PATHS,
+	SecurityRightsSite,
+	SITE_CONTEXT_DEFAULT_BREADCRUMBS,
+	SITES_ROOT,
+} from '../../roles.const';
 import { RolesRouteProps } from '../../roles.types';
 import { DEFAULT_ROLES_SEARCH_PARAMS } from '../../services/roles/roles.service.const';
 import { rolesFacade } from '../../store/roles';
@@ -28,12 +33,7 @@ const RolesOverview: FC<RolesRouteProps<{ siteId: string }>> = () => {
 	 */
 	const { siteId } = useParams<{ siteId: string }>();
 	const [t] = useCoreTranslation();
-	const breadcrumbs = useRoutesBreadcrumbs([
-		{
-			name: 'Gebruikers',
-			target: '',
-		},
-	]);
+	const breadcrumbs = useRoutesBreadcrumbs(SITE_CONTEXT_DEFAULT_BREADCRUMBS);
 	const { navigate, generatePath } = useNavigate(SITES_ROOT);
 	const [initialLoading, setInitialLoading] = useState(LoadingState.Loading);
 	const [currentPage, setCurrentPage] = useState(DEFAULT_ROLES_SEARCH_PARAMS.skip);
@@ -108,7 +108,7 @@ const RolesOverview: FC<RolesRouteProps<{ siteId: string }>> = () => {
 					onPageChange={handlePageChange}
 					orderBy={handleOrderBy}
 					activeSorting={activeSorting}
-					totalValues={roles?.length}
+					totalValues={roles?.length || 0}
 					loading={rolesLoadingState === LoadingState.Loading}
 				></PaginatedTable>
 			</>

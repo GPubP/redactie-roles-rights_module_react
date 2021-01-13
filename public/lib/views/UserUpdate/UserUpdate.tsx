@@ -147,7 +147,7 @@ const UserUpdate: FC<RolesRouteProps<{ userUuid?: string }>> = ({ route, tenantI
 
 	return (
 		<>
-			<ContextHeader title={user ? `${user?.firstname} ${user?.lastname}` : ''}>
+			<ContextHeader title={user ? `${user?.firstname} ${user?.lastname} bewerken` : ''}>
 				<ContextHeaderTopSection>{breadcrumbs}</ContextHeaderTopSection>
 			</ContextHeader>
 			<Container>
