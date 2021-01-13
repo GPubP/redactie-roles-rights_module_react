@@ -1,7 +1,7 @@
 import { Card } from '@acpaas-ui/react-components';
 import { PaginatedTable } from '@acpaas-ui/react-editorial-components';
-import { DataLoader, LoadingState, useAPIQueryParams, useNavigate } from '@redactie/utils';
-import React, { FC, useEffect, useMemo, useState } from 'react';
+import { LoadingState, useAPIQueryParams, useNavigate } from '@redactie/utils';
+import React, { FC, useMemo, useState } from 'react';
 
 import { FormViewUserRoles } from '../../components';
 import { sitesConnector, useCoreTranslation } from '../../connectors';
