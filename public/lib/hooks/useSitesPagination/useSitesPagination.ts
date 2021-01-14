@@ -1,10 +1,9 @@
 import { PaginationResponse } from '@datorama/akita';
-import { usePrevious } from '@redactie/utils';
+import { SearchParams, usePrevious } from '@redactie/utils';
 import { equals } from 'ramda';
 import { useCallback, useEffect, useState } from 'react';
 
 import { sitesConnector } from '../../connectors';
-import { SearchParams } from '../../services/api';
 import { RoleMapsResponses } from '../../services/roles';
 import { usersApiService } from '../../services/users';
 

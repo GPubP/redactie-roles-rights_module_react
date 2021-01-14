@@ -1,5 +1,6 @@
+import { SearchParams } from '@redactie/utils';
+
 import { EmbeddedResponse } from '../../roles.types';
-import { SearchParams } from '../api';
 
 export type GetRolesPayload = SearchParams;
 

@@ -1,6 +1,6 @@
 import { Card } from '@acpaas-ui/react-components';
 import { PaginatedTable } from '@acpaas-ui/react-editorial-components';
-import { LoadingState, useAPIQueryParams, useNavigate } from '@redactie/utils';
+import { LoadingState, SearchParams, useAPIQueryParams, useNavigate } from '@redactie/utils';
 import React, { FC, useMemo, useState } from 'react';
 
 import { FormViewUserRoles } from '../../components';
@@ -8,7 +8,6 @@ import { sitesConnector, useCoreTranslation } from '../../connectors';
 import { mapUserRoles } from '../../helpers';
 import { useSitesPagination, useUsersLoadingStates } from '../../hooks';
 import { MODULE_PATHS } from '../../roles.const';
-import { SearchParams } from '../../services/api';
 import { usersFacade } from '../../store/users';
 
 import { SITE_COLUMNS } from './UserDetailRoles.const';
