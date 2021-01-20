@@ -9,8 +9,10 @@ import {
 	LeavePrompt,
 	LoadingState,
 	useDetectValueChanges,
+	useNavigate,
 } from '@redactie/utils';
 import { FormikProps } from 'formik';
+import { isEmpty } from 'ramda';
 import React, { FC, ReactElement, useEffect, useMemo, useState } from 'react';
 import { generatePath, useParams } from 'react-router-dom';
 
@@ -24,7 +26,7 @@ import {
 	useUserRolesForSite,
 	useUsersLoadingStates,
 } from '../../hooks';
-import { ALERT_CONTAINER_IDS, MODULE_PATHS } from '../../roles.const';
+import { ALERT_CONTAINER_IDS, MODULE_PATHS, SITES_ROOT } from '../../roles.const';
 import { RolesRouteProps } from '../../roles.types';
 import { rolesFacade } from '../../store/roles';
 import { usersFacade } from '../../store/users';
@@ -57,6 +59,7 @@ const SiteUserDetailRolesUpdate: FC<RolesRouteProps> = ({ tenantId }) => {
 	const [userRolesLoadingState, userRoles] = useUserRolesForSite();
 	const [initialFormState, setInitialFormState] = useState<UserRolesFormState | null>(null);
 	const [formState, setFormState] = useState<UserRolesFormState | null>(initialFormState);
+	const { navigate } = useNavigate();
 
 	const [hasChanges, resetDetectValueChanges] = useDetectValueChanges(
 		initialLoading !== LoadingState.Loading && isUpdating !== LoadingState.Loading,
@@ -98,20 +101,32 @@ const SiteUserDetailRolesUpdate: FC<RolesRouteProps> = ({ tenantId }) => {
 	/**
 	 * Methods
 	 */
+	const navigateToOverview = (): void => {
+		navigate(`/${SITES_ROOT}${MODULE_PATHS.users.overview}`, { siteId });
+	};
+
 	const onSubmit = (values: UserRolesFormState): void => {
-		usersFacade.updateUserRolesForSite(
-			{
-				userUuid,
-				siteUuid: siteId,
-				roles: values.roleIds,
-			},
-			ALERT_CONTAINER_IDS.UPDATE_USER_ROLES_SITE_ON_SITE
-		);
+		usersFacade
+			.updateUserRolesForSite(
+				{
+					userUuid,
+					siteUuid: siteId,
+					roles: values.roleIds,
+				},
+				ALERT_CONTAINER_IDS.UPDATE_USER_ROLES_SITE_ON_SITE
+			)
+			.then(() => {
+				if (isEmpty(values.roleIds)) {
+					setTimeout(() => navigateToOverview());
+				}
+			});
+
 		resetDetectValueChanges();
 	};
 
 	const onCancel = (resetForm: FormikProps<UserRolesFormState>['resetForm']): void => {
 		resetForm();
+		setTimeout(() => navigateToOverview());
 	};
 
 	/**
