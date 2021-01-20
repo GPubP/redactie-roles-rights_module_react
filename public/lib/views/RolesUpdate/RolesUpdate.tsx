@@ -27,6 +27,7 @@ import {
 	ALERT_CONTAINER_IDS,
 	MODULE_PATHS,
 	SecurityRightsSite,
+	SITE_CONTEXT_DEFAULT_BREADCRUMBS,
 	SITES_ROOT,
 	TENANT_ROOT,
 } from '../../roles.const';
@@ -44,10 +45,7 @@ const RolesUpdate: FC<RolesRouteProps> = () => {
 	const [formState, setFormState] = useState<RoleDetailFormState | null>(initialFormState);
 	const { generatePath } = useNavigate();
 	const breadcrumbs = useRoutesBreadcrumbs([
-		{
-			name: 'Gebruikers',
-			target: '',
-		},
+		...SITE_CONTEXT_DEFAULT_BREADCRUMBS,
 		{
 			name: 'Rollen',
 			target: generatePath(`/sites${MODULE_PATHS.roles.overview}`, { siteId }),
@@ -168,7 +166,7 @@ const RolesUpdate: FC<RolesRouteProps> = () => {
 
 	return (
 		<>
-			<ContextHeader title="Rol bewerken">
+			<ContextHeader title={role ? `${role.attributes?.displayName || 'Rol'} bewerken` : ''}>
 				<ContextHeaderTopSection>{breadcrumbs}</ContextHeaderTopSection>
 			</ContextHeader>
 			<Container>

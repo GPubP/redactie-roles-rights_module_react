@@ -9,7 +9,7 @@ import { useParams } from 'react-router-dom';
 
 import { RoleDetailForm } from '../../components';
 import { useRolesLoadingStates, useRoutesBreadcrumbs } from '../../hooks';
-import { MODULE_PATHS, TENANT_ROOT } from '../../roles.const';
+import { MODULE_PATHS, SITE_CONTEXT_DEFAULT_BREADCRUMBS, TENANT_ROOT } from '../../roles.const';
 import { RoleDetailFormState, RolesRouteProps } from '../../roles.types';
 import { rolesFacade } from '../../store/roles';
 
@@ -20,8 +20,14 @@ const RolesCreate: FC<RolesRouteProps> = () => {
 	 * Hooks
 	 */
 	const { siteId } = useParams<{ siteId: string }>();
-	const { navigate } = useNavigate();
-	const breadcrumbs = useRoutesBreadcrumbs();
+	const { navigate, generatePath } = useNavigate();
+	const breadcrumbs = useRoutesBreadcrumbs([
+		...SITE_CONTEXT_DEFAULT_BREADCRUMBS,
+		{
+			name: 'Rollen',
+			target: generatePath(`/sites${MODULE_PATHS.roles.overview}`, { siteId }),
+		},
+	]);
 	const rolesLoadingStates = useRolesLoadingStates();
 	const [formValue, setFormValue] = useState<RoleDetailFormState>(INITIAL_FORM_STATE);
 	const [hasChanges] = useDetectValueChanges(true, formValue);

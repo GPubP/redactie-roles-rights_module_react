@@ -9,7 +9,7 @@ import React, { FC, ReactElement, useEffect, useState } from 'react';
 
 import { ModulesList, RolesPermissionsForm, RolesPermissionsFormState } from '../../components';
 import { useMySecurityRightsForSite, useRoutesBreadcrumbs, useSecurityRights } from '../../hooks';
-import { SecurityRightsSite } from '../../roles.const';
+import { SecurityRightsSite, SITE_CONTEXT_DEFAULT_BREADCRUMBS } from '../../roles.const';
 import { RolesRouteProps } from '../../roles.types';
 import { DEFAULT_ROLES_SEARCH_PARAMS } from '../../services/roles/roles.service.const';
 import { ModuleResponse, UpdateRolesMatrixPayload } from '../../services/securityRights';
@@ -23,12 +23,7 @@ const RolesRightsOverview: FC<RolesRouteProps<{ siteId: string }>> = ({ match })
 	/**
 	 * Hooks
 	 */
-	const breadcrumbs = useRoutesBreadcrumbs([
-		{
-			name: 'Gebruikers',
-			target: '',
-		},
-	]);
+	const breadcrumbs = useRoutesBreadcrumbs(SITE_CONTEXT_DEFAULT_BREADCRUMBS);
 	const [rolesSearchParams, setRolesSearchParams] = useState(DEFAULT_ROLES_SEARCH_PARAMS);
 	const [fetchLoadingState, updateLoadingState, securityRightMatrix] = useSecurityRights();
 	const [initialLoading, setInitialLoading] = useState(LoadingState.Loading);

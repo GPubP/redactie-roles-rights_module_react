@@ -1,4 +1,4 @@
-import { SearchParams } from '../api';
+import { SearchParams } from '@redactie/utils';
 
 export interface SecurityRightMatrixResponse {
 	modules: ModuleResponse[];

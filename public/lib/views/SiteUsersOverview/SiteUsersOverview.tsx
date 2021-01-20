@@ -10,7 +10,7 @@ import React, { FC, ReactElement, useEffect, useState } from 'react';
 import { FilterForm, FilterFormState } from '../../components';
 import { useCoreTranslation } from '../../connectors/translations';
 import { useMySecurityRightsForSite, useRoutesBreadcrumbs, useUsers } from '../../hooks';
-import { MODULE_PATHS, SITES_ROOT } from '../../roles.const';
+import { MODULE_PATHS, SITE_CONTEXT_DEFAULT_BREADCRUMBS, SITES_ROOT } from '../../roles.const';
 import { RolesRouteProps } from '../../roles.types';
 import { DEFAULT_USERS_SEARCH_PARAMS } from '../../services/users/users.service.const';
 import { usersFacade } from '../../store/users';
@@ -29,16 +29,7 @@ const SiteUsersOverview: FC<RolesRouteProps<{ siteId: string }>> = ({ match }) =
 		CONTENT_INITIAL_FILTER_STATE
 	);
 	const { navigate } = useNavigate(SITES_ROOT);
-	const breadcrumbs = useRoutesBreadcrumbs([
-		{
-			name: 'Gebruikers',
-			target: '',
-		},
-		{
-			name: 'Gebruikers',
-			target: '',
-		},
-	]);
+	const breadcrumbs = useRoutesBreadcrumbs(SITE_CONTEXT_DEFAULT_BREADCRUMBS);
 	const [usersSearchParams, setUsersSearchParams] = useState(DEFAULT_USERS_SEARCH_PARAMS);
 	const [loadingState, users, usersMeta] = useUsers();
 	const [initialLoading, setInitialLoading] = useState(LoadingState.Loading);
@@ -173,7 +164,7 @@ const SiteUsersOverview: FC<RolesRouteProps<{ siteId: string }>> = ({ match }) =
 					onPageChange={handlePageChange}
 					orderBy={handleOrderBy}
 					activeSorting={activeSorting}
-					totalValues={usersMeta?.totalElements}
+					totalValues={usersMeta?.totalElements || 0}
 					loading={loadingState === LoadingState.Loading}
 				></PaginatedTable>
 			</>
