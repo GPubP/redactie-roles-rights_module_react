@@ -43,7 +43,7 @@ const SiteUserDetailRolesUpdate: FC<RolesRouteProps> = ({ tenantId }) => {
 	const { isUpdating } = useUsersLoadingStates();
 	const [userLoadingState, user] = useUser(userUuid);
 	const [rolesLoadingState, roles] = useSiteRoles();
-	const [isSubmitting, setIsSubmiting] = useState<boolean>(false);
+	const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
 	const extraBreadcrumbs = useMemo(() => {
 		return [
 			...SITE_CONTEXT_DEFAULT_BREADCRUMBS,
@@ -120,13 +120,13 @@ const SiteUserDetailRolesUpdate: FC<RolesRouteProps> = ({ tenantId }) => {
 			)
 			.then(() => {
 				resetDetectValueChanges();
-				setIsSubmiting(true);
+				setIsSubmitting(true);
 			});
 	};
 
 	const onCancel = (resetForm: FormikProps<UserRolesFormState>['resetForm']): void => {
 		resetForm();
-		setIsSubmiting(true);
+		setIsSubmitting(true);
 	};
 
 	/**
