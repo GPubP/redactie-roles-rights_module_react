@@ -9,6 +9,7 @@ import {
 	LeavePrompt,
 	LoadingState,
 	useDetectValueChanges,
+	useNavigate,
 } from '@redactie/utils';
 import { FormikProps } from 'formik';
 import React, { FC, ReactElement, useEffect, useMemo, useState } from 'react';
@@ -27,6 +28,7 @@ import {
 	ALERT_CONTAINER_IDS,
 	MODULE_PATHS,
 	SITE_CONTEXT_DEFAULT_BREADCRUMBS,
+	SITES_ROOT
 } from '../../roles.const';
 import { RolesRouteProps } from '../../roles.types';
 import { rolesFacade } from '../../store/roles';
@@ -41,6 +43,7 @@ const SiteUserDetailRolesUpdate: FC<RolesRouteProps> = ({ tenantId }) => {
 	const { isUpdating } = useUsersLoadingStates();
 	const [userLoadingState, user] = useUser(userUuid);
 	const [rolesLoadingState, roles] = useSiteRoles();
+	const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
 	const extraBreadcrumbs = useMemo(() => {
 		return [
 			...SITE_CONTEXT_DEFAULT_BREADCRUMBS,
@@ -56,6 +59,7 @@ const SiteUserDetailRolesUpdate: FC<RolesRouteProps> = ({ tenantId }) => {
 	const [userRolesLoadingState, userRoles] = useUserRolesForSite();
 	const [initialFormState, setInitialFormState] = useState<UserRolesFormState | null>(null);
 	const [formState, setFormState] = useState<UserRolesFormState | null>(initialFormState);
+	const { navigate } = useNavigate(SITES_ROOT);
 
 	const [hasChanges, resetDetectValueChanges] = useDetectValueChanges(
 		initialLoading !== LoadingState.Loading && isUpdating !== LoadingState.Loading,
@@ -93,23 +97,36 @@ const SiteUserDetailRolesUpdate: FC<RolesRouteProps> = ({ tenantId }) => {
 		}
 	}, [userRoles]);
 
+	useEffect(() => {
+		isSubmitting && navigateToOverview();
+	}, [isSubmitting]); // eslint-disable-line
+
 	/**
 	 * Methods
 	 */
+	const navigateToOverview = (): void => {
+		navigate(`${MODULE_PATHS.users.overview}`, { siteId });
+	};
+
 	const onSubmit = (values: UserRolesFormState): void => {
-		usersFacade.updateUserRolesForSite(
-			{
-				userUuid,
-				siteUuid: siteId,
-				roles: values.roleIds,
-			},
-			ALERT_CONTAINER_IDS.UPDATE_USER_ROLES_SITE_ON_SITE
-		);
-		resetDetectValueChanges();
+		usersFacade
+			.updateUserRolesForSite(
+				{
+					userUuid,
+					siteUuid: siteId,
+					roles: values.roleIds,
+				},
+				ALERT_CONTAINER_IDS.UPDATE_USER_ROLES_SITE_ON_SITE
+			)
+			.then(() => {
+				resetDetectValueChanges();
+				setIsSubmitting(true);
+			});
 	};
 
 	const onCancel = (resetForm: FormikProps<UserRolesFormState>['resetForm']): void => {
 		resetForm();
+		setIsSubmitting(true);
 	};
 
 	/**
@@ -142,7 +159,7 @@ const SiteUserDetailRolesUpdate: FC<RolesRouteProps> = ({ tenantId }) => {
 								/>
 								<LeavePrompt
 									shouldBlockNavigationOnConfirm
-									when={hasChanges}
+									when={hasChanges && !isSubmitting}
 									onConfirm={submitForm}
 								/>
 							</>
