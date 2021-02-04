@@ -1,4 +1,5 @@
 import { Link as AUILink, Icon } from '@acpaas-ui/react-components';
+import { EllipsisWithTooltip } from '@acpaas-ui/react-editorial-components';
 import { prop, propOr } from 'ramda';
 import React from 'react';
 import { Link } from 'react-router-dom';
@@ -20,14 +21,17 @@ export const ROLES_OVERVIEW_COLUMNS = (mySecurityRights: string[]): any[] => {
 			label: 'Rol',
 			value: 'description',
 			disableSorting: true,
+			width: '50%',
 			component(value: any, rowData: RolesOverviewTableRow) {
 				return (
 					<>
 						<AUILink to={propOr('#', 'target')(rowData)} component={Link}>
-							{prop('name')(rowData)}
+							<EllipsisWithTooltip>{prop('name')(rowData)}</EllipsisWithTooltip>
 						</AUILink>
 						<p className="u-text-light u-margin-top-xs">
-							{prop('description')(rowData)}
+							<EllipsisWithTooltip>
+								{prop('description')(rowData)}
+							</EllipsisWithTooltip>
 						</p>
 					</>
 				);
@@ -37,6 +41,7 @@ export const ROLES_OVERVIEW_COLUMNS = (mySecurityRights: string[]): any[] => {
 			label: 'Admin',
 			value: 'admin',
 			disableSorting: true,
+			width: '30%',
 			component(value: unknown, rowData: RolesOverviewTableRow) {
 				return prop('admin')(rowData) ? (
 					<span className="u-text-success fa fa-check"></span>
@@ -57,6 +62,7 @@ export const ROLES_OVERVIEW_COLUMNS = (mySecurityRights: string[]): any[] => {
 			label: '',
 			classList: ['u-text-right'],
 			disableSorting: true,
+			width: '20%',
 			component(value: unknown, rowData: RolesOverviewTableRow) {
 				return (
 					<AUILink

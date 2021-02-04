@@ -80,7 +80,9 @@ const UserDetailRoles: FC<UserDetailRolesProps> = ({
 
 		return (
 			<PaginatedTable
+				fixed
 				className="u-margin-top"
+				tableClassName="a-table--fixed--sm"
 				columns={SITE_COLUMNS(t, mySecurityRights, isAddingUserToSite, giveAccesSiteId)}
 				rows={siteRows}
 				currentPage={sitesPagination?.currentPage}
@@ -88,7 +90,7 @@ const UserDetailRoles: FC<UserDetailRolesProps> = ({
 				onPageChange={handlePageChange}
 				noDataMessage="Er zijn geen resultaten"
 				loadDataMessage="Sites ophalen"
-				totalValues={sitesPagination?.total}
+				totalValues={sitesPagination?.total ?? 0}
 				loading={
 					sitesLoadingStates.isFetching === LoadingState.Loading ||
 					isFetchingUserRolesForSite

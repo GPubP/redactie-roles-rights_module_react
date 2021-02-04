@@ -150,7 +150,9 @@ const UsersOverview: FC<RolesRouteProps> = () => {
 					/>
 				</div>
 				<PaginatedTable
+					fixed
 					className="u-margin-top"
+					tableClassName="a-table--fixed--xs"
 					columns={USERS_OVERVIEW_COLUMNS(t, mySecurityRights)}
 					rows={usersRows}
 					currentPage={currentPage}
