@@ -100,8 +100,10 @@ const RolesOverview: FC<RolesRouteProps<{ siteId: string }>> = () => {
 		return (
 			<>
 				<PaginatedTable
+					fixed
 					className="u-margin-top"
-					columns={ROLES_OVERVIEW_COLUMNS(mySecurityRights)}
+					tableClassName="a-table--fixed--xs"
+					columns={ROLES_OVERVIEW_COLUMNS(mySecurityRights, t)}
 					rows={rolesRows}
 					currentPage={currentPage}
 					itemsPerPage={DEFAULT_ROLES_SEARCH_PARAMS.limit}

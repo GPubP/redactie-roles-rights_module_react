@@ -39,7 +39,7 @@
   "license": "ISC",
   "devDependencies": {
     "@acpaas-ui/react-components": "^4.7.0",
-    "@acpaas-ui/react-editorial-components": "0.0.2-7",
+    "@acpaas-ui/react-editorial-components": "0.0.2-13",
     "@babel/core": "7.8.3",
     "@babel/preset-env": "7.8.3",
     "@babel/preset-react": "7.8.3",
@@ -52,7 +52,7 @@
     "@redactie/react-router-guards": "1.0.2",
     "@redactie/redactie-core": "^2.0.0",
     "@redactie/sites-module": "^0.19.3",
-    "@redactie/translations-module": "^0.6.0",
+    "@redactie/translations-module": "^0.8.0",
     "@redactie/utils": "^1.0.0",
     "@testing-library/jest-dom": "5.0.2",
     "@testing-library/react": "9.4.0",

@@ -1,4 +1,5 @@
 import { Link as AUILink, Button } from '@acpaas-ui/react-components';
+import { EllipsisWithTooltip } from '@acpaas-ui/react-editorial-components';
 import { TranslateFunc } from '@redactie/translations-module/public/lib/i18next/useTranslation';
 import React from 'react';
 import { Link } from 'react-router-dom';
@@ -22,11 +23,12 @@ export const USERS_OVERVIEW_COLUMNS = (t: TranslateFunc, mySecurityRights: strin
 			label: t(CORE_TRANSLATIONS.TABLE_NAME),
 			disableSorting: true,
 			value: 'name',
+			width: '50%',
 			component(value: any, rowData: UsersOverviewTableRow) {
 				return (
 					<>
 						<AUILink to={`${rowData?.uuid}/rollen`} component={Link}>
-							{value}
+							<EllipsisWithTooltip>{value}</EllipsisWithTooltip>
 						</AUILink>
 					</>
 				);
@@ -35,6 +37,7 @@ export const USERS_OVERVIEW_COLUMNS = (t: TranslateFunc, mySecurityRights: strin
 		{
 			label: t(CORE_TRANSLATIONS.TABLE_TYPE),
 			disableSorting: true,
+			width: '30%',
 			value: 'type',
 		},
 	];
@@ -49,6 +52,7 @@ export const USERS_OVERVIEW_COLUMNS = (t: TranslateFunc, mySecurityRights: strin
 			label: '',
 			classList: ['u-text-right'],
 			disableSorting: true,
+			width: '20%',
 			component(value: unknown, rowData: UsersOverviewTableRow) {
 				const { uuid, navigate } = rowData;
 

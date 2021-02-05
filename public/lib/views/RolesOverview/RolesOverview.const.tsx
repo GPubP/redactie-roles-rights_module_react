@@ -1,14 +1,17 @@
 import { Link as AUILink, Icon } from '@acpaas-ui/react-components';
-import { prop, propOr } from 'ramda';
+import { EllipsisWithTooltip } from '@acpaas-ui/react-editorial-components';
+import { TranslateFunc } from '@redactie/translations-module';
+import { propOr } from 'ramda';
 import React from 'react';
 import { Link } from 'react-router-dom';
 
+import { CORE_TRANSLATIONS } from '../../connectors';
 import { checkSecurityRights } from '../../helpers';
 import { SecurityRightsSite } from '../../roles.const';
 
 import { RolesOverviewTableRow } from './RolesOverview.types';
 
-export const ROLES_OVERVIEW_COLUMNS = (mySecurityRights: string[]): any[] => {
+export const ROLES_OVERVIEW_COLUMNS = (mySecurityRights: string[], t: TranslateFunc): any[] => {
 	const canUpdate = checkSecurityRights(
 		mySecurityRights,
 		[SecurityRightsSite.RolesUpdate],
@@ -18,16 +21,24 @@ export const ROLES_OVERVIEW_COLUMNS = (mySecurityRights: string[]): any[] => {
 	const defaultColumns = [
 		{
 			label: 'Rol',
-			value: 'description',
+			value: 'name',
 			disableSorting: true,
-			component(value: any, rowData: RolesOverviewTableRow) {
+			width: '50%',
+			component(label: string, rowData: RolesOverviewTableRow) {
+				const { description } = rowData;
 				return (
 					<>
 						<AUILink to={propOr('#', 'target')(rowData)} component={Link}>
-							{prop('name')(rowData)}
+							<EllipsisWithTooltip>{label}</EllipsisWithTooltip>
 						</AUILink>
-						<p className="u-text-light u-margin-top-xs">
-							{prop('description')(rowData)}
+						<p className="small">
+							{description ? (
+								<EllipsisWithTooltip>{description}</EllipsisWithTooltip>
+							) : (
+								<span className="u-text-italic">
+									{t(CORE_TRANSLATIONS['TABLE_NO-DESCRIPTION'])}
+								</span>
+							)}
 						</p>
 					</>
 				);
@@ -37,8 +48,9 @@ export const ROLES_OVERVIEW_COLUMNS = (mySecurityRights: string[]): any[] => {
 			label: 'Admin',
 			value: 'admin',
 			disableSorting: true,
-			component(value: unknown, rowData: RolesOverviewTableRow) {
-				return prop('admin')(rowData) ? (
+			width: '30%',
+			component(isAdmin: boolean) {
+				return isAdmin ? (
 					<span className="u-text-success fa fa-check"></span>
 				) : (
 					<span className="u-text-danger fa fa-close"></span>
@@ -57,6 +69,7 @@ export const ROLES_OVERVIEW_COLUMNS = (mySecurityRights: string[]): any[] => {
 			label: '',
 			classList: ['u-text-right'],
 			disableSorting: true,
+			width: '20%',
 			component(value: unknown, rowData: RolesOverviewTableRow) {
 				return (
 					<AUILink
