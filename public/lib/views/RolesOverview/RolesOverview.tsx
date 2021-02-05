@@ -103,7 +103,7 @@ const RolesOverview: FC<RolesRouteProps<{ siteId: string }>> = () => {
 					fixed
 					className="u-margin-top"
 					tableClassName="a-table--fixed--xs"
-					columns={ROLES_OVERVIEW_COLUMNS(mySecurityRights)}
+					columns={ROLES_OVERVIEW_COLUMNS(mySecurityRights, t)}
 					rows={rolesRows}
 					currentPage={currentPage}
 					itemsPerPage={DEFAULT_ROLES_SEARCH_PARAMS.limit}
