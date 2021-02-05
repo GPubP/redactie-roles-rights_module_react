@@ -2,7 +2,7 @@ import { Button } from '@acpaas-ui/react-components';
 import { EllipsisWithTooltip } from '@acpaas-ui/react-editorial-components';
 import { TranslateFunc } from '@redactie/translations-module/public/lib/i18next/useTranslation';
 import { LoadingState } from '@redactie/utils';
-import React, { useMemo } from 'react';
+import React from 'react';
 
 import { SecurableRender } from '../../components';
 import { CORE_TRANSLATIONS } from '../../connectors/translations';

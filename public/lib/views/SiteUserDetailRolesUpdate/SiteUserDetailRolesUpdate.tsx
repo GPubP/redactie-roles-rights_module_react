@@ -28,7 +28,7 @@ import {
 	ALERT_CONTAINER_IDS,
 	MODULE_PATHS,
 	SITE_CONTEXT_DEFAULT_BREADCRUMBS,
-	SITES_ROOT
+	SITES_ROOT,
 } from '../../roles.const';
 import { RolesRouteProps } from '../../roles.types';
 import { rolesFacade } from '../../store/roles';
@@ -97,16 +97,16 @@ const SiteUserDetailRolesUpdate: FC<RolesRouteProps> = ({ tenantId }) => {
 		}
 	}, [userRoles]);
 
-	useEffect(() => {
-		isSubmitting && navigateToOverview();
-	}, [isSubmitting]); // eslint-disable-line
-
 	/**
 	 * Methods
 	 */
 	const navigateToOverview = (): void => {
 		navigate(`${MODULE_PATHS.users.overview}`, { siteId });
 	};
+
+	useEffect(() => {
+		isSubmitting && navigateToOverview();
+	}, [isSubmitting]); // eslint-disable-line
 
 	const onSubmit = (values: UserRolesFormState): void => {
 		usersFacade
