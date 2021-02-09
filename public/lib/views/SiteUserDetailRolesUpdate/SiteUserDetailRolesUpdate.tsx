@@ -101,7 +101,7 @@ const SiteUserDetailRolesUpdate: FC<RolesRouteProps> = ({ tenantId }) => {
 	 * Methods
 	 */
 	const navigateToOverview = (): void => {
-		navigate(`${MODULE_PATHS.users.overview}`, { siteId });
+		navigate(`${MODULE_PATHS.users.siteOverview}`, { siteId });
 	};
 
 	useEffect(() => {

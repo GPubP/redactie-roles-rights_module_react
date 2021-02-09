@@ -6,11 +6,13 @@ import {
 } from '@acpaas-ui/react-editorial-components';
 import { DataLoader, LoadingState, useNavigate } from '@redactie/utils';
 import React, { FC, ReactElement, useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
 
 import { FilterForm, FilterFormState } from '../../components';
 import { useCoreTranslation } from '../../connectors/translations';
 import { useMySecurityRightsForSite, useRoutesBreadcrumbs, useUsers } from '../../hooks';
-import { MODULE_PATHS, SITE_CONTEXT_DEFAULT_BREADCRUMBS, SITES_ROOT } from '../../roles.const';
+import useActiveTabs from '../../hooks/useActiveTabs/useActiveTabs';
+import { MODULE_PATHS, SITE_CONTEXT_DEFAULT_BREADCRUMBS, SITES_ROOT, SITE_USER_OVERVIEW_TABS } from '../../roles.const';
 import { RolesRouteProps } from '../../roles.types';
 import { DEFAULT_USERS_SEARCH_PARAMS } from '../../services/users/users.service.const';
 import { usersFacade } from '../../store/users';
@@ -28,7 +30,7 @@ const SiteUsersOverview: FC<RolesRouteProps<{ siteId: string }>> = ({ match }) =
 	const [filterFormState, setFilterFormState] = useState<FilterFormState>(
 		CONTENT_INITIAL_FILTER_STATE
 	);
-	const { navigate } = useNavigate(SITES_ROOT);
+	const { navigate, generatePath } = useNavigate(SITES_ROOT);
 	const breadcrumbs = useRoutesBreadcrumbs(SITE_CONTEXT_DEFAULT_BREADCRUMBS);
 	const [usersSearchParams, setUsersSearchParams] = useState(DEFAULT_USERS_SEARCH_PARAMS);
 	const [loadingState, users, usersMeta] = useUsers();
@@ -38,9 +40,15 @@ const SiteUsersOverview: FC<RolesRouteProps<{ siteId: string }>> = ({ match }) =
 		siteUuid: siteId,
 		onlyKeys: true,
 	});
+	const activeTabs = useActiveTabs(SITE_USER_OVERVIEW_TABS, location.pathname);
 	const [t] = useCoreTranslation();
 
 	useEffect(() => {
+		if (activeTabs.find(tab => tab.active)?.target === 'tenant') {
+			usersFacade.getUsers(usersSearchParams);
+			return;
+		}
+
 		usersFacade.getUsersBySite(usersSearchParams, siteId);
 	}, [siteId, usersSearchParams]);
 
@@ -175,7 +183,21 @@ const SiteUsersOverview: FC<RolesRouteProps<{ siteId: string }>> = ({ match }) =
 
 	return (
 		<>
-			<ContextHeader title="Gebruikers">
+			<ContextHeader
+				tabs={activeTabs}
+				linkProps={(props: any) => {
+					const to = generatePath(`${MODULE_PATHS.siteUsersOverview}/${props.href}`, {
+						siteId,
+					});
+
+					return {
+						...props,
+						to,
+						component: Link,
+					};
+				}}
+				title="Gebruikers"
+			>
 				<ContextHeaderTopSection>{breadcrumbs}</ContextHeaderTopSection>
 			</ContextHeader>
 			<Container>
