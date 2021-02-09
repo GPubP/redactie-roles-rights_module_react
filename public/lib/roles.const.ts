@@ -1,4 +1,4 @@
-import { Tab, TabTypes } from "./roles.types";
+import { Tab } from "./roles.types";
 
 export const BREADCRUMB_OPTIONS = {
 	excludePaths: [
@@ -81,14 +81,12 @@ export const SITE_USER_OVERVIEW_TAB_MAP: {
 	site: {
 		name: 'Site',
 		target: 'site',
-		type: TabTypes.INTERNAL,
 		active: true,
 		containerId: ALERT_CONTAINER_IDS.UPDATE_USER_ROLES_SITE_ON_SITE,
 	},
 	tenant: {
 		name: 'Tenant',
 		target: 'tenant',
-		type: TabTypes.INTERNAL,
 		active: false,
 		containerId: ALERT_CONTAINER_IDS.UPDATE_USER_ROLES_SITE_ON_SITE,
 	},

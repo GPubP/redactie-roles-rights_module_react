@@ -131,12 +131,6 @@ export interface Tab {
 	name: string;
 	target: string;
 	active: boolean;
-	type: TabTypes;
 	disabled?: boolean;
 	containerId: ALERT_CONTAINER_IDS;
-}
-
-export enum TabTypes {
-	'INTERNAL',
-	'EXTERNAL',
 }
