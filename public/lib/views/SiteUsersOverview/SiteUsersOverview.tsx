@@ -23,7 +23,7 @@ const SiteUsersOverview: FC<RolesRouteProps<{ siteId: string }>> = ({ match }) =
 	/**
 	 * Hooks
 	 */
-	const [currentPage, setCurrentPage] = useState(DEFAULT_USERS_SEARCH_PARAMS.skip);
+	const [currentPage, setCurrentPage] = useState(DEFAULT_USERS_SEARCH_PARAMS.page);
 	const [filterItems, setFilterItems] = useState<FilterItemSchema[]>([]);
 	const [filterFormState, setFilterFormState] = useState<FilterFormState>(
 		CONTENT_INITIAL_FILTER_STATE
@@ -83,7 +83,7 @@ const SiteUsersOverview: FC<RolesRouteProps<{ siteId: string }>> = ({ match }) =
 		setUsersSearchParams({
 			...usersSearchParams,
 			search: filterFormState.name,
-			skip: 0,
+			page: 1,
 		});
 	};
 
@@ -113,7 +113,7 @@ const SiteUsersOverview: FC<RolesRouteProps<{ siteId: string }>> = ({ match }) =
 
 		setUsersSearchParams({
 			...usersSearchParams,
-			skip: pageNumber,
+			page: pageNumber,
 		});
 	};
 
@@ -162,7 +162,7 @@ const SiteUsersOverview: FC<RolesRouteProps<{ siteId: string }>> = ({ match }) =
 					columns={USERS_OVERVIEW_COLUMNS(t, mySecurityRights)}
 					rows={usersRows}
 					currentPage={currentPage}
-					itemsPerPage={DEFAULT_USERS_SEARCH_PARAMS.limit}
+					itemsPerPage={DEFAULT_USERS_SEARCH_PARAMS.pagesize}
 					onPageChange={handlePageChange}
 					orderBy={handleOrderBy}
 					activeSorting={activeSorting}
