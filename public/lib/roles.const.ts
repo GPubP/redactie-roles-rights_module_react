@@ -1,3 +1,5 @@
+import { Tab } from "./roles.types";
+
 export const BREADCRUMB_OPTIONS = {
 	excludePaths: [
 		'/',
@@ -29,6 +31,8 @@ const siteRolesCreate = `${siteRolesRoot}/aanmaken`;
 const siteRolesDetail = `${siteRolesRoot}/:roleId`;
 const siteRolesRightsOverview = `${siteRolesRightsRoot}/overzicht`;
 const siteUsersOverview = `${siteUsersRoot}/overzicht`;
+const siteUsersOverviewSite = `${siteUsersRoot}/overzicht/site`;
+const siteUsersOverviewTenant = `${siteUsersRoot}/overzicht/tenant`;
 const tenantUserDetail = `${tenantRoot}/:userUuid`;
 const tenantUserDetailGeneral = `${tenantUserDetail}/algemeen`;
 const tenantUserDetailRoles = `${tenantUserDetail}/rollen`;
@@ -43,8 +47,10 @@ export const MODULE_PATHS = {
 	dashboard: '/dashboard',
 	tenantRoot,
 	tenantUsersOverview,
+	siteUsersOverview,
 	users: {
-		overview: siteUsersOverview,
+		siteOverview: siteUsersOverviewSite,
+		tenantOverview: siteUsersOverviewTenant,
 	},
 	roles: {
 		overview: siteRolesOverview,
@@ -62,12 +68,34 @@ export const MODULE_PATHS = {
 	siteUserDetailRolesUpdate,
 };
 
-export const ALERT_CONTAINER_IDS = {
-	UPDATE_USER_ROLES_SITE_ON_TENANT: 'update-user-roles-site-on-tenant',
-	UPDATE_USER_ROLES_SITE_ON_SITE: 'update-user-roles-site-on-tenant',
-	UPDATE_USER_ROLES_TENANT: 'update-user-roles-tenant',
-	UPDATE_ROLE_ON_SITE: 'update-role-on-site',
+export enum ALERT_CONTAINER_IDS {
+	UPDATE_USER_ROLES_SITE_ON_TENANT = 'update-user-roles-site-on-tenant',
+	UPDATE_USER_ROLES_SITE_ON_SITE = 'update-user-roles-site-on-tenant',
+	UPDATE_USER_ROLES_TENANT = 'update-user-roles-tenant',
+	UPDATE_ROLE_ON_SITE = 'update-role-on-site',
 };
+
+export const SITE_USER_OVERVIEW_TAB_MAP: {
+	[key in 'site' | 'tenant']: Tab;
+} = {
+	site: {
+		name: 'Site',
+		target: 'site',
+		active: true,
+		containerId: ALERT_CONTAINER_IDS.UPDATE_USER_ROLES_SITE_ON_SITE,
+	},
+	tenant: {
+		name: 'Tenant',
+		target: 'tenant',
+		active: false,
+		containerId: ALERT_CONTAINER_IDS.UPDATE_USER_ROLES_SITE_ON_SITE,
+	},
+};
+
+export const SITE_USER_OVERVIEW_TABS: Tab[] = [
+	SITE_USER_OVERVIEW_TAB_MAP.site,
+	SITE_USER_OVERVIEW_TAB_MAP.tenant,
+];
 
 export const SITE_CONTEXT_DEFAULT_BREADCRUMBS = [
 	{

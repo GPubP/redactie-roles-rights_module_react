@@ -69,7 +69,7 @@ sitesConnector.registerRoutes({
 	path: MODULE_PATHS.siteRoot,
 	breadcrumb: false,
 	component: RolesRootComponent,
-	redirect: MODULE_PATHS.users.overview,
+	redirect: MODULE_PATHS.users.siteOverview,
 	navigation: {
 		renderContext: 'site',
 		context: 'site',
@@ -153,7 +153,24 @@ sitesConnector.registerRoutes({
 			},
 		},
 		{
-			path: MODULE_PATHS.users.overview,
+			path: MODULE_PATHS.users.siteOverview,
+			breadcrumb: false,
+			component: SiteUsersOverview,
+			guardOptions: {
+				guards: [securityRightsSiteGuard(urlSiteParam, [SecurityRightsSite.UsersRead])],
+			},
+			navigation: {
+				context: 'site',
+				label: 'Gebruikers',
+				order: 2,
+				parentPath: MODULE_PATHS.siteRoot,
+				canShown: [
+					securityRightsSiteCanShown(urlSiteParam, [SecurityRightsSite.UsersRead]),
+				],
+			},
+		},
+		{
+			path: MODULE_PATHS.users.tenantOverview,
 			breadcrumb: false,
 			component: SiteUsersOverview,
 			guardOptions: {
