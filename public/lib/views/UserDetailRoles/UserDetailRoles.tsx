@@ -29,7 +29,7 @@ const UserDetailRoles: FC<UserDetailRolesProps> = ({
 	const [sitesPagination, isFetchingUserRolesForSite] = useSitesPagination(
 		query as SearchParams,
 		user.id,
-		true,
+		true
 	);
 	const sitesLoadingStates = sitesConnector.hooks.useSitesLoadingStates();
 

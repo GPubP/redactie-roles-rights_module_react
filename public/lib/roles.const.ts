@@ -1,4 +1,6 @@
-import { Tab } from "./roles.types";
+import { ContextHeaderBadge } from '@redactie/utils';
+
+import { Tab } from './roles.types';
 
 export const BREADCRUMB_OPTIONS = {
 	excludePaths: [
@@ -73,7 +75,7 @@ export enum ALERT_CONTAINER_IDS {
 	UPDATE_USER_ROLES_SITE_ON_SITE = 'update-user-roles-site-on-tenant',
 	UPDATE_USER_ROLES_TENANT = 'update-user-roles-tenant',
 	UPDATE_ROLE_ON_SITE = 'update-role-on-site',
-};
+}
 
 export const SITE_USER_OVERVIEW_TAB_MAP: {
 	[key in 'site' | 'tenant']: Tab;
@@ -82,12 +84,14 @@ export const SITE_USER_OVERVIEW_TAB_MAP: {
 		name: 'Site',
 		target: 'site',
 		active: true,
+		disabled: false,
 		containerId: ALERT_CONTAINER_IDS.UPDATE_USER_ROLES_SITE_ON_SITE,
 	},
 	tenant: {
 		name: 'Tenant',
 		target: 'tenant',
 		active: false,
+		disabled: false,
 		containerId: ALERT_CONTAINER_IDS.UPDATE_USER_ROLES_SITE_ON_SITE,
 	},
 };
@@ -121,3 +125,17 @@ export enum SecurityRightsTenant {
 	UsersGrantSiteAccess = 'roles-rights_grant-users-site-access',
 	UsersUpdateSiteRoles = 'roles-rights_update-users-site-roles',
 }
+
+export const DEFAULT_USER_DETAIL_HEADER_BADGES: ContextHeaderBadge[] = [
+	{
+		name: 'Gebruiker',
+		type: 'primary',
+	},
+];
+
+export const DEFAULT_ROLES_DETAIL_HEADER_BADGES: ContextHeaderBadge[] = [
+	{
+		name: 'Rol',
+		type: 'primary',
+	},
+];

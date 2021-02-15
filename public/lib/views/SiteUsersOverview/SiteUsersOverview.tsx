@@ -12,7 +12,12 @@ import { FilterForm, FilterFormState } from '../../components';
 import { useCoreTranslation } from '../../connectors/translations';
 import { useMySecurityRightsForSite, useRoutesBreadcrumbs, useUsers } from '../../hooks';
 import useActiveTabs from '../../hooks/useActiveTabs/useActiveTabs';
-import { MODULE_PATHS, SITE_CONTEXT_DEFAULT_BREADCRUMBS, SITES_ROOT, SITE_USER_OVERVIEW_TABS } from '../../roles.const';
+import {
+	MODULE_PATHS,
+	SITE_CONTEXT_DEFAULT_BREADCRUMBS,
+	SITE_USER_OVERVIEW_TABS,
+	SITES_ROOT,
+} from '../../roles.const';
 import { RolesRouteProps } from '../../roles.types';
 import { DEFAULT_USERS_SEARCH_PARAMS } from '../../services/users/users.service.const';
 import { usersFacade } from '../../store/users';
@@ -50,7 +55,7 @@ const SiteUsersOverview: FC<RolesRouteProps<{ siteId: string }>> = ({ match }) =
 		}
 
 		usersFacade.getUsersBySite(usersSearchParams, siteId);
-	}, [siteId, usersSearchParams]);
+	}, [activeTabs, siteId, usersSearchParams]);
 
 	useEffect(() => {
 		if (
