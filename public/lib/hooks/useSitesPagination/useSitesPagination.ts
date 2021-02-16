@@ -12,13 +12,16 @@ import { SiteModelWithRoles } from './useSitesPagination.types';
 function useSitesPagination(
 	sitesSearchParams: SearchParams,
 	userUuid: string,
-	clearCache: boolean = false
+	clearCache = false
 ): [PaginationResponse<SiteModelWithRoles> | null, boolean] {
 	const [newPagination, setNewPagination] = useState<PaginationResponse<
 		SiteModelWithRoles
 	> | null>(null);
 	const prevUserUuid = usePrevious<string>(userUuid);
-	const [pagination] = sitesConnector.hooks.useSitesPagination(sitesSearchParams as any, clearCache);
+	const [pagination] = sitesConnector.hooks.useSitesPagination(
+		sitesSearchParams as any,
+		clearCache
+	);
 	const [siteRolesMap, setSiteRolesMap] = useState<RoleMapsResponses>();
 	const [prevSiteUuids, setPrevSiteUuids] = useState<string[]>([]);
 	const [isFetchingRolesForSite, setIsFetchingRolesForSite] = useState(false);

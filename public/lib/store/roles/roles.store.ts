@@ -64,7 +64,7 @@ export class RolesStore extends Store<RolesState> {
 		}));
 	}
 
-	public setRoleDetail(type: RoleEntityTypes, roleDetail: Partial<RoleModel>): void {
+	public setRoleDetail(type: RoleEntityTypes, roleDetail: Partial<RoleModel> | undefined): void {
 		this.update(state => ({
 			...state,
 			[type]: {

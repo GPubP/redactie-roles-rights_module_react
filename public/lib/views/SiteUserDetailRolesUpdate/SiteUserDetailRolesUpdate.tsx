@@ -10,12 +10,14 @@ import {
 	LoadingState,
 	useDetectValueChanges,
 	useNavigate,
+	useWillUnmount,
 } from '@redactie/utils';
 import { FormikProps } from 'formik';
 import React, { FC, ReactElement, useEffect, useMemo, useState } from 'react';
 import { generatePath, useParams } from 'react-router-dom';
 
 import { DefaultFormActions, FormViewUserRoles, UserRolesFormState } from '../../components';
+import { CORE_TRANSLATIONS, useCoreTranslation } from '../../connectors/translations';
 import { mapUserRoles } from '../../helpers';
 import {
 	useRoutesBreadcrumbs,
@@ -26,6 +28,7 @@ import {
 } from '../../hooks';
 import {
 	ALERT_CONTAINER_IDS,
+	DEFAULT_USER_DETAIL_HEADER_BADGES,
 	MODULE_PATHS,
 	SITE_CONTEXT_DEFAULT_BREADCRUMBS,
 	SITES_ROOT,
@@ -41,6 +44,7 @@ const SiteUserDetailRolesUpdate: FC<RolesRouteProps> = ({ tenantId }) => {
 	const { userUuid, siteId } = useParams<{ userUuid: string; siteId: string }>();
 	const [initialLoading, setInitialLoading] = useState(LoadingState.Loading);
 	const { isUpdating } = useUsersLoadingStates();
+	const [t] = useCoreTranslation();
 	const [userLoadingState, user] = useUser(userUuid);
 	const [rolesLoadingState, roles] = useSiteRoles();
 	const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
@@ -65,6 +69,10 @@ const SiteUserDetailRolesUpdate: FC<RolesRouteProps> = ({ tenantId }) => {
 		initialLoading !== LoadingState.Loading && isUpdating !== LoadingState.Loading,
 		formState ?? initialFormState
 	);
+
+	useWillUnmount(() => {
+		usersFacade.clearUser();
+	});
 
 	useEffect(() => {
 		if (userUuid && siteId) {
@@ -129,6 +137,13 @@ const SiteUserDetailRolesUpdate: FC<RolesRouteProps> = ({ tenantId }) => {
 		setIsSubmitting(true);
 	};
 
+	const pageTitle = (
+		<>
+			<i>{user ? `${user?.firstname} ${user?.lastname}` : 'Gebruiker'}</i>{' '}
+			{t(CORE_TRANSLATIONS.ROUTING_UPDATE)}
+		</>
+	);
+
 	/**
 	 * Render
 	 */
@@ -172,7 +187,7 @@ const SiteUserDetailRolesUpdate: FC<RolesRouteProps> = ({ tenantId }) => {
 
 	return (
 		<>
-			<ContextHeader title={user ? `${user?.firstname} ${user?.lastname} bewerken` : ''}>
+			<ContextHeader title={pageTitle} badges={DEFAULT_USER_DETAIL_HEADER_BADGES}>
 				<ContextHeaderTopSection>{breadcrumbs}</ContextHeaderTopSection>
 			</ContextHeader>
 			<Container>

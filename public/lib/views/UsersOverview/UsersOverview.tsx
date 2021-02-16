@@ -156,7 +156,11 @@ const UsersOverview: FC<RolesRouteProps> = () => {
 					columns={USERS_OVERVIEW_COLUMNS(t, mySecurityRights)}
 					rows={usersRows}
 					currentPage={currentPage}
-					itemsPerPage={DEFAULT_USERS_SEARCH_PARAMS.pagesize !== -1 ? DEFAULT_USERS_SEARCH_PARAMS.pagesize : (usersMeta?.totalElements || 0)}
+					itemsPerPage={
+						DEFAULT_USERS_SEARCH_PARAMS.pagesize !== -1
+							? DEFAULT_USERS_SEARCH_PARAMS.pagesize
+							: usersMeta?.totalElements || 0
+					}
 					onPageChange={handlePageChange}
 					orderBy={handleOrderBy}
 					activeSorting={activeSorting}

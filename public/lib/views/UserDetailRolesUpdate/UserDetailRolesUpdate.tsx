@@ -119,6 +119,12 @@ const UserDetailRolesUpdate: FC<RolesRouteProps<{ userUuid: string; siteUuid: st
 		resetForm();
 	};
 
+	const pageTitle = (
+		<>
+			<i>{site?.data?.name || 'Site'}</i> Toegang
+		</>
+	);
+
 	/**
 	 * Render
 	 */
@@ -163,7 +169,7 @@ const UserDetailRolesUpdate: FC<RolesRouteProps<{ userUuid: string; siteUuid: st
 
 	return (
 		<>
-			<ContextHeader title={site ? `${site.data.name} toegang` : ''}>
+			<ContextHeader title={pageTitle}>
 				<ContextHeaderTopSection>{breadcrumbs}</ContextHeaderTopSection>
 			</ContextHeader>
 			<Container>

@@ -10,12 +10,14 @@ import {
 	LoadingState,
 	useDetectValueChanges,
 	useNavigate,
+	useWillUnmount,
 } from '@redactie/utils';
 import { FormikProps } from 'formik';
 import React, { FC, ReactElement, useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 
 import { RoleDetailForm } from '../../components';
+import { CORE_TRANSLATIONS, useCoreTranslation } from '../../connectors/translations';
 import { checkSecurityRights } from '../../helpers';
 import {
 	useMySecurityRightsForSite,
@@ -25,6 +27,7 @@ import {
 } from '../../hooks';
 import {
 	ALERT_CONTAINER_IDS,
+	DEFAULT_ROLES_DETAIL_HEADER_BADGES,
 	MODULE_PATHS,
 	SecurityRightsSite,
 	SITE_CONTEXT_DEFAULT_BREADCRUMBS,
@@ -40,6 +43,7 @@ const RolesUpdate: FC<RolesRouteProps> = () => {
 	 */
 	const { siteId, roleId } = useParams<{ siteId: string; roleId: string }>();
 	const { navigate } = useNavigate(SITES_ROOT);
+	const [t] = useCoreTranslation();
 	const [initialLoading, setInitialLoading] = useState(LoadingState.Loading);
 	const [initialFormState, setInitialFormState] = useState<RoleDetailFormState | null>(null);
 	const [formState, setFormState] = useState<RoleDetailFormState | null>(initialFormState);
@@ -64,6 +68,10 @@ const RolesUpdate: FC<RolesRouteProps> = () => {
 	const [mySecurityRightsLoadingState, mySecurityRights] = useMySecurityRightsForSite({
 		siteUuid: siteId,
 		onlyKeys: true,
+	});
+
+	useWillUnmount(() => {
+		rolesFacade.clearSiteRole();
 	});
 
 	useEffect(() => {
@@ -133,6 +141,12 @@ const RolesUpdate: FC<RolesRouteProps> = () => {
 		resetForm();
 	};
 
+	const pageTitle = (
+		<>
+			<i>{role?.attributes?.displayName || 'Rol'}</i> {t(CORE_TRANSLATIONS.ROUTING_UPDATE)}
+		</>
+	);
+
 	/**
 	 * Render
 	 */
@@ -166,7 +180,7 @@ const RolesUpdate: FC<RolesRouteProps> = () => {
 
 	return (
 		<>
-			<ContextHeader title={role ? `${role.attributes?.displayName || 'Rol'} bewerken` : ''}>
+			<ContextHeader title={pageTitle} badges={DEFAULT_ROLES_DETAIL_HEADER_BADGES}>
 				<ContextHeaderTopSection>{breadcrumbs}</ContextHeaderTopSection>
 			</ContextHeader>
 			<Container>

@@ -14,6 +14,7 @@ import {
 	LoadingState,
 	RenderChildRoutes,
 	useDetectValueChanges,
+	useWillUnmount,
 } from '@redactie/utils';
 import { FormikProps, FormikValues } from 'formik';
 import { equals } from 'ramda';
@@ -31,7 +32,11 @@ import {
 	useUserRolesForTenant,
 	useUsersLoadingStates,
 } from '../../hooks';
-import { ALERT_CONTAINER_IDS, MODULE_PATHS } from '../../roles.const';
+import {
+	ALERT_CONTAINER_IDS,
+	DEFAULT_USER_DETAIL_HEADER_BADGES,
+	MODULE_PATHS,
+} from '../../roles.const';
 import { RolesRouteProps } from '../../roles.types';
 import { rolesFacade } from '../../store/roles';
 import { usersFacade } from '../../store/users';
@@ -68,6 +73,10 @@ const UserUpdate: FC<RolesRouteProps<{ userUuid?: string }>> = ({ route, tenantI
 		}),
 		[tenantId]
 	);
+
+	useWillUnmount(() => {
+		usersFacade.clearUser();
+	});
 
 	useEffect(() => {
 		if (userUuid) {
@@ -111,6 +120,17 @@ const UserUpdate: FC<RolesRouteProps<{ userUuid?: string }>> = ({ route, tenantI
 		}
 	};
 
+	const pageTitle = (
+		<>
+			<i>
+				{user && user.firstname && user.lastname
+					? `${user.firstname} ${user.lastname}`
+					: 'Gebruiker'}
+			</i>{' '}
+			{t(CORE_TRANSLATIONS.ROUTING_UPDATE)}
+		</>
+	);
+
 	/**
 	 * Render
 	 */
@@ -147,7 +167,7 @@ const UserUpdate: FC<RolesRouteProps<{ userUuid?: string }>> = ({ route, tenantI
 
 	return (
 		<>
-			<ContextHeader title={user ? `${user?.firstname} ${user?.lastname} bewerken` : ''}>
+			<ContextHeader title={pageTitle} badges={DEFAULT_USER_DETAIL_HEADER_BADGES}>
 				<ContextHeaderTopSection>{breadcrumbs}</ContextHeaderTopSection>
 			</ContextHeader>
 			<Container>

@@ -143,6 +143,10 @@ export class RolesFacade {
 			})
 			.finally(() => this.store.setIsDeleting(RoleEntityTypes.SITE, false));
 	}
+
+	public clearSiteRole(): void {
+		this.store.setRoleDetail(RoleEntityTypes.SITE, undefined);
+	}
 }
 
 export const rolesFacade = new RolesFacade(rolesStore, rolesApiService, rolesQuery);

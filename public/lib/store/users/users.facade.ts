@@ -203,6 +203,12 @@ export class UsersFacade extends BaseEntityFacade<UsersStore, UsersApiService, U
 				this.store.setIsAddingUserToSite(false);
 			});
 	}
+
+	public clearUser(): void {
+		this.store.update({
+			userDetail: undefined,
+		});
+	}
 }
 
 export const usersFacade = new UsersFacade(

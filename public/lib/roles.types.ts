@@ -1,4 +1,5 @@
 import { ModuleRouteConfig, RouteConfigComponentProps } from '@redactie/redactie-core';
+import { ContextHeaderTab } from '@redactie/utils';
 import { FC } from 'react';
 
 import {
@@ -126,11 +127,6 @@ export interface RoleDetailFormState {
 	admin?: boolean;
 }
 
-export interface Tab {
-	id?: string;
-	name: string;
-	target: string;
-	active: boolean;
-	disabled?: boolean;
+export interface Tab extends ContextHeaderTab {
 	containerId: ALERT_CONTAINER_IDS;
 }

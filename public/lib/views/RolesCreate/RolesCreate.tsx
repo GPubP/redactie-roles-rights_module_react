@@ -8,6 +8,7 @@ import React, { FC, useState } from 'react';
 import { useParams } from 'react-router-dom';
 
 import { RoleDetailForm } from '../../components';
+import { CORE_TRANSLATIONS, useCoreTranslation } from '../../connectors';
 import { useRolesLoadingStates, useRoutesBreadcrumbs } from '../../hooks';
 import { MODULE_PATHS, SITE_CONTEXT_DEFAULT_BREADCRUMBS, TENANT_ROOT } from '../../roles.const';
 import { RoleDetailFormState, RolesRouteProps } from '../../roles.types';
@@ -21,6 +22,7 @@ const RolesCreate: FC<RolesRouteProps> = () => {
 	 */
 	const { siteId } = useParams<{ siteId: string }>();
 	const { navigate, generatePath } = useNavigate();
+	const [t] = useCoreTranslation();
 	const breadcrumbs = useRoutesBreadcrumbs([
 		...SITE_CONTEXT_DEFAULT_BREADCRUMBS,
 		{
@@ -32,6 +34,8 @@ const RolesCreate: FC<RolesRouteProps> = () => {
 	const [formValue, setFormValue] = useState<RoleDetailFormState>(INITIAL_FORM_STATE);
 	const [hasChanges] = useDetectValueChanges(true, formValue);
 	const [allowedPaths, setAllowedPaths] = useState<string[]>([]);
+
+	const pageTitle = `Rol ${t(CORE_TRANSLATIONS.ROUTING_CREATE)}`;
 
 	/**
 	 * Methods
@@ -59,7 +63,7 @@ const RolesCreate: FC<RolesRouteProps> = () => {
 	 */
 	return (
 		<>
-			<ContextHeader title="Rol aanmaken">
+			<ContextHeader title={pageTitle}>
 				<ContextHeaderTopSection>{breadcrumbs}</ContextHeaderTopSection>
 			</ContextHeader>
 			<Container>
