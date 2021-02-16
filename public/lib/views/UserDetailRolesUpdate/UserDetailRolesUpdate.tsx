@@ -121,7 +121,7 @@ const UserDetailRolesUpdate: FC<RolesRouteProps<{ userUuid: string; siteUuid: st
 
 	const pageTitle = (
 		<>
-			<i>{site?.data.name ? `${site?.data.name}` : 'Site'}</i> Toegang
+			<i>{site?.data?.name || 'Site'}</i> Toegang
 		</>
 	);
 

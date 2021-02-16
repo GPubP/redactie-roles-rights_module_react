@@ -143,8 +143,7 @@ const RolesUpdate: FC<RolesRouteProps> = () => {
 
 	const pageTitle = (
 		<>
-			<i>{role?.attributes?.displayName ? `${role.attributes?.displayName}` : 'Rol'}</i>{' '}
-			{t(CORE_TRANSLATIONS.ROUTING_UPDATE)}
+			<i>{role?.attributes?.displayName || 'Rol'}</i> {t(CORE_TRANSLATIONS.ROUTING_UPDATE)}
 		</>
 	);
 
