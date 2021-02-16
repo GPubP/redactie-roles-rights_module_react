@@ -10,6 +10,7 @@ import {
 	LoadingState,
 	useDetectValueChanges,
 	useNavigate,
+	useWillUnmount,
 } from '@redactie/utils';
 import { FormikProps } from 'formik';
 import React, { FC, ReactElement, useEffect, useMemo, useState } from 'react';
@@ -68,6 +69,10 @@ const SiteUserDetailRolesUpdate: FC<RolesRouteProps> = ({ tenantId }) => {
 		initialLoading !== LoadingState.Loading && isUpdating !== LoadingState.Loading,
 		formState ?? initialFormState
 	);
+
+	useWillUnmount(() => {
+		usersFacade.clearUser();
+	});
 
 	useEffect(() => {
 		if (userUuid && siteId) {

@@ -14,6 +14,7 @@ import {
 	LoadingState,
 	RenderChildRoutes,
 	useDetectValueChanges,
+	useWillUnmount,
 } from '@redactie/utils';
 import { FormikProps, FormikValues } from 'formik';
 import { equals } from 'ramda';
@@ -72,6 +73,10 @@ const UserUpdate: FC<RolesRouteProps<{ userUuid?: string }>> = ({ route, tenantI
 		}),
 		[tenantId]
 	);
+
+	useWillUnmount(() => {
+		usersFacade.clearUser();
+	});
 
 	useEffect(() => {
 		if (userUuid) {

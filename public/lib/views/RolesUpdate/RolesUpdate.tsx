@@ -10,6 +10,7 @@ import {
 	LoadingState,
 	useDetectValueChanges,
 	useNavigate,
+	useWillUnmount,
 } from '@redactie/utils';
 import { FormikProps } from 'formik';
 import React, { FC, ReactElement, useEffect, useState } from 'react';
@@ -67,6 +68,10 @@ const RolesUpdate: FC<RolesRouteProps> = () => {
 	const [mySecurityRightsLoadingState, mySecurityRights] = useMySecurityRightsForSite({
 		siteUuid: siteId,
 		onlyKeys: true,
+	});
+
+	useWillUnmount(() => {
+		rolesFacade.clearSiteRole();
 	});
 
 	useEffect(() => {
