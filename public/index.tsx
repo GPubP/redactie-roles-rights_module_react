@@ -176,15 +176,6 @@ sitesConnector.registerRoutes({
 			guardOptions: {
 				guards: [securityRightsSiteGuard(urlSiteParam, [SecurityRightsSite.UsersRead])],
 			},
-			navigation: {
-				context: 'site',
-				label: 'Gebruikers',
-				order: 2,
-				parentPath: MODULE_PATHS.siteRoot,
-				canShown: [
-					securityRightsSiteCanShown(urlSiteParam, [SecurityRightsSite.UsersRead]),
-				],
-			},
 		},
 	],
 });
