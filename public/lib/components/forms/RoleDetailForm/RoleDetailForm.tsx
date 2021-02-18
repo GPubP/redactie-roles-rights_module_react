@@ -59,6 +59,7 @@ const RoleDetailForm: FC<RoleDetailFormProps> = ({
 				</Card>
 				<DeletePrompt
 					body="Ben je zeker dat je deze rol wil verwijderen? Dit kan niet ongedaan gemaakt worden."
+					isDeleting={isDeleting}
 					show={showDeleteModal}
 					onCancel={onDeletePromptCancel}
 					onConfirm={onDeletePromptConfirm}
