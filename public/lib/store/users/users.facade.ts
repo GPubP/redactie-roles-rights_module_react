@@ -118,6 +118,21 @@ export class UsersFacade extends BaseEntityFacade<UsersStore, UsersApiService, U
 			.finally(() => this.store.setIsFetchingOne(false));
 	}
 
+	public getTenantUserBySite(payload: GetUserPayload, siteId: string): void {
+		this.store.setIsFetchingOne(true);
+		this.service
+			.getTenantUserBySite(payload, siteId)
+			.then(response => {
+				this.store.setUserDetail({
+					...response,
+				});
+			})
+			.catch(err => {
+				this.store.setError(err);
+			})
+			.finally(() => this.store.setIsFetchingOne(false));
+	}
+
 	public getUserRolesForTenant(payload: GetUserRolesForTenantPayload): void {
 		this.store.setIsFetchingUserRolesForTenant(true);
 		this.service

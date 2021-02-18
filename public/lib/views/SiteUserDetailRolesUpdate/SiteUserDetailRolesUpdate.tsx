@@ -80,7 +80,7 @@ const SiteUserDetailRolesUpdate: FC<RolesRouteProps> = ({ tenantId }) => {
 				userUuid,
 				siteUuid: siteId,
 			});
-			usersFacade.getUser({ userUuid });
+			usersFacade.getTenantUserBySite({ userUuid }, siteId);
 			rolesFacade.getSiteRoles(siteId);
 		}
 	}, [siteId, userUuid]);

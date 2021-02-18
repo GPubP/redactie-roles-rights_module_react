@@ -54,6 +54,10 @@ export class UsersApiService {
 		return await api.get(`users/${userUuid}`).json();
 	}
 
+	public async getTenantUserBySite({ userUuid }: GetUserPayload, siteId: string): Promise<UserResponse> {
+		return await api.get(`sites/${siteId}/tenant-users/${userUuid}`).json();
+	}
+
 	public async getUserRolesForTenant({
 		userUuid,
 	}: GetUserRolesForTenantPayload): Promise<RolesResponse> {
