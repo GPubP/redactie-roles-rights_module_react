@@ -6,9 +6,9 @@ import {
 	Textarea,
 	TextField,
 } from '@acpaas-ui/react-components';
-import { ErrorMessage, FormikOnChangeHandler } from '@redactie/utils';
+import { ErrorMessage, FormikOnChangeHandler, DeletePrompt } from '@redactie/utils';
 import { Field, Formik } from 'formik';
-import React, { FC, ReactElement } from 'react';
+import React, { FC, ReactElement, useState } from 'react';
 
 import { CORE_TRANSLATIONS, useCoreTranslation } from '../../../connectors/translations';
 import { RoleDetailFormState } from '../../../roles.types';
@@ -29,23 +29,41 @@ const RoleDetailForm: FC<RoleDetailFormProps> = ({
 	onChange = () => null,
 }) => {
 	const [t] = useCoreTranslation();
+	const [showDeleteModal, setShowDeleteModal] = useState(false);
+
+	const onDeletePromptConfirm = (): void => {
+		if (onDelete) {
+			onDelete();
+		};
+	};
+
+	const onDeletePromptCancel = (): void => {
+		setShowDeleteModal(false);
+	};
 
 	const renderDelete = (): ReactElement => {
 		return (
-			<Card className="u-margin-top">
-				<CardBody>
-					<CardTitle>Rol verwijderen</CardTitle>
-					<Button
-						onClick={onDelete}
-						className="u-margin-top"
-						type="danger"
-						outline
-						iconLeft={isDeleting ? 'circle-o-notch fa-spin' : null}
-					>
-						{t(CORE_TRANSLATIONS['BUTTON_REMOVE'])}
-					</Button>
-				</CardBody>
-			</Card>
+			<>
+				<Card className="u-margin-top">
+					<CardBody>
+						<CardTitle>Rol verwijderen</CardTitle>
+						<Button
+							onClick={() => setShowDeleteModal(true)}
+							className="u-margin-top"
+							type="danger"
+							outline
+						>
+							{t(CORE_TRANSLATIONS['BUTTON_REMOVE'])}
+						</Button>
+					</CardBody>
+				</Card>
+				<DeletePrompt
+					body="Ben je zeker dat je deze rol wil verwijderen? Dit kan niet ongedaan gemaakt worden."
+					show={showDeleteModal}
+					onCancel={onDeletePromptCancel}
+					onConfirm={onDeletePromptConfirm}
+				/>
+			</>
 		);
 	};
 
