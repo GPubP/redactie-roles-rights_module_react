@@ -50,7 +50,7 @@ const SiteUsersOverview: FC<RolesRouteProps<{ siteId: string }>> = ({ match }) =
 
 	useEffect(() => {
 		if (activeTabs.find(tab => tab.active)?.target === 'tenant') {
-			usersFacade.getUsers(usersSearchParams);
+			usersFacade.getTenantUsersBySite(usersSearchParams, siteId);
 			return;
 		}
 

@@ -39,8 +39,23 @@ export class UsersApiService {
 			.json<UsersResponse>();
 	}
 
+	public async getTenantUsersBySite(
+		searchParams: GetUsersPayload = DEFAULT_USERS_SEARCH_PARAMS,
+		siteId: string
+	): Promise<UsersResponse> {
+		return await api
+			.get(`sites/${siteId}/tenant-users`, {
+				searchParams: parseSearchParams(searchParams),
+			})
+			.json<UsersResponse>();
+	}
+
 	public async getUser({ userUuid }: GetUserPayload): Promise<UserResponse> {
 		return await api.get(`users/${userUuid}`).json();
+	}
+
+	public async getTenantUserBySite({ userUuid }: GetUserPayload, siteId: string): Promise<UserResponse> {
+		return await api.get(`sites/${siteId}/tenant-users/${userUuid}`).json();
 	}
 
 	public async getUserRolesForTenant({

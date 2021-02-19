@@ -27,7 +27,7 @@ export const USERS_OVERVIEW_COLUMNS = (t: TranslateFunc, mySecurityRights: strin
 			component(value: any, rowData: UsersOverviewTableRow) {
 				return (
 					<>
-						<AUILink to={`${rowData?.uuid}/rollen`} component={Link}>
+						<AUILink to={`../${rowData?.uuid}/rollen`} component={Link}>
 							<EllipsisWithTooltip>{value}</EllipsisWithTooltip>
 						</AUILink>
 					</>
