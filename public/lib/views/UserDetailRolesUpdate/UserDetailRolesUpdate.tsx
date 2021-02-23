@@ -44,7 +44,7 @@ const UserDetailRolesUpdate: FC<RolesRouteProps<{ userUuid: string; siteUuid: st
 		return [
 			{
 				name: 'Gebruikers',
-				target: generatePath(`/${tenantId}${MODULE_PATHS.tenantUsersOverview}`),
+				target: generatePath(`${MODULE_PATHS.tenantUsersOverview}`),
 			},
 			{
 				name: user ? `${user.firstname} ${user.lastname}` : '...',
