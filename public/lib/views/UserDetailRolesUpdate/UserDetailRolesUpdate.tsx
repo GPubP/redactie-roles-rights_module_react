@@ -53,7 +53,7 @@ const UserDetailRolesUpdate: FC<RolesRouteProps<{ userUuid: string; siteUuid: st
 				}),
 			},
 		];
-	}, [generatePath, tenantId, user, userUuid]);
+	}, [generatePath, user, userUuid]);
 	const breadcrumbs = useRoutesBreadcrumbs(extraBreadcrumbs);
 	const { isUpdating } = useUsersLoadingStates();
 	const [rolesLoadingState, roles] = useSiteRoles();
