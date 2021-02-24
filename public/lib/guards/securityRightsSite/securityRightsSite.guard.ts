@@ -33,8 +33,13 @@ const securityRightsSiteGuard: SecurityRightsSiteGuardFunction = (
 				) {
 					return next();
 				}
+				const fromPathname = from?.location?.pathname;
+				const hasRedirectURI = fromPathname !== to?.location?.pathname;
 
-				next.redirect(generatePath(`/${tenantId}${MODULE_PATHS.forbidden403}`));
+				next.redirect({
+					pathname: generatePath(`/${tenantId}${MODULE_PATHS.forbidden403}`),
+					search: hasRedirectURI ? `?redirect=${fromPathname}` : '',
+				});
 			});
 	} catch {
 		throw new Error(`Site ${siteUuid} does not exist`);
