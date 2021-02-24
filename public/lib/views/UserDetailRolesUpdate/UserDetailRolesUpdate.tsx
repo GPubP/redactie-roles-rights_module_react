@@ -30,9 +30,7 @@ import { RolesRouteProps } from '../../roles.types';
 import { rolesFacade } from '../../store/roles';
 import { usersFacade } from '../../store/users';
 
-const UserDetailRolesUpdate: FC<RolesRouteProps<{ userUuid: string; siteUuid: string }>> = ({
-	tenantId,
-}) => {
+const UserDetailRolesUpdate: FC<RolesRouteProps<{ userUuid: string; siteUuid: string }>> = () => {
 	/**
 	 * Hooks
 	 */
