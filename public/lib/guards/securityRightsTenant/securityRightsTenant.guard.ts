@@ -25,7 +25,12 @@ const securityRightsTenantGuard: SecurityRightsTenantGuardFunction = (
 		if (checkSecurityRights(mySecurityRights, requiredSecurityRights, oneSecurityRight)) {
 			next();
 		} else {
-			next.redirect(generatePath(`/${tenantId}${MODULE_PATHS.forbidden403}`));
+			const fromPathname = from?.location?.pathname;
+			const hasRedirectURI = fromPathname !== to?.location?.pathname;
+			next.redirect({
+				pathname: generatePath(`/${tenantId}${MODULE_PATHS.forbidden403}`),
+				search: hasRedirectURI ? `?redirect=${fromPathname}` : '',
+			});
 		}
 	} catch {
 		throw new Error('Tenant does not exist');

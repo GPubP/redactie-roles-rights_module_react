@@ -76,6 +76,9 @@ export interface EmbeddedResponse<T> {
 }
 
 export interface RolesRightsModuleAPI {
+	consts: {
+		forbidden403Path: string;
+	};
 	store: {
 		users: {
 			service: Pick<UsersFacade, 'getUsersBySite' | 'getUsers' | 'getUser'>;

@@ -64,6 +64,11 @@ export class MySecurityRightsFacade {
 		return Promise.resolve();
 	}
 
+	public invalidateCache(): void {
+		this.store.setSiteRightsCache(false);
+		this.store.setTenantRightsCache(false);
+	}
+
 	public getMySiteSecurityRights(siteUuid: string, clearCache = false): Promise<void> {
 		if (clearCache) {
 			this.store.setSiteRightsCache(false);

@@ -30,9 +30,7 @@ import { RolesRouteProps } from '../../roles.types';
 import { rolesFacade } from '../../store/roles';
 import { usersFacade } from '../../store/users';
 
-const UserDetailRolesUpdate: FC<RolesRouteProps<{ userUuid: string; siteUuid: string }>> = ({
-	tenantId,
-}) => {
+const UserDetailRolesUpdate: FC<RolesRouteProps<{ userUuid: string; siteUuid: string }>> = () => {
 	/**
 	 * Hooks
 	 */
@@ -53,7 +51,7 @@ const UserDetailRolesUpdate: FC<RolesRouteProps<{ userUuid: string; siteUuid: st
 				}),
 			},
 		];
-	}, [generatePath, tenantId, user, userUuid]);
+	}, [generatePath, user, userUuid]);
 	const breadcrumbs = useRoutesBreadcrumbs(extraBreadcrumbs);
 	const { isUpdating } = useUsersLoadingStates();
 	const [rolesLoadingState, roles] = useSiteRoles();

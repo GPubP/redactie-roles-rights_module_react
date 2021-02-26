@@ -6,7 +6,7 @@ import {
 	Textarea,
 	TextField,
 } from '@acpaas-ui/react-components';
-import { ErrorMessage, FormikOnChangeHandler, DeletePrompt } from '@redactie/utils';
+import { DeletePrompt, ErrorMessage, FormikOnChangeHandler } from '@redactie/utils';
 import { Field, Formik } from 'formik';
 import React, { FC, ReactElement, useState } from 'react';
 
@@ -34,7 +34,7 @@ const RoleDetailForm: FC<RoleDetailFormProps> = ({
 	const onDeletePromptConfirm = (): void => {
 		if (onDelete) {
 			onDelete();
-		};
+		}
 	};
 
 	const onDeletePromptCancel = (): void => {
