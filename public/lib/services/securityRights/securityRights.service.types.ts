@@ -14,6 +14,7 @@ export interface SecurityRightAttributes {
 	module: string;
 	subModule: string;
 	moduleVersion: string;
+	reference: string;
 	type: 'module' | 'content-type';
 	displayName: string;
 }

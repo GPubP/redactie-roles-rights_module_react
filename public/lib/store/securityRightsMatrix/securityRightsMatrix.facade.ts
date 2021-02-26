@@ -4,12 +4,14 @@ import {
 	SecurityRightsApiService,
 	UpdateRolesMatrixPayload,
 } from '../../services/securityRights';
+import { MySecurityRightsFacade, mySecurityRightsFacade } from '../mySecurityRights';
 
 import { securityRightsMatrixQuery, SecurityRightsMatrixQuery } from './securityRightsMatrix.query';
 import { securityRightsMatrixStore, SecurityRightsMatrixStore } from './securityRightsMatrix.store';
 
 export class SecurityRightsMatrixFacade {
 	constructor(
+		private mySecurityRightsFacade: MySecurityRightsFacade,
 		private store: SecurityRightsMatrixStore,
 		private service: SecurityRightsApiService,
 		private query: SecurityRightsMatrixQuery
@@ -50,6 +52,7 @@ export class SecurityRightsMatrixFacade {
 					data: response,
 				});
 				this.store.setError(false);
+				this.mySecurityRightsFacade.invalidateCache();
 				return true;
 			})
 			.catch(err => {
@@ -73,6 +76,7 @@ export class SecurityRightsMatrixFacade {
 				this.store.update({
 					data: response,
 				});
+				this.mySecurityRightsFacade.invalidateCache();
 				return true;
 			})
 			.catch(err => {
@@ -84,6 +88,7 @@ export class SecurityRightsMatrixFacade {
 }
 
 export const securityRightsMatrixFacade = new SecurityRightsMatrixFacade(
+	mySecurityRightsFacade,
 	securityRightsMatrixStore,
 	securityRightsApiService,
 	securityRightsMatrixQuery
