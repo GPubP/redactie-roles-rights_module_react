@@ -34,7 +34,7 @@ export const SITE_COLUMNS = (
 			const { hasAccess, roles = [] } = rowData;
 
 			if (!hasAccess) {
-				return <span className="u-text-light">Geen toegang</span>;
+				return <span className="u-text-light u-text-italic">Geen toegang</span>;
 			}
 
 			const rolesList = roles
