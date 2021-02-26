@@ -4,26 +4,26 @@ import {
 	ContextHeaderTopSection,
 	PaginatedTable,
 } from '@acpaas-ui/react-editorial-components';
-import { DataLoader, LoadingState, useNavigate } from '@redactie/utils';
+import { DataLoader, LoadingState, OrderBy, useNavigate } from '@redactie/utils';
 import React, { FC, ReactElement, useEffect, useState } from 'react';
 
 import { FilterForm, FilterFormState } from '../../components';
 import { useCoreTranslation } from '../../connectors/translations';
 import { useMySecurityRightsForTenant, useRoutesBreadcrumbs, useUsers } from '../../hooks';
 import { MODULE_PATHS } from '../../roles.const';
-import { RolesRouteProps } from '../../roles.types';
+import { OverviewFilterItem, RolesRouteProps } from '../../roles.types';
 import { DEFAULT_USERS_SEARCH_PARAMS } from '../../services/users/users.service.const';
 import { usersFacade } from '../../store/users';
 
 import { CONTENT_INITIAL_FILTER_STATE, USERS_OVERVIEW_COLUMNS } from './UsersOverview.const';
-import { FilterItemSchema, OrderBy, UsersOverviewTableRow } from './UsersOverview.types';
+import { UsersOverviewTableRow } from './UsersOverview.types';
 
 const UsersOverview: FC<RolesRouteProps> = () => {
 	/**
 	 * Hooks
 	 */
 	const [currentPage, setCurrentPage] = useState(DEFAULT_USERS_SEARCH_PARAMS.page);
-	const [filterItems, setFilterItems] = useState<FilterItemSchema[]>([]);
+	const [filterItems, setFilterItems] = useState<OverviewFilterItem[]>([]);
 	const [filterFormState, setFilterFormState] = useState<FilterFormState>(
 		CONTENT_INITIAL_FILTER_STATE
 	);
@@ -55,7 +55,7 @@ const UsersOverview: FC<RolesRouteProps> = () => {
 	const createFilterItems = ({
 		name,
 	}: FilterFormState): {
-		filters: FilterItemSchema[];
+		filters: OverviewFilterItem[];
 	} => {
 		const filters = [
 			{
