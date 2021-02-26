@@ -63,7 +63,7 @@ export const USERS_OVERVIEW_COLUMNS = (t: TranslateFunc, mySecurityRights: strin
 						onClick={() => navigate(uuid)}
 						type="primary"
 						transparent
-					></Button>
+					/>
 				);
 			},
 		},

@@ -51,9 +51,9 @@ export const ROLES_OVERVIEW_COLUMNS = (mySecurityRights: string[], t: TranslateF
 			width: '30%',
 			component(isAdmin: boolean) {
 				return isAdmin ? (
-					<span className="u-text-success fa fa-check"></span>
+					<span className="u-text-success fa fa-check" />
 				) : (
-					<span className="u-text-danger fa fa-close"></span>
+					<span className="u-text-danger fa fa-close" />
 				);
 			},
 		},
@@ -78,7 +78,7 @@ export const ROLES_OVERVIEW_COLUMNS = (mySecurityRights: string[], t: TranslateF
 						aria-label="Edit"
 						className="a-button a-button--transparent has-icon"
 					>
-						<Icon name="edit"></Icon>
+						<Icon name="edit" />
 					</AUILink>
 				);
 			},

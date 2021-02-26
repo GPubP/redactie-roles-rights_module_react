@@ -96,7 +96,7 @@ const UserDetailRoles: FC<UserDetailRolesProps> = ({
 					sitesLoadingStates.isFetching === LoadingState.Loading ||
 					isFetchingUserRolesForSite
 				}
-			></PaginatedTable>
+			/>
 		);
 	};
 

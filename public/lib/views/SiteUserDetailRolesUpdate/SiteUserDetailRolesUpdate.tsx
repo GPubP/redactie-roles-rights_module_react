@@ -196,7 +196,7 @@ const SiteUserDetailRolesUpdate: FC<RolesRouteProps> = ({ tenantId }) => {
 						containerId={ALERT_CONTAINER_IDS.UPDATE_USER_ROLES_SITE_ON_SITE}
 					/>
 				</div>
-				<DataLoader loadingState={initialLoading} render={renderSiteRolesForm}></DataLoader>
+				<DataLoader loadingState={initialLoading} render={renderSiteRolesForm} />
 			</Container>
 		</>
 	);

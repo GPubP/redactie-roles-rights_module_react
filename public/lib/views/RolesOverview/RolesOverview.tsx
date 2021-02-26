@@ -112,7 +112,7 @@ const RolesOverview: FC<RolesRouteProps<{ siteId: string }>> = () => {
 					activeSorting={activeSorting}
 					totalValues={roles?.length || 0}
 					loading={rolesLoadingState === LoadingState.Loading}
-				></PaginatedTable>
+				/>
 			</>
 		);
 	};
