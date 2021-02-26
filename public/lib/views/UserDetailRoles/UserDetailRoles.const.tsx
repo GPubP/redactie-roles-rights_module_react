@@ -1,7 +1,7 @@
 import { Button } from '@acpaas-ui/react-components';
 import { EllipsisWithTooltip } from '@acpaas-ui/react-editorial-components';
 import { TranslateFunc } from '@redactie/translations-module/public/lib/i18next/useTranslation';
-import { LoadingState } from '@redactie/utils';
+import { LoadingState, TableColumn } from '@redactie/utils';
 import React from 'react';
 
 import { SecurableRender } from '../../components';
@@ -9,12 +9,14 @@ import { CORE_TRANSLATIONS } from '../../connectors/translations';
 import { SecurityRightsTenant } from '../../roles.const';
 import { RoleModel } from '../../store/roles';
 
+import { SiteRow } from './UserDetailRoles.types';
+
 export const SITE_COLUMNS = (
 	t: TranslateFunc,
 	mySecurityRights: string[],
 	isAddingUserToSite: LoadingState | null,
 	giveAccessSiteId: string | null
-): any[] => [
+): TableColumn<SiteRow>[] => [
 	{
 		label: t(CORE_TRANSLATIONS.TABLE_NAME),
 		disableSorting: true,
@@ -30,9 +32,7 @@ export const SITE_COLUMNS = (
 		disableSorting: true,
 		ellipsis: true,
 		width: '45%',
-		component(value: any, rowData: any) {
-			const { hasAccess, roles = [] } = rowData;
-
+		component(value: any, { hasAccess, roles = [] }) {
 			if (!hasAccess) {
 				return <span className="u-text-light u-text-italic">Geen toegang</span>;
 			}
@@ -53,7 +53,7 @@ export const SITE_COLUMNS = (
 		disableSorting: true,
 		classList: ['u-text-right'],
 		width: '25%',
-		component(value: string, rowData: any) {
+		component(value: string, rowData) {
 			const { editAccess, giveAccess, hasAccess } = rowData;
 			const isGivingAccess =
 				giveAccessSiteId === rowData.siteUuid &&

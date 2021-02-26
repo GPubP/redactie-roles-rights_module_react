@@ -1,6 +1,7 @@
 import { Link as AUILink, Button } from '@acpaas-ui/react-components';
 import { EllipsisWithTooltip } from '@acpaas-ui/react-editorial-components';
 import { TranslateFunc } from '@redactie/translations-module/public/lib/i18next/useTranslation';
+import { TableColumn } from '@redactie/utils';
 import React from 'react';
 import { Link } from 'react-router-dom';
 
@@ -14,19 +15,22 @@ export const CONTENT_INITIAL_FILTER_STATE = {
 	name: '',
 };
 
-export const USERS_OVERVIEW_COLUMNS = (t: TranslateFunc, mySecurityRights: string[]): any[] => {
+export const USERS_OVERVIEW_COLUMNS = (
+	t: TranslateFunc,
+	mySecurityRights: string[]
+): TableColumn<UsersOverviewTableRow>[] => {
 	const canUpdate = checkSecurityRights(
 		mySecurityRights,
 		[SecurityRightsTenant.UsersUpdateTenantRoles],
 		false
 	);
-	const defaultColumns = [
+	const defaultColumns: TableColumn<UsersOverviewTableRow>[] = [
 		{
 			label: t(CORE_TRANSLATIONS.TABLE_NAME),
 			disableSorting: true,
 			value: 'name',
 			width: '50%',
-			component(value: any, rowData: UsersOverviewTableRow) {
+			component(value: string, rowData) {
 				return (
 					<>
 						<AUILink to={`${rowData?.uuid}/algemeen`} component={Link}>
@@ -55,9 +59,7 @@ export const USERS_OVERVIEW_COLUMNS = (t: TranslateFunc, mySecurityRights: strin
 			classList: ['u-text-right'],
 			disableSorting: true,
 			width: '20%',
-			component(value: unknown, rowData: UsersOverviewTableRow) {
-				const { uuid, navigate } = rowData;
-
+			component(value: unknown, { uuid, navigate }) {
 				return (
 					<Button
 						ariaLabel="Edit"
