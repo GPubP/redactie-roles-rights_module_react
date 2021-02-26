@@ -1,6 +1,5 @@
-import { BaseEntityState } from '@redactie/utils';
+import { BaseEntityState, Page } from '@redactie/utils';
 
-import { Page } from '../../roles.types';
 import { UserResponse } from '../../services/users';
 import { RoleModel } from '../roles';
 

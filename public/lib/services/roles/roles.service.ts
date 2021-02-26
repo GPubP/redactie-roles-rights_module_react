@@ -1,4 +1,6 @@
-import api, { parseSearchParams } from '../api/api.service';
+import { parseSearchParams } from '@redactie/utils';
+
+import api from '../api/api.service';
 
 import { GetRolesPayload, RolePayload, RoleResponse, RolesResponse } from './roles.service.types';
 

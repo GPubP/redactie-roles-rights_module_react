@@ -1,4 +1,6 @@
-import api, { parseSearchParams } from '../api/api.service';
+import { parseSearchParams } from '@redactie/utils';
+
+import api from '../api/api.service';
 import { RoleMapsResponses, RolesResponse } from '../roles';
 
 import { DEFAULT_USERS_SEARCH_PARAMS } from './users.service.const';
