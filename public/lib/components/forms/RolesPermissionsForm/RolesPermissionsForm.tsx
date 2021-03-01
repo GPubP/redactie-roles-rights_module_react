@@ -89,7 +89,7 @@ const RolesPermissionsForm: FC<RolesPermissionsFormProps> = ({
 							})
 						}
 					/>
-					<td></td>
+					<td />
 				</tr>
 			);
 		});
@@ -123,7 +123,7 @@ const RolesPermissionsForm: FC<RolesPermissionsFormProps> = ({
 							<table className="m-table">
 								<thead>
 									<tr className="m-table--header">
-										<th></th>
+										<th />
 										{roles.map((role: RoleResponse) => (
 											<th key={role.role.id} className="a-table-header--top">
 												<div>
@@ -131,7 +131,7 @@ const RolesPermissionsForm: FC<RolesPermissionsFormProps> = ({
 												</div>
 											</th>
 										))}
-										<th></th>
+										<th />
 									</tr>
 								</thead>
 								<tbody>{renderModuleSecurityRights(permissions, values)}</tbody>

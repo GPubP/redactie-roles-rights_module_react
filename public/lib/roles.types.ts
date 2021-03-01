@@ -44,37 +44,6 @@ export enum ContentType {
 	SiteRoles = 'SiteRoles',
 }
 
-export interface Page {
-	size: string;
-	totalElements: number;
-	totalPages: number;
-	number: string;
-}
-
-export interface Links {
-	self?: {
-		href: string;
-	};
-	first?: {
-		href: string;
-	};
-	last?: {
-		href: string;
-	};
-	prev?: {
-		href: string;
-	};
-	next?: {
-		href: string;
-	};
-}
-
-export interface EmbeddedResponse<T> {
-	_embedded: T[];
-	_links: Links;
-	_page: Page;
-}
-
 export interface RolesRightsModuleAPI {
 	consts: {
 		forbidden403Path: string;

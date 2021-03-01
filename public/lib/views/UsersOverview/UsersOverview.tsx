@@ -166,7 +166,7 @@ const UsersOverview: FC<RolesRouteProps> = () => {
 					activeSorting={activeSorting}
 					totalValues={usersMeta?.totalElements || 0}
 					loading={loadingState === LoadingState.Loading}
-				></PaginatedTable>
+				/>
 			</>
 		);
 	};

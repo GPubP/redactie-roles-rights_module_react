@@ -1,6 +1,7 @@
 import { Link as AUILink, Icon } from '@acpaas-ui/react-components';
 import { EllipsisWithTooltip } from '@acpaas-ui/react-editorial-components';
 import { TranslateFunc } from '@redactie/translations-module';
+import { TableColumn } from '@redactie/utils';
 import { propOr } from 'ramda';
 import React from 'react';
 import { Link } from 'react-router-dom';
@@ -11,20 +12,23 @@ import { SecurityRightsSite } from '../../roles.const';
 
 import { RolesOverviewTableRow } from './RolesOverview.types';
 
-export const ROLES_OVERVIEW_COLUMNS = (mySecurityRights: string[], t: TranslateFunc): any[] => {
+export const ROLES_OVERVIEW_COLUMNS = (
+	mySecurityRights: string[],
+	t: TranslateFunc
+): TableColumn<RolesOverviewTableRow>[] => {
 	const canUpdate = checkSecurityRights(
 		mySecurityRights,
 		[SecurityRightsSite.RolesUpdate],
 		false
 	);
 
-	const defaultColumns = [
+	const defaultColumns: TableColumn<RolesOverviewTableRow>[] = [
 		{
 			label: 'Rol',
 			value: 'name',
 			disableSorting: true,
 			width: '50%',
-			component(label: string, rowData: RolesOverviewTableRow) {
+			component(label: string, rowData) {
 				const { description } = rowData;
 				return (
 					<>
@@ -51,9 +55,9 @@ export const ROLES_OVERVIEW_COLUMNS = (mySecurityRights: string[], t: TranslateF
 			width: '30%',
 			component(isAdmin: boolean) {
 				return isAdmin ? (
-					<span className="u-text-success fa fa-check"></span>
+					<span className="u-text-success fa fa-check" />
 				) : (
-					<span className="u-text-danger fa fa-close"></span>
+					<span className="u-text-danger fa fa-close" />
 				);
 			},
 		},
@@ -70,7 +74,7 @@ export const ROLES_OVERVIEW_COLUMNS = (mySecurityRights: string[], t: TranslateF
 			classList: ['u-text-right'],
 			disableSorting: true,
 			width: '20%',
-			component(value: unknown, rowData: RolesOverviewTableRow) {
+			component(value: unknown, rowData) {
 				return (
 					<AUILink
 						to={propOr('#', 'target')(rowData)}
@@ -78,7 +82,7 @@ export const ROLES_OVERVIEW_COLUMNS = (mySecurityRights: string[], t: TranslateF
 						aria-label="Edit"
 						className="a-button a-button--transparent has-icon"
 					>
-						<Icon name="edit"></Icon>
+						<Icon name="edit" />
 					</AUILink>
 				);
 			},

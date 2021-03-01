@@ -176,7 +176,7 @@ const UserDetailRolesUpdate: FC<RolesRouteProps<{ userUuid: string; siteUuid: st
 						containerId={ALERT_CONTAINER_IDS.UPDATE_USER_ROLES_SITE_ON_TENANT}
 					/>
 				</div>
-				<DataLoader loadingState={initialLoading} render={renderSiteRolesForm}></DataLoader>
+				<DataLoader loadingState={initialLoading} render={renderSiteRolesForm} />
 			</Container>
 		</>
 	);

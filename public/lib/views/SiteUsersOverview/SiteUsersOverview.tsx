@@ -188,7 +188,7 @@ const SiteUsersOverview: FC<RolesRouteProps<{ siteId: string }>> = ({ match }) =
 					activeSorting={activeSorting}
 					totalValues={usersMeta?.totalElements || 0}
 					loading={loadingState === LoadingState.Loading}
-				></PaginatedTable>
+				/>
 			</>
 		);
 	};

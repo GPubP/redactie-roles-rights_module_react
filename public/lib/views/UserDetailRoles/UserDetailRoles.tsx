@@ -21,21 +21,21 @@ const UserDetailRoles: FC<UserDetailRolesProps> = ({
 	formikRef = () => null,
 	onChange,
 }) => {
+	/**
+	 * Hooks
+	 */
+
 	const [t] = useCoreTranslation();
 	const { isAddingUserToSite } = useUsersLoadingStates();
 	const [giveAccesSiteId, setGiveAccessSiteId] = useState<string | null>(null);
 	const { navigate } = useNavigate();
-	const [query, setQuery] = useAPIQueryParams();
+	const [query, setQuery] = useAPIQueryParams({});
 	const [sitesPagination, isFetchingUserRolesForSite] = useSitesPagination(
 		query as SearchParams,
 		user.id,
 		true
 	);
 	const sitesLoadingStates = sitesConnector.hooks.useSitesLoadingStates();
-
-	/**
-	 * Hooks
-	 */
 
 	/**
 	 * Methods
@@ -96,7 +96,7 @@ const UserDetailRoles: FC<UserDetailRolesProps> = ({
 					sitesLoadingStates.isFetching === LoadingState.Loading ||
 					isFetchingUserRolesForSite
 				}
-			></PaginatedTable>
+			/>
 		);
 	};
 

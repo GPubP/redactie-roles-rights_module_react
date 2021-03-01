@@ -1,4 +1,5 @@
-import { Page } from '../../roles.types';
+import { Page } from '@redactie/utils';
+
 import { RoleResponse } from '../../services/roles';
 
 export enum RoleEntityTypes {
