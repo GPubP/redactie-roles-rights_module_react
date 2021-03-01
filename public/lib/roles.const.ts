@@ -1,6 +1,7 @@
 import { ContextHeaderBadge } from '@redactie/utils';
 
-import { Tab } from './roles.types';
+import { DEFAULT_ROLES_SEARCH_PARAMS } from './services/roles/roles.service.const';
+import { DEFAULT_USERS_SEARCH_PARAMS } from './services/users/users.service.const';
 
 export const BREADCRUMB_OPTIONS = {
 	excludePaths: [
@@ -113,6 +114,12 @@ export const DEFAULT_USERS_QUERY_PARAMS = {
 	...DEFAULT_USERS_SEARCH_PARAMS,
 	search: undefined,
 };
+
+export const ROLES_QUERY_PARAMS_CONFIG = {
+	pagesize: { defaultValue: DEFAULT_ROLES_SEARCH_PARAMS.limit, type: 'number' },
+	sparse: { defaultValue: DEFAULT_ROLES_SEARCH_PARAMS.sparse, type: 'number' },
+	search: { type: 'string' },
+} as const;
 
 // Detail views
 export const DEFAULT_USER_DETAIL_HEADER_BADGES: ContextHeaderBadge[] = [
