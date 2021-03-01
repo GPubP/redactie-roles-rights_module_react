@@ -53,11 +53,9 @@ export const SITE_COLUMNS = (
 		disableSorting: true,
 		classList: ['u-text-right'],
 		width: '25%',
-		component(value: string, rowData) {
-			const { editAccess, giveAccess, hasAccess } = rowData;
+		component(value, { editAccess, giveAccess, hasAccess, siteUuid }) {
 			const isGivingAccess =
-				giveAccessSiteId === rowData.siteUuid &&
-				isAddingUserToSite === LoadingState.Loading;
+				giveAccessSiteId === siteUuid && isAddingUserToSite === LoadingState.Loading;
 
 			if (hasAccess) {
 				return (
