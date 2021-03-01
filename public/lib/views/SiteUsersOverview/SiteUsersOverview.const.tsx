@@ -7,13 +7,27 @@ import { Link } from 'react-router-dom';
 
 import { CORE_TRANSLATIONS } from '../../connectors/translations';
 import { checkSecurityRights } from '../../helpers';
-import { SecurityRightsSite } from '../../roles.const';
+import { ALERT_CONTAINER_IDS, SecurityRightsSite } from '../../roles.const';
+import { Tab } from '../../roles.types';
 
 import { UsersOverviewTableRow } from './SiteUsersOverview.types';
 
-export const CONTENT_INITIAL_FILTER_STATE = {
-	name: '',
-};
+export const SITE_USER_OVERVIEW_TABS: Tab[] = [
+	{
+		name: 'Site',
+		target: 'site',
+		active: true,
+		disabled: false,
+		containerId: ALERT_CONTAINER_IDS.UPDATE_USER_ROLES_SITE_ON_SITE,
+	},
+	{
+		name: 'Tenant',
+		target: 'tenant',
+		active: false,
+		disabled: false,
+		containerId: ALERT_CONTAINER_IDS.UPDATE_USER_ROLES_SITE_ON_SITE,
+	},
+];
 
 export const USERS_OVERVIEW_COLUMNS = (
 	t: TranslateFunc,

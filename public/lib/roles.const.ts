@@ -77,30 +77,6 @@ export enum ALERT_CONTAINER_IDS {
 	UPDATE_ROLE_ON_SITE = 'update-role-on-site',
 }
 
-export const SITE_USER_OVERVIEW_TAB_MAP: {
-	[key in 'site' | 'tenant']: Tab;
-} = {
-	site: {
-		name: 'Site',
-		target: 'site',
-		active: true,
-		disabled: false,
-		containerId: ALERT_CONTAINER_IDS.UPDATE_USER_ROLES_SITE_ON_SITE,
-	},
-	tenant: {
-		name: 'Tenant',
-		target: 'tenant',
-		active: false,
-		disabled: false,
-		containerId: ALERT_CONTAINER_IDS.UPDATE_USER_ROLES_SITE_ON_SITE,
-	},
-};
-
-export const SITE_USER_OVERVIEW_TABS: Tab[] = [
-	SITE_USER_OVERVIEW_TAB_MAP.site,
-	SITE_USER_OVERVIEW_TAB_MAP.tenant,
-];
-
 export const SITE_CONTEXT_DEFAULT_BREADCRUMBS = [
 	{
 		name: 'Gebruikers',
@@ -126,6 +102,19 @@ export enum SecurityRightsTenant {
 	UsersUpdateSiteRoles = 'roles-rights_update-users-site-roles',
 }
 
+// Overviews
+export const USERS_QUERY_PARAMS_CONFIG = {
+	pagesize: { defaultValue: DEFAULT_USERS_SEARCH_PARAMS.pagesize, type: 'number' },
+	sparse: { defaultValue: DEFAULT_USERS_SEARCH_PARAMS.sparse, type: 'number' },
+	search: { type: 'string' },
+} as const;
+
+export const DEFAULT_USERS_QUERY_PARAMS = {
+	...DEFAULT_USERS_SEARCH_PARAMS,
+	search: undefined,
+};
+
+// Detail views
 export const DEFAULT_USER_DETAIL_HEADER_BADGES: ContextHeaderBadge[] = [
 	{
 		name: 'Gebruiker',

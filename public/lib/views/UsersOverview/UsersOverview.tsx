@@ -4,42 +4,52 @@ import {
 	ContextHeaderTopSection,
 	PaginatedTable,
 } from '@acpaas-ui/react-editorial-components';
-import { DataLoader, LoadingState, OrderBy, useNavigate } from '@redactie/utils';
+import {
+	DataLoader,
+	LoadingState,
+	OrderBy,
+	parseObjToOrderBy,
+	parseOrderByToObj,
+	SearchParams,
+	useAPIQueryParams,
+	useNavigate,
+} from '@redactie/utils';
 import React, { FC, ReactElement, useEffect, useState } from 'react';
 
 import { FilterForm, FilterFormState } from '../../components';
-import { useCoreTranslation } from '../../connectors/translations';
+import { CORE_TRANSLATIONS, useCoreTranslation } from '../../connectors/translations';
 import { useMySecurityRightsForTenant, useRoutesBreadcrumbs, useUsers } from '../../hooks';
-import { MODULE_PATHS } from '../../roles.const';
+import {
+	DEFAULT_USERS_QUERY_PARAMS,
+	MODULE_PATHS,
+	USERS_QUERY_PARAMS_CONFIG,
+} from '../../roles.const';
 import { OverviewFilterItem, RolesRouteProps } from '../../roles.types';
 import { DEFAULT_USERS_SEARCH_PARAMS } from '../../services/users/users.service.const';
 import { usersFacade } from '../../store/users';
 
-import { CONTENT_INITIAL_FILTER_STATE, USERS_OVERVIEW_COLUMNS } from './UsersOverview.const';
+import { USERS_OVERVIEW_COLUMNS } from './UsersOverview.const';
 import { UsersOverviewTableRow } from './UsersOverview.types';
 
 const UsersOverview: FC<RolesRouteProps> = () => {
 	/**
 	 * Hooks
 	 */
-	const [currentPage, setCurrentPage] = useState(DEFAULT_USERS_SEARCH_PARAMS.page);
-	const [filterItems, setFilterItems] = useState<OverviewFilterItem[]>([]);
-	const [filterFormState, setFilterFormState] = useState<FilterFormState>(
-		CONTENT_INITIAL_FILTER_STATE
-	);
+
 	const { navigate } = useNavigate();
 	const breadcrumbs = useRoutesBreadcrumbs();
-	const [usersSearchParams, setUsersSearchParams] = useState(DEFAULT_USERS_SEARCH_PARAMS);
+	const [query, setQuery] = useAPIQueryParams(USERS_QUERY_PARAMS_CONFIG);
 	const [loadingState, users, usersMeta] = useUsers();
 	const [initialLoading, setInitialLoading] = useState(LoadingState.Loading);
-	const [activeSorting, setActiveSorting] = useState<OrderBy>();
 	const [mySecurityRightsLoadingState, mySecurityRights] = useMySecurityRightsForTenant(true);
 	const [t] = useCoreTranslation();
 
+	// Fetch users on every query change
 	useEffect(() => {
-		usersFacade.getUsers(usersSearchParams);
-	}, [usersSearchParams]);
+		usersFacade.getUsers(query as SearchParams);
+	}, [query]);
 
+	// Set initial loading state
 	useEffect(() => {
 		if (
 			loadingState !== LoadingState.Loading &&
@@ -48,79 +58,50 @@ const UsersOverview: FC<RolesRouteProps> = () => {
 			setInitialLoading(LoadingState.Loaded);
 		}
 	}, [loadingState, mySecurityRightsLoadingState]);
+
 	/**
 	 * Methods
 	 */
 
-	const createFilterItems = ({
-		name,
-	}: FilterFormState): {
-		filters: OverviewFilterItem[];
-	} => {
-		const filters = [
-			{
-				filterKey: 'search',
-				valuePrefix: 'Zoekterm',
-				value: name,
-			},
-		];
-
-		return {
-			filters: [...filters].filter(item => !!item.value),
-		};
-	};
-
-	const onSubmit = (filterFormState: FilterFormState): void => {
-		//add item to filterItems for Taglist
-		setFilterFormState(filterFormState);
-		const filterItems = createFilterItems(filterFormState);
-		setFilterItems(filterItems.filters);
-		//add value to searchParams
-		setUsersSearchParams({
-			...usersSearchParams,
-			search: filterFormState.name,
+	const onSubmit = (formValues: FilterFormState): void => {
+		setQuery({
+			search: formValues.name,
 			page: 1,
 		});
 	};
 
 	const deleteAllFilters = (): void => {
-		//set empty array as Taglist
-		const emptyFilter: [] = [];
-		setFilterItems(emptyFilter);
-		//delete search param from api call
-		setUsersSearchParams(DEFAULT_USERS_SEARCH_PARAMS);
-		setFilterFormState(CONTENT_INITIAL_FILTER_STATE);
+		setQuery(DEFAULT_USERS_QUERY_PARAMS);
 	};
 
-	const deleteFilter = (item: any): void => {
-		//delete item from filterItems
-		const setFilter = filterItems?.filter(el => el.value !== item.value);
-		setFilterItems(setFilter);
-		//set empty searchParams
-		setUsersSearchParams(DEFAULT_USERS_SEARCH_PARAMS);
-		setFilterFormState({
-			...filterFormState,
-			[item.filterKey]: '',
-		});
+	const deleteFilter = (item: OverviewFilterItem): void => {
+		setQuery({ ...DEFAULT_USERS_SEARCH_PARAMS, [item.filterKey]: undefined });
 	};
 
-	const handlePageChange = (pageNumber: number): void => {
-		setCurrentPage(pageNumber);
-
-		setUsersSearchParams({
-			...usersSearchParams,
-			page: pageNumber,
-		});
+	const handlePageChange = (page: number): void => {
+		setQuery({ page });
 	};
 
 	const handleOrderBy = (orderBy: OrderBy): void => {
-		setUsersSearchParams({
-			...usersSearchParams,
-			sort: `meta.${orderBy.key}`,
-			direction: orderBy.order === 'desc' ? 1 : -1,
-		});
-		setActiveSorting(orderBy);
+		setQuery(
+			parseOrderByToObj({
+				...orderBy,
+				key: `meta.${orderBy.key}`,
+			})
+		);
 	};
+
+	const activeFilters = [
+		{
+			filterKey: 'search',
+			valuePrefix: 'Zoekterm',
+			value: query.search ?? '',
+		},
+	].filter(filter => !!filter.value);
+	const activeSorting = parseObjToOrderBy({
+		sort: query.sort ?? '',
+		direction: query.direction ?? 1,
+	});
 
 	/**
 	 * Render
@@ -142,11 +123,11 @@ const UsersOverview: FC<RolesRouteProps> = () => {
 			<>
 				<div className="u-margin-top">
 					<FilterForm
-						initialState={filterFormState}
+						initialState={{ name: query.search ?? '' }}
 						onCancel={deleteAllFilters}
 						onSubmit={onSubmit}
 						deleteActiveFilter={deleteFilter}
-						activeFilters={filterItems}
+						activeFilters={activeFilters}
 					/>
 				</div>
 				<PaginatedTable
@@ -155,7 +136,7 @@ const UsersOverview: FC<RolesRouteProps> = () => {
 					tableClassName="a-table--fixed--xs"
 					columns={USERS_OVERVIEW_COLUMNS(t, mySecurityRights)}
 					rows={usersRows}
-					currentPage={currentPage}
+					currentPage={query.page}
 					itemsPerPage={
 						DEFAULT_USERS_SEARCH_PARAMS.pagesize !== -1
 							? DEFAULT_USERS_SEARCH_PARAMS.pagesize
@@ -166,6 +147,8 @@ const UsersOverview: FC<RolesRouteProps> = () => {
 					activeSorting={activeSorting}
 					totalValues={usersMeta?.totalElements || 0}
 					loading={loadingState === LoadingState.Loading}
+					loadDataMessage="Gebruikers ophalen"
+					noDataMessage={t(CORE_TRANSLATIONS['TABLE_NO-RESULT'])}
 				/>
 			</>
 		);
