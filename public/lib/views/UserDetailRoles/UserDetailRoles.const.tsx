@@ -32,7 +32,7 @@ export const SITE_COLUMNS = (
 		disableSorting: true,
 		ellipsis: true,
 		width: '45%',
-		component(value: any, { hasAccess, roles = [] }) {
+		component(value, { hasAccess, roles = [] }) {
 			if (!hasAccess) {
 				return <span className="u-text-light u-text-italic">Geen toegang</span>;
 			}

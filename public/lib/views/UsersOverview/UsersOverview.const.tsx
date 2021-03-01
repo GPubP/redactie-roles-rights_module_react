@@ -59,7 +59,7 @@ export const USERS_OVERVIEW_COLUMNS = (
 			classList: ['u-text-right'],
 			disableSorting: true,
 			width: '20%',
-			component(value: unknown, { uuid, navigate }) {
+			component(value, { uuid, navigate }) {
 				return (
 					<Button
 						ariaLabel="Edit"

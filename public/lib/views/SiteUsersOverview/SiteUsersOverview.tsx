@@ -109,7 +109,7 @@ const SiteUsersOverview: FC<RolesRouteProps<{ siteId: string }>> = ({ match }) =
 		setFilterFormState(CONTENT_INITIAL_FILTER_STATE);
 	};
 
-	const deleteFilter = (item: any): void => {
+	const deleteFilter = (item: OverviewFilterItem): void => {
 		//delete item from filterItems
 		const setFilter = filterItems?.filter(el => el.value !== item.value);
 		setFilterItems(setFilter);
@@ -197,17 +197,13 @@ const SiteUsersOverview: FC<RolesRouteProps<{ siteId: string }>> = ({ match }) =
 		<>
 			<ContextHeader
 				tabs={activeTabs}
-				linkProps={(props: any) => {
-					const to = generatePath(`${MODULE_PATHS.siteUsersOverview}/${props.href}`, {
+				linkProps={(props: ContextHeaderTabLinkProps) => ({
+					...props,
+					to: generatePath(`${MODULE_PATHS.siteUsersOverview}/${props.href}`, {
 						siteId,
-					});
-
-					return {
-						...props,
-						to,
-						component: Link,
-					};
-				}}
+					}),
+					component: Link,
+				})}
 				title="Gebruikers"
 			>
 				<ContextHeaderTopSection>{breadcrumbs}</ContextHeaderTopSection>

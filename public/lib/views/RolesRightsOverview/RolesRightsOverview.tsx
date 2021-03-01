@@ -109,7 +109,7 @@ const RolesRightsOverview: FC<RolesRouteProps<{ siteId: string }>> = ({ match })
 	/**
 	 * Methods
 	 */
-	const handleClick = (value: string, type: 'content-type' | 'module' | ''): any => {
+	const handleClick = (value: string, type: 'content-type' | 'module' | ''): void => {
 		setRolesSearchParams({
 			...rolesSearchParams,
 			module: type === 'module' ? value : '',
