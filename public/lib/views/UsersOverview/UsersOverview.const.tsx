@@ -11,10 +11,6 @@ import { SecurityRightsTenant } from '../../roles.const';
 
 import { UsersOverviewTableRow } from './UsersOverview.types';
 
-export const CONTENT_INITIAL_FILTER_STATE = {
-	name: '',
-};
-
 export const USERS_OVERVIEW_COLUMNS = (
 	t: TranslateFunc,
 	mySecurityRights: string[]
@@ -59,7 +55,7 @@ export const USERS_OVERVIEW_COLUMNS = (
 			classList: ['u-text-right'],
 			disableSorting: true,
 			width: '20%',
-			component(value: unknown, { uuid, navigate }) {
+			component(value, { uuid, navigate }) {
 				return (
 					<Button
 						ariaLabel="Edit"

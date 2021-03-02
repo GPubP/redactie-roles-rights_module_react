@@ -6,8 +6,13 @@ import {
 	ContextHeaderTopSection,
 	PaginatedTable,
 } from '@acpaas-ui/react-editorial-components';
-import { OrderBy } from '@redactie/translations-module/public/lib/services/api';
-import { DataLoader, LoadingState, useNavigate } from '@redactie/utils';
+import {
+	DataLoader,
+	LoadingState,
+	SearchParams,
+	useAPIQueryParams,
+	useNavigate,
+} from '@redactie/utils';
 import React, { FC, ReactElement, useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 
@@ -16,12 +21,12 @@ import { CORE_TRANSLATIONS, useCoreTranslation } from '../../connectors/translat
 import { useMySecurityRightsForSite, useRoutesBreadcrumbs, useSiteRoles } from '../../hooks';
 import {
 	MODULE_PATHS,
+	ROLES_QUERY_PARAMS_CONFIG,
 	SecurityRightsSite,
 	SITE_CONTEXT_DEFAULT_BREADCRUMBS,
 	SITES_ROOT,
 } from '../../roles.const';
 import { RolesRouteProps } from '../../roles.types';
-import { DEFAULT_ROLES_SEARCH_PARAMS } from '../../services/roles/roles.service.const';
 import { rolesFacade } from '../../store/roles';
 
 import { ROLES_OVERVIEW_COLUMNS } from './RolesOverview.const';
@@ -36,9 +41,7 @@ const RolesOverview: FC<RolesRouteProps<{ siteId: string }>> = () => {
 	const breadcrumbs = useRoutesBreadcrumbs(SITE_CONTEXT_DEFAULT_BREADCRUMBS);
 	const { navigate, generatePath } = useNavigate(SITES_ROOT);
 	const [initialLoading, setInitialLoading] = useState(LoadingState.Loading);
-	const [currentPage, setCurrentPage] = useState(DEFAULT_ROLES_SEARCH_PARAMS.skip);
-	const [rolesSearchParams, setRolesSearchParams] = useState(DEFAULT_ROLES_SEARCH_PARAMS);
-	const [activeSorting, setActiveSorting] = useState<OrderBy>();
+	const [query, setQuery] = useAPIQueryParams(ROLES_QUERY_PARAMS_CONFIG);
 	const [mySecurityRightsLoadingState, mySecurityRights] = useMySecurityRightsForSite({
 		siteUuid: siteId,
 		onlyKeys: true,
@@ -47,9 +50,9 @@ const RolesOverview: FC<RolesRouteProps<{ siteId: string }>> = () => {
 
 	useEffect(() => {
 		if (siteId) {
-			rolesFacade.getSiteRoles(siteId, rolesSearchParams);
+			rolesFacade.getSiteRoles(siteId, query as SearchParams);
 		}
-	}, [rolesSearchParams, siteId]);
+	}, [query, siteId]);
 
 	useEffect(() => {
 		if (
@@ -63,22 +66,8 @@ const RolesOverview: FC<RolesRouteProps<{ siteId: string }>> = () => {
 	/**
 	 * Methods
 	 */
-	const handlePageChange = (pageNumber: number): void => {
-		setCurrentPage(pageNumber);
-
-		setRolesSearchParams({
-			...rolesSearchParams,
-			skip: pageNumber,
-		});
-	};
-
-	const handleOrderBy = (orderBy: OrderBy): void => {
-		setRolesSearchParams({
-			...rolesSearchParams,
-			sort: `meta.${orderBy.key}`,
-			direction: orderBy.order === 'desc' ? 1 : -1,
-		});
-		setActiveSorting(orderBy);
+	const handlePageChange = (page: number): void => {
+		setQuery({ page });
 	};
 
 	/**
@@ -105,13 +94,13 @@ const RolesOverview: FC<RolesRouteProps<{ siteId: string }>> = () => {
 					tableClassName="a-table--fixed--xs"
 					columns={ROLES_OVERVIEW_COLUMNS(mySecurityRights, t)}
 					rows={rolesRows}
-					currentPage={currentPage}
-					itemsPerPage={DEFAULT_ROLES_SEARCH_PARAMS.limit}
+					currentPage={query.page ?? 1}
+					itemsPerPage={query.pagesize}
 					onPageChange={handlePageChange}
-					orderBy={handleOrderBy}
-					activeSorting={activeSorting}
 					totalValues={roles?.length || 0}
 					loading={rolesLoadingState === LoadingState.Loading}
+					loadDataMessage="Rollen ophalen"
+					noDataMessage={t(CORE_TRANSLATIONS['TABLE_NO-RESULT'])}
 				/>
 			</>
 		);

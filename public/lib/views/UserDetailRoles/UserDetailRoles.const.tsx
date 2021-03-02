@@ -32,7 +32,7 @@ export const SITE_COLUMNS = (
 		disableSorting: true,
 		ellipsis: true,
 		width: '45%',
-		component(value: any, { hasAccess, roles = [] }) {
+		component(value, { hasAccess, roles = [] }) {
 			if (!hasAccess) {
 				return <span className="u-text-light u-text-italic">Geen toegang</span>;
 			}
@@ -53,11 +53,9 @@ export const SITE_COLUMNS = (
 		disableSorting: true,
 		classList: ['u-text-right'],
 		width: '25%',
-		component(value: string, rowData) {
-			const { editAccess, giveAccess, hasAccess } = rowData;
+		component(value, { editAccess, giveAccess, hasAccess, siteUuid }) {
 			const isGivingAccess =
-				giveAccessSiteId === rowData.siteUuid &&
-				isAddingUserToSite === LoadingState.Loading;
+				giveAccessSiteId === siteUuid && isAddingUserToSite === LoadingState.Loading;
 
 			if (hasAccess) {
 				return (

@@ -5,8 +5,3 @@ export interface RolesOverviewTableRow {
 	admin: boolean;
 	target: string;
 }
-
-export interface OrderBy {
-	key: string;
-	order: string;
-}

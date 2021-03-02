@@ -1,5 +1,5 @@
 import { ModuleRouteConfig, RouteConfigComponentProps } from '@redactie/redactie-core';
-import { ContextHeaderTab } from '@redactie/utils';
+import { ContextHeaderTab, FilterItem } from '@redactie/utils';
 import { FC } from 'react';
 
 import {
@@ -101,4 +101,9 @@ export interface RoleDetailFormState {
 
 export interface Tab extends ContextHeaderTab {
 	containerId: ALERT_CONTAINER_IDS;
+}
+
+export interface OverviewFilterItem extends FilterItem {
+	filterKey: string;
+	formvalue?: any;
 }

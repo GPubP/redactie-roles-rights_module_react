@@ -3,7 +3,12 @@ import {
 	ContextHeader,
 	ContextHeaderTopSection,
 } from '@acpaas-ui/react-editorial-components';
-import { DataLoader, LoadingState, useDetectValueChanges } from '@redactie/utils';
+import {
+	DataLoader,
+	LoadingState,
+	useAPIQueryParams,
+	useDetectValueChanges,
+} from '@redactie/utils';
 import { FormikProps } from 'formik';
 import React, { FC, ReactElement, useEffect, useState } from 'react';
 
@@ -11,10 +16,10 @@ import { ModulesList, RolesPermissionsForm, RolesPermissionsFormState } from '..
 import { useMySecurityRightsForSite, useRoutesBreadcrumbs, useSecurityRights } from '../../hooks';
 import { SecurityRightsSite, SITE_CONTEXT_DEFAULT_BREADCRUMBS } from '../../roles.const';
 import { RolesRouteProps } from '../../roles.types';
-import { DEFAULT_ROLES_SEARCH_PARAMS } from '../../services/roles/roles.service.const';
 import { ModuleResponse, UpdateRolesMatrixPayload } from '../../services/securityRights';
 import { securityRightsMatrixFacade } from '../../store/securityRightsMatrix';
 
+import { ROLES_RIGHTS_QUERY_PARAMS_CONFIG } from './RolesRightsOverview.const';
 import { RoleSecurityRight } from './RolesRightsOverview.types';
 
 const RolesRightsOverview: FC<RolesRouteProps<{ siteId: string }>> = ({ match }) => {
@@ -24,7 +29,7 @@ const RolesRightsOverview: FC<RolesRouteProps<{ siteId: string }>> = ({ match })
 	 * Hooks
 	 */
 	const breadcrumbs = useRoutesBreadcrumbs(SITE_CONTEXT_DEFAULT_BREADCRUMBS);
-	const [rolesSearchParams, setRolesSearchParams] = useState(DEFAULT_ROLES_SEARCH_PARAMS);
+	const [query, setQuery] = useAPIQueryParams(ROLES_RIGHTS_QUERY_PARAMS_CONFIG, false);
 	const [fetchLoadingState, updateLoadingState, securityRightMatrix] = useSecurityRights();
 	const [initialLoading, setInitialLoading] = useState(LoadingState.Loading);
 	const [securityRightsByModule, setSecurityRightsByModule] = useState<
@@ -50,8 +55,8 @@ const RolesRightsOverview: FC<RolesRouteProps<{ siteId: string }>> = ({ match })
 
 	useEffect(() => {
 		setInitialLoading(LoadingState.Loading);
-		securityRightsMatrixFacade.getSecurityRightsBySite(rolesSearchParams, siteId);
-	}, [rolesSearchParams, siteId]);
+		securityRightsMatrixFacade.getSecurityRightsBySite(query, siteId);
+	}, [query, siteId]);
 
 	useEffect(() => {
 		if (
@@ -109,11 +114,10 @@ const RolesRightsOverview: FC<RolesRouteProps<{ siteId: string }>> = ({ match })
 	/**
 	 * Methods
 	 */
-	const handleClick = (value: string, type: 'content-type' | 'module' | ''): any => {
-		setRolesSearchParams({
-			...rolesSearchParams,
-			module: type === 'module' ? value : '',
-			'content-type': type === 'content-type' ? value : '',
+	const handleClick = (value: string, type: 'content-type' | 'module' | ''): void => {
+		setQuery({
+			module: type === 'module' ? value : undefined,
+			'content-type': type === 'content-type' ? value : undefined,
 		});
 
 		setSelectedCompartment({ type, id: value });

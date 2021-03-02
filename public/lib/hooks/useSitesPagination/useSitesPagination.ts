@@ -19,7 +19,7 @@ function useSitesPagination(
 	> | null>(null);
 	const prevUserUuid = usePrevious<string>(userUuid);
 	const [pagination] = sitesConnector.hooks.useSitesPagination(
-		sitesSearchParams as any,
+		sitesSearchParams as Required<SearchParams>,
 		clearCache
 	);
 	const [siteRolesMap, setSiteRolesMap] = useState<RoleMapsResponses>();

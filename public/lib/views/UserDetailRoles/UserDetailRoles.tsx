@@ -25,11 +25,12 @@ const UserDetailRoles: FC<UserDetailRolesProps> = ({
 	 * Hooks
 	 */
 
+	const initialFormState = useMemo(() => ({ roleIds: mapUserRoles(userRoles) }), [userRoles]);
 	const [t] = useCoreTranslation();
 	const { isAddingUserToSite } = useUsersLoadingStates();
 	const [giveAccesSiteId, setGiveAccessSiteId] = useState<string | null>(null);
 	const { navigate } = useNavigate();
-	const [query, setQuery] = useAPIQueryParams({});
+	const [query, setQuery] = useAPIQueryParams();
 	const [sitesPagination, isFetchingUserRolesForSite] = useSitesPagination(
 		query as SearchParams,
 		user.id,
@@ -40,12 +41,6 @@ const UserDetailRoles: FC<UserDetailRolesProps> = ({
 	/**
 	 * Methods
 	 */
-	const initialFormState = useMemo(
-		() => ({
-			roleIds: mapUserRoles(userRoles),
-		}),
-		[userRoles]
-	);
 
 	const redirectToSitesRolesDetail = (userId: string, siteId: string): void => {
 		navigate(MODULE_PATHS.tenantUserDetailRolesUpdate, {
@@ -54,10 +49,8 @@ const UserDetailRoles: FC<UserDetailRolesProps> = ({
 		});
 	};
 
-	const handlePageChange = (pageNumber: number): void => {
-		setQuery({
-			page: pageNumber,
-		});
+	const handlePageChange = (page: number): void => {
+		setQuery({ page });
 	};
 
 	const SitesTable = (): React.ReactElement | null => {

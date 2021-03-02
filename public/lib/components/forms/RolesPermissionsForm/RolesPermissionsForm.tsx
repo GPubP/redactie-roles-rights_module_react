@@ -2,7 +2,7 @@
 import { Card, CardBody, CardTitle, Checkbox } from '@acpaas-ui/react-components';
 import { FormikOnChangeHandler, LeavePrompt } from '@redactie/utils';
 import { Field, FieldArray, Formik } from 'formik';
-import React, { ChangeEvent, FC, ReactNode } from 'react';
+import React, { ChangeEvent, FC, Fragment, ReactNode } from 'react';
 
 import './RolesPermissionsForm.scss';
 import { SecurityRightsSite } from '../../../roles.const';
@@ -98,17 +98,15 @@ const RolesPermissionsForm: FC<RolesPermissionsFormProps> = ({
 	const renderModuleSecurityRights = (modules: RoleSecurityRight[], values: any): ReactNode => {
 		return modules.map((module: RoleSecurityRight) =>
 			module.securityRights ? (
-				<>
-					<tr key={module.id} className="a-table-category">
+				<Fragment key={module.id}>
+					<tr className="a-table-category">
 						<th colSpan={roles.length + 2}>
 							{module.name} <span className="u-text-light">({module.type})</span>
 						</th>
 					</tr>
 					{renderSecurityRightsRows(module.securityRights, values)}
-				</>
-			) : (
-				''
-			)
+				</Fragment>
+			) : null
 		);
 	};
 
