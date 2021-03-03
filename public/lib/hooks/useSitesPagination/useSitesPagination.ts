@@ -18,7 +18,7 @@ function useSitesPagination(
 		SiteModelWithRoles
 	> | null>(null);
 	const prevUserUuid = usePrevious<string>(userUuid);
-	const [pagination] = sitesConnector.hooks.useSitesPagination(
+	const { pagination, loading: sitesLoading } = sitesConnector.hooks.usePaginatedSites(
 		sitesSearchParams as Required<SearchParams>,
 		clearCache
 	);
@@ -78,6 +78,6 @@ function useSitesPagination(
 		});
 	}, [siteRolesMap, pagination]);
 
-	return [newPagination, isFetchingRolesForSite];
+	return [newPagination, isFetchingRolesForSite || sitesLoading];
 }
 export default useSitesPagination;

@@ -55,7 +55,7 @@ const UserDetailRolesUpdate: FC<RolesRouteProps<{ userUuid: string; siteUuid: st
 	const breadcrumbs = useRoutesBreadcrumbs(extraBreadcrumbs);
 	const { isUpdating } = useUsersLoadingStates();
 	const [rolesLoadingState, roles] = useSiteRoles();
-	const [siteLoadingState, site] = sitesConnector.hooks.useSite(siteUuid);
+	const [site, siteUI] = sitesConnector.hooks.useSite(siteUuid);
 	const [userRolesLoadingState, userRoles] = useUserRolesForSite();
 
 	const [initialFormState, setInitialFormState] = useState<UserRolesFormState | null>(null);
@@ -82,13 +82,13 @@ const UserDetailRolesUpdate: FC<RolesRouteProps<{ userUuid: string; siteUuid: st
 			userLoadingState !== LoadingState.Loading &&
 			userRolesLoadingState !== LoadingState.Loading &&
 			rolesLoadingState !== LoadingState.Loading &&
-			siteLoadingState !== LoadingState.Loading
+			!siteUI?.isFetching
 		) {
 			return setInitialLoading(LoadingState.Loaded);
 		}
 
 		setInitialLoading(LoadingState.Loading);
-	}, [rolesLoadingState, userLoadingState, siteLoadingState, userRolesLoadingState]);
+	}, [rolesLoadingState, userLoadingState, userRolesLoadingState, siteUI]);
 
 	useEffect(() => {
 		if (userRoles) {
