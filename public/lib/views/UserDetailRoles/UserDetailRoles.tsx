@@ -1,10 +1,10 @@
 import { Card } from '@acpaas-ui/react-components';
 import { PaginatedTable } from '@acpaas-ui/react-editorial-components';
-import { LoadingState, SearchParams, useAPIQueryParams, useNavigate } from '@redactie/utils';
+import { SearchParams, useAPIQueryParams, useNavigate } from '@redactie/utils';
 import React, { FC, useMemo, useState } from 'react';
 
 import { FormViewUserRoles } from '../../components';
-import { CORE_TRANSLATIONS, sitesConnector, useCoreTranslation } from '../../connectors';
+import { CORE_TRANSLATIONS, useCoreTranslation } from '../../connectors';
 import { mapUserRoles } from '../../helpers';
 import { useSitesPagination, useUsersLoadingStates } from '../../hooks';
 import { MODULE_PATHS } from '../../roles.const';
@@ -31,12 +31,7 @@ const UserDetailRoles: FC<UserDetailRolesProps> = ({
 	const [giveAccesSiteId, setGiveAccessSiteId] = useState<string | null>(null);
 	const { navigate } = useNavigate();
 	const [query, setQuery] = useAPIQueryParams();
-	const [sitesPagination, isFetchingUserRolesForSite] = useSitesPagination(
-		query as SearchParams,
-		user.id,
-		true
-	);
-	const sitesLoadingStates = sitesConnector.hooks.useSitesLoadingStates();
+	const [sitesPagination, isFetching] = useSitesPagination(query as SearchParams, user.id, true);
 
 	/**
 	 * Methods
@@ -85,10 +80,7 @@ const UserDetailRoles: FC<UserDetailRolesProps> = ({
 				noDataMessage={t(CORE_TRANSLATIONS['TABLE_NO-RESULT'])}
 				loadDataMessage="Sites ophalen"
 				totalValues={sitesPagination?.total ?? 0}
-				loading={
-					sitesLoadingStates.isFetching === LoadingState.Loading ||
-					isFetchingUserRolesForSite
-				}
+				loading={isFetching}
 			/>
 		);
 	};
