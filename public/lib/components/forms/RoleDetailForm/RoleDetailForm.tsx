@@ -51,7 +51,7 @@ const RoleDetailForm: FC<RoleDetailFormProps> = ({
 							onClick={() => setShowDeleteModal(true)}
 							className="u-margin-top"
 							type="danger"
-							outline
+							iconLeft="trash-o"
 						>
 							{t(CORE_TRANSLATIONS['BUTTON_REMOVE'])}
 						</Button>
