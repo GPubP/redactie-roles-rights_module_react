@@ -4,7 +4,7 @@ import { LoadingState, SearchParams, useAPIQueryParams, useNavigate } from '@red
 import React, { FC, useMemo, useState } from 'react';
 
 import { FormViewUserRoles } from '../../components';
-import { sitesConnector, useCoreTranslation } from '../../connectors';
+import { CORE_TRANSLATIONS, sitesConnector, useCoreTranslation } from '../../connectors';
 import { mapUserRoles } from '../../helpers';
 import { useSitesPagination, useUsersLoadingStates } from '../../hooks';
 import { MODULE_PATHS } from '../../roles.const';
@@ -82,7 +82,7 @@ const UserDetailRoles: FC<UserDetailRolesProps> = ({
 				currentPage={sitesPagination?.currentPage}
 				itemsPerPage={query.pagesize}
 				onPageChange={handlePageChange}
-				noDataMessage="Er zijn geen resultaten"
+				noDataMessage={t(CORE_TRANSLATIONS['TABLE_NO-RESULT'])}
 				loadDataMessage="Sites ophalen"
 				totalValues={sitesPagination?.total ?? 0}
 				loading={
