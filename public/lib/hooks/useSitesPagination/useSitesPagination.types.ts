@@ -1,8 +1,8 @@
-import { SiteModel } from '@redactie/sites-module';
+import { SiteListModel } from '@redactie/sites-module';
 
 import { RoleModel } from '../../store/roles';
 
-export interface SiteModelWithRoles extends SiteModel {
+export interface SiteModelWithRoles extends SiteListModel {
 	roles: RoleModel[];
 	hasAccess: boolean;
 }
