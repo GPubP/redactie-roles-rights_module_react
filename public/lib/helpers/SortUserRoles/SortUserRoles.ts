@@ -8,7 +8,11 @@ const sortUserRoles = (roles?: RoleModel[]): Array<RoleModel> => {
 	const sortedRoles =
 		roles &&
 		roles.sort((a: RoleModel, b: RoleModel) => {
-			return a.attributes.displayName.localeCompare(b.attributes.displayName);
+			if (a.attributes.displayName && b.attributes.displayName) {
+				return a.attributes.displayName.localeCompare(b.attributes.displayName);
+			}
+
+			return 0;
 		});
 	return sortedRoles;
 };
