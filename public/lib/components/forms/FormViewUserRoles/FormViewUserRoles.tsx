@@ -1,8 +1,9 @@
 import { Checkbox } from '@acpaas-ui/react-components';
 import { FormikOnChangeHandler } from '@redactie/utils';
 import { Field, FieldArray, Formik } from 'formik';
-import React, { ChangeEvent, FC } from 'react';
+import React, { ChangeEvent, FC, useMemo } from 'react';
 
+import { sortUserRoles } from '../../../helpers';
 import { RoleModel } from '../../../store/roles';
 
 import { FormViewUserRolesProps, UserRolesFormState } from './FormViewUserRoles.types';
@@ -16,6 +17,10 @@ const FormViewUserRoles: FC<FormViewUserRolesProps> = ({
 	onChange = () => null,
 	onSubmit = () => null,
 }) => {
+	const sortedRoles = useMemo(() => {
+		return sortUserRoles(availableRoles);
+	}, [availableRoles]);
+
 	/**
 	 * Render
 	 */
@@ -36,8 +41,8 @@ const FormViewUserRoles: FC<FormViewUserRolesProps> = ({
 						<FieldArray
 							name="roleIds"
 							render={arrayHelpers =>
-								availableRoles &&
-								availableRoles.map((role: RoleModel) => (
+								sortedRoles &&
+								sortedRoles.map((role: RoleModel) => (
 									<Field
 										key={role.id}
 										as={Checkbox}
