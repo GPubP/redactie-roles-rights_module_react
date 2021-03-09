@@ -19,6 +19,7 @@ import { RoleDetailFormProps } from './RoleDetailForm.types';
 
 const RoleDetailForm: FC<RoleDetailFormProps> = ({
 	initialState,
+	readonly = false,
 	isLoading = false,
 	isDeleting = false,
 	hasChanges = false,
@@ -87,6 +88,7 @@ const RoleDetailForm: FC<RoleDetailFormProps> = ({
 									description="Geef de rol een korte en duidelijke naam."
 									as={TextField}
 									required
+									disabled={readonly}
 									id="name"
 									label="Naam"
 									name="name"
@@ -100,6 +102,7 @@ const RoleDetailForm: FC<RoleDetailFormProps> = ({
 									as={Textarea}
 									id="description"
 									required
+									disabled={readonly}
 									label="Beschrijving"
 									name="description"
 								/>
@@ -110,12 +113,14 @@ const RoleDetailForm: FC<RoleDetailFormProps> = ({
 							</div>
 						</div>
 						{onDelete ? renderDelete() : null}
-						<DefaultFormActions
-							isLoading={isLoading}
-							saveBtnDisabled={isDeleting}
-							hasChanges={hasChanges}
-							onCancel={onCancel}
-						/>
+						{!readonly && (
+							<DefaultFormActions
+								isLoading={isLoading}
+								saveBtnDisabled={isDeleting}
+								hasChanges={hasChanges}
+								onCancel={onCancel}
+							/>
+						)}
 						{children && children(props)}
 					</>
 				);

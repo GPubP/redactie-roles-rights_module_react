@@ -4,6 +4,7 @@ import { RoleDetailFormState } from '../../../roles.types';
 
 export interface RoleDetailFormProps {
 	initialState: RoleDetailFormState;
+	readonly?: boolean;
 	isLoading?: boolean;
 	isDeleting?: boolean;
 	hasChanges?: boolean;

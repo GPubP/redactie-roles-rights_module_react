@@ -18,8 +18,9 @@ import { generatePath, useParams } from 'react-router-dom';
 
 import { DefaultFormActions, FormViewUserRoles, UserRolesFormState } from '../../components';
 import { CORE_TRANSLATIONS, useCoreTranslation } from '../../connectors/translations';
-import { mapUserRoles } from '../../helpers';
+import { checkSecurityRights, mapUserRoles } from '../../helpers';
 import {
+	useMySecurityRightsForSite,
 	useRoutesBreadcrumbs,
 	useSiteRoles,
 	useUser,
@@ -30,6 +31,7 @@ import {
 	ALERT_CONTAINER_IDS,
 	DEFAULT_USER_DETAIL_HEADER_BADGES,
 	MODULE_PATHS,
+	SecurityRightsSite,
 	SITE_CONTEXT_DEFAULT_BREADCRUMBS,
 	SITES_ROOT,
 } from '../../roles.const';
@@ -69,6 +71,10 @@ const SiteUserDetailRolesUpdate: FC<RolesRouteProps> = ({ tenantId }) => {
 		initialLoading !== LoadingState.Loading && isUpdating !== LoadingState.Loading,
 		formState ?? initialFormState
 	);
+	const [mySecurityRightsLoadingState, mySecurityRights] = useMySecurityRightsForSite({
+		siteUuid: siteId,
+		onlyKeys: true,
+	});
 
 	useWillUnmount(() => {
 		usersFacade.clearUser();
@@ -89,13 +95,14 @@ const SiteUserDetailRolesUpdate: FC<RolesRouteProps> = ({ tenantId }) => {
 		if (
 			userLoadingState !== LoadingState.Loading &&
 			userRolesLoadingState !== LoadingState.Loading &&
-			rolesLoadingState !== LoadingState.Loading
+			rolesLoadingState !== LoadingState.Loading &&
+			mySecurityRightsLoadingState !== LoadingState.Loading
 		) {
 			return setInitialLoading(LoadingState.Loaded);
 		}
 
 		setInitialLoading(LoadingState.Loading);
-	}, [rolesLoadingState, userLoadingState, userRolesLoadingState]);
+	}, [mySecurityRightsLoadingState, rolesLoadingState, userLoadingState, userRolesLoadingState]);
 
 	useEffect(() => {
 		if (userRoles) {
@@ -108,6 +115,12 @@ const SiteUserDetailRolesUpdate: FC<RolesRouteProps> = ({ tenantId }) => {
 	/**
 	 * Methods
 	 */
+	const canUpdate = checkSecurityRights(
+		mySecurityRights,
+		[SecurityRightsSite.UsersUpdateSiteRoles],
+		false
+	);
+
 	const navigateToOverview = (): void => {
 		navigate(`${MODULE_PATHS.users.siteOverview}`, { siteId });
 	};
@@ -156,6 +169,7 @@ const SiteUserDetailRolesUpdate: FC<RolesRouteProps> = ({ tenantId }) => {
 				<h3>Rollen</h3>
 				<div className="u-margin-top">
 					<FormViewUserRoles
+						readonly={!canUpdate}
 						initialState={initialFormState}
 						availableRoles={roles}
 						onChange={value => {
@@ -167,16 +181,20 @@ const SiteUserDetailRolesUpdate: FC<RolesRouteProps> = ({ tenantId }) => {
 					>
 						{({ submitForm }) => (
 							<>
-								<DefaultFormActions
-									isLoading={isUpdating === LoadingState.Loading}
-									onCancel={onCancel}
-									hasChanges={hasChanges}
-								/>
-								<LeavePrompt
-									shouldBlockNavigationOnConfirm
-									when={hasChanges && !isSubmitting}
-									onConfirm={submitForm}
-								/>
+								{canUpdate && (
+									<>
+										<DefaultFormActions
+											isLoading={isUpdating === LoadingState.Loading}
+											onCancel={onCancel}
+											hasChanges={hasChanges}
+										/>
+										<LeavePrompt
+											shouldBlockNavigationOnConfirm
+											when={hasChanges && !isSubmitting}
+											onConfirm={submitForm}
+										/>
+									</>
+								)}
 							</>
 						)}
 					</FormViewUserRoles>

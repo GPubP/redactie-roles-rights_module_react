@@ -112,6 +112,12 @@ const RolesUpdate: FC<RolesRouteProps> = () => {
 		false
 	);
 
+	const canUpdate = checkSecurityRights(
+		mySecurityRights,
+		[SecurityRightsSite.RolesUpdate],
+		false
+	);
+
 	const navigateToOverview = (): void => {
 		navigate(MODULE_PATHS.roles.overview, { siteId });
 	};
@@ -157,6 +163,7 @@ const RolesUpdate: FC<RolesRouteProps> = () => {
 
 		return (
 			<RoleDetailForm
+				readonly={!canUpdate}
 				initialState={initialFormState}
 				isLoading={rolesLoadingStates.isUpdatingSiteRole === LoadingState.Loading}
 				isDeleting={rolesLoadingStates.isDeletingSiteRole === LoadingState.Loading}
