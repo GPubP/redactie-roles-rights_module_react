@@ -11,6 +11,7 @@ export const BREADCRUMB_OPTIONS = {
 		'/:tenantId/users/:userId/sites/:siteUuid([0-9a-fA-F]{8}\\-[0-9a-fA-F]{4}\\-[0-9a-fA-F]{4}\\-[0-9a-fA-F]{4}\\-[0-9a-fA-F]{12})',
 		'/:tenantId/sites',
 		'/:tenantId/sites/:siteUuid',
+		'/:tenantId/sites/:siteUuid/users/overzicht',
 		'/:tenantId/sites/:siteUuid/users/rolesrights',
 		'/:tenantId/sites/:siteUuid/users/roles',
 		'/:tenantId/sites/:siteUuid/users/:userId([0-9a-fA-F]{8}\\-[0-9a-fA-F]{4}\\-[0-9a-fA-F]{4}\\-[0-9a-fA-F]{4}\\-[0-9a-fA-F]{12})',
