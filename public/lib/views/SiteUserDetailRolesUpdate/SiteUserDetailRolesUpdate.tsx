@@ -52,7 +52,7 @@ const SiteUserDetailRolesUpdate: FC<RolesRouteProps> = ({ tenantId }) => {
 		return [
 			...SITE_CONTEXT_DEFAULT_BREADCRUMBS,
 			{
-				name: 'Gebruikerslijst',
+				name: 'Overzicht',
 				target: generatePath(`/${tenantId}/sites${MODULE_PATHS.siteRoot}`, {
 					siteId,
 				}),
