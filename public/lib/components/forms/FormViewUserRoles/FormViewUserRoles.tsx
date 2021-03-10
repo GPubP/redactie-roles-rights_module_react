@@ -12,6 +12,7 @@ const FormViewUserRoles: FC<FormViewUserRolesProps> = ({
 	initialState,
 	availableRoles,
 	checkAdmin = false,
+	readonly = false,
 	children,
 	formikRef = () => null,
 	onChange = () => null,
@@ -47,7 +48,7 @@ const FormViewUserRoles: FC<FormViewUserRolesProps> = ({
 										key={role.id}
 										as={Checkbox}
 										checked={values.roleIds && values.roleIds.includes(role.id)}
-										disabled={checkAdmin && role.attributes.admin}
+										disabled={(checkAdmin && role.attributes.admin) || readonly}
 										id={role.id}
 										name={role.name}
 										label={role.attributes.displayName}

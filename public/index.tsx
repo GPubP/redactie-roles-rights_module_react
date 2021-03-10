@@ -78,7 +78,13 @@ sitesConnector.registerRoutes({
 		canShown: [
 			securityRightsSiteCanShown(
 				urlSiteParam,
-				[SecurityRightsSite.RolesRightsReadRolePermissions, SecurityRightsSite.UsersRead],
+				// The top menu item is visible when the user has one of the following
+				// permissions
+				[
+					SecurityRightsSite.RolesRightsReadRolePermissions,
+					SecurityRightsSite.RolesRead,
+					SecurityRightsSite.UsersRead,
+				],
 				true
 			),
 		],
@@ -91,7 +97,8 @@ sitesConnector.registerRoutes({
 			guardOptions: {
 				guards: [
 					securityRightsSiteGuard(urlSiteParam, [
-						SecurityRightsSite.RolesRightsUpdateRolePermissions,
+						SecurityRightsSite.UsersRead,
+						SecurityRightsSite.RolesRead,
 					]),
 				],
 			},
@@ -149,7 +156,7 @@ sitesConnector.registerRoutes({
 			breadcrumb: false,
 			component: RolesUpdate,
 			guardOptions: {
-				guards: [securityRightsSiteGuard(urlSiteParam, [SecurityRightsSite.RolesUpdate])],
+				guards: [securityRightsSiteGuard(urlSiteParam, [SecurityRightsSite.RolesRead])],
 			},
 		},
 		{

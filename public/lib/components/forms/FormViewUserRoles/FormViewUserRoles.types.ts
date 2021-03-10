@@ -4,6 +4,7 @@ import { RoleModel } from '../../../store/roles';
 
 export interface FormViewUserRolesProps {
 	checkAdmin?: boolean;
+	readonly?: boolean;
 	initialState: UserRolesFormState;
 	availableRoles: RoleModel[];
 	children?: (props: FormikProps<UserRolesFormState>) => React.ReactNode;

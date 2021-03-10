@@ -74,11 +74,7 @@ const RolesOverview: FC<RolesRouteProps<{ siteId: string }>> = () => {
 	 * Render
 	 */
 	const renderOverview = (): ReactElement | null => {
-		if (!roles) {
-			return null;
-		}
-
-		const rolesRows: RolesOverviewTableRow[] = roles.map(role => ({
+		const rolesRows: RolesOverviewTableRow[] = (roles || []).map(role => ({
 			uuid: role.id,
 			name: role.attributes.displayName || '',
 			description: role.description || '',

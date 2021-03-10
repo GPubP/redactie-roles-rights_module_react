@@ -86,10 +86,10 @@ export const SITE_CONTEXT_DEFAULT_BREADCRUMBS = [
 ];
 
 export enum SecurityRightsSite {
-	UsersRead = 'roles-rights_read-users',
-	UsersUpdateSiteRoles = 'roles-rights_update-site-roles',
 	RolesRightsReadRolePermissions = 'roles-rights_read-role-permissions',
 	RolesRightsUpdateRolePermissions = 'roles-rights_update-role-permissions',
+	UsersRead = 'roles-rights_read-users',
+	UsersUpdateSiteRoles = 'roles-rights_update-site-roles',
 	RolesRead = 'roles_read',
 	RolesCreate = 'roles_create',
 	RolesUpdate = 'roles_update',
