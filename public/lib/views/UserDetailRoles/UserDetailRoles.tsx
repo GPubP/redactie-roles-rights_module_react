@@ -77,10 +77,11 @@ const UserDetailRoles: FC<UserDetailRolesProps> = ({
 				currentPage={sitesPagination?.currentPage}
 				itemsPerPage={query.pagesize}
 				onPageChange={handlePageChange}
-				noDataMessage={t(CORE_TRANSLATIONS['TABLE_NO-RESULT'])}
+				noDataMessage={t(CORE_TRANSLATIONS['TABLE_NO-ITEMS'])}
 				loadDataMessage="Sites ophalen"
 				totalValues={sitesPagination?.total ?? 0}
 				loading={isFetching}
+				hideResultsMessage
 			/>
 		);
 	};
