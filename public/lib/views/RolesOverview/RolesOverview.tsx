@@ -96,7 +96,8 @@ const RolesOverview: FC<RolesRouteProps<{ siteId: string }>> = () => {
 					totalValues={roles?.length || 0}
 					loading={rolesLoadingState === LoadingState.Loading}
 					loadDataMessage="Rollen ophalen"
-					noDataMessage={t(CORE_TRANSLATIONS['TABLE_NO-RESULT'])}
+					noDataMessage={t(CORE_TRANSLATIONS['TABLE_NO-ITEMS'])}
+					hideResultsMessage
 				/>
 			</>
 		);
