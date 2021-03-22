@@ -47,7 +47,11 @@ const RoleDetailForm: FC<RoleDetailFormProps> = ({
 			<>
 				<Card className="u-margin-top">
 					<CardBody>
-						<CardTitle>Rol verwijderen</CardTitle>
+						<CardTitle>Verwijderen</CardTitle>
+						<p>
+							Opgelet, indien u deze rol verwijdert verliezen gebruikers die deze rol
+							hebben alle bijhorende rechten.
+						</p>
 						<Button
 							onClick={() => setShowDeleteModal(true)}
 							className="u-margin-top"
