@@ -6,7 +6,7 @@ import React, { ChangeEvent, FC, Fragment, ReactNode } from 'react';
 
 import './RolesPermissionsForm.scss';
 import { SecurityRightsSite } from '../../../roles.const';
-import { RoleResponse, SecurityRightResponse } from '../../../services/securityRights';
+import { SecurityRightResponse } from '../../../services/securityRights';
 import { RoleSecurityRight } from '../../../views/RolesRightsOverview/RolesRightsOverview.types';
 import DefaultFormActions from '../../DefaultFormActions/DefaultFormActions';
 import SecurableRender from '../../SecurableRender/SecurableRender';
@@ -58,27 +58,27 @@ const RolesPermissionsForm: FC<RolesPermissionsFormProps> = ({
 						// https://github.com/italodeandra/formik/blob/patch-1/docs/guides/arrays.md
 						name={`['${securityRight.id}']`}
 						render={arrayHelpers =>
-							roles?.map((role: RoleResponse) => {
+							roles?.map(role => {
 								return (
 									<td
 										className="a-table-checkbox"
-										key={`${securityRight.id}_${role.role.id}`}
+										key={`${securityRight.id}_${role.id}`}
 									>
 										<Field
 											as={Checkbox}
 											checked={
 												values[securityRight.id] &&
-												values[securityRight.id].includes(role.role.id)
+												values[securityRight.id].includes(role.id)
 											}
-											disabled={readonly || role.role.attributes.admin}
-											id={`${securityRight.id}_${role.role.id}`}
-											name={`${securityRight.id}_${role.role.id}`}
+											disabled={readonly || role.attributes.admin}
+											id={`${securityRight.id}_${role.id}`}
+											name={`${securityRight.id}_${role.id}`}
 											onChange={(e: ChangeEvent<HTMLInputElement>) => {
 												if (e.target.checked) {
-													arrayHelpers.push(role.role.id);
+													arrayHelpers.push(role.id);
 												} else {
 													const idx = values[securityRight.id].indexOf(
-														role.role.id
+														role.id
 													);
 													arrayHelpers.remove(idx);
 												}
@@ -122,10 +122,10 @@ const RolesPermissionsForm: FC<RolesPermissionsFormProps> = ({
 								<thead>
 									<tr className="m-table--header">
 										<th />
-										{roles.map((role: RoleResponse) => (
-											<th key={role.role.id} className="a-table-header--top">
+										{roles.map(role => (
+											<th key={role.id} className="a-table-header--top">
 												<div>
-													<span>{role.role?.attributes.displayName}</span>
+													<span>{role?.attributes.displayName}</span>
 												</div>
 											</th>
 										))}

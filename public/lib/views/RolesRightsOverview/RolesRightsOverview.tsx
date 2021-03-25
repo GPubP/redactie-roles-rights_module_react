@@ -10,7 +10,7 @@ import {
 	useDetectValueChanges,
 } from '@redactie/utils';
 import { FormikProps } from 'formik';
-import React, { FC, ReactElement, useEffect, useState } from 'react';
+import React, { FC, ReactElement, useEffect, useMemo, useState } from 'react';
 
 import { ModulesList, RolesPermissionsForm, RolesPermissionsFormState } from '../../components';
 import { useMySecurityRightsForSite, useRoutesBreadcrumbs, useSecurityRights } from '../../hooks';
@@ -46,6 +46,15 @@ const RolesRightsOverview: FC<RolesRouteProps<{ siteId: string }>> = ({ match })
 		siteUuid: siteId,
 		onlyKeys: true,
 	});
+	const sortedRoles = useMemo(() => {
+		return (securityRightMatrix?.roles || [])
+			.map(role => role.role)
+			.sort((a, b) => {
+				const nameA = a?.attributes?.displayName || '';
+				const nameB = b?.attributes?.displayName || '';
+				return nameA < nameB ? -1 : nameA > nameB ? 1 : 0;
+			});
+	}, [securityRightMatrix]);
 	const [hasChanges, resetDetectValueChanges] = useDetectValueChanges(
 		initialLoading !== LoadingState.Loading && updateLoadingState !== LoadingState.Loading,
 		formState ?? initialFormState
@@ -210,7 +219,7 @@ const RolesRightsOverview: FC<RolesRouteProps<{ siteId: string }>> = ({ match })
 									SecurityRightsSite.RolesRightsUpdateRolePermissions
 								)
 							}
-							roles={roles}
+							roles={sortedRoles}
 							permissions={securityRightsByModule}
 							mySecurityRights={mySecurityRights}
 							isLoading={updateLoadingState === LoadingState.Loading}
