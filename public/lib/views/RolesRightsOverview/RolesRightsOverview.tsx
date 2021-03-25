@@ -40,8 +40,7 @@ const RolesRightsOverview: FC<RolesRouteProps<{ siteId: string }>> = ({ match })
 	);
 	const [formState, setFormState] = useState<RolesPermissionsFormState | null>(null);
 	const [categories, setCategories] = useState<ModuleResponse[] | null>(null);
-	const { modules = [], securityRights = [], roles = [], contentTypes = [] } =
-		securityRightMatrix || {};
+	const [selectedCompartment, setSelectedCompartment] = useState<{ type: string; id: string }>();
 	const [matrixTitle, setMatrixTitle] = useState<string>('');
 	const [mySecurityRightsLoadingState, mySecurityRights] = useMySecurityRightsForSite({
 		siteUuid: siteId,
@@ -51,7 +50,8 @@ const RolesRightsOverview: FC<RolesRouteProps<{ siteId: string }>> = ({ match })
 		initialLoading !== LoadingState.Loading && updateLoadingState !== LoadingState.Loading,
 		formState ?? initialFormState
 	);
-	const [selectedCompartment, setSelectedCompartment] = useState<{ type: string; id: string }>();
+	const { modules = [], securityRights = [], roles = [], contentTypes = [] } =
+		securityRightMatrix || {};
 
 	useEffect(() => {
 		setInitialLoading(LoadingState.Loading);
@@ -87,7 +87,13 @@ const RolesRightsOverview: FC<RolesRouteProps<{ siteId: string }>> = ({ match })
 			newAcc[moduleIndex] = {
 				...categoryResult[moduleIndex],
 				type: right.attributes.type,
-				securityRights: (acc[moduleIndex]?.securityRights || []).concat([right]),
+				securityRights: (acc[moduleIndex]?.securityRights || [])
+					.concat([right])
+					.sort((a, b) => {
+						const nameA = a?.attributes?.displayName || '';
+						const nameB = b?.attributes?.displayName || '';
+						return nameA < nameB ? -1 : nameA > nameB ? 1 : 0;
+					}),
 			};
 
 			return newAcc;
