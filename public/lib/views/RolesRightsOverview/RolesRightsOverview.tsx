@@ -10,7 +10,7 @@ import {
 	useDetectValueChanges,
 } from '@redactie/utils';
 import { FormikProps } from 'formik';
-import React, { FC, ReactElement, useEffect, useState } from 'react';
+import React, { FC, ReactElement, useEffect, useMemo, useState } from 'react';
 
 import { ModulesList, RolesPermissionsForm, RolesPermissionsFormState } from '../../components';
 import { useMySecurityRightsForSite, useRoutesBreadcrumbs, useSecurityRights } from '../../hooks';
@@ -40,18 +40,27 @@ const RolesRightsOverview: FC<RolesRouteProps<{ siteId: string }>> = ({ match })
 	);
 	const [formState, setFormState] = useState<RolesPermissionsFormState | null>(null);
 	const [categories, setCategories] = useState<ModuleResponse[] | null>(null);
-	const { modules = [], securityRights = [], roles = [], contentTypes = [] } =
-		securityRightMatrix || {};
+	const [selectedCompartment, setSelectedCompartment] = useState<{ type: string; id: string }>();
 	const [matrixTitle, setMatrixTitle] = useState<string>('');
 	const [mySecurityRightsLoadingState, mySecurityRights] = useMySecurityRightsForSite({
 		siteUuid: siteId,
 		onlyKeys: true,
 	});
+	const sortedRoles = useMemo(() => {
+		return (securityRightMatrix?.roles || [])
+			.map(role => role.role)
+			.sort((a, b) => {
+				const nameA = a?.attributes?.displayName || '';
+				const nameB = b?.attributes?.displayName || '';
+				return nameA < nameB ? -1 : nameA > nameB ? 1 : 0;
+			});
+	}, [securityRightMatrix]);
 	const [hasChanges, resetDetectValueChanges] = useDetectValueChanges(
 		initialLoading !== LoadingState.Loading && updateLoadingState !== LoadingState.Loading,
 		formState ?? initialFormState
 	);
-	const [selectedCompartment, setSelectedCompartment] = useState<{ type: string; id: string }>();
+	const { modules = [], securityRights = [], roles = [], contentTypes = [] } =
+		securityRightMatrix || {};
 
 	useEffect(() => {
 		setInitialLoading(LoadingState.Loading);
@@ -87,7 +96,13 @@ const RolesRightsOverview: FC<RolesRouteProps<{ siteId: string }>> = ({ match })
 			newAcc[moduleIndex] = {
 				...categoryResult[moduleIndex],
 				type: right.attributes.type,
-				securityRights: (acc[moduleIndex]?.securityRights || []).concat([right]),
+				securityRights: (acc[moduleIndex]?.securityRights || [])
+					.concat([right])
+					.sort((a, b) => {
+						const nameA = a?.attributes?.displayName || '';
+						const nameB = b?.attributes?.displayName || '';
+						return nameA < nameB ? -1 : nameA > nameB ? 1 : 0;
+					}),
 			};
 
 			return newAcc;
@@ -204,7 +219,7 @@ const RolesRightsOverview: FC<RolesRouteProps<{ siteId: string }>> = ({ match })
 									SecurityRightsSite.RolesRightsUpdateRolePermissions
 								)
 							}
-							roles={roles}
+							roles={sortedRoles}
 							permissions={securityRightsByModule}
 							mySecurityRights={mySecurityRights}
 							isLoading={updateLoadingState === LoadingState.Loading}

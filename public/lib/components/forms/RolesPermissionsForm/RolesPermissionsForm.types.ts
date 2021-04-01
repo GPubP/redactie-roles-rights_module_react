@@ -1,10 +1,10 @@
 import { FormikProps } from 'formik';
 
-import { RoleResponse } from '../../../services/securityRights';
+import { Role } from '../../../services/securityRights';
 import { RoleSecurityRight } from '../../../views/RolesRightsOverview/RolesRightsOverview.types';
 
 export interface RolesPermissionsFormProps {
-	roles: RoleResponse[];
+	roles: Role[];
 	permissions: RoleSecurityRight[];
 	mySecurityRights: string[];
 	title: string;
