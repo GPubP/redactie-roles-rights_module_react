@@ -7,7 +7,7 @@ import {
 	DataLoader,
 	LoadingState,
 	useAPIQueryParams,
-	useDetectValueChanges,
+	useDetectValueChangesWorker,
 } from '@redactie/utils';
 import { FormikProps } from 'formik';
 import React, { FC, ReactElement, useEffect, useMemo, useState } from 'react';
@@ -55,9 +55,10 @@ const RolesRightsOverview: FC<RolesRouteProps<{ siteId: string }>> = ({ match })
 				return nameA < nameB ? -1 : nameA > nameB ? 1 : 0;
 			});
 	}, [securityRightMatrix]);
-	const [hasChanges, resetDetectValueChanges] = useDetectValueChanges(
+	const [hasChanges, resetDetectValueChanges] = useDetectValueChangesWorker(
 		initialLoading !== LoadingState.Loading && updateLoadingState !== LoadingState.Loading,
-		formState ?? initialFormState
+		formState ?? initialFormState,
+		BFF_MODULE_PUBLIC_PATH
 	);
 	const { modules = [], securityRights = [], roles = [], contentTypes = [] } =
 		securityRightMatrix || {};

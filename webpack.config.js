@@ -1,4 +1,4 @@
-const { getModuleConfig } = require('@redactie/utils/dist/webpack');
+const { getModuleConfig, getWorkerConfig } = require('@redactie/utils/dist/webpack');
 
 const packageJSON = require('./package.json');
 
@@ -10,6 +10,7 @@ module.exports = env => {
 			'@redactie/translations-module': '@redactie/translations-module',
 		},
 	})(env);
+	const workerConfig = getWorkerConfig();
 
-	return defaultConfig;
+	return [workerConfig, defaultConfig];
 };
