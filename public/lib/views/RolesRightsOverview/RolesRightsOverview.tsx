@@ -9,8 +9,8 @@ import {
 	useAPIQueryParams,
 	useDetectValueChangesWorker,
 } from '@redactie/utils';
-import { FormikProps } from 'formik';
-import React, { FC, ReactElement, useEffect, useMemo, useState } from 'react';
+import { isEmpty } from 'ramda';
+import React, { FC, ReactElement, useEffect, useMemo, useRef, useState } from 'react';
 
 import { ModulesList, RolesPermissionsForm, RolesPermissionsFormState } from '../../components';
 import { useMySecurityRightsForSite, useRoutesBreadcrumbs, useSecurityRights } from '../../hooks';
@@ -116,8 +116,8 @@ const RolesRightsOverview: FC<RolesRouteProps<{ siteId: string }>> = ({ match })
 		setMatrixTitle(value);
 	};
 
-	const onCancel = (resetForm: FormikProps<RolesPermissionsFormState>['resetForm']): void => {
-		resetForm();
+	const onCancel = (): void => {
+		setFormState(initialFormState.current);
 	};
 
 	const onSave = (values: RolesPermissionsFormState): void => {
