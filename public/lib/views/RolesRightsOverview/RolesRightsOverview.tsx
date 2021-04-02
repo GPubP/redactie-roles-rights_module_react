@@ -20,6 +20,7 @@ import { ModuleResponse, UpdateRolesMatrixPayload } from '../../services/securit
 import { securityRightsMatrixFacade } from '../../store/securityRightsMatrix';
 
 import { ROLES_RIGHTS_QUERY_PARAMS_CONFIG } from './RolesRightsOverview.const';
+import { sortSecurityRightsMatrixRoles } from './RolesRightsOverview.helpers';
 import { RoleSecurityRight } from './RolesRightsOverview.types';
 
 const RolesRightsOverview: FC<RolesRouteProps<{ siteId: string }>> = ({ match }) => {
@@ -46,15 +47,9 @@ const RolesRightsOverview: FC<RolesRouteProps<{ siteId: string }>> = ({ match })
 		siteUuid: siteId,
 		onlyKeys: true,
 	});
-	const sortedRoles = useMemo(() => {
-		return (securityRightMatrix?.roles || [])
-			.map(role => role.role)
-			.sort((a, b) => {
-				const nameA = a?.attributes?.displayName || '';
-				const nameB = b?.attributes?.displayName || '';
-				return nameA < nameB ? -1 : nameA > nameB ? 1 : 0;
-			});
-	}, [securityRightMatrix]);
+	const sortedRoles = useMemo(() => sortSecurityRightsMatrixRoles(securityRightMatrix?.roles), [
+		securityRightMatrix,
+	]);
 	const [hasChanges, resetDetectValueChanges] = useDetectValueChangesWorker(
 		initialLoading !== LoadingState.Loading && updateLoadingState !== LoadingState.Loading,
 		formState ?? initialFormState,
@@ -86,42 +81,16 @@ const RolesRightsOverview: FC<RolesRouteProps<{ siteId: string }>> = ({ match })
 
 		setCategories(categoryResult);
 
-		const securityRightsByModuleResult = securityRights.reduce((acc, right) => {
-			const newAcc = [...acc];
-			const moduleIndex =
-				right.attributes.type !== 'content-type'
-					? modules.findIndex(mod => mod.id === right.attributes.module)
-					: modules.length +
-					  contentTypes.findIndex(mod => mod.id === right.attributes.subModule);
-
-			newAcc[moduleIndex] = {
-				...categoryResult[moduleIndex],
-				type: right.attributes.type,
-				securityRights: (acc[moduleIndex]?.securityRights || [])
-					.concat([right])
-					.sort((a, b) => {
-						const nameA = a?.attributes?.displayName || '';
-						const nameB = b?.attributes?.displayName || '';
-						return nameA < nameB ? -1 : nameA > nameB ? 1 : 0;
-					}),
-			};
-
-			return newAcc;
-		}, categoryResult as RoleSecurityRight[]);
+		const securityRightsByModuleResult = parseSecurityRightsByModule(
+			categoryResult,
+			contentTypes,
+			modules,
+			securityRights
+		);
 
 		setSecurityRightsByModule(securityRightsByModuleResult);
 
-		const initialStateResult = securityRights.reduce((acc, right) => {
-			acc[right.id] = roles.reduce((roleIds, role) => {
-				const hasSecurityRight = role.securityRights.find(rightId => rightId === right.id);
-				if (hasSecurityRight) {
-					roleIds.push(role.role.id);
-				}
-				return roleIds;
-			}, [] as string[]);
-
-			return acc;
-		}, {} as RolesPermissionsFormState);
+		const initialStateResult = parseSecurityRightsFormState(securityRights, roles);
 
 		setInitialFormState(initialStateResult);
 		resetDetectValueChanges();
@@ -130,7 +99,7 @@ const RolesRightsOverview: FC<RolesRouteProps<{ siteId: string }>> = ({ match })
 	/**
 	 * Methods
 	 */
-	const handleClick = (value: string, type: 'content-type' | 'module' | ''): void => {
+	const onModuleListClick = (value: string, type: 'content-type' | 'module' | ''): void => {
 		setQuery({
 			module: type === 'module' ? value : undefined,
 			'content-type': type === 'content-type' ? value : undefined,
@@ -144,30 +113,8 @@ const RolesRightsOverview: FC<RolesRouteProps<{ siteId: string }>> = ({ match })
 		resetForm();
 	};
 
-	const parseFormResult = (formState: RolesPermissionsFormState): UpdateRolesMatrixPayload =>
-		Object.keys(formState).reduce((roles, securityRightId) => {
-			const roleIds = formState[securityRightId];
-			roleIds.forEach(roleId => {
-				const role = roles.find(item => item.roleId === roleId);
-				if (!role) {
-					roles.push({ roleId: roleId, securityRights: [securityRightId] });
-				} else {
-					roles = roles.map(r => {
-						if (r.roleId === roleId) {
-							return {
-								...r,
-								securityRights: [...r.securityRights, securityRightId],
-							};
-						}
-						return r;
-					});
-				}
-			});
-			return roles;
-		}, [] as UpdateRolesMatrixPayload);
-
 	const onSave = (values: RolesPermissionsFormState): void => {
-		const results = parseFormResult(values);
+		const results = parseRolesSecurityRightsMatrix(values);
 		const updateRolesMatrixData = securityRightMatrix?.roles.map(role => {
 			const resultRoleId = results.find(r => r.roleId === role.role.id);
 			if (resultRoleId) {
@@ -209,7 +156,7 @@ const RolesRightsOverview: FC<RolesRouteProps<{ siteId: string }>> = ({ match })
 			<>
 				<div className="row">
 					<div className="col-xs-3">
-						<ModulesList modules={categories} onClick={handleClick} />
+						<ModulesList modules={categories} onClick={onModuleListClick} />
 					</div>
 					<div className="col-xs-8 u-margin-left">
 						<RolesPermissionsForm
