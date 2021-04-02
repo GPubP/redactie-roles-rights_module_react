@@ -111,10 +111,10 @@ const RolesPermissionsForm: FC<RolesPermissionsFormProps> = ({
 	};
 
 	return (
-		<Formik enableReinitialize initialValues={initialFormState} onSubmit={onSubmit}>
+		<Formik initialValues={initialFormState} onSubmit={onSubmit}>
 			{({ values, submitForm }) => (
 				<>
-					<FormikOnChangeHandler delay={0} onChange={values => onChange(values)} />
+					<FormikOnChangeHandler delay={0} onChange={onChange} />
 					<Card>
 						<CardBody>
 							{getModuleTitle(permissions, title)}

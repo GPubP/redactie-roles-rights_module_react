@@ -16,11 +16,16 @@ import { ModulesList, RolesPermissionsForm, RolesPermissionsFormState } from '..
 import { useMySecurityRightsForSite, useRoutesBreadcrumbs, useSecurityRights } from '../../hooks';
 import { SecurityRightsSite, SITE_CONTEXT_DEFAULT_BREADCRUMBS } from '../../roles.const';
 import { RolesRouteProps } from '../../roles.types';
-import { ModuleResponse, UpdateRolesMatrixPayload } from '../../services/securityRights';
+import { ModuleResponse } from '../../services/securityRights';
 import { securityRightsMatrixFacade } from '../../store/securityRightsMatrix';
 
 import { ROLES_RIGHTS_QUERY_PARAMS_CONFIG } from './RolesRightsOverview.const';
-import { sortSecurityRightsMatrixRoles } from './RolesRightsOverview.helpers';
+import {
+	parseRolesSecurityRightsMatrix,
+	parseSecurityRightsByModule,
+	parseSecurityRightsFormState,
+	sortSecurityRightsMatrixRoles,
+} from './RolesRightsOverview.helpers';
 import { RoleSecurityRight } from './RolesRightsOverview.types';
 
 const RolesRightsOverview: FC<RolesRouteProps<{ siteId: string }>> = ({ match }) => {
@@ -36,9 +41,7 @@ const RolesRightsOverview: FC<RolesRouteProps<{ siteId: string }>> = ({ match })
 	const [securityRightsByModule, setSecurityRightsByModule] = useState<
 		RoleSecurityRight[] | null
 	>(null);
-	const [initialFormState, setInitialFormState] = useState<RolesPermissionsFormState | null>(
-		null
-	);
+	const initialFormState = useRef<RolesPermissionsFormState | null>(null);
 	const [formState, setFormState] = useState<RolesPermissionsFormState | null>(null);
 	const [categories, setCategories] = useState<ModuleResponse[] | null>(null);
 	const [selectedCompartment, setSelectedCompartment] = useState<{ type: string; id: string }>();
@@ -51,8 +54,10 @@ const RolesRightsOverview: FC<RolesRouteProps<{ siteId: string }>> = ({ match })
 		securityRightMatrix,
 	]);
 	const [hasChanges, resetDetectValueChanges] = useDetectValueChangesWorker(
-		initialLoading !== LoadingState.Loading && updateLoadingState !== LoadingState.Loading,
-		formState ?? initialFormState,
+		initialLoading !== LoadingState.Loading &&
+			updateLoadingState !== LoadingState.Loading &&
+			!!formState,
+		formState,
 		BFF_MODULE_PUBLIC_PATH
 	);
 	const { modules = [], securityRights = [], roles = [], contentTypes = [] } =
@@ -68,11 +73,11 @@ const RolesRightsOverview: FC<RolesRouteProps<{ siteId: string }>> = ({ match })
 			fetchLoadingState !== LoadingState.Loading &&
 			mySecurityRightsLoadingState !== LoadingState.Loading &&
 			securityRightsByModule &&
-			initialFormState
+			formState
 		) {
 			setInitialLoading(LoadingState.Loaded);
 		}
-	}, [initialFormState, fetchLoadingState, mySecurityRightsLoadingState, securityRightsByModule]);
+	}, [fetchLoadingState, formState, mySecurityRightsLoadingState, securityRightsByModule]);
 
 	useEffect(() => {
 		const categoryResult: ModuleResponse[] = modules
@@ -92,8 +97,10 @@ const RolesRightsOverview: FC<RolesRouteProps<{ siteId: string }>> = ({ match })
 
 		const initialStateResult = parseSecurityRightsFormState(securityRights, roles);
 
-		setInitialFormState(initialStateResult);
-		resetDetectValueChanges();
+		if (!isEmpty(initialStateResult)) {
+			initialFormState.current = initialStateResult;
+			setFormState(initialStateResult);
+		}
 	}, [securityRightMatrix]); // eslint-disable-line react-hooks/exhaustive-deps
 
 	/**
@@ -148,7 +155,7 @@ const RolesRightsOverview: FC<RolesRouteProps<{ siteId: string }>> = ({ match })
 	 * Render
 	 */
 	const renderOverview = (): ReactElement | null => {
-		if (!securityRightsByModule || !initialFormState) {
+		if (!securityRightsByModule || !formState) {
 			return null;
 		}
 
@@ -161,7 +168,7 @@ const RolesRightsOverview: FC<RolesRouteProps<{ siteId: string }>> = ({ match })
 					<div className="col-xs-8 u-margin-left">
 						<RolesPermissionsForm
 							title={matrixTitle}
-							initialFormState={initialFormState}
+							initialFormState={formState}
 							readonly={
 								!mySecurityRights.includes(
 									SecurityRightsSite.RolesRightsUpdateRolePermissions
