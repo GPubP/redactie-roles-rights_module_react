@@ -1,7 +1,6 @@
-/* eslint-disable prettier/prettier */
 import { Card, CardBody, CardTitle, Checkbox } from '@acpaas-ui/react-components';
 import { FormikOnChangeHandler, LeavePrompt } from '@redactie/utils';
-import { Field, FieldArray, Formik } from 'formik';
+import { FastField, FieldArray, Formik } from 'formik';
 import React, { ChangeEvent, FC, Fragment, ReactNode } from 'react';
 
 import './RolesPermissionsForm.scss';
@@ -50,29 +49,28 @@ const RolesPermissionsForm: FC<RolesPermissionsFormProps> = ({
 		values: any
 	): ReactNode => {
 		return securityRights.map((securityRight: SecurityRightResponse) => {
+			const fieldArrayName = `['${securityRight.id}']`;
 			return (
 				<tr key={securityRight.id}>
 					<td className="a-table-header--side">{securityRight.attributes.displayName}</td>
 					<FieldArray
 						// Names are made out of dots, to avoid that formik creates a nested structure we have added this funky fieldname:
 						// https://github.com/italodeandra/formik/blob/patch-1/docs/guides/arrays.md
-						name={`['${securityRight.id}']`}
+						name={fieldArrayName}
 						render={arrayHelpers =>
 							roles?.map(role => {
+								const fieldId = `${securityRight.id}_${role.id}`;
 								return (
-									<td
-										className="a-table-checkbox"
-										key={`${securityRight.id}_${role.id}`}
-									>
-										<Field
+									<td className="a-table-checkbox" key={fieldId}>
+										<FastField
 											as={Checkbox}
 											checked={
 												values[securityRight.id] &&
 												values[securityRight.id].includes(role.id)
 											}
 											disabled={readonly || role.attributes.admin}
-											id={`${securityRight.id}_${role.id}`}
-											name={`${securityRight.id}_${role.id}`}
+											id={fieldId}
+											name={fieldArrayName}
 											onChange={(e: ChangeEvent<HTMLInputElement>) => {
 												if (e.target.checked) {
 													arrayHelpers.push(role.id);

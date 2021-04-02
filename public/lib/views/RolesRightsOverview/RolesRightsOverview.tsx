@@ -9,6 +9,7 @@ import {
 	useAPIQueryParams,
 	useDetectValueChangesWorker,
 } from '@redactie/utils';
+import { FormikProps } from 'formik';
 import { isEmpty } from 'ramda';
 import React, { FC, ReactElement, useEffect, useMemo, useRef, useState } from 'react';
 
@@ -116,8 +117,11 @@ const RolesRightsOverview: FC<RolesRouteProps<{ siteId: string }>> = ({ match })
 		setMatrixTitle(value);
 	};
 
-	const onCancel = (): void => {
-		setFormState(initialFormState.current);
+	const onCancel = (resetForm: FormikProps<RolesPermissionsFormState>['resetForm']): void => {
+		if (initialFormState.current) {
+			resetForm({ values: initialFormState.current });
+			setFormState(initialFormState.current);
+		}
 	};
 
 	const onSave = (values: RolesPermissionsFormState): void => {
