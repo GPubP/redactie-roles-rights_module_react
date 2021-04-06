@@ -113,7 +113,7 @@ const RolesRightsOverview: FC<RolesRouteProps<{ siteId: string }>> = ({ match })
 			'content-type': type === 'content-type' ? value : undefined,
 		});
 
-		setSelectedCompartment({ type, id: value });
+		setSelectedCompartment(!isEmpty(type) ? { type, id: value } : undefined);
 		setMatrixTitle(value);
 	};
 
@@ -164,32 +164,30 @@ const RolesRightsOverview: FC<RolesRouteProps<{ siteId: string }>> = ({ match })
 		}
 
 		return (
-			<>
-				<div className="row">
-					<div className="col-xs-3">
-						<ModulesList modules={categories} onClick={onModuleListClick} />
-					</div>
-					<div className="col-xs-8 u-margin-left">
-						<RolesPermissionsForm
-							title={matrixTitle}
-							initialFormState={formState}
-							readonly={
-								!mySecurityRights.includes(
-									SecurityRightsSite.RolesRightsUpdateRolePermissions
-								)
-							}
-							roles={sortedRoles}
-							permissions={securityRightsByModule}
-							mySecurityRights={mySecurityRights}
-							isLoading={updateLoadingState === LoadingState.Loading}
-							hasChanges={hasChanges}
-							onChange={setFormState}
-							onSubmit={onSave}
-							onCancel={onCancel}
-						/>
-					</div>
+			<div className="row u-margin-top">
+				<div className="col-xs-3">
+					<ModulesList modules={categories} onClick={onModuleListClick} />
 				</div>
-			</>
+				<div className="col-xs-8 u-margin-left">
+					<RolesPermissionsForm
+						title={matrixTitle}
+						initialFormState={formState}
+						readonly={
+							!mySecurityRights.includes(
+								SecurityRightsSite.RolesRightsUpdateRolePermissions
+							)
+						}
+						roles={sortedRoles}
+						permissions={securityRightsByModule}
+						mySecurityRights={mySecurityRights}
+						isLoading={updateLoadingState === LoadingState.Loading}
+						hasChanges={hasChanges}
+						onChange={setFormState}
+						onSubmit={onSave}
+						onCancel={onCancel}
+					/>
+				</div>
+			</div>
 		);
 	};
 
