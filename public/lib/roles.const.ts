@@ -73,6 +73,7 @@ export const MODULE_PATHS = {
 };
 
 export enum ALERT_CONTAINER_IDS {
+	UPDATE_SECURITY_RIGHTS_ON_SITE = 'update-security-rights-on-site',
 	UPDATE_USER_ROLES_SITE_ON_TENANT = 'update-user-roles-site-on-tenant',
 	UPDATE_USER_ROLES_SITE_ON_SITE = 'update-user-roles-site-on-tenant',
 	UPDATE_USER_ROLES_TENANT = 'update-user-roles-tenant',

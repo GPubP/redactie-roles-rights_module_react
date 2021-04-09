@@ -4,6 +4,7 @@ import {
 	ContextHeaderTopSection,
 } from '@acpaas-ui/react-editorial-components';
 import {
+	AlertContainer,
 	DataLoader,
 	LoadingState,
 	useAPIQueryParams,
@@ -15,7 +16,11 @@ import React, { FC, ReactElement, useEffect, useMemo, useRef, useState } from 'r
 
 import { ModulesList, RolesPermissionsForm, RolesPermissionsFormState } from '../../components';
 import { useMySecurityRightsForSite, useRoutesBreadcrumbs, useSecurityRights } from '../../hooks';
-import { SecurityRightsSite, SITE_CONTEXT_DEFAULT_BREADCRUMBS } from '../../roles.const';
+import {
+	ALERT_CONTAINER_IDS,
+	SecurityRightsSite,
+	SITE_CONTEXT_DEFAULT_BREADCRUMBS,
+} from '../../roles.const';
 import { RolesRouteProps } from '../../roles.types';
 import { ModuleResponse } from '../../services/securityRights';
 import { securityRightsMatrixFacade } from '../../store/securityRightsMatrix';
@@ -155,12 +160,10 @@ const RolesRightsOverview: FC<RolesRouteProps<{ siteId: string }>> = ({ match })
 		}
 
 		securityRightsMatrixFacade
-			.updateSecurityRightsForSiteByCompartment(
-				updateRolesMatrixData,
-				siteId,
-				selectedCompartment.type,
-				selectedCompartment.id
-			)
+			.updateSecurityRightsForSiteByCompartment(updateRolesMatrixData, siteId, {
+				...selectedCompartment,
+				name: matrixTitle,
+			})
 			.then(() => resetDetectValueChanges());
 	};
 
@@ -206,6 +209,7 @@ const RolesRightsOverview: FC<RolesRouteProps<{ siteId: string }>> = ({ match })
 				<ContextHeaderTopSection>{breadcrumbs}</ContextHeaderTopSection>
 			</ContextHeader>
 			<Container>
+				<AlertContainer containerId={ALERT_CONTAINER_IDS.UPDATE_SECURITY_RIGHTS_ON_SITE} />
 				<DataLoader loadingState={initialLoading} render={renderOverview} />
 			</Container>
 		</>
