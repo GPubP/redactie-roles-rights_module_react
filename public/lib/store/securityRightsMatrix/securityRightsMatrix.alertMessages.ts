@@ -18,7 +18,7 @@ export const getAlertMessages = (name?: string): AlertMessages<'update' | 'updat
 		},
 		error: {
 			title: 'Bewaren mislukt',
-			message: `Bewaren van de permsissies voor ${name} is mislukt.`,
+			message: `Bewaren van de permissies voor ${name} is mislukt.`,
 		},
 	},
 });
