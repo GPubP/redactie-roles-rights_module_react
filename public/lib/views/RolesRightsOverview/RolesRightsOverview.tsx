@@ -27,7 +27,7 @@ import {
 	parseSecurityRightsFormState,
 	sortSecurityRightsMatrixRoles,
 } from './RolesRightsOverview.helpers';
-import { RoleSecurityRight } from './RolesRightsOverview.types';
+import { RoleSecurityRight, SelectedCompartment } from './RolesRightsOverview.types';
 
 const RolesRightsOverview: FC<RolesRouteProps<{ siteId: string }>> = ({ match }) => {
 	const { siteId } = match.params;
@@ -45,8 +45,7 @@ const RolesRightsOverview: FC<RolesRouteProps<{ siteId: string }>> = ({ match })
 	const initialFormState = useRef<RolesPermissionsFormState | null>(null);
 	const [formState, setFormState] = useState<RolesPermissionsFormState | null>(null);
 	const [categories, setCategories] = useState<ModuleResponse[] | null>(null);
-	const [selectedCompartment, setSelectedCompartment] = useState<{ type: string; id: string }>();
-	const [matrixTitle, setMatrixTitle] = useState<string>('');
+	const [selectedCompartment, setSelectedCompartment] = useState<SelectedCompartment>();
 	const [mySecurityRightsLoadingState, mySecurityRights] = useMySecurityRightsForSite({
 		siteUuid: siteId,
 		onlyKeys: true,
@@ -54,6 +53,12 @@ const RolesRightsOverview: FC<RolesRouteProps<{ siteId: string }>> = ({ match })
 	const sortedRoles = useMemo(() => sortSecurityRightsMatrixRoles(securityRightMatrix?.roles), [
 		securityRightMatrix,
 	]);
+	const matrixTitle = useMemo(() => {
+		const moduleId = query['content-type'] || query.module || '';
+		return moduleId
+			? securityRightsByModule?.find(module => module.id === moduleId)?.name || moduleId
+			: 'Alle permissies';
+	}, [query, securityRightsByModule]);
 	const [hasChanges, resetDetectValueChanges] = useDetectValueChangesWorker(
 		initialLoading !== LoadingState.Loading &&
 			updateLoadingState !== LoadingState.Loading &&
@@ -118,9 +123,7 @@ const RolesRightsOverview: FC<RolesRouteProps<{ siteId: string }>> = ({ match })
 			module: type === 'module' ? value : undefined,
 			'content-type': type === 'content-type' ? value : undefined,
 		});
-
 		setSelectedCompartment(!isEmpty(type) ? { type, id: value } : undefined);
-		setMatrixTitle(value);
 	};
 
 	const onCancel = (resetForm: FormikProps<RolesPermissionsFormState>['resetForm']): void => {

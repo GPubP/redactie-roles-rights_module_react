@@ -10,3 +10,8 @@ export interface RoleSecurityRight {
 export interface MatrixTitle {
 	id: string;
 }
+
+export interface SelectedCompartment {
+	type: string;
+	id: string;
+}
