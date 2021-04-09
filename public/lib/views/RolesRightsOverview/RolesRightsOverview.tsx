@@ -21,12 +21,14 @@ import {
 	SecurityRightsSite,
 	SITE_CONTEXT_DEFAULT_BREADCRUMBS,
 } from '../../roles.const';
-import { RolesRouteProps } from '../../roles.types';
+import { RolesRightsCompartmentType, RolesRouteProps } from '../../roles.types';
 import { ModuleResponse } from '../../services/securityRights';
 import { securityRightsMatrixFacade } from '../../store/securityRightsMatrix';
 
 import { ROLES_RIGHTS_QUERY_PARAMS_CONFIG } from './RolesRightsOverview.const';
 import {
+	getMatrixTitle,
+	getSelectedCompartment,
 	parseRolesSecurityRightsMatrix,
 	parseSecurityRightsByModule,
 	parseSecurityRightsFormState,
@@ -50,7 +52,6 @@ const RolesRightsOverview: FC<RolesRouteProps<{ siteId: string }>> = ({ match })
 	const initialFormState = useRef<RolesPermissionsFormState | null>(null);
 	const [formState, setFormState] = useState<RolesPermissionsFormState | null>(null);
 	const [categories, setCategories] = useState<ModuleResponse[] | null>(null);
-	const [selectedCompartment, setSelectedCompartment] = useState<SelectedCompartment>();
 	const [mySecurityRightsLoadingState, mySecurityRights] = useMySecurityRightsForSite({
 		siteUuid: siteId,
 		onlyKeys: true,
@@ -58,12 +59,14 @@ const RolesRightsOverview: FC<RolesRouteProps<{ siteId: string }>> = ({ match })
 	const sortedRoles = useMemo(() => sortSecurityRightsMatrixRoles(securityRightMatrix?.roles), [
 		securityRightMatrix,
 	]);
-	const matrixTitle = useMemo(() => {
-		const moduleId = query['content-type'] || query.module || '';
-		return moduleId
-			? securityRightsByModule?.find(module => module.id === moduleId)?.name || moduleId
-			: 'Alle permissies';
-	}, [query, securityRightsByModule]);
+	const matrixTitle = useMemo(() => getMatrixTitle(query, securityRightsByModule), [
+		query,
+		securityRightsByModule,
+	]);
+	const selectedCompartment: SelectedCompartment | undefined = useMemo(
+		() => getSelectedCompartment(query),
+		[query]
+	);
 	const [hasChanges, resetDetectValueChanges] = useDetectValueChangesWorker(
 		initialLoading !== LoadingState.Loading &&
 			updateLoadingState !== LoadingState.Loading &&
@@ -123,12 +126,11 @@ const RolesRightsOverview: FC<RolesRouteProps<{ siteId: string }>> = ({ match })
 	/**
 	 * Methods
 	 */
-	const onModuleListClick = (value: string, type: 'content-type' | 'module' | ''): void => {
+	const onModuleListClick = (value: string, type: RolesRightsCompartmentType | ''): void => {
 		setQuery({
-			module: type === 'module' ? value : undefined,
-			'content-type': type === 'content-type' ? value : undefined,
+			module: type === RolesRightsCompartmentType.Module ? value : undefined,
+			'content-type': type === RolesRightsCompartmentType.ContentType ? value : undefined,
 		});
-		setSelectedCompartment(!isEmpty(type) ? { type, id: value } : undefined);
 	};
 
 	const onCancel = (resetForm: FormikProps<RolesPermissionsFormState>['resetForm']): void => {

@@ -108,6 +108,11 @@ export interface OverviewFilterItem extends FilterItem {
 	formvalue?: any;
 }
 
+export enum RolesRightsCompartmentType {
+	ContentType = 'content-type',
+	Module = 'Module',
+}
+
 export type AlertMessages<T extends string | number | symbol> = Record<
 	T,
 	{ [key in 'success' | 'error']: AlertProps }
