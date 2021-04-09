@@ -26,20 +26,9 @@ const RolesPermissionsForm: FC<RolesPermissionsFormProps> = ({
 	onSubmit = () => null,
 }) => {
 	/**
-	 * Function
-	 */
-	const getModuleTitle = (modules: RoleSecurityRight[], moduleId: string): ReactNode => {
-		const matrixTitle = modules.find(module => module.id === moduleId)?.name;
-		if (matrixTitle !== undefined) {
-			return <CardTitle>{matrixTitle}</CardTitle>;
-		} else {
-			return <CardTitle>Alle permissies</CardTitle>;
-		}
-	};
-
-	/**
 	 * Render
 	 */
+
 	if (!initialFormState) {
 		return null;
 	}
@@ -115,7 +104,7 @@ const RolesPermissionsForm: FC<RolesPermissionsFormProps> = ({
 					<FormikOnChangeHandler delay={0} onChange={onChange} />
 					<Card>
 						<CardBody>
-							{getModuleTitle(permissions, title)}
+							<CardTitle>{title}</CardTitle>
 							<table className="m-table">
 								<thead>
 									<tr className="m-table--header">

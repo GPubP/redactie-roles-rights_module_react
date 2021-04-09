@@ -1,8 +1,6 @@
-import { AlertProps } from '@redactie/utils';
+import { AlertMessages } from '../../roles.types';
 
-export type AlertMessages = Record<'update', { [key in 'success' | 'error']: AlertProps }>;
-
-export const getAlertMessages = (name: string): AlertMessages => ({
+export const getAlertMessages = (name: string): AlertMessages<'update'> => ({
 	update: {
 		success: {
 			title: 'Bewaard',

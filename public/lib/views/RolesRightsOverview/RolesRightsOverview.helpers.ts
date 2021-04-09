@@ -1,4 +1,5 @@
 import { RolesPermissionsFormState } from '../../components';
+import { RolesRightsCompartmentType } from '../../roles.types';
 import {
 	ModuleResponse,
 	RoleResponse,
@@ -6,7 +7,11 @@ import {
 	UpdateRolesMatrixPayload,
 } from '../../services/securityRights';
 
-import { RoleSecurityRight } from './RolesRightsOverview.types';
+import {
+	RoleSecurityRight,
+	RolesRightsQueryParams,
+	SelectedCompartment,
+} from './RolesRightsOverview.types';
 
 export const sortSecurityRightsMatrixRoles = (
 	roles: RoleResponse[] | undefined
@@ -90,4 +95,26 @@ export const parseRolesSecurityRightsMatrix = (
 		});
 		return roles;
 	}, [] as UpdateRolesMatrixPayload);
+};
+
+export const getMatrixTitle = (
+	query: RolesRightsQueryParams,
+	securityRightsByModule: RoleSecurityRight[] | null
+): string => {
+	const moduleId = query['content-type'] || query.module || '';
+	return moduleId
+		? securityRightsByModule?.find(module => module.id === moduleId)?.name || moduleId
+		: 'Alle permissies';
+};
+
+export const getSelectedCompartment = (
+	query: RolesRightsQueryParams
+): SelectedCompartment | undefined => {
+	if (query['content-type']) {
+		return { id: query['content-type'], type: RolesRightsCompartmentType.ContentType };
+	}
+	if (query.module) {
+		return { id: query.module, type: RolesRightsCompartmentType.Module };
+	}
+	return undefined;
 };

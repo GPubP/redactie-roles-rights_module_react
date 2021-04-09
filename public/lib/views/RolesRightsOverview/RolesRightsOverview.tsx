@@ -4,6 +4,7 @@ import {
 	ContextHeaderTopSection,
 } from '@acpaas-ui/react-editorial-components';
 import {
+	AlertContainer,
 	DataLoader,
 	LoadingState,
 	useAPIQueryParams,
@@ -15,19 +16,25 @@ import React, { FC, ReactElement, useEffect, useMemo, useRef, useState } from 'r
 
 import { ModulesList, RolesPermissionsForm, RolesPermissionsFormState } from '../../components';
 import { useMySecurityRightsForSite, useRoutesBreadcrumbs, useSecurityRights } from '../../hooks';
-import { SecurityRightsSite, SITE_CONTEXT_DEFAULT_BREADCRUMBS } from '../../roles.const';
-import { RolesRouteProps } from '../../roles.types';
+import {
+	ALERT_CONTAINER_IDS,
+	SecurityRightsSite,
+	SITE_CONTEXT_DEFAULT_BREADCRUMBS,
+} from '../../roles.const';
+import { RolesRightsCompartmentType, RolesRouteProps } from '../../roles.types';
 import { ModuleResponse } from '../../services/securityRights';
 import { securityRightsMatrixFacade } from '../../store/securityRightsMatrix';
 
 import { ROLES_RIGHTS_QUERY_PARAMS_CONFIG } from './RolesRightsOverview.const';
 import {
+	getMatrixTitle,
+	getSelectedCompartment,
 	parseRolesSecurityRightsMatrix,
 	parseSecurityRightsByModule,
 	parseSecurityRightsFormState,
 	sortSecurityRightsMatrixRoles,
 } from './RolesRightsOverview.helpers';
-import { RoleSecurityRight } from './RolesRightsOverview.types';
+import { RoleSecurityRight, SelectedCompartment } from './RolesRightsOverview.types';
 
 const RolesRightsOverview: FC<RolesRouteProps<{ siteId: string }>> = ({ match }) => {
 	const { siteId } = match.params;
@@ -45,8 +52,6 @@ const RolesRightsOverview: FC<RolesRouteProps<{ siteId: string }>> = ({ match })
 	const initialFormState = useRef<RolesPermissionsFormState | null>(null);
 	const [formState, setFormState] = useState<RolesPermissionsFormState | null>(null);
 	const [categories, setCategories] = useState<ModuleResponse[] | null>(null);
-	const [selectedCompartment, setSelectedCompartment] = useState<{ type: string; id: string }>();
-	const [matrixTitle, setMatrixTitle] = useState<string>('');
 	const [mySecurityRightsLoadingState, mySecurityRights] = useMySecurityRightsForSite({
 		siteUuid: siteId,
 		onlyKeys: true,
@@ -54,6 +59,14 @@ const RolesRightsOverview: FC<RolesRouteProps<{ siteId: string }>> = ({ match })
 	const sortedRoles = useMemo(() => sortSecurityRightsMatrixRoles(securityRightMatrix?.roles), [
 		securityRightMatrix,
 	]);
+	const matrixTitle = useMemo(() => getMatrixTitle(query, securityRightsByModule), [
+		query,
+		securityRightsByModule,
+	]);
+	const selectedCompartment: SelectedCompartment | undefined = useMemo(
+		() => getSelectedCompartment(query),
+		[query]
+	);
 	const [hasChanges, resetDetectValueChanges] = useDetectValueChangesWorker(
 		initialLoading !== LoadingState.Loading &&
 			updateLoadingState !== LoadingState.Loading &&
@@ -113,14 +126,11 @@ const RolesRightsOverview: FC<RolesRouteProps<{ siteId: string }>> = ({ match })
 	/**
 	 * Methods
 	 */
-	const onModuleListClick = (value: string, type: 'content-type' | 'module' | ''): void => {
+	const onModuleListClick = (value: string, type: RolesRightsCompartmentType | ''): void => {
 		setQuery({
-			module: type === 'module' ? value : undefined,
-			'content-type': type === 'content-type' ? value : undefined,
+			module: type === RolesRightsCompartmentType.Module ? value : undefined,
+			'content-type': type === RolesRightsCompartmentType.ContentType ? value : undefined,
 		});
-
-		setSelectedCompartment(!isEmpty(type) ? { type, id: value } : undefined);
-		setMatrixTitle(value);
 	};
 
 	const onCancel = (resetForm: FormikProps<RolesPermissionsFormState>['resetForm']): void => {
@@ -152,12 +162,10 @@ const RolesRightsOverview: FC<RolesRouteProps<{ siteId: string }>> = ({ match })
 		}
 
 		securityRightsMatrixFacade
-			.updateSecurityRightsForSiteByCompartment(
-				updateRolesMatrixData,
-				siteId,
-				selectedCompartment.type,
-				selectedCompartment.id
-			)
+			.updateSecurityRightsForSiteByCompartment(updateRolesMatrixData, siteId, {
+				...selectedCompartment,
+				name: matrixTitle,
+			})
 			.then(() => resetDetectValueChanges());
 	};
 
@@ -203,6 +211,7 @@ const RolesRightsOverview: FC<RolesRouteProps<{ siteId: string }>> = ({ match })
 				<ContextHeaderTopSection>{breadcrumbs}</ContextHeaderTopSection>
 			</ContextHeader>
 			<Container>
+				<AlertContainer containerId={ALERT_CONTAINER_IDS.UPDATE_SECURITY_RIGHTS_ON_SITE} />
 				<DataLoader loadingState={initialLoading} render={renderOverview} />
 			</Container>
 		</>

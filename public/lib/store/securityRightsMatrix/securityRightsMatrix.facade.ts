@@ -1,11 +1,15 @@
+import { alertService } from '../../helpers';
+import { ALERT_CONTAINER_IDS } from '../../roles.const';
 import {
 	GetSecurityRightsPayload,
 	securityRightsApiService,
 	SecurityRightsApiService,
 	UpdateRolesMatrixPayload,
 } from '../../services/securityRights';
+import { SelectedCompartment } from '../../views/RolesRightsOverview/RolesRightsOverview.types';
 import { MySecurityRightsFacade, mySecurityRightsFacade } from '../mySecurityRights';
 
+import { getAlertMessages } from './securityRightsMatrix.alertMessages';
 import { securityRightsMatrixQuery, SecurityRightsMatrixQuery } from './securityRightsMatrix.query';
 import { securityRightsMatrixStore, SecurityRightsMatrixStore } from './securityRightsMatrix.store';
 
@@ -41,8 +45,12 @@ export class SecurityRightsMatrixFacade {
 
 	public updateSecurityRightsForSite(
 		payload: UpdateRolesMatrixPayload,
-		siteId: string
+		siteId: string,
+		options = {
+			containerId: ALERT_CONTAINER_IDS.UPDATE_SECURITY_RIGHTS_ON_SITE,
+		}
 	): Promise<boolean> {
+		const alertMessages = getAlertMessages();
 		this.store.setIsUpdating(true);
 
 		return this.service
@@ -53,10 +61,14 @@ export class SecurityRightsMatrixFacade {
 				});
 				this.store.setError(false);
 				this.mySecurityRightsFacade.invalidateCache();
+				alertService(alertMessages.update.success, options.containerId, 'success');
+
 				return true;
 			})
 			.catch(err => {
 				this.store.setError(err);
+				alertService(alertMessages.update.error, options.containerId, 'error');
+
 				return false;
 			})
 			.finally(() => this.store.setIsUpdating(false));
@@ -65,22 +77,34 @@ export class SecurityRightsMatrixFacade {
 	public updateSecurityRightsForSiteByCompartment(
 		payload: UpdateRolesMatrixPayload,
 		siteId: string,
-		type: string,
-		id: string
+		compartment: SelectedCompartment & { name: string },
+		options = {
+			containerId: ALERT_CONTAINER_IDS.UPDATE_SECURITY_RIGHTS_ON_SITE,
+		}
 	): Promise<boolean> {
+		const alertMessages = getAlertMessages(compartment.name);
 		this.store.setIsUpdating(true);
 
 		return this.service
-			.updateSecurityRightsForSiteByCompartment(siteId, payload, type, id)
+			.updateSecurityRightsForSiteByCompartment(
+				siteId,
+				payload,
+				compartment.type,
+				compartment.id
+			)
 			.then(response => {
 				this.store.update({
 					data: response,
 				});
 				this.mySecurityRightsFacade.invalidateCache();
+				alertService(alertMessages.updateOne.success, options.containerId, 'success');
+
 				return true;
 			})
 			.catch(err => {
 				this.store.setError(err);
+				alertService(alertMessages.updateOne.error, options.containerId, 'error');
+
 				return false;
 			})
 			.finally(() => this.store.setIsUpdating(false));
