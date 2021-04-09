@@ -1,5 +1,5 @@
 import { ModuleRouteConfig, RouteConfigComponentProps } from '@redactie/redactie-core';
-import { ContextHeaderTab, FilterItem } from '@redactie/utils';
+import { AlertProps, ContextHeaderTab, FilterItem } from '@redactie/utils';
 import { FC } from 'react';
 
 import {
@@ -107,3 +107,8 @@ export interface OverviewFilterItem extends FilterItem {
 	filterKey: string;
 	formvalue?: any;
 }
+
+export type AlertMessages<T extends string | number | symbol> = Record<
+	T,
+	{ [key in 'success' | 'error']: AlertProps }
+>;
