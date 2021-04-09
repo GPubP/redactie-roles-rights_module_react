@@ -64,11 +64,16 @@ const RolesRightsOverview: FC<RolesRouteProps<{ siteId: string }>> = ({ match })
 	const { modules = [], securityRights = [], roles = [], contentTypes = [] } =
 		securityRightMatrix || {};
 
+	// Fetch data when query changes
 	useEffect(() => {
+		// Reset change detection
+		resetDetectValueChanges();
+		// Set loading state and fetch data
 		setInitialLoading(LoadingState.Loading);
 		securityRightsMatrixFacade.getSecurityRightsBySite(query, siteId);
-	}, [query, siteId]);
+	}, [query, siteId]); // eslint-disable-line react-hooks/exhaustive-deps
 
+	// Check loading state
 	useEffect(() => {
 		if (
 			fetchLoadingState !== LoadingState.Loading &&
@@ -80,6 +85,7 @@ const RolesRightsOverview: FC<RolesRouteProps<{ siteId: string }>> = ({ match })
 		}
 	}, [fetchLoadingState, formState, mySecurityRightsLoadingState, securityRightsByModule]);
 
+	// Parse security rights matrix data to form state
 	useEffect(() => {
 		const categoryResult: ModuleResponse[] = modules
 			.map(mod => ({ ...mod, type: 'module' } as ModuleResponse))
