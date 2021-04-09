@@ -7,19 +7,26 @@ import {
 	DataLoader,
 	LoadingState,
 	useAPIQueryParams,
-	useDetectValueChanges,
+	useDetectValueChangesWorker,
 } from '@redactie/utils';
 import { FormikProps } from 'formik';
-import React, { FC, ReactElement, useEffect, useMemo, useState } from 'react';
+import { isEmpty } from 'ramda';
+import React, { FC, ReactElement, useEffect, useMemo, useRef, useState } from 'react';
 
 import { ModulesList, RolesPermissionsForm, RolesPermissionsFormState } from '../../components';
 import { useMySecurityRightsForSite, useRoutesBreadcrumbs, useSecurityRights } from '../../hooks';
 import { SecurityRightsSite, SITE_CONTEXT_DEFAULT_BREADCRUMBS } from '../../roles.const';
 import { RolesRouteProps } from '../../roles.types';
-import { ModuleResponse, UpdateRolesMatrixPayload } from '../../services/securityRights';
+import { ModuleResponse } from '../../services/securityRights';
 import { securityRightsMatrixFacade } from '../../store/securityRightsMatrix';
 
 import { ROLES_RIGHTS_QUERY_PARAMS_CONFIG } from './RolesRightsOverview.const';
+import {
+	parseRolesSecurityRightsMatrix,
+	parseSecurityRightsByModule,
+	parseSecurityRightsFormState,
+	sortSecurityRightsMatrixRoles,
+} from './RolesRightsOverview.helpers';
 import { RoleSecurityRight } from './RolesRightsOverview.types';
 
 const RolesRightsOverview: FC<RolesRouteProps<{ siteId: string }>> = ({ match }) => {
@@ -35,9 +42,7 @@ const RolesRightsOverview: FC<RolesRouteProps<{ siteId: string }>> = ({ match })
 	const [securityRightsByModule, setSecurityRightsByModule] = useState<
 		RoleSecurityRight[] | null
 	>(null);
-	const [initialFormState, setInitialFormState] = useState<RolesPermissionsFormState | null>(
-		null
-	);
+	const initialFormState = useRef<RolesPermissionsFormState | null>(null);
 	const [formState, setFormState] = useState<RolesPermissionsFormState | null>(null);
 	const [categories, setCategories] = useState<ModuleResponse[] | null>(null);
 	const [selectedCompartment, setSelectedCompartment] = useState<{ type: string; id: string }>();
@@ -46,38 +51,41 @@ const RolesRightsOverview: FC<RolesRouteProps<{ siteId: string }>> = ({ match })
 		siteUuid: siteId,
 		onlyKeys: true,
 	});
-	const sortedRoles = useMemo(() => {
-		return (securityRightMatrix?.roles || [])
-			.map(role => role.role)
-			.sort((a, b) => {
-				const nameA = a?.attributes?.displayName || '';
-				const nameB = b?.attributes?.displayName || '';
-				return nameA < nameB ? -1 : nameA > nameB ? 1 : 0;
-			});
-	}, [securityRightMatrix]);
-	const [hasChanges, resetDetectValueChanges] = useDetectValueChanges(
-		initialLoading !== LoadingState.Loading && updateLoadingState !== LoadingState.Loading,
-		formState ?? initialFormState
+	const sortedRoles = useMemo(() => sortSecurityRightsMatrixRoles(securityRightMatrix?.roles), [
+		securityRightMatrix,
+	]);
+	const [hasChanges, resetDetectValueChanges] = useDetectValueChangesWorker(
+		initialLoading !== LoadingState.Loading &&
+			updateLoadingState !== LoadingState.Loading &&
+			!!formState,
+		formState,
+		BFF_MODULE_PUBLIC_PATH
 	);
 	const { modules = [], securityRights = [], roles = [], contentTypes = [] } =
 		securityRightMatrix || {};
 
+	// Fetch data when query changes
 	useEffect(() => {
+		// Reset change detection
+		resetDetectValueChanges();
+		// Set loading state and fetch data
 		setInitialLoading(LoadingState.Loading);
 		securityRightsMatrixFacade.getSecurityRightsBySite(query, siteId);
-	}, [query, siteId]);
+	}, [query, siteId]); // eslint-disable-line react-hooks/exhaustive-deps
 
+	// Check loading state
 	useEffect(() => {
 		if (
 			fetchLoadingState !== LoadingState.Loading &&
 			mySecurityRightsLoadingState !== LoadingState.Loading &&
 			securityRightsByModule &&
-			initialFormState
+			formState
 		) {
 			setInitialLoading(LoadingState.Loaded);
 		}
-	}, [initialFormState, fetchLoadingState, mySecurityRightsLoadingState, securityRightsByModule]);
+	}, [fetchLoadingState, formState, mySecurityRightsLoadingState, securityRightsByModule]);
 
+	// Parse security rights matrix data to form state
 	useEffect(() => {
 		const categoryResult: ModuleResponse[] = modules
 			.map(mod => ({ ...mod, type: 'module' } as ModuleResponse))
@@ -85,88 +93,45 @@ const RolesRightsOverview: FC<RolesRouteProps<{ siteId: string }>> = ({ match })
 
 		setCategories(categoryResult);
 
-		const securityRightsByModuleResult = securityRights.reduce((acc, right) => {
-			const newAcc = [...acc];
-			const moduleIndex =
-				right.attributes.type !== 'content-type'
-					? modules.findIndex(mod => mod.id === right.attributes.module)
-					: modules.length +
-					  contentTypes.findIndex(mod => mod.id === right.attributes.subModule);
-
-			newAcc[moduleIndex] = {
-				...categoryResult[moduleIndex],
-				type: right.attributes.type,
-				securityRights: (acc[moduleIndex]?.securityRights || [])
-					.concat([right])
-					.sort((a, b) => {
-						const nameA = a?.attributes?.displayName || '';
-						const nameB = b?.attributes?.displayName || '';
-						return nameA < nameB ? -1 : nameA > nameB ? 1 : 0;
-					}),
-			};
-
-			return newAcc;
-		}, categoryResult as RoleSecurityRight[]);
+		const securityRightsByModuleResult = parseSecurityRightsByModule(
+			categoryResult,
+			contentTypes,
+			modules,
+			securityRights
+		);
 
 		setSecurityRightsByModule(securityRightsByModuleResult);
 
-		const initialStateResult = securityRights.reduce((acc, right) => {
-			acc[right.id] = roles.reduce((roleIds, role) => {
-				const hasSecurityRight = role.securityRights.find(rightId => rightId === right.id);
-				if (hasSecurityRight) {
-					roleIds.push(role.role.id);
-				}
-				return roleIds;
-			}, [] as string[]);
+		const initialStateResult = parseSecurityRightsFormState(securityRights, roles);
 
-			return acc;
-		}, {} as RolesPermissionsFormState);
-
-		setInitialFormState(initialStateResult);
-		resetDetectValueChanges();
+		if (!isEmpty(initialStateResult)) {
+			initialFormState.current = initialStateResult;
+			setFormState(initialStateResult);
+		}
 	}, [securityRightMatrix]); // eslint-disable-line react-hooks/exhaustive-deps
 
 	/**
 	 * Methods
 	 */
-	const handleClick = (value: string, type: 'content-type' | 'module' | ''): void => {
+	const onModuleListClick = (value: string, type: 'content-type' | 'module' | ''): void => {
 		setQuery({
 			module: type === 'module' ? value : undefined,
 			'content-type': type === 'content-type' ? value : undefined,
 		});
 
-		setSelectedCompartment({ type, id: value });
+		setSelectedCompartment(!isEmpty(type) ? { type, id: value } : undefined);
 		setMatrixTitle(value);
 	};
 
 	const onCancel = (resetForm: FormikProps<RolesPermissionsFormState>['resetForm']): void => {
-		resetForm();
+		if (initialFormState.current) {
+			resetForm({ values: initialFormState.current });
+			setFormState(initialFormState.current);
+		}
 	};
 
-	const parseFormResult = (formState: RolesPermissionsFormState): UpdateRolesMatrixPayload =>
-		Object.keys(formState).reduce((roles, securityRightId) => {
-			const roleIds = formState[securityRightId];
-			roleIds.forEach(roleId => {
-				const role = roles.find(item => item.roleId === roleId);
-				if (!role) {
-					roles.push({ roleId: roleId, securityRights: [securityRightId] });
-				} else {
-					roles = roles.map(r => {
-						if (r.roleId === roleId) {
-							return {
-								...r,
-								securityRights: [...r.securityRights, securityRightId],
-							};
-						}
-						return r;
-					});
-				}
-			});
-			return roles;
-		}, [] as UpdateRolesMatrixPayload);
-
 	const onSave = (values: RolesPermissionsFormState): void => {
-		const results = parseFormResult(values);
+		const results = parseRolesSecurityRightsMatrix(values);
 		const updateRolesMatrixData = securityRightMatrix?.roles.map(role => {
 			const resultRoleId = results.find(r => r.roleId === role.role.id);
 			if (resultRoleId) {
@@ -200,37 +165,35 @@ const RolesRightsOverview: FC<RolesRouteProps<{ siteId: string }>> = ({ match })
 	 * Render
 	 */
 	const renderOverview = (): ReactElement | null => {
-		if (!securityRightsByModule || !initialFormState) {
+		if (!securityRightsByModule || !formState) {
 			return null;
 		}
 
 		return (
-			<>
-				<div className="row">
-					<div className="col-xs-3">
-						<ModulesList modules={categories} onClick={handleClick} />
-					</div>
-					<div className="col-xs-8 u-margin-left">
-						<RolesPermissionsForm
-							title={matrixTitle}
-							initialFormState={initialFormState}
-							readonly={
-								!mySecurityRights.includes(
-									SecurityRightsSite.RolesRightsUpdateRolePermissions
-								)
-							}
-							roles={sortedRoles}
-							permissions={securityRightsByModule}
-							mySecurityRights={mySecurityRights}
-							isLoading={updateLoadingState === LoadingState.Loading}
-							hasChanges={hasChanges}
-							onChange={setFormState}
-							onSubmit={onSave}
-							onCancel={onCancel}
-						/>
-					</div>
+			<div className="row u-margin-top">
+				<div className="col-xs-3">
+					<ModulesList modules={categories} onClick={onModuleListClick} />
 				</div>
-			</>
+				<div className="col-xs-8 u-margin-left">
+					<RolesPermissionsForm
+						title={matrixTitle}
+						initialFormState={formState}
+						readonly={
+							!mySecurityRights.includes(
+								SecurityRightsSite.RolesRightsUpdateRolePermissions
+							)
+						}
+						roles={sortedRoles}
+						permissions={securityRightsByModule}
+						mySecurityRights={mySecurityRights}
+						isLoading={updateLoadingState === LoadingState.Loading}
+						hasChanges={hasChanges}
+						onChange={setFormState}
+						onSubmit={onSave}
+						onCancel={onCancel}
+					/>
+				</div>
+			</div>
 		);
 	};
 
