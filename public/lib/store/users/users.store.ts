@@ -21,13 +21,15 @@ export class UsersStore extends BaseEntityStore<UsersState, UserModel> {
 		});
 	}
 
-	public setUserDetail(userDetail: Partial<UserDetailModel>): void {
+	public setUserDetail(userDetail: Partial<UserDetailModel> | undefined): void {
 		this.update(state => ({
 			...state,
-			userDetail: {
-				...state.userDetail,
-				...userDetail,
-			},
+			userDetail: userDetail
+				? {
+						...state.userDetail,
+						...userDetail,
+				  }
+				: userDetail,
 		}));
 	}
 }

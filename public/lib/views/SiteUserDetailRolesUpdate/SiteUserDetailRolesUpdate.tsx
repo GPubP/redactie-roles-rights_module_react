@@ -8,7 +8,7 @@ import {
 	DataLoader,
 	LeavePrompt,
 	LoadingState,
-	useDetectValueChanges,
+	useDetectValueChangesWorker,
 	useNavigate,
 	useWillUnmount,
 } from '@redactie/utils';
@@ -63,13 +63,14 @@ const SiteUserDetailRolesUpdate: FC<RolesRouteProps> = ({ tenantId }) => {
 	}, [siteId, tenantId]);
 	const breadcrumbs = useRoutesBreadcrumbs(extraBreadcrumbs);
 	const [userRolesLoadingState, userRoles] = useUserRolesForSite();
-	const [initialFormState, setInitialFormState] = useState<UserRolesFormState | null>(null);
-	const [formState, setFormState] = useState<UserRolesFormState | null>(initialFormState);
+	const [initialFormState, setInitialFormState] = useState<UserRolesFormState | undefined>();
+	const [formState, setFormState] = useState<UserRolesFormState | undefined>(initialFormState);
 	const { navigate } = useNavigate(SITES_ROOT);
 
-	const [hasChanges, resetDetectValueChanges] = useDetectValueChanges(
+	const [hasChanges, resetDetectValueChanges] = useDetectValueChangesWorker(
 		initialLoading !== LoadingState.Loading && isUpdating !== LoadingState.Loading,
-		formState ?? initialFormState
+		formState,
+		BFF_MODULE_PUBLIC_PATH
 	);
 	const [mySecurityRightsLoadingState, mySecurityRights] = useMySecurityRightsForSite({
 		siteUuid: siteId,
@@ -105,12 +106,20 @@ const SiteUserDetailRolesUpdate: FC<RolesRouteProps> = ({ tenantId }) => {
 	}, [mySecurityRightsLoadingState, rolesLoadingState, userLoadingState, userRolesLoadingState]);
 
 	useEffect(() => {
-		if (userRoles) {
+		const roleIds = userRoles ? mapUserRoles(userRoles) : [];
+
+		if (userRolesLoadingState !== LoadingState.Loading) {
 			setInitialFormState({
-				roleIds: mapUserRoles(userRoles),
+				roleIds,
 			});
 		}
-	}, [userRoles]);
+
+		if (userRoles || userRolesLoadingState === LoadingState.Error) {
+			setFormState({
+				roleIds,
+			});
+		}
+	}, [userRoles, userRolesLoadingState]);
 
 	/**
 	 * Methods
@@ -152,7 +161,7 @@ const SiteUserDetailRolesUpdate: FC<RolesRouteProps> = ({ tenantId }) => {
 
 	const pageTitle = (
 		<>
-			<i>{user ? `${user?.firstname} ${user?.lastname}` : 'Gebruiker'}</i>{' '}
+			<i>{user?.firstname ? `${user?.firstname} ${user?.lastname}` : 'Gebruiker'}</i>{' '}
 			{t(CORE_TRANSLATIONS.ROUTING_UPDATE)}
 		</>
 	);
@@ -164,6 +173,7 @@ const SiteUserDetailRolesUpdate: FC<RolesRouteProps> = ({ tenantId }) => {
 		if (!roles || !initialFormState) {
 			return null;
 		}
+
 		return (
 			<div className="u-margin-bottom-lg">
 				<h3>Rollen</h3>
