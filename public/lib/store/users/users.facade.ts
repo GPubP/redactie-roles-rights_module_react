@@ -68,7 +68,6 @@ export class UsersFacade extends BaseEntityFacade<UsersStore, UsersApiService, U
 		this.service
 			.getUsersBySite(payload, siteId)
 			.then(response => {
-				this.store.setIsFetching(false);
 				const users = response._embedded;
 				const meta = response._page;
 
@@ -76,6 +75,7 @@ export class UsersFacade extends BaseEntityFacade<UsersStore, UsersApiService, U
 				this.store.update({
 					meta,
 				});
+				this.store.setIsFetching(false);
 			})
 			.catch(err => {
 				this.store.setIsFetching(false);
@@ -85,10 +85,10 @@ export class UsersFacade extends BaseEntityFacade<UsersStore, UsersApiService, U
 
 	public getTenantUsersBySite(payload: GetUsersPayload, siteId: string): void {
 		this.store.setIsFetching(true);
+
 		this.service
 			.getTenantUsersBySite(payload, siteId)
 			.then(response => {
-				this.store.setIsFetching(false);
 				const users = response._embedded;
 				const meta = response._page;
 
@@ -96,6 +96,7 @@ export class UsersFacade extends BaseEntityFacade<UsersStore, UsersApiService, U
 				this.store.update({
 					meta,
 				});
+				this.store.setIsFetching(false);
 			})
 			.catch(err => {
 				this.store.setIsFetching(false);
@@ -105,6 +106,7 @@ export class UsersFacade extends BaseEntityFacade<UsersStore, UsersApiService, U
 
 	public getUser(payload: GetUserPayload): void {
 		this.store.setIsFetchingOne(true);
+
 		this.service
 			.getUser(payload)
 			.then(response => {
@@ -240,9 +242,8 @@ export class UsersFacade extends BaseEntityFacade<UsersStore, UsersApiService, U
 	}
 
 	public clearUser(): void {
-		this.store.update({
-			userDetail: undefined,
-		});
+		this.store.setUserDetail(undefined);
+		this.store.setError(undefined);
 	}
 }
 
