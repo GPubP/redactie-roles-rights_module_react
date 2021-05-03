@@ -66,6 +66,8 @@ const SiteUsersOverview: FC<RolesRouteProps<{ siteId: string }>> = ({ match }) =
 			return;
 		}
 
+		setIsTenantView(false);
+
 		usersFacade.getUsersBySite(query as SearchParams, siteId);
 	}, [activeTabs, query, siteId]);
 
