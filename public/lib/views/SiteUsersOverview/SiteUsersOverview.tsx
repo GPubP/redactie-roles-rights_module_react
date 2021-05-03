@@ -54,10 +54,14 @@ const SiteUsersOverview: FC<RolesRouteProps<{ siteId: string }>> = ({ match }) =
 	});
 	const activeTabs = useActiveTabs(SITE_USER_OVERVIEW_TABS, location.pathname);
 	const [t] = useCoreTranslation();
+	const [isTenantView, setIsTenantView] = useState(false);
 
 	// Fetch users by site or tenant
 	useEffect(() => {
-		if (activeTabs.find(tab => tab.active)?.target === 'tenant') {
+		const target = activeTabs.find(tab => tab.active)?.target;
+
+		if (target === 'tenant') {
+			setIsTenantView(true);
 			usersFacade.getTenantUsersBySite(query as SearchParams, siteId);
 			return;
 		}
@@ -139,6 +143,11 @@ const SiteUsersOverview: FC<RolesRouteProps<{ siteId: string }>> = ({ match }) =
 
 		return (
 			<>
+				{ isTenantView &&
+					<div className="u-margin-top u-margin-bottom">
+						<p>Bewerk tenant gebruikers om ze toegang te geven tot deze site.</p>
+					</div>
+				}
 				<div className="u-margin-top">
 					<FilterForm
 						initialState={{ name: query.search ?? '' }}
