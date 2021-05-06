@@ -159,12 +159,9 @@ const SiteUserDetailRolesUpdate: FC<RolesRouteProps> = ({ tenantId }) => {
 		setIsSubmitting(true);
 	};
 
-	const pageTitle = (
-		<>
-			<i>{user?.firstname ? `${user?.firstname} ${user?.lastname}` : 'Gebruiker'}</i>{' '}
-			{t(CORE_TRANSLATIONS.ROUTING_UPDATE)}
-		</>
-	);
+	const pageTitle = `${
+		user?.firstname ? `'${user?.firstname} ${user?.lastname}'` : 'Gebruiker'
+	} ${t(CORE_TRANSLATIONS.ROUTING_UPDATE)}`;
 
 	/**
 	 * Render
