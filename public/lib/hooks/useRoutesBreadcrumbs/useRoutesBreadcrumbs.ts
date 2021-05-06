@@ -4,8 +4,11 @@ import { ReactNode } from 'react';
 
 import { BREADCRUMB_OPTIONS, MODULE_PATHS, SITES_ROOT } from '../../roles.const';
 
-const useRoutesBreadcrumbs = (extraBreadcrumbs: Breadcrumb[] = []): ReactNode => {
-	const { generatePath } = useNavigate(SITES_ROOT);
+const useRoutesBreadcrumbs = (
+	extraBreadcrumbs: Breadcrumb[] = [],
+	isSiteLevel = false
+): ReactNode => {
+	const { generatePath } = useNavigate(isSiteLevel ? SITES_ROOT : undefined);
 	const { siteId } = useSiteContext();
 	const routes = useRoutes();
 	const breadcrumbs = useBreadcrumbs(routes as ModuleRouteConfig[], {
@@ -13,9 +16,12 @@ const useRoutesBreadcrumbs = (extraBreadcrumbs: Breadcrumb[] = []): ReactNode =>
 		extraBreadcrumbs: [
 			{
 				name: 'Home',
-				target: generatePath(MODULE_PATHS.dashboard, {
-					siteId,
-				}),
+				target: generatePath(
+					isSiteLevel ? MODULE_PATHS.dashboard : MODULE_PATHS.dashboardRoot,
+					{
+						siteId: siteId,
+					}
+				),
 			},
 			...extraBreadcrumbs,
 		],

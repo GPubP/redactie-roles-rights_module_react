@@ -38,7 +38,7 @@ const RolesOverview: FC<RolesRouteProps<{ siteId: string }>> = () => {
 	 */
 	const { siteId } = useParams<{ siteId: string }>();
 	const [t] = useCoreTranslation();
-	const breadcrumbs = useRoutesBreadcrumbs(SITE_CONTEXT_DEFAULT_BREADCRUMBS);
+	const breadcrumbs = useRoutesBreadcrumbs(SITE_CONTEXT_DEFAULT_BREADCRUMBS, true);
 	const { navigate, generatePath } = useNavigate(SITES_ROOT);
 	const [initialLoading, setInitialLoading] = useState(LoadingState.Loading);
 	const [query, setQuery] = useAPIQueryParams(ROLES_QUERY_PARAMS_CONFIG);
