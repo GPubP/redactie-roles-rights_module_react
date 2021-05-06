@@ -15,7 +15,7 @@ import {
 	useAPIQueryParams,
 	useNavigate,
 } from '@redactie/utils';
-import React, { FC, ReactElement, useEffect, useState } from 'react';
+import React, { FC, ReactElement, useEffect, useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
 
 import { FilterForm, FilterFormState } from '../../components';
@@ -54,13 +54,15 @@ const SiteUsersOverview: FC<RolesRouteProps<{ siteId: string }>> = ({ match }) =
 	});
 	const activeTabs = useActiveTabs(SITE_USER_OVERVIEW_TABS, location.pathname);
 	const [t] = useCoreTranslation();
+	const isTenantView = useMemo(() => activeTabs.find(tab => tab.active)?.target === 'tenant', [activeTabs]);
 
 	// Fetch users by site or tenant
 	useEffect(() => {
-		if (activeTabs.find(tab => tab.active)?.target === 'tenant') {
+		if (isTenantView) {
 			usersFacade.getTenantUsersBySite(query as SearchParams, siteId);
 			return;
 		}
+
 
 		usersFacade.getUsersBySite(query as SearchParams, siteId);
 	}, [activeTabs, query, siteId]);
@@ -139,6 +141,11 @@ const SiteUsersOverview: FC<RolesRouteProps<{ siteId: string }>> = ({ match }) =
 
 		return (
 			<>
+				{ isTenantView &&
+					<div className="u-margin-top u-margin-bottom">
+						<p>Bewerk tenant gebruikers om ze toegang te geven tot deze site.</p>
+					</div>
+				}
 				<div className="u-margin-top">
 					<FilterForm
 						initialState={{ name: query.search ?? '' }}
