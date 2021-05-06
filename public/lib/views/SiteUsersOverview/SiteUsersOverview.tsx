@@ -15,7 +15,7 @@ import {
 	useAPIQueryParams,
 	useNavigate,
 } from '@redactie/utils';
-import React, { FC, ReactElement, useEffect, useState } from 'react';
+import React, { FC, ReactElement, useEffect, useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
 
 import { FilterForm, FilterFormState } from '../../components';
@@ -54,19 +54,15 @@ const SiteUsersOverview: FC<RolesRouteProps<{ siteId: string }>> = ({ match }) =
 	});
 	const activeTabs = useActiveTabs(SITE_USER_OVERVIEW_TABS, location.pathname);
 	const [t] = useCoreTranslation();
-	const [isTenantView, setIsTenantView] = useState(false);
+	const isTenantView = useMemo(() => activeTabs.find(tab => tab.active)?.target === 'tenant', [activeTabs]);
 
 	// Fetch users by site or tenant
 	useEffect(() => {
-		const target = activeTabs.find(tab => tab.active)?.target;
-
-		if (target === 'tenant') {
-			setIsTenantView(true);
+		if (isTenantView) {
 			usersFacade.getTenantUsersBySite(query as SearchParams, siteId);
 			return;
 		}
 
-		setIsTenantView(false);
 
 		usersFacade.getUsersBySite(query as SearchParams, siteId);
 	}, [activeTabs, query, siteId]);
