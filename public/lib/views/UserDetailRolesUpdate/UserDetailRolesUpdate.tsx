@@ -117,7 +117,7 @@ const UserDetailRolesUpdate: FC<RolesRouteProps<{ userUuid: string; siteUuid: st
 		resetForm();
 	};
 
-	const pageTitle = `${site?.data?.name ? `'${site?.data?.name}'` : 'Site'} Toegang`;
+	const pageTitle = `${site?.data?.name ? `'${site?.data?.name}'` : 'Site'} toegang`;
 
 	/**
 	 * Render
