@@ -150,11 +150,9 @@ const RolesUpdate: FC<RolesRouteProps> = () => {
 		resetForm();
 	};
 
-	const pageTitle = (
-		<>
-			<i>{role?.attributes?.displayName || 'Rol'}</i> {t(CORE_TRANSLATIONS.ROUTING_UPDATE)}
-		</>
-	);
+	const pageTitle = `${
+		role?.attributes?.displayName ? `'${role?.attributes?.displayName}'` : 'Rol'
+	} ${t(CORE_TRANSLATIONS.ROUTING_UPDATE)}`;
 
 	/**
 	 * Render

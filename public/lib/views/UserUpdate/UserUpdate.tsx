@@ -120,16 +120,11 @@ const UserUpdate: FC<RolesRouteProps<{ userUuid?: string }>> = ({ route, tenantI
 		}
 	};
 
-	const pageTitle = (
-		<>
-			<i>
-				{user && user.firstname && user.lastname
-					? `${user.firstname} ${user.lastname}`
-					: 'Gebruiker'}
-			</i>{' '}
-			{t(CORE_TRANSLATIONS.ROUTING_UPDATE)}
-		</>
-	);
+	const pageTitle = `${
+		user && user.firstname && user.lastname
+			? `'${user.firstname} ${user.lastname}'`
+			: 'Gebruiker'
+	} ${t(CORE_TRANSLATIONS.ROUTING_UPDATE)}`;
 
 	/**
 	 * Render

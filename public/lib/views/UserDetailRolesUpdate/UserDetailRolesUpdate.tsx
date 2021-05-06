@@ -117,11 +117,7 @@ const UserDetailRolesUpdate: FC<RolesRouteProps<{ userUuid: string; siteUuid: st
 		resetForm();
 	};
 
-	const pageTitle = (
-		<>
-			<i>{site?.data?.name || 'Site'}</i> Toegang
-		</>
-	);
+	const pageTitle = `${site?.data?.name ? `'${site?.data?.name}'` : 'Site'} toegang`;
 
 	/**
 	 * Render
