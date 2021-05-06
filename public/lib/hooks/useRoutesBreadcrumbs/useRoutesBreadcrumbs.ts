@@ -19,7 +19,7 @@ const useRoutesBreadcrumbs = (
 				target: generatePath(
 					isSiteLevel ? MODULE_PATHS.dashboard : MODULE_PATHS.dashboardRoot,
 					{
-						siteId: siteId,
+						siteId,
 					}
 				),
 			},
