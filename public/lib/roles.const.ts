@@ -25,6 +25,8 @@ const forbidden403 = '/403';
 const siteRoot = `/:${urlSiteParam}/users`;
 const tenantRoot = '/users';
 const tenantUsersOverview = `${tenantRoot}/overzicht`;
+const dashboardRoot = `/dashboard`;
+const dashboard = `/:${urlSiteParam}/content`;
 
 const siteRolesRoot = `${siteRoot}/roles`;
 const siteRolesRightsRoot = `${siteRoot}/rolesrights`;
@@ -48,7 +50,8 @@ const tenantRolesRoot = `${tenantRoot}/roles`;
 export const MODULE_PATHS = {
 	forbidden403,
 	siteRoot,
-	dashboard: '/dashboard',
+	dashboard,
+	dashboardRoot,
 	tenantRoot,
 	tenantUsersOverview,
 	siteUsersOverview,

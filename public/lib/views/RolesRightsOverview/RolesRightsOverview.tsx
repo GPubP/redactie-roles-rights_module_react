@@ -42,7 +42,7 @@ const RolesRightsOverview: FC<RolesRouteProps<{ siteId: string }>> = ({ match })
 	/**
 	 * Hooks
 	 */
-	const breadcrumbs = useRoutesBreadcrumbs(SITE_CONTEXT_DEFAULT_BREADCRUMBS);
+	const breadcrumbs = useRoutesBreadcrumbs(SITE_CONTEXT_DEFAULT_BREADCRUMBS, true);
 	const [query, setQuery] = useAPIQueryParams(ROLES_RIGHTS_QUERY_PARAMS_CONFIG, false);
 	const [fetchLoadingState, updateLoadingState, securityRightMatrix] = useSecurityRights();
 	const [initialLoading, setInitialLoading] = useState(LoadingState.Loading);

@@ -44,7 +44,7 @@ const SiteUsersOverview: FC<RolesRouteProps<{ siteId: string }>> = ({ match }) =
 	 */
 
 	const { navigate, generatePath } = useNavigate(SITES_ROOT);
-	const breadcrumbs = useRoutesBreadcrumbs(SITE_CONTEXT_DEFAULT_BREADCRUMBS);
+	const breadcrumbs = useRoutesBreadcrumbs(SITE_CONTEXT_DEFAULT_BREADCRUMBS, true);
 	const [query, setQuery] = useAPIQueryParams(USERS_QUERY_PARAMS_CONFIG);
 	const [loadingState, users, usersMeta] = useUsers();
 	const [initialLoading, setInitialLoading] = useState(LoadingState.Loading);

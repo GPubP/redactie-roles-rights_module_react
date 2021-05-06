@@ -23,13 +23,16 @@ const RolesCreate: FC<RolesRouteProps> = () => {
 	const { siteId } = useParams<{ siteId: string }>();
 	const { navigate, generatePath } = useNavigate();
 	const [t] = useCoreTranslation();
-	const breadcrumbs = useRoutesBreadcrumbs([
-		...SITE_CONTEXT_DEFAULT_BREADCRUMBS,
-		{
-			name: 'Rollen',
-			target: generatePath(`/sites${MODULE_PATHS.roles.overview}`, { siteId }),
-		},
-	]);
+	const breadcrumbs = useRoutesBreadcrumbs(
+		[
+			...SITE_CONTEXT_DEFAULT_BREADCRUMBS,
+			{
+				name: 'Rollen',
+				target: generatePath(`/sites${MODULE_PATHS.roles.overview}`, { siteId }),
+			},
+		],
+		true
+	);
 	const rolesLoadingStates = useRolesLoadingStates();
 	const [formValue, setFormValue] = useState<RoleDetailFormState>(INITIAL_FORM_STATE);
 	const [hasChanges] = useDetectValueChanges(true, formValue);

@@ -61,7 +61,7 @@ const SiteUserDetailRolesUpdate: FC<RolesRouteProps> = ({ tenantId }) => {
 			},
 		];
 	}, [siteId, tenantId]);
-	const breadcrumbs = useRoutesBreadcrumbs(extraBreadcrumbs);
+	const breadcrumbs = useRoutesBreadcrumbs(extraBreadcrumbs, true);
 	const [userRolesLoadingState, userRoles] = useUserRolesForSite();
 	const [initialFormState, setInitialFormState] = useState<UserRolesFormState | undefined>();
 	const [formState, setFormState] = useState<UserRolesFormState | undefined>(initialFormState);
