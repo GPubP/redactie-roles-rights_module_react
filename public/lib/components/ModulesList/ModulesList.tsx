@@ -11,11 +11,11 @@ const ModulesList: FC<ModulesListProps> = ({ modules, onClick }) => {
 	return (
 		<ul className="m-nav-list">
 			<li>
-				<Button onClick={() => onClick('', '')}>Alle permissies</Button>
+				<Button onClick={() => onClick('', '')} className="m-nav-list__button">Alle permissies</Button>
 			</li>
 			{modules?.map(({ name, id, type }, index) => (
 				<li key={`nav-list-${index}`}>
-					<Button onClick={() => onClick(id, (type as RolesRightsCompartmentType) || '')}>
+					<Button onClick={() => onClick(id, (type as RolesRightsCompartmentType) || '')} className="m-nav-list__button">
 						<label>{name}</label>
 						<p aria-label={`type ${type}`} className="u-text-light">
 							{type}
