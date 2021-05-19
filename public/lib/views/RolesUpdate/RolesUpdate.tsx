@@ -64,7 +64,8 @@ const RolesUpdate: FC<RolesRouteProps> = () => {
 
 	const [hasChanges, resetDetectValueChanges] = useDetectValueChanges(
 		initialLoading !== LoadingState.Loading &&
-			rolesLoadingStates.isUpdatingSiteRole !== LoadingState.Loading,
+			rolesLoadingStates.isUpdatingSiteRole !== LoadingState.Loading &&
+			!!role,
 		formState ?? initialFormState
 	);
 
