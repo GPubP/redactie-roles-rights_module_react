@@ -95,12 +95,7 @@ sitesConnector.registerRoutes({
 			breadcrumb: false,
 			component: SiteUserDetailRolesUpdate,
 			guardOptions: {
-				guards: [
-					securityRightsSiteGuard(urlSiteParam, [
-						SecurityRightsSite.UsersRead,
-						SecurityRightsSite.RolesRead,
-					]),
-				],
+				guards: [securityRightsSiteGuard(urlSiteParam, [SecurityRightsSite.UsersRead])],
 			},
 		},
 		{
