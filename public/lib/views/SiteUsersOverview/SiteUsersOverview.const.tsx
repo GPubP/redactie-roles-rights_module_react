@@ -42,15 +42,17 @@ export const USERS_OVERVIEW_COLUMNS = (
 			disableSorting: true,
 			value: 'name',
 			width: '50%',
-			component(value: string, rowData) {
-				return (
-					<>
-						<AUILink to={`../${rowData?.uuid}/rollen`} component={Link}>
-							<EllipsisWithTooltip>{value}</EllipsisWithTooltip>
-						</AUILink>
-					</>
-				);
-			},
+			...(canUpdate && {
+				component(value: string, rowData) {
+					return (
+						<>
+							<AUILink to={`../${rowData?.uuid}/rollen`} component={Link}>
+								<EllipsisWithTooltip>{value}</EllipsisWithTooltip>
+							</AUILink>
+						</>
+					);
+				},
+			}),
 		},
 		{
 			label: t(CORE_TRANSLATIONS.TABLE_TYPE),
