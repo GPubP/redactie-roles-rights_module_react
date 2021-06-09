@@ -42,7 +42,7 @@ export const USERS_OVERVIEW_COLUMNS = (
 			disableSorting: true,
 			value: 'name',
 			width: '50%',
-			...canUpdate && {
+			...(canUpdate && {
 				component(value: string, rowData) {
 					return (
 						<>
@@ -52,7 +52,7 @@ export const USERS_OVERVIEW_COLUMNS = (
 						</>
 					);
 				},
-			}
+			}),
 		},
 		{
 			label: t(CORE_TRANSLATIONS.TABLE_TYPE),
