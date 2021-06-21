@@ -54,7 +54,9 @@ const SiteUsersOverview: FC<RolesRouteProps<{ siteId: string }>> = ({ match }) =
 	});
 	const activeTabs = useActiveTabs(SITE_USER_OVERVIEW_TABS, location.pathname);
 	const [t] = useCoreTranslation();
-	const isTenantView = useMemo(() => activeTabs.find(tab => tab.active)?.target === 'tenant', [activeTabs]);
+	const isTenantView = useMemo(() => activeTabs.find(tab => tab.active)?.target === 'tenant', [
+		activeTabs,
+	]);
 
 	// Fetch users by site or tenant
 	useEffect(() => {
@@ -63,9 +65,8 @@ const SiteUsersOverview: FC<RolesRouteProps<{ siteId: string }>> = ({ match }) =
 			return;
 		}
 
-
 		usersFacade.getUsersBySite(query as SearchParams, siteId);
-	}, [activeTabs, query, siteId]);
+	}, [activeTabs, isTenantView, query, siteId]);
 
 	// Set initial loading
 	useEffect(() => {
@@ -141,11 +142,11 @@ const SiteUsersOverview: FC<RolesRouteProps<{ siteId: string }>> = ({ match }) =
 
 		return (
 			<>
-				{ isTenantView &&
+				{isTenantView && (
 					<div className="u-margin-top u-margin-bottom">
 						<p>Bewerk tenant gebruikers om ze toegang te geven tot deze site.</p>
 					</div>
-				}
+				)}
 				<div className="u-margin-top">
 					<FilterForm
 						initialState={{ name: query.search ?? '' }}
