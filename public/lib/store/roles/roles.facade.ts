@@ -110,10 +110,14 @@ export class RolesFacade {
 			.updateSiteRole(payload)
 			.then(response => {
 				this.store.setRoleDetail(RoleEntityTypes.SITE, response);
-				alertService(
-					alertMessages.update.success,
-					ALERT_CONTAINER_IDS.UPDATE_ROLE_ON_SITE,
-					'success'
+				setTimeout(
+					() =>
+						alertService(
+							alertMessages.update.success,
+							ALERT_CONTAINER_IDS.ROLES_SITE_OVERVIEW,
+							'success'
+						),
+					300
 				);
 				return true;
 			})

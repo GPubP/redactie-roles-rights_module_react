@@ -10,6 +10,7 @@ import {
 	LoadingState,
 	useDetectValueChanges,
 	useNavigate,
+	useOnNextRender,
 	useWillUnmount,
 } from '@redactie/utils';
 import { FormikProps } from 'formik';
@@ -32,7 +33,6 @@ import {
 	SecurityRightsSite,
 	SITE_CONTEXT_DEFAULT_BREADCRUMBS,
 	SITES_ROOT,
-	TENANT_ROOT,
 } from '../../roles.const';
 import { RoleDetailFormState, RolesRouteProps } from '../../roles.types';
 import { rolesFacade } from '../../store/roles';
@@ -48,6 +48,7 @@ const RolesUpdate: FC<RolesRouteProps> = () => {
 	const [initialFormState, setInitialFormState] = useState<RoleDetailFormState | null>(null);
 	const [formState, setFormState] = useState<RoleDetailFormState | null>(initialFormState);
 	const { generatePath } = useNavigate();
+	const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
 	const breadcrumbs = useRoutesBreadcrumbs(
 		[
 			...SITE_CONTEXT_DEFAULT_BREADCRUMBS,
@@ -60,19 +61,19 @@ const RolesUpdate: FC<RolesRouteProps> = () => {
 	);
 	const rolesLoadingStates = useRolesLoadingStates();
 	const [roleLoadingState, role] = useSiteRole();
-	const [allowedPaths, setAllowedPaths] = useState<string[]>([]);
-
 	const [hasChanges, resetDetectValueChanges] = useDetectValueChanges(
 		initialLoading !== LoadingState.Loading &&
 			rolesLoadingStates.isUpdatingSiteRole !== LoadingState.Loading &&
 			!!role,
 		formState ?? initialFormState
 	);
-
 	const [mySecurityRightsLoadingState, mySecurityRights] = useMySecurityRightsForSite({
 		siteUuid: siteId,
 		onlyKeys: true,
 	});
+	const forceNavigateToOverview = useOnNextRender(() =>
+		navigate(MODULE_PATHS.roles.overview, { siteId })
+	);
 
 	useWillUnmount(() => {
 		rolesFacade.clearSiteRole();
@@ -122,33 +123,38 @@ const RolesUpdate: FC<RolesRouteProps> = () => {
 		false
 	);
 
-	const navigateToOverview = (): void => {
-		navigate(MODULE_PATHS.roles.overview, { siteId });
-	};
-
-	const onSubmit = (request: RoleDetailFormState): void => {
-		if (siteId && roleId) {
-			rolesFacade.updateSiteRole({
-				siteId,
-				roleId,
-				body: request,
-			});
+	const onSubmit = async (request: RoleDetailFormState): Promise<void> => {
+		if (!siteId || !roleId) {
+			return;
 		}
-		resetDetectValueChanges();
+
+		const isSuccesss = await rolesFacade.updateSiteRole({
+			siteId,
+			roleId,
+			body: request,
+		});
+
+		if (isSuccesss) {
+			setIsSubmitting(true);
+			forceNavigateToOverview();
+			resetDetectValueChanges();
+		}
 	};
 
 	const onDelete = (): void => {
-		if (siteId && roleId) {
-			setAllowedPaths([`${TENANT_ROOT}/sites${MODULE_PATHS.roles.overview}`]);
-			rolesFacade
-				.deleteSiteRole({ siteId, roleId })
-				.then(navigateToOverview)
-				.finally(() => setAllowedPaths([]));
+		if (!siteId || !roleId) {
+			return;
 		}
+
+		rolesFacade.deleteSiteRole({ siteId, roleId }).then(() => {
+			setIsSubmitting(true);
+			forceNavigateToOverview();
+		});
 	};
 
 	const onCancel = (resetForm: FormikProps<RoleDetailFormState>['resetForm']): void => {
 		resetForm();
+		forceNavigateToOverview();
 	};
 
 	const pageTitle = `${
@@ -176,12 +182,7 @@ const RolesUpdate: FC<RolesRouteProps> = () => {
 				onDelete={canDelete && !initialFormState?.admin && onDelete}
 			>
 				{({ submitForm }) => (
-					<LeavePrompt
-						allowedPaths={allowedPaths}
-						shouldBlockNavigationOnConfirm
-						when={hasChanges}
-						onConfirm={submitForm}
-					/>
+					<LeavePrompt when={hasChanges && !isSubmitting} onConfirm={submitForm} />
 				)}
 			</RoleDetailForm>
 		);
@@ -193,9 +194,10 @@ const RolesUpdate: FC<RolesRouteProps> = () => {
 				<ContextHeaderTopSection>{breadcrumbs}</ContextHeaderTopSection>
 			</ContextHeader>
 			<Container>
-				<div className="u-margin-bottom">
-					<AlertContainer containerId={ALERT_CONTAINER_IDS.UPDATE_ROLE_ON_SITE} />
-				</div>
+				<AlertContainer
+					toastClassName="u-margin-bottom"
+					containerId={ALERT_CONTAINER_IDS.UPDATE_ROLE_ON_SITE}
+				/>
 				<DataLoader loadingState={initialLoading} render={renderRoleUpdate} />
 			</Container>
 		</>

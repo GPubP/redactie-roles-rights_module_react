@@ -108,7 +108,10 @@ const UserDetailRolesUpdate: FC<RolesRouteProps<{ userUuid: string; siteUuid: st
 				siteUuid,
 				roles: values.roleIds,
 			},
-			ALERT_CONTAINER_IDS.UPDATE_USER_ROLES_SITE_ON_TENANT
+			{
+				errorAlertContainerId: ALERT_CONTAINER_IDS.UPDATE_USER_ROLES_SITE_ON_TENANT,
+				successAlertContainerId: ALERT_CONTAINER_IDS.UPDATE_USER_ROLES_SITE_ON_TENANT,
+			}
 		);
 		resetDetectValueChanges();
 	};

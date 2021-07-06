@@ -5,6 +5,7 @@ import {
 	PaginatedTable,
 } from '@acpaas-ui/react-editorial-components';
 import {
+	AlertContainer,
 	ContextHeaderTabLinkProps,
 	DataLoader,
 	LoadingState,
@@ -23,6 +24,7 @@ import { CORE_TRANSLATIONS, useCoreTranslation } from '../../connectors/translat
 import { useMySecurityRightsForSite, useRoutesBreadcrumbs, useUsers } from '../../hooks';
 import useActiveTabs from '../../hooks/useActiveTabs/useActiveTabs';
 import {
+	ALERT_CONTAINER_IDS,
 	DEFAULT_USERS_QUERY_PARAMS,
 	MODULE_PATHS,
 	SITE_CONTEXT_DEFAULT_BREADCRUMBS,
@@ -192,6 +194,10 @@ const SiteUsersOverview: FC<RolesRouteProps<{ siteId: string }>> = ({ match }) =
 				<ContextHeaderTopSection>{breadcrumbs}</ContextHeaderTopSection>
 			</ContextHeader>
 			<Container>
+				<AlertContainer
+					toastClassName="u-margin-bottom"
+					containerId={ALERT_CONTAINER_IDS.USERS_SITE_OVERVIEW}
+				/>
 				<DataLoader loadingState={initialLoading} render={renderOverview} />
 			</Container>
 		</>
