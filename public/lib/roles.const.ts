@@ -81,6 +81,8 @@ export enum ALERT_CONTAINER_IDS {
 	UPDATE_USER_ROLES_SITE_ON_SITE = 'update-user-roles-site-on-tenant',
 	UPDATE_USER_ROLES_TENANT = 'update-user-roles-tenant',
 	UPDATE_ROLE_ON_SITE = 'update-role-on-site',
+	USERS_SITE_OVERVIEW = 'users-site-overview',
+	ROLES_SITE_OVERVIEW = 'roles-site-overview',
 }
 
 export const SITE_CONTEXT_DEFAULT_BREADCRUMBS = [

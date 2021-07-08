@@ -10,6 +10,7 @@ import {
 	LoadingState,
 	useDetectValueChangesWorker,
 	useNavigate,
+	useOnNextRender,
 	useWillUnmount,
 } from '@redactie/utils';
 import { FormikProps } from 'formik';
@@ -66,7 +67,6 @@ const SiteUserDetailRolesUpdate: FC<RolesRouteProps> = ({ tenantId }) => {
 	const [initialFormState, setInitialFormState] = useState<UserRolesFormState | undefined>();
 	const [formState, setFormState] = useState<UserRolesFormState | undefined>(initialFormState);
 	const { navigate } = useNavigate(SITES_ROOT);
-
 	const [hasChanges, resetDetectValueChanges] = useDetectValueChangesWorker(
 		initialLoading !== LoadingState.Loading && isUpdating !== LoadingState.Loading,
 		formState,
@@ -76,6 +76,9 @@ const SiteUserDetailRolesUpdate: FC<RolesRouteProps> = ({ tenantId }) => {
 		siteUuid: siteId,
 		onlyKeys: true,
 	});
+	const forceNavigateToOverview = useOnNextRender(() =>
+		navigate(`${MODULE_PATHS.users.siteOverview}`, { siteId })
+	);
 
 	useWillUnmount(() => {
 		usersFacade.clearUser();
@@ -130,14 +133,6 @@ const SiteUserDetailRolesUpdate: FC<RolesRouteProps> = ({ tenantId }) => {
 		false
 	);
 
-	const navigateToOverview = (): void => {
-		navigate(`${MODULE_PATHS.users.siteOverview}`, { siteId });
-	};
-
-	useEffect(() => {
-		isSubmitting && navigateToOverview();
-	}, [isSubmitting]); // eslint-disable-line
-
 	const onSubmit = (values: UserRolesFormState): void => {
 		usersFacade
 			.updateUserRolesForSite(
@@ -146,17 +141,22 @@ const SiteUserDetailRolesUpdate: FC<RolesRouteProps> = ({ tenantId }) => {
 					siteUuid: siteId,
 					roles: values.roleIds,
 				},
-				ALERT_CONTAINER_IDS.UPDATE_USER_ROLES_SITE_ON_SITE
+				{
+					errorAlertContainerId: ALERT_CONTAINER_IDS.UPDATE_USER_ROLES_SITE_ON_SITE,
+					successAlertContainerId: ALERT_CONTAINER_IDS.USERS_SITE_OVERVIEW,
+				}
 			)
 			.then(() => {
 				resetDetectValueChanges();
 				setIsSubmitting(true);
+				forceNavigateToOverview();
 			});
 	};
 
 	const onCancel = (resetForm: FormikProps<UserRolesFormState>['resetForm']): void => {
 		resetForm();
 		setIsSubmitting(true);
+		forceNavigateToOverview();
 	};
 
 	const pageTitle = `${
@@ -196,7 +196,6 @@ const SiteUserDetailRolesUpdate: FC<RolesRouteProps> = ({ tenantId }) => {
 											hasChanges={hasChanges}
 										/>
 										<LeavePrompt
-											shouldBlockNavigationOnConfirm
 											when={hasChanges && !isSubmitting}
 											onConfirm={submitForm}
 										/>
@@ -216,11 +215,10 @@ const SiteUserDetailRolesUpdate: FC<RolesRouteProps> = ({ tenantId }) => {
 				<ContextHeaderTopSection>{breadcrumbs}</ContextHeaderTopSection>
 			</ContextHeader>
 			<Container>
-				<div className="u-margin-bottom">
-					<AlertContainer
-						containerId={ALERT_CONTAINER_IDS.UPDATE_USER_ROLES_SITE_ON_SITE}
-					/>
-				</div>
+				<AlertContainer
+					toastClassName="u-margin-bottom"
+					containerId={ALERT_CONTAINER_IDS.UPDATE_USER_ROLES_SITE_ON_SITE}
+				/>
 				<DataLoader loadingState={initialLoading} render={renderSiteRolesForm} />
 			</Container>
 		</>

@@ -18,6 +18,7 @@ import { MySecurityRightsStore, mySecurityRightsStore } from '../mySecurityRight
 import { getAlertMessages } from './users.alertMessages';
 import { UsersQuery, usersQuery } from './users.query';
 import { UsersStore, usersStore } from './users.store';
+import { AlertOptions } from './users.types';
 
 export class UsersFacade extends BaseEntityFacade<UsersStore, UsersApiService, UsersQuery> {
 	constructor(
@@ -200,7 +201,10 @@ export class UsersFacade extends BaseEntityFacade<UsersStore, UsersApiService, U
 
 	public updateUserRolesForSite(
 		payload: UpdateUserRolesForSitePayload,
-		containerId: string
+		options: AlertOptions = {
+			errorAlertContainerId: ALERT_CONTAINER_IDS.UPDATE_USER_ROLES_SITE_ON_SITE,
+			successAlertContainerId: ALERT_CONTAINER_IDS.UPDATE_USER_ROLES_SITE_ON_SITE,
+		}
 	): Promise<void> {
 		const state = this.store.getValue();
 		const alertMessages = getAlertMessages(
@@ -214,11 +218,15 @@ export class UsersFacade extends BaseEntityFacade<UsersStore, UsersApiService, U
 				this.store.setUserDetail({
 					siteRoles: response._embedded,
 				});
-				alertService(alertMessages.update.success, containerId, 'success');
+				alertService(
+					alertMessages.update.success,
+					options.successAlertContainerId,
+					'success'
+				);
 			})
 			.catch(err => {
 				this.store.setError(err);
-				alertService(alertMessages.update.error, containerId, 'error');
+				alertService(alertMessages.update.error, options.errorAlertContainerId, 'error');
 			})
 			.finally(() => this.store.setIsUpdating(false));
 	}

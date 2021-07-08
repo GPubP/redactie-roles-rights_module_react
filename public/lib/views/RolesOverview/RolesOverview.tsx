@@ -7,6 +7,7 @@ import {
 	PaginatedTable,
 } from '@acpaas-ui/react-editorial-components';
 import {
+	AlertContainer,
 	DataLoader,
 	LoadingState,
 	SearchParams,
@@ -20,6 +21,7 @@ import { SecurableRender } from '../../components';
 import { CORE_TRANSLATIONS, useCoreTranslation } from '../../connectors/translations';
 import { useMySecurityRightsForSite, useRoutesBreadcrumbs, useSiteRoles } from '../../hooks';
 import {
+	ALERT_CONTAINER_IDS,
 	MODULE_PATHS,
 	ROLES_QUERY_PARAMS_CONFIG,
 	SecurityRightsSite,
@@ -122,6 +124,10 @@ const RolesOverview: FC<RolesRouteProps<{ siteId: string }>> = () => {
 				</ContextHeaderActionsSection>
 			</ContextHeader>
 			<Container>
+				<AlertContainer
+					toastClassName="u-margin-bottom"
+					containerId={ALERT_CONTAINER_IDS.ROLES_SITE_OVERVIEW}
+				/>
 				<DataLoader loadingState={initialLoading} render={renderOverview} />
 			</Container>
 		</>
