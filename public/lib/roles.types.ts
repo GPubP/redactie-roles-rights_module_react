@@ -11,6 +11,7 @@ import { SecurityRightsSiteGuardFunction, SecurityRightsTenantGuardFunction } fr
 import { CheckSecurityRightsFunction } from './helpers';
 import { UseMySecurityRightsForSiteFunction } from './hooks/useMySecurityRightsForSite/useMySecurityRightsForSite.types';
 import { UseMySecurityRightsForTenantFunction } from './hooks/useMySecurityRightsForTenant/useMySecurityRightsForTenant.types';
+import { UseTenantRolesFunction } from './hooks/useTenantRoles/useTenantRoles.types';
 import { UseUsersFunction } from './hooks/useUsers/useUsers.types';
 import { ALERT_CONTAINER_IDS } from './roles.const';
 import { MySecurityRightsFacade, MySecurityRightsQuery } from './store/mySecurityRights';
@@ -73,6 +74,7 @@ export interface RolesRightsModuleAPI {
 		useMySecurityRightsForSite: UseMySecurityRightsForSiteFunction;
 		useMySecurityRightsForTenant: UseMySecurityRightsForTenantFunction;
 		useUsers: UseUsersFunction;
+		useTenantRoles: UseTenantRolesFunction;
 	};
 	components: {
 		SecurableRender: FC<SecurableRenderProps>;
