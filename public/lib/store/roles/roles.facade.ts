@@ -76,6 +76,25 @@ export class RolesFacade {
 			.finally(() => this.store.setIsFetching(RoleEntityTypes.SITE, false));
 	}
 
+	public getDefaultSiteRoles(): void {
+		this.store.setIsFetching(RoleEntityTypes.SITE, true);
+		this.service
+			.getDefaultSiteRoles()
+			.then(response => {
+				const roles = response._embedded;
+				const meta = response._page;
+
+				this.store.setRoles(RoleEntityTypes.SITE, {
+					roles,
+					meta,
+				});
+			})
+			.catch(err => {
+				this.store.setError(err);
+			})
+			.finally(() => this.store.setIsFetching(RoleEntityTypes.SITE, false));
+	}
+
 	public getSiteRole(siteUuid: string, roleId: string): void {
 		this.store.setIsFetching(RoleEntityTypes.SITE, true);
 		this.service

@@ -17,6 +17,7 @@ export const store = {
 	},
 	roles: {
 		service: {
+			getDefaultSiteRoles: rolesFacade.getDefaultSiteRoles.bind(rolesFacade),
 			getSiteRoles: rolesFacade.getSiteRoles.bind(rolesFacade),
 			getTenantRoles: rolesFacade.getTenantRoles.bind(rolesFacade),
 		},
