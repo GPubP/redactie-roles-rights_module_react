@@ -9,6 +9,10 @@ export class RolesApiService {
 		return await api.get(`roles`).json();
 	}
 
+	public async getDefaultSiteRoles(): Promise<RolesResponse> {
+		return await api.get('default-site-roles').json();
+	}
+
 	public async getSiteRoles(
 		siteUuid: string,
 		searchParams: GetRolesPayload
