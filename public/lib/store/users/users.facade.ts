@@ -168,13 +168,13 @@ export class UsersFacade extends BaseEntityFacade<UsersStore, UsersApiService, U
 	 * Update calls
 	 */
 
-	public updateUserRolesForTenant(payload: UpdateUserRolesForTenantPayload): void {
+	public updateUserRolesForTenant(payload: UpdateUserRolesForTenantPayload): Promise<void> {
 		const state = this.store.getValue();
 		const alertMessages = getAlertMessages(
 			`${state.userDetail?.firstname} ${state.userDetail?.lastname}`
 		);
 		this.store.setIsUpdating(true);
-		this.service
+		return this.service
 			.updateUserRolesForTenant(payload)
 			.then(response => {
 				this.mySecurityRightsStore.setTenantRightsCache(false);
@@ -182,10 +182,14 @@ export class UsersFacade extends BaseEntityFacade<UsersStore, UsersApiService, U
 					tenantRoles: response._embedded,
 				});
 
-				alertService(
-					alertMessages.update.success,
-					ALERT_CONTAINER_IDS.UPDATE_USER_ROLES_TENANT,
-					'success'
+				setTimeout(
+					() =>
+						alertService(
+							alertMessages.update.success,
+							ALERT_CONTAINER_IDS.USERS_OVERVIEW,
+							'success'
+						),
+					300
 				);
 			})
 			.catch(err => {
@@ -195,6 +199,8 @@ export class UsersFacade extends BaseEntityFacade<UsersStore, UsersApiService, U
 					ALERT_CONTAINER_IDS.UPDATE_USER_ROLES_TENANT,
 					'error'
 				);
+
+				throw err;
 			})
 			.finally(() => this.store.setIsUpdating(false));
 	}

@@ -5,6 +5,7 @@ import {
 	PaginatedTable,
 } from '@acpaas-ui/react-editorial-components';
 import {
+	AlertContainer,
 	DataLoader,
 	LoadingState,
 	OrderBy,
@@ -20,6 +21,7 @@ import { FilterForm, FilterFormState } from '../../components';
 import { CORE_TRANSLATIONS, useCoreTranslation } from '../../connectors/translations';
 import { useMySecurityRightsForTenant, useRoutesBreadcrumbs, useUsers } from '../../hooks';
 import {
+	ALERT_CONTAINER_IDS,
 	DEFAULT_USERS_QUERY_PARAMS,
 	MODULE_PATHS,
 	USERS_QUERY_PARAMS_CONFIG,
@@ -160,6 +162,9 @@ const UsersOverview: FC<RolesRouteProps> = () => {
 				<ContextHeaderTopSection>{breadcrumbs}</ContextHeaderTopSection>
 			</ContextHeader>
 			<Container>
+				<div className="u-margin-bottom">
+					<AlertContainer containerId={ALERT_CONTAINER_IDS.USERS_OVERVIEW} />
+				</div>
 				<DataLoader loadingState={initialLoading} render={renderOverview} />
 			</Container>
 		</>

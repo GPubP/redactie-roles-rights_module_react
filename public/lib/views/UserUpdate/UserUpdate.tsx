@@ -14,12 +14,14 @@ import {
 	LoadingState,
 	RenderChildRoutes,
 	useDetectValueChanges,
+	useNavigate,
+	useOnNextRender,
 	useWillUnmount,
 } from '@redactie/utils';
 import { FormikProps, FormikValues } from 'formik';
 import { equals } from 'ramda';
-import React, { FC, ReactElement, useEffect, useMemo, useRef, useState } from 'react';
-import { generatePath, NavLink, useParams } from 'react-router-dom';
+import React, { FC, ReactElement, useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { NavLink, useParams } from 'react-router-dom';
 
 import { UserRolesFormState } from '../../components';
 import { CORE_TRANSLATIONS, useCoreTranslation } from '../../connectors/translations';
@@ -50,10 +52,11 @@ const UserUpdate: FC<RolesRouteProps<{ userUuid?: string }>> = ({ route, tenantI
 	const [initialLoading, setInitialLoading] = useState(LoadingState.Loading);
 	const activeCompartmentFormikRef = useRef<FormikProps<FormikValues>>();
 	const { userUuid } = useParams<{ userUuid: string }>();
+	const { generatePath, navigate } = useNavigate();
 	const breadcrumbs = useRoutesBreadcrumbs([
 		{
 			name: 'Gebruikers',
-			target: generatePath(`/${tenantId}${MODULE_PATHS.tenantUsersOverview}`),
+			target: generatePath(MODULE_PATHS.tenantUsersOverview),
 		},
 	]);
 	const [userLoadingState, user] = useUser(userUuid);
@@ -73,6 +76,10 @@ const UserUpdate: FC<RolesRouteProps<{ userUuid?: string }>> = ({ route, tenantI
 		}),
 		[tenantId]
 	);
+	const navigateToOverview = useCallback(() => navigate(MODULE_PATHS.tenantUsersOverview), [
+		navigate,
+	]);
+	const forceNavigateToOverview = useOnNextRender(() => navigateToOverview());
 
 	useWillUnmount(() => {
 		usersFacade.clearUser();
@@ -105,12 +112,17 @@ const UserUpdate: FC<RolesRouteProps<{ userUuid?: string }>> = ({ route, tenantI
 	 */
 	const onSubmit = (): void => {
 		if (user && userRolesHasChanges && selectedRoles) {
-			usersFacade.updateUserRolesForTenant({
-				userUuid: user.id,
-				roles: selectedRoles,
-			});
+			usersFacade
+				.updateUserRolesForTenant({
+					userUuid: user.id,
+					roles: selectedRoles,
+				})
+				.then(() => {
+					resetDetectValueChanges();
+					forceNavigateToOverview();
+				})
+				.catch();
 		}
-		resetDetectValueChanges();
 	};
 
 	const onCancel = (): void => {
