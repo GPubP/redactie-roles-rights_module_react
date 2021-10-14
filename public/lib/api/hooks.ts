@@ -2,6 +2,7 @@ import {
 	useMySecurityRightsForSite,
 	useMySecurityRightsForTenant,
 	useSiteRoles,
+	useUserRolesForSite,
 	useUsers,
 } from '../hooks';
 
@@ -10,4 +11,5 @@ export const hooks = {
 	useMySecurityRightsForTenant,
 	useUsers,
 	useSiteRoles,
+	useUserRolesForSite,
 };

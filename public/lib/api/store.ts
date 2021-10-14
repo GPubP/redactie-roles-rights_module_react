@@ -12,6 +12,7 @@ export const store = {
 			getUsersBySite: usersFacade.getUsersBySite.bind(usersFacade),
 			getUser: usersFacade.getUser.bind(usersFacade),
 			getUsers: usersFacade.getUsers.bind(usersFacade),
+			getUserRolesForSite: usersFacade.getUserRolesForSite.bind(usersFacade),
 		},
 		query: usersQuery,
 	},
