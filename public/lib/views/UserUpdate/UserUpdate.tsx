@@ -188,9 +188,12 @@ const UserUpdate: FC<RolesRouteProps<{ userUuid?: string }>> = ({ route, tenantI
 								items={USER_UPDATE_NAV_LIST_ITEMS.map(listItem => ({
 									...listItem,
 									activeClassName: 'is-active',
-									to: generatePath(`${route.path}/${listItem.to}`, {
-										userUuid,
-									}),
+									to: generatePath(
+										`${MODULE_PATHS.tenantUserDetail}/${listItem.to}`,
+										{
+											userUuid,
+										}
+									),
 								}))}
 								linkComponent={NavLink}
 							/>
