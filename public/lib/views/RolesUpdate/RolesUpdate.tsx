@@ -71,7 +71,7 @@ const RolesUpdate: FC<RolesRouteProps> = () => {
 		siteUuid: siteId,
 		onlyKeys: true,
 	});
-	const forceNavigateToOverview = useOnNextRender(() =>
+	const [forceNavigateToOverview] = useOnNextRender(() =>
 		navigate(MODULE_PATHS.roles.overview, { siteId })
 	);
 

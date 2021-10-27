@@ -79,7 +79,7 @@ const UserUpdate: FC<RolesRouteProps<{ userUuid?: string }>> = ({ route, tenantI
 	const navigateToOverview = useCallback(() => navigate(MODULE_PATHS.tenantUsersOverview), [
 		navigate,
 	]);
-	const forceNavigateToOverview = useOnNextRender(() => navigateToOverview());
+	const [forceNavigateToOverview] = useOnNextRender(() => navigateToOverview());
 
 	useWillUnmount(() => {
 		usersFacade.clearUser();
