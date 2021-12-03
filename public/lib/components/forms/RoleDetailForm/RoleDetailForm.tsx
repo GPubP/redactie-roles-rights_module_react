@@ -49,7 +49,7 @@ const RoleDetailForm: FC<RoleDetailFormProps> = ({
 					<CardBody>
 						<CardTitle>Verwijderen</CardTitle>
 						<p>
-							Opgelet, indien u deze rol verwijdert verliezen gebruikers die deze rol
+							Opgelet: indien je deze rol verwijdert verliezen gebruikers die deze rol
 							hebben alle bijhorende rechten.
 						</p>
 						<Button
