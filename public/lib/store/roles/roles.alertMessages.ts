@@ -4,7 +4,7 @@ export const getAlertMessages = (name: string): AlertMessages<'update'> => ({
 	update: {
 		success: {
 			title: 'Bewaard',
-			message: `U hebt de rol ${name} succesvol gewijzigd.`,
+			message: `Je hebt de rol ${name} succesvol gewijzigd.`,
 		},
 		error: {
 			title: 'Bewaren mislukt',
