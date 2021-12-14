@@ -111,7 +111,8 @@ const RoleDetailForm: FC<RoleDetailFormProps> = ({
 									name="description"
 								/>
 								<small>
-									Geef de rol een duidelijke beschrijving voor in het overzicht
+									Geef de rol een duidelijke beschrijving. Deze wordt gebruikt in
+									het overzicht.
 								</small>
 								<ErrorMessage name="description" />
 							</div>
