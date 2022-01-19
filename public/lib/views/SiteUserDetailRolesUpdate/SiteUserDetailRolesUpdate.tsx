@@ -20,6 +20,7 @@ import { generatePath, useParams } from 'react-router-dom';
 import { DefaultFormActions, FormViewUserRoles, UserRolesFormState } from '../../components';
 import { CORE_TRANSLATIONS, useCoreTranslation } from '../../connectors/translations';
 import { checkSecurityRights, mapUserRoles } from '../../helpers';
+import { getUserName } from '../../helpers/getUserName';
 import {
 	useMySecurityRightsForSite,
 	useRoutesBreadcrumbs,
@@ -159,9 +160,7 @@ const SiteUserDetailRolesUpdate: FC<RolesRouteProps> = ({ tenantId }) => {
 		forceNavigateToOverview();
 	};
 
-	const pageTitle = `${
-		user?.firstname ? `'${user?.firstname} ${user?.lastname}'` : 'Gebruiker'
-	} ${t(CORE_TRANSLATIONS.ROUTING_UPDATE)}`;
+	const pageTitle = `${getUserName(user, 'Gebruiker')} ${t(CORE_TRANSLATIONS.ROUTING_UPDATE)}`;
 
 	/**
 	 * Render

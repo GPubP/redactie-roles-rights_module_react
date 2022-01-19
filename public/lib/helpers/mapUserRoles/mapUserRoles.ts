@@ -5,6 +5,7 @@ const mapUserRoles = (roles?: RoleModel[]): Array<string> => {
 		return [];
 	}
 	const rolesArray = roles && roles.map((role: RoleModel) => role.id).sort();
+
 	return rolesArray;
 };
 

@@ -26,6 +26,7 @@ import { NavLink, useParams } from 'react-router-dom';
 import { UserRolesFormState } from '../../components';
 import { CORE_TRANSLATIONS, useCoreTranslation } from '../../connectors/translations';
 import { mapUserRoles } from '../../helpers';
+import { getUserName } from '../../helpers/getUserName';
 import {
 	useMySecurityRightsForTenant,
 	useRoutesBreadcrumbs,
@@ -132,11 +133,7 @@ const UserUpdate: FC<RolesRouteProps<{ userUuid?: string }>> = ({ route, tenantI
 		}
 	};
 
-	const pageTitle = `${
-		user && user.firstname && user.lastname
-			? `'${user.firstname} ${user.lastname}'`
-			: 'Gebruiker'
-	} ${t(CORE_TRANSLATIONS.ROUTING_UPDATE)}`;
+	const pageTitle = `${getUserName(user, 'Gebruiker')} ${t(CORE_TRANSLATIONS.ROUTING_UPDATE)}`;
 
 	/**
 	 * Render

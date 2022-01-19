@@ -21,6 +21,7 @@ import { Link } from 'react-router-dom';
 
 import { FilterForm, FilterFormState } from '../../components';
 import { CORE_TRANSLATIONS, useCoreTranslation } from '../../connectors/translations';
+import { getUserName } from '../../helpers/getUserName';
 import { useMySecurityRightsForSite, useRoutesBreadcrumbs, useUsers } from '../../hooks';
 import useActiveTabs from '../../hooks/useActiveTabs/useActiveTabs';
 import {
@@ -134,7 +135,7 @@ const SiteUsersOverview: FC<RolesRouteProps<{ siteId: string }>> = ({ match }) =
 
 		const usersRows: UsersOverviewTableRow[] = users.map(user => ({
 			uuid: user.id,
-			name: `${user.firstname} ${user.lastname}`,
+			name: getUserName(user),
 			type: user.type,
 			added: user.email,
 			status: user.username || 'N/A',
