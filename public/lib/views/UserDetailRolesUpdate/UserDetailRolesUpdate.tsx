@@ -18,6 +18,7 @@ import { useParams } from 'react-router-dom';
 import { DefaultFormActions, FormViewUserRoles, UserRolesFormState } from '../../components';
 import { sitesConnector } from '../../connectors';
 import { mapUserRoles } from '../../helpers';
+import { getUserName } from '../../helpers/getUserName';
 import {
 	useRoutesBreadcrumbs,
 	useSiteRoles,
@@ -45,7 +46,7 @@ const UserDetailRolesUpdate: FC<RolesRouteProps<{ userUuid: string; siteUuid: st
 				target: generatePath(`${MODULE_PATHS.tenantUsersOverview}`),
 			},
 			{
-				name: user ? `${user.firstname} ${user.lastname}` : '...',
+				name: getUserName(user, '...'),
 				target: generatePath(MODULE_PATHS.tenantUserDetail, {
 					userUuid,
 				}),

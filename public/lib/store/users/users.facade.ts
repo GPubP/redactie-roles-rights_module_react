@@ -1,6 +1,7 @@
 import { BaseEntityFacade } from '@redactie/utils';
 
 import { alertService } from '../../helpers';
+import { getUserName } from '../../helpers/getUserName';
 import { ALERT_CONTAINER_IDS } from '../../roles.const';
 import {
 	AddUserToSitePayload,
@@ -170,9 +171,7 @@ export class UsersFacade extends BaseEntityFacade<UsersStore, UsersApiService, U
 
 	public updateUserRolesForTenant(payload: UpdateUserRolesForTenantPayload): Promise<void> {
 		const state = this.store.getValue();
-		const alertMessages = getAlertMessages(
-			`${state.userDetail?.firstname} ${state.userDetail?.lastname}`
-		);
+		const alertMessages = getAlertMessages(getUserName(state.userDetail));
 		this.store.setIsUpdating(true);
 		return this.service
 			.updateUserRolesForTenant(payload)
@@ -213,9 +212,7 @@ export class UsersFacade extends BaseEntityFacade<UsersStore, UsersApiService, U
 		}
 	): Promise<void> {
 		const state = this.store.getValue();
-		const alertMessages = getAlertMessages(
-			`${state.userDetail?.firstname} ${state.userDetail?.lastname}`
-		);
+		const alertMessages = getAlertMessages(getUserName(state.userDetail));
 		this.store.setIsUpdating(true);
 		return this.service
 			.updateUserRolesForSite(payload)

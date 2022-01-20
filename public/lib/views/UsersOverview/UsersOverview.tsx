@@ -19,6 +19,7 @@ import React, { FC, ReactElement, useEffect, useState } from 'react';
 
 import { FilterForm, FilterFormState } from '../../components';
 import { CORE_TRANSLATIONS, useCoreTranslation } from '../../connectors/translations';
+import { getUserName } from '../../helpers/getUserName';
 import { useMySecurityRightsForTenant, useRoutesBreadcrumbs, useUsers } from '../../hooks';
 import {
 	ALERT_CONTAINER_IDS,
@@ -115,7 +116,7 @@ const UsersOverview: FC<RolesRouteProps> = () => {
 
 		const usersRows: UsersOverviewTableRow[] = users.map(user => ({
 			uuid: user.id,
-			name: `${user.firstname} ${user.lastname}`,
+			name: getUserName(user),
 			type: user.type,
 			navigate: (userUuid: string) =>
 				navigate(MODULE_PATHS.tenantUserDetailRoles, { userUuid }),
