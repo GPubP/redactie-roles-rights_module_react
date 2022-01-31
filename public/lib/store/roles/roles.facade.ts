@@ -109,14 +109,27 @@ export class RolesFacade {
 	}
 
 	public createSiteRole(payload: RolePayload): Promise<boolean> {
+		const alertMessages = getAlertMessages(payload.body?.name || '');
+
 		this.store.setIsCreating(RoleEntityTypes.SITE, true);
+
 		return this.service
 			.createSiteRole(payload)
 			.then(() => {
+				alertService(
+					alertMessages.create.success,
+					ALERT_CONTAINER_IDS.ROLES_SITE_OVERVIEW,
+					'success'
+				);
 				return true;
 			})
-			.catch(err => {
+			.catch(async err => {
 				this.store.setError(err);
+				const messageKey =
+					(await err?.response?.json())?.code === 'UNIQ001'
+						? alertMessages.create.errorDuplicate
+						: alertMessages.create.error;
+				alertService(messageKey, ALERT_CONTAINER_IDS.ROLES_SITE_OVERVIEW, 'error');
 				return false;
 			})
 			.finally(() => this.store.setIsCreating(RoleEntityTypes.SITE, false));
@@ -124,19 +137,17 @@ export class RolesFacade {
 
 	public updateSiteRole(payload: RolePayload): Promise<boolean> {
 		const alertMessages = getAlertMessages(payload.body?.name || '');
+
 		this.store.setIsUpdating(RoleEntityTypes.SITE, true);
+
 		return this.service
 			.updateSiteRole(payload)
 			.then(response => {
 				this.store.setRoleDetail(RoleEntityTypes.SITE, response);
-				setTimeout(
-					() =>
-						alertService(
-							alertMessages.update.success,
-							ALERT_CONTAINER_IDS.ROLES_SITE_OVERVIEW,
-							'success'
-						),
-					300
+				alertService(
+					alertMessages.update.success,
+					ALERT_CONTAINER_IDS.ROLES_SITE_OVERVIEW,
+					'success'
 				);
 				return true;
 			})
@@ -153,14 +164,28 @@ export class RolesFacade {
 	}
 
 	public deleteSiteRole(payload: RolePayload): Promise<boolean> {
+		const alertMessages = getAlertMessages(payload.body?.name || '');
+
 		this.store.setIsDeleting(RoleEntityTypes.SITE, true);
+
 		return this.service
 			.deleteSiteRole(payload)
 			.then(() => {
+				alertService(
+					alertMessages.remove.success,
+					ALERT_CONTAINER_IDS.ROLES_SITE_OVERVIEW,
+					'success'
+				);
 				return true;
 			})
 			.catch(err => {
 				this.store.setError(err);
+
+				alertService(
+					alertMessages.remove.error,
+					ALERT_CONTAINER_IDS.ROLES_SITE_OVERVIEW,
+					'error'
+				);
 
 				return false;
 			})
