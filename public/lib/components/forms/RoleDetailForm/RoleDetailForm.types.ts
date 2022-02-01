@@ -12,5 +12,5 @@ export interface RoleDetailFormProps {
 	onSubmit?: (values: RoleDetailFormState) => void;
 	onChange?: (values: RoleDetailFormState) => void;
 	children?: (props: FormikProps<RoleDetailFormState>) => React.ReactNode;
-	onDelete?: false | (() => void);
+	onDelete?: false | ((values: RoleDetailFormState) => void);
 }

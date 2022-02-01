@@ -141,12 +141,12 @@ const RolesUpdate: FC<RolesRouteProps> = () => {
 		}
 	};
 
-	const onDelete = (): void => {
+	const onDelete = (role: RoleDetailFormState): void => {
 		if (!siteId || !roleId) {
 			return;
 		}
 
-		rolesFacade.deleteSiteRole({ siteId, roleId }).then(() => {
+		rolesFacade.deleteSiteRole({ siteId, roleId, body: role }).then(() => {
 			setIsSubmitting(true);
 			forceNavigateToOverview();
 		});

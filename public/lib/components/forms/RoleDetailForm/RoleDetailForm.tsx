@@ -34,7 +34,7 @@ const RoleDetailForm: FC<RoleDetailFormProps> = ({
 
 	const onDeletePromptConfirm = (): void => {
 		if (onDelete) {
-			onDelete();
+			onDelete(initialState);
 		}
 	};
 

@@ -122,5 +122,5 @@ export enum RolesRightsCompartmentType {
 
 export type AlertMessages<T extends string | number | symbol> = Record<
 	T,
-	{ [key in 'success' | 'error']: AlertProps }
+	{ [key in 'success' | 'error' | string]: AlertProps }
 >;
