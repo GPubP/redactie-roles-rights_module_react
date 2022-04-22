@@ -31,7 +31,7 @@ const securityRightsSiteCanShown: SecurityRightsSiteCanShownFunction = (
 			throw new Error('No permission to see navigation item');
 		}
 	} catch (err) {
-		throw new Error(err);
+		throw new Error(err as string);
 	}
 };
 
