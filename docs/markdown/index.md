@@ -12,15 +12,15 @@
 
 ### Type aliases
 
-- [MySecurityRightModel](../wiki/index#mysecurityrightmodel-1)
-- [RoleModel](../wiki/index#rolemodel-1)
-- [RolesMetaModel](../wiki/index#rolesmetamodel-1)
-- [SecurityRightMatrixModel](../wiki/index#securityrightmatrixmodel-1)
-- [SecurityRightsSiteGuardFunction](../wiki/index#securityrightssiteguardfunction-1)
-- [SecurityRightsTenantCanShownFunction](../wiki/index#securityrightstenantcanshownfunction-1)
-- [SecurityRightsTenantGuardFunction](../wiki/index#securityrightstenantguardfunction-1)
-- [UserModel](../wiki/index#usermodel-1)
-- [UsersMetaModel](../wiki/index#usersmetamodel-1)
+- [MySecurityRightModel](../wiki/index#mysecurityrightmodel)
+- [RoleModel](../wiki/index#rolemodel)
+- [RolesMetaModel](../wiki/index#rolesmetamodel)
+- [SecurityRightMatrixModel](../wiki/index#securityrightmatrixmodel)
+- [SecurityRightsSiteGuardFunction](../wiki/index#securityrightssiteguardfunction)
+- [SecurityRightsTenantCanShownFunction](../wiki/index#securityrightstenantcanshownfunction)
+- [SecurityRightsTenantGuardFunction](../wiki/index#securityrightstenantguardfunction)
+- [UserModel](../wiki/index#usermodel)
+- [UsersMetaModel](../wiki/index#usersmetamodel)
 
 ## Type aliases
 

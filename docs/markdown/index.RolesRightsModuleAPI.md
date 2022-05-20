@@ -6,14 +6,14 @@
 
 ### Properties
 
-- [canShowns](../wiki/index.RolesRightsModuleAPI#canshowns-1)
-- [components](../wiki/index.RolesRightsModuleAPI#components-1)
-- [consts](../wiki/index.RolesRightsModuleAPI#consts-1)
-- [guards](../wiki/index.RolesRightsModuleAPI#guards-1)
-- [helpers](../wiki/index.RolesRightsModuleAPI#helpers-1)
-- [hooks](../wiki/index.RolesRightsModuleAPI#hooks-1)
-- [store](../wiki/index.RolesRightsModuleAPI#store-1)
-- [views](../wiki/index.RolesRightsModuleAPI#views-1)
+- [canShowns](../wiki/index.RolesRightsModuleAPI#canshowns)
+- [components](../wiki/index.RolesRightsModuleAPI#components)
+- [consts](../wiki/index.RolesRightsModuleAPI#consts)
+- [guards](../wiki/index.RolesRightsModuleAPI#guards)
+- [helpers](../wiki/index.RolesRightsModuleAPI#helpers)
+- [hooks](../wiki/index.RolesRightsModuleAPI#hooks)
+- [store](../wiki/index.RolesRightsModuleAPI#store)
+- [views](../wiki/index.RolesRightsModuleAPI#views)
 
 ## Properties
 
@@ -26,7 +26,7 @@
 | Name | Type |
 | :------ | :------ |
 | `securityRightsSiteCanShown` | `SecurityRightsSiteCanShownFunction` |
-| `securityRightsTenantCanShown` | [`SecurityRightsTenantCanShownFunction`](../wiki/index#securityrightstenantcanshownfunction-1) |
+| `securityRightsTenantCanShown` | [`SecurityRightsTenantCanShownFunction`](../wiki/index#securityrightstenantcanshownfunction) |
 
 #### Defined in
 
@@ -74,8 +74,8 @@ ___
 
 | Name | Type |
 | :------ | :------ |
-| `securityRightsSiteGuard` | [`SecurityRightsSiteGuardFunction`](../wiki/index#securityrightssiteguardfunction-1) |
-| `securityRightsTenantGuard` | [`SecurityRightsTenantGuardFunction`](../wiki/index#securityrightstenantguardfunction-1) |
+| `securityRightsSiteGuard` | [`SecurityRightsSiteGuardFunction`](../wiki/index#securityrightssiteguardfunction) |
+| `securityRightsTenantGuard` | [`SecurityRightsTenantGuardFunction`](../wiki/index#securityrightstenantguardfunction) |
 
 #### Defined in
 

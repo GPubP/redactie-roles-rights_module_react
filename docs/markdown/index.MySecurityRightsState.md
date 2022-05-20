@@ -6,10 +6,10 @@
 
 ### Properties
 
-- [data](../wiki/index.MySecurityRightsState#data-1)
-- [isFetchingSiteRights](../wiki/index.MySecurityRightsState#isfetchingsiterights-1)
-- [isFetchingTenantRights](../wiki/index.MySecurityRightsState#isfetchingtenantrights-1)
-- [siteUuid](../wiki/index.MySecurityRightsState#siteuuid-1)
+- [data](../wiki/index.MySecurityRightsState#data)
+- [isFetchingSiteRights](../wiki/index.MySecurityRightsState#isfetchingsiterights)
+- [isFetchingTenantRights](../wiki/index.MySecurityRightsState#isfetchingtenantrights)
+- [siteUuid](../wiki/index.MySecurityRightsState#siteuuid)
 
 ## Properties
 
