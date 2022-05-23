@@ -6,7 +6,9 @@ import {
 } from '../store/securityRightsMatrix';
 import { usersFacade, usersQuery } from '../store/users';
 
-export const store = {
+import { RolesRightsModuleStoreAPI } from './api.types';
+
+export const store: RolesRightsModuleStoreAPI = {
 	users: {
 		service: {
 			getUsersBySite: usersFacade.getUsersBySite.bind(usersFacade),

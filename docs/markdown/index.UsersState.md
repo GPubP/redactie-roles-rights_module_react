@@ -4,7 +4,7 @@
 
 ## Hierarchy
 
-- `BaseEntityState`<[`UserModel`](../wiki/index#usermodel-1), `string`\>
+- `BaseEntityState`<[`UserModel`](../wiki/index#usermodel), `string`\>
 
   ↳ **`UsersState`**
 
@@ -12,18 +12,18 @@
 
 ### Properties
 
-- [entities](../wiki/index.UsersState#entities-1)
-- [error](../wiki/index.UsersState#error-1)
-- [ids](../wiki/index.UsersState#ids-1)
-- [isAddingUserToSite](../wiki/index.UsersState#isaddingusertosite-1)
-- [isCreating](../wiki/index.UsersState#iscreating-1)
-- [isFetching](../wiki/index.UsersState#isfetching-1)
-- [isFetchingOne](../wiki/index.UsersState#isfetchingone-1)
-- [isFetchingUserRolesForTenant](../wiki/index.UsersState#isfetchinguserrolesfortenant-1)
-- [isUpdating](../wiki/index.UsersState#isupdating-1)
-- [loading](../wiki/index.UsersState#loading-1)
-- [meta](../wiki/index.UsersState#meta-1)
-- [userDetail](../wiki/index.UsersState#userdetail-1)
+- [entities](../wiki/index.UsersState#entities)
+- [error](../wiki/index.UsersState#error)
+- [ids](../wiki/index.UsersState#ids)
+- [isAddingUserToSite](../wiki/index.UsersState#isaddingusertosite)
+- [isCreating](../wiki/index.UsersState#iscreating)
+- [isFetching](../wiki/index.UsersState#isfetching)
+- [isFetchingOne](../wiki/index.UsersState#isfetchingone)
+- [isFetchingUserRolesForTenant](../wiki/index.UsersState#isfetchinguserrolesfortenant)
+- [isUpdating](../wiki/index.UsersState#isupdating)
+- [loading](../wiki/index.UsersState#loading)
+- [meta](../wiki/index.UsersState#meta)
+- [userDetail](../wiki/index.UsersState#userdetail)
 
 ## Properties
 

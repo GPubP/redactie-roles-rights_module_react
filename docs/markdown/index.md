@@ -6,21 +6,30 @@
 
 - [MySecurityRightsState](../wiki/index.MySecurityRightsState)
 - [RolesRightsModuleAPI](../wiki/index.RolesRightsModuleAPI)
+- [RolesRightsModuleCanShowsAPI](../wiki/index.RolesRightsModuleCanShowsAPI)
+- [RolesRightsModuleComponentsAPI](../wiki/index.RolesRightsModuleComponentsAPI)
+- [RolesRightsModuleConstsAPI](../wiki/index.RolesRightsModuleConstsAPI)
+- [RolesRightsModuleGuardsAPI](../wiki/index.RolesRightsModuleGuardsAPI)
+- [RolesRightsModuleHelpersAPI](../wiki/index.RolesRightsModuleHelpersAPI)
+- [RolesRightsModuleHooksAPI](../wiki/index.RolesRightsModuleHooksAPI)
+- [RolesRightsModuleStoreAPI](../wiki/index.RolesRightsModuleStoreAPI)
+- [RolesRightsModuleViewsAPI](../wiki/index.RolesRightsModuleViewsAPI)
 - [RolesState](../wiki/index.RolesState)
 - [SecurityRightsMatrixState](../wiki/index.SecurityRightsMatrixState)
 - [UsersState](../wiki/index.UsersState)
 
 ### Type aliases
 
-- [MySecurityRightModel](../wiki/index#mysecurityrightmodel-1)
-- [RoleModel](../wiki/index#rolemodel-1)
-- [RolesMetaModel](../wiki/index#rolesmetamodel-1)
-- [SecurityRightMatrixModel](../wiki/index#securityrightmatrixmodel-1)
-- [SecurityRightsSiteGuardFunction](../wiki/index#securityrightssiteguardfunction-1)
-- [SecurityRightsTenantCanShownFunction](../wiki/index#securityrightstenantcanshownfunction-1)
-- [SecurityRightsTenantGuardFunction](../wiki/index#securityrightstenantguardfunction-1)
-- [UserModel](../wiki/index#usermodel-1)
-- [UsersMetaModel](../wiki/index#usersmetamodel-1)
+- [MySecurityRightModel](../wiki/index#mysecurityrightmodel)
+- [RoleModel](../wiki/index#rolemodel)
+- [RolesMetaModel](../wiki/index#rolesmetamodel)
+- [SecurityRightMatrixModel](../wiki/index#securityrightmatrixmodel)
+- [SecurityRightsSiteCanShownFunction](../wiki/index#securityrightssitecanshownfunction)
+- [SecurityRightsSiteGuardFunction](../wiki/index#securityrightssiteguardfunction)
+- [SecurityRightsTenantCanShownFunction](../wiki/index#securityrightstenantcanshownfunction)
+- [SecurityRightsTenantGuardFunction](../wiki/index#securityrightstenantguardfunction)
+- [UserModel](../wiki/index#usermodel)
+- [UsersMetaModel](../wiki/index#usersmetamodel)
 
 ## Type aliases
 
@@ -61,6 +70,32 @@ ___
 #### Defined in
 
 public/lib/store/securityRightsMatrix/securityRightsMatrix.model.ts:8
+
+___
+
+### SecurityRightsSiteCanShownFunction
+
+Ƭ **SecurityRightsSiteCanShownFunction**: (`urlSiteParam`: `string`, `requiredSecurityRights`: `string`[], `oneSecurityRight?`: `boolean`) => `CanShownFunction`
+
+#### Type declaration
+
+▸ (`urlSiteParam`, `requiredSecurityRights`, `oneSecurityRight?`): `CanShownFunction`
+
+##### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `urlSiteParam` | `string` |
+| `requiredSecurityRights` | `string`[] |
+| `oneSecurityRight?` | `boolean` |
+
+##### Returns
+
+`CanShownFunction`
+
+#### Defined in
+
+public/lib/canShowns/securityRightsSite/securityRightsSite.canShown.types.ts:3
 
 ___
 

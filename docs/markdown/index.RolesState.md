@@ -6,8 +6,8 @@
 
 ### Properties
 
-- [site](../wiki/index.RolesState#site-1)
-- [tenant](../wiki/index.RolesState#tenant-1)
+- [site](../wiki/index.RolesState#site)
+- [tenant](../wiki/index.RolesState#tenant)
 
 ## Properties
 

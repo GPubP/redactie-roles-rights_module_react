@@ -1,5 +1,7 @@
 import { checkSecurityRights } from '../helpers';
 
-export const helpers = {
+import { RolesRightsModuleHelpersAPI } from './api.types';
+
+export const helpers: RolesRightsModuleHelpersAPI = {
 	checkSecurityRights,
 };

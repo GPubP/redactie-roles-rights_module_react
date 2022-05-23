@@ -6,9 +6,9 @@
 
 ### Properties
 
-- [data](../wiki/index.SecurityRightsMatrixState#data-1)
-- [isFetching](../wiki/index.SecurityRightsMatrixState#isfetching-1)
-- [isUpdating](../wiki/index.SecurityRightsMatrixState#isupdating-1)
+- [data](../wiki/index.SecurityRightsMatrixState#data)
+- [isFetching](../wiki/index.SecurityRightsMatrixState#isfetching)
+- [isUpdating](../wiki/index.SecurityRightsMatrixState#isupdating)
 
 ## Properties
 

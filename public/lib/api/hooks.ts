@@ -6,7 +6,9 @@ import {
 	useUsers,
 } from '../hooks';
 
-export const hooks = {
+import { RolesRightsModuleHooksAPI } from './api.types';
+
+export const hooks: RolesRightsModuleHooksAPI = {
 	useMySecurityRightsForSite,
 	useMySecurityRightsForTenant,
 	useUsers,
