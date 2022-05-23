@@ -1,6 +1,8 @@
 import { securityRightsSiteGuard, securityRightsTenantGuard } from '../guards';
 
-export const guards = {
+import { RolesRightsModuleGuardsAPI } from './api.types';
+
+export const guards: RolesRightsModuleGuardsAPI = {
 	securityRightsTenantGuard,
 	securityRightsSiteGuard,
 };

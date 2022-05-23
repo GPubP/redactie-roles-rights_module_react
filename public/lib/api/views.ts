@@ -1,5 +1,7 @@
 import { Forbidden403View } from '../views';
 
-export const views = {
+import { RolesRightsModuleViewsAPI } from './api.types';
+
+export const views: RolesRightsModuleViewsAPI = {
 	Forbidden403View,
 };

@@ -1,27 +1,9 @@
 import { ModuleRouteConfig, RouteConfigComponentProps } from '@redactie/redactie-core';
 import { AlertProps, ContextHeaderTab, FilterItem } from '@redactie/utils';
-import { FC } from 'react';
 
-import {
-	SecurityRightsSiteCanShownFunction,
-	SecurityRightsTenantCanShownFunction,
-} from './canShowns';
-import { SecurableRenderProps } from './components/SecurableRender/SecurableRender.types';
-import { SecurityRightsSiteGuardFunction, SecurityRightsTenantGuardFunction } from './guards';
-import { CheckSecurityRightsFunction } from './helpers';
-import { UseMySecurityRightsForSiteFunction } from './hooks/useMySecurityRightsForSite/useMySecurityRightsForSite.types';
-import { UseMySecurityRightsForTenantFunction } from './hooks/useMySecurityRightsForTenant/useMySecurityRightsForTenant.types';
-import { UseSiteRolesFunction } from './hooks/useSiteRoles/useSiteRoles.types';
-import { UseUserRolesForSiteFunction } from './hooks/useUserRolesForSite/useUserRolesForSite.types';
-import { UseUsersFunction } from './hooks/useUsers/useUsers.types';
 import { ALERT_CONTAINER_IDS } from './roles.const';
-import { MySecurityRightsFacade, MySecurityRightsQuery } from './store/mySecurityRights';
-import { RolesFacade, RolesQuery } from './store/roles';
-import {
-	SecurityRightsMatrixFacade,
-	SecurityRightsMatrixQuery,
-} from './store/securityRightsMatrix';
-import { UsersFacade, UsersQuery } from './store/users';
+
+export * from './api/api.types';
 
 export interface RolesModuleProps<
 	Params extends {
@@ -44,60 +26,6 @@ export interface RolesRouteProps<
 export enum ContentType {
 	UserRoles = 'UserRoles',
 	SiteRoles = 'SiteRoles',
-}
-
-export interface RolesRightsModuleAPI {
-	consts: {
-		forbidden403Path: string;
-	};
-	store: {
-		users: {
-			service: Pick<
-				UsersFacade,
-				'getUsersBySite' | 'getUsers' | 'getUser' | 'getUserRolesForSite'
-			>;
-			query: UsersQuery;
-		};
-		roles: {
-			service: Pick<RolesFacade, 'getSiteRoles' | 'getTenantRoles' | 'getDefaultSiteRoles'>;
-			query: RolesQuery;
-		};
-		securityRights: {
-			service: Pick<SecurityRightsMatrixFacade, 'getSecurityRightsBySite'>;
-			query: SecurityRightsMatrixQuery;
-		};
-		mySecurityRights: {
-			service: Pick<
-				MySecurityRightsFacade,
-				'getMyTenantSecurityRights' | 'getMySiteSecurityRights' | 'getMySecurityRights'
-			>;
-			query: MySecurityRightsQuery;
-		};
-	};
-	hooks: {
-		useMySecurityRightsForSite: UseMySecurityRightsForSiteFunction;
-		useMySecurityRightsForTenant: UseMySecurityRightsForTenantFunction;
-		useUsers: UseUsersFunction;
-		useSiteRoles: UseSiteRolesFunction;
-		useUserRolesForSite: UseUserRolesForSiteFunction;
-	};
-	components: {
-		SecurableRender: FC<SecurableRenderProps>;
-	};
-	guards: {
-		securityRightsTenantGuard: SecurityRightsTenantGuardFunction;
-		securityRightsSiteGuard: SecurityRightsSiteGuardFunction;
-	};
-	canShowns: {
-		securityRightsTenantCanShown: SecurityRightsTenantCanShownFunction;
-		securityRightsSiteCanShown: SecurityRightsSiteCanShownFunction;
-	};
-	helpers: {
-		checkSecurityRights: CheckSecurityRightsFunction;
-	};
-	views: {
-		Forbidden403View: FC;
-	};
 }
 
 export interface RoleDetailFormState {

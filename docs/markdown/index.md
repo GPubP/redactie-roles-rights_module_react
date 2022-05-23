@@ -6,6 +6,14 @@
 
 - [MySecurityRightsState](../wiki/index.MySecurityRightsState)
 - [RolesRightsModuleAPI](../wiki/index.RolesRightsModuleAPI)
+- [RolesRightsModuleCanShowsAPI](../wiki/index.RolesRightsModuleCanShowsAPI)
+- [RolesRightsModuleComponentsAPI](../wiki/index.RolesRightsModuleComponentsAPI)
+- [RolesRightsModuleConstsAPI](../wiki/index.RolesRightsModuleConstsAPI)
+- [RolesRightsModuleGuardsAPI](../wiki/index.RolesRightsModuleGuardsAPI)
+- [RolesRightsModuleHelpersAPI](../wiki/index.RolesRightsModuleHelpersAPI)
+- [RolesRightsModuleHooksAPI](../wiki/index.RolesRightsModuleHooksAPI)
+- [RolesRightsModuleStoreAPI](../wiki/index.RolesRightsModuleStoreAPI)
+- [RolesRightsModuleViewsAPI](../wiki/index.RolesRightsModuleViewsAPI)
 - [RolesState](../wiki/index.RolesState)
 - [SecurityRightsMatrixState](../wiki/index.SecurityRightsMatrixState)
 - [UsersState](../wiki/index.UsersState)
@@ -16,6 +24,7 @@
 - [RoleModel](../wiki/index#rolemodel)
 - [RolesMetaModel](../wiki/index#rolesmetamodel)
 - [SecurityRightMatrixModel](../wiki/index#securityrightmatrixmodel)
+- [SecurityRightsSiteCanShownFunction](../wiki/index#securityrightssitecanshownfunction)
 - [SecurityRightsSiteGuardFunction](../wiki/index#securityrightssiteguardfunction)
 - [SecurityRightsTenantCanShownFunction](../wiki/index#securityrightstenantcanshownfunction)
 - [SecurityRightsTenantGuardFunction](../wiki/index#securityrightstenantguardfunction)
@@ -61,6 +70,32 @@ ___
 #### Defined in
 
 public/lib/store/securityRightsMatrix/securityRightsMatrix.model.ts:8
+
+___
+
+### SecurityRightsSiteCanShownFunction
+
+Ƭ **SecurityRightsSiteCanShownFunction**: (`urlSiteParam`: `string`, `requiredSecurityRights`: `string`[], `oneSecurityRight?`: `boolean`) => `CanShownFunction`
+
+#### Type declaration
+
+▸ (`urlSiteParam`, `requiredSecurityRights`, `oneSecurityRight?`): `CanShownFunction`
+
+##### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `urlSiteParam` | `string` |
+| `requiredSecurityRights` | `string`[] |
+| `oneSecurityRight?` | `boolean` |
+
+##### Returns
+
+`CanShownFunction`
+
+#### Defined in
+
+public/lib/canShowns/securityRightsSite/securityRightsSite.canShown.types.ts:3
 
 ___
 

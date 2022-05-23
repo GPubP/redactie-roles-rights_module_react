@@ -1,6 +1,7 @@
 /**
  * @module Module API
  */
+
 import { canShowns } from './canShowns';
 import { components } from './components';
 import { consts } from './consts';
