@@ -12,62 +12,12 @@
 
 ### Properties
 
-- [entities](../wiki/index.UsersState#entities)
-- [error](../wiki/index.UsersState#error)
-- [ids](../wiki/index.UsersState#ids)
 - [isAddingUserToSite](../wiki/index.UsersState#isaddingusertosite)
-- [isCreating](../wiki/index.UsersState#iscreating)
-- [isFetching](../wiki/index.UsersState#isfetching)
-- [isFetchingOne](../wiki/index.UsersState#isfetchingone)
 - [isFetchingUserRolesForTenant](../wiki/index.UsersState#isfetchinguserrolesfortenant)
-- [isUpdating](../wiki/index.UsersState#isupdating)
-- [loading](../wiki/index.UsersState#loading)
 - [meta](../wiki/index.UsersState#meta)
 - [userDetail](../wiki/index.UsersState#userdetail)
 
 ## Properties
-
-### entities
-
-• `Optional` **entities**: `HashMap`<`UserResponse`\>
-
-#### Inherited from
-
-BaseEntityState.entities
-
-#### Defined in
-
-node_modules/@datorama/akita/lib/types.d.ts:7
-
-___
-
-### error
-
-• `Optional` **error**: `any`
-
-#### Inherited from
-
-BaseEntityState.error
-
-#### Defined in
-
-node_modules/@datorama/akita/lib/types.d.ts:10
-
-___
-
-### ids
-
-• `Optional` **ids**: `string`[]
-
-#### Inherited from
-
-BaseEntityState.ids
-
-#### Defined in
-
-node_modules/@datorama/akita/lib/types.d.ts:8
-
-___
 
 ### isAddingUserToSite
 
@@ -79,48 +29,6 @@ public/lib/store/users/users.model.ts:17
 
 ___
 
-### isCreating
-
-• **isCreating**: `boolean`
-
-#### Inherited from
-
-BaseEntityState.isCreating
-
-#### Defined in
-
-node_modules/@redactie/utils/dist/store/baseEntity/baseEntity.state.d.ts:5
-
-___
-
-### isFetching
-
-• **isFetching**: `boolean`
-
-#### Inherited from
-
-BaseEntityState.isFetching
-
-#### Defined in
-
-node_modules/@redactie/utils/dist/store/baseEntity/baseEntity.state.d.ts:3
-
-___
-
-### isFetchingOne
-
-• **isFetchingOne**: `boolean`
-
-#### Inherited from
-
-BaseEntityState.isFetchingOne
-
-#### Defined in
-
-node_modules/@redactie/utils/dist/store/baseEntity/baseEntity.state.d.ts:4
-
-___
-
 ### isFetchingUserRolesForTenant
 
 • **isFetchingUserRolesForTenant**: `boolean`
@@ -128,34 +36,6 @@ ___
 #### Defined in
 
 public/lib/store/users/users.model.ts:16
-
-___
-
-### isUpdating
-
-• **isUpdating**: `boolean`
-
-#### Inherited from
-
-BaseEntityState.isUpdating
-
-#### Defined in
-
-node_modules/@redactie/utils/dist/store/baseEntity/baseEntity.state.d.ts:6
-
-___
-
-### loading
-
-• `Optional` **loading**: `boolean`
-
-#### Inherited from
-
-BaseEntityState.loading
-
-#### Defined in
-
-node_modules/@datorama/akita/lib/types.d.ts:9
 
 ___
 
@@ -171,7 +51,7 @@ ___
 
 ### userDetail
 
-• `Optional` **userDetail**: `UserDetailModel`
+• `Optional` **userDetail**: [`UserDetailModel`](../wiki/index.%3Cinternal%3E.UserDetailModel)
 
 #### Defined in
 

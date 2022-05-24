@@ -14,7 +14,7 @@
 
 ### data
 
-• **data**: ``null`` \| `SecurityRightMatrixResponse`
+• **data**: ``null`` \| [`SecurityRightMatrixResponse`](../wiki/index.%3Cinternal%3E.SecurityRightMatrixResponse)
 
 #### Defined in
 
