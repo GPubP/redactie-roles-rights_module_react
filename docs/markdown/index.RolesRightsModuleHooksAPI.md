@@ -16,7 +16,7 @@
 
 ### useMySecurityRightsForSite
 
-• **useMySecurityRightsForSite**: `UseMySecurityRightsForSiteFunction`
+• **useMySecurityRightsForSite**: [`UseMySecurityRightsForSiteFunction`](../wiki/index.%3Cinternal%3E.UseMySecurityRightsForSiteFunction)
 
 #### Defined in
 
@@ -26,7 +26,7 @@ ___
 
 ### useMySecurityRightsForTenant
 
-• **useMySecurityRightsForTenant**: `UseMySecurityRightsForTenantFunction`
+• **useMySecurityRightsForTenant**: [`UseMySecurityRightsForTenantFunction`](../wiki/index.%3Cinternal%3E.UseMySecurityRightsForTenantFunction)
 
 #### Defined in
 
@@ -36,7 +36,7 @@ ___
 
 ### useSiteRoles
 
-• **useSiteRoles**: `UseSiteRolesFunction`
+• **useSiteRoles**: [`UseSiteRolesFunction`](../wiki/index.%3Cinternal%3E#usesiterolesfunction)
 
 #### Defined in
 
@@ -46,7 +46,7 @@ ___
 
 ### useUserRolesForSite
 
-• **useUserRolesForSite**: `UseUserRolesForSiteFunction`
+• **useUserRolesForSite**: [`UseUserRolesForSiteFunction`](../wiki/index.%3Cinternal%3E#useuserrolesforsitefunction)
 
 #### Defined in
 
@@ -56,7 +56,7 @@ ___
 
 ### useUsers
 
-• **useUsers**: `UseUsersFunction`
+• **useUsers**: [`UseUsersFunction`](../wiki/index.%3Cinternal%3E#useusersfunction)
 
 #### Defined in
 

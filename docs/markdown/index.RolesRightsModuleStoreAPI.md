@@ -21,8 +21,8 @@
 
 | Name | Type |
 | :------ | :------ |
-| `query` | `MySecurityRightsQuery` |
-| `service` | `Pick`<`MySecurityRightsFacade`, ``"getMyTenantSecurityRights"`` \| ``"getMySiteSecurityRights"`` \| ``"getMySecurityRights"``\> |
+| `query` | [`MySecurityRightsQuery`](../wiki/index.%3Cinternal%3E.MySecurityRightsQuery) |
+| `service` | `Pick`<[`MySecurityRightsFacade`](../wiki/index.%3Cinternal%3E.MySecurityRightsFacade), ``"getMyTenantSecurityRights"`` \| ``"getMySiteSecurityRights"`` \| ``"getMySecurityRights"``\> |
 
 #### Defined in
 
@@ -38,8 +38,8 @@ ___
 
 | Name | Type |
 | :------ | :------ |
-| `query` | `RolesQuery` |
-| `service` | `Pick`<`RolesFacade`, ``"getSiteRoles"`` \| ``"getTenantRoles"`` \| ``"getDefaultSiteRoles"``\> |
+| `query` | [`RolesQuery`](../wiki/index.%3Cinternal%3E.RolesQuery) |
+| `service` | `Pick`<[`RolesFacade`](../wiki/index.%3Cinternal%3E.RolesFacade), ``"getSiteRoles"`` \| ``"getTenantRoles"`` \| ``"getDefaultSiteRoles"``\> |
 
 #### Defined in
 
@@ -55,8 +55,8 @@ ___
 
 | Name | Type |
 | :------ | :------ |
-| `query` | `SecurityRightsMatrixQuery` |
-| `service` | `Pick`<`SecurityRightsMatrixFacade`, ``"getSecurityRightsBySite"``\> |
+| `query` | [`SecurityRightsMatrixQuery`](../wiki/index.%3Cinternal%3E.SecurityRightsMatrixQuery) |
+| `service` | `Pick`<[`SecurityRightsMatrixFacade`](../wiki/index.%3Cinternal%3E.SecurityRightsMatrixFacade), ``"getSecurityRightsBySite"``\> |
 
 #### Defined in
 
@@ -72,8 +72,8 @@ ___
 
 | Name | Type |
 | :------ | :------ |
-| `query` | `UsersQuery` |
-| `service` | `Pick`<`UsersFacade`, ``"getUsersBySite"`` \| ``"getUsers"`` \| ``"getUser"`` \| ``"getUserRolesForSite"``\> |
+| `query` | [`UsersQuery`](../wiki/index.%3Cinternal%3E.UsersQuery) |
+| `service` | `Pick`<[`UsersFacade`](../wiki/index.%3Cinternal%3E.UsersFacade), ``"getUsersBySite"`` \| ``"getUsers"`` \| ``"getUser"`` \| ``"getUserRolesForSite"``\> |
 
 #### Defined in
 

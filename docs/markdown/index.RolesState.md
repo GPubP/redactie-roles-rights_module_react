@@ -13,7 +13,7 @@
 
 ### site
 
-• **site**: `RoleEntityState`
+• **site**: [`RoleEntityState`](../wiki/index.%3Cinternal%3E.RoleEntityState)
 
 #### Defined in
 
@@ -23,7 +23,7 @@ ___
 
 ### tenant
 
-• **tenant**: `RoleEntityState`
+• **tenant**: [`RoleEntityState`](../wiki/index.%3Cinternal%3E.RoleEntityState)
 
 #### Defined in
 

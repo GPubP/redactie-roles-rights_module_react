@@ -12,7 +12,7 @@
 
 ### checkSecurityRights
 
-• **checkSecurityRights**: `CheckSecurityRightsFunction`
+• **checkSecurityRights**: [`CheckSecurityRightsFunction`](../wiki/index.%3Cinternal%3E#checksecurityrightsfunction)
 
 #### Defined in
 

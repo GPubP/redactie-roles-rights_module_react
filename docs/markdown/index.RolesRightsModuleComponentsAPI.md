@@ -12,7 +12,7 @@
 
 ### SecurableRender
 
-• **SecurableRender**: `FC`<`SecurableRenderProps`\>
+• **SecurableRender**: `FC`<[`SecurableRenderProps`](../wiki/index.%3Cinternal%3E.SecurableRenderProps)\>
 
 #### Defined in
 

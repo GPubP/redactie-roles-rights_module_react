@@ -21,8 +21,8 @@
 
 | Name | Type |
 | :------ | :------ |
-| `siteRights` | ``null`` \| `SecurityRightResponse`[] |
-| `tenantRights` | ``null`` \| `SecurityRightResponse`[] |
+| `siteRights` | ``null`` \| [`SecurityRightResponse`](../wiki/index.%3Cinternal%3E.SecurityRightResponse)[] |
+| `tenantRights` | ``null`` \| [`SecurityRightResponse`](../wiki/index.%3Cinternal%3E.SecurityRightResponse)[] |
 
 #### Defined in
 

@@ -2,6 +2,10 @@
 
 ## Table of contents
 
+### Namespaces
+
+- [&lt;internal\&gt;](../wiki/index.%3Cinternal%3E)
+
 ### Interfaces
 
 - [MySecurityRightsState](../wiki/index.MySecurityRightsState)
@@ -35,7 +39,7 @@
 
 ### MySecurityRightModel
 
-Ƭ **MySecurityRightModel**: `SecurityRightResponse`
+Ƭ **MySecurityRightModel**: [`SecurityRightResponse`](../wiki/index.%3Cinternal%3E.SecurityRightResponse)
 
 #### Defined in
 
@@ -45,7 +49,7 @@ ___
 
 ### RoleModel
 
-Ƭ **RoleModel**: `RoleResponse`
+Ƭ **RoleModel**: [`RoleResponse`](../wiki/index.%3Cinternal%3E.RoleResponse)
 
 #### Defined in
 
@@ -65,7 +69,7 @@ ___
 
 ### SecurityRightMatrixModel
 
-Ƭ **SecurityRightMatrixModel**: `SecurityRightMatrixResponse`
+Ƭ **SecurityRightMatrixModel**: [`SecurityRightMatrixResponse`](../wiki/index.%3Cinternal%3E.SecurityRightMatrixResponse)
 
 #### Defined in
 
@@ -177,7 +181,7 @@ ___
 
 ### UserModel
 
-Ƭ **UserModel**: `UserResponse`
+Ƭ **UserModel**: [`UserResponse`](../wiki/index.%3Cinternal%3E.UserResponse)
 
 #### Defined in
 
